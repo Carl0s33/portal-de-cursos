@@ -94,10 +94,10 @@
   flex: 0 0 38px;
   width: 38px;
   height: 38px;
-  border: 1px solid var(--borda-suave);
+  border: 1px solid var(--borda);
   border-radius: 10px;
-  background: var(--fundo);
-  color: var(--texto);
+  background: var(--suave);
+  color: var(--titulo);
   transition:
     background-color 160ms ease,
     color 160ms ease,
@@ -139,9 +139,9 @@
 }
 
 .painel-navegacao nav a:hover .painel-navegacao__icone {
-  border-color: color-mix(in srgb, var(--azul) 24%, var(--borda));
-  background: var(--azul-suave);
-  color: var(--azul);
+  border-color: var(--azul);
+  background: var(--azul);
+  color: var(--branco);
 }
 
 .painel-navegacao nav a:focus-visible {
@@ -150,8 +150,8 @@
 }
 
 .painel-navegacao nav a[aria-current] {
-  border-color: color-mix(in srgb, var(--azul) 22%, var(--borda));
-  background: color-mix(in srgb, var(--azul) 8%, var(--superficie));
+  border-color: var(--azul);
+  background: var(--azul-suave);
   color: var(--azul);
 }
 

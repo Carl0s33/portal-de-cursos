@@ -429,20 +429,20 @@
 }
 
 .cadastro-aluno__projeto-icone--tcc {
-  background: var(--azul-suave);
-  color: var(--azul-vivo);
+  background: var(--azul-vivo);
+  color: var(--branco);
 }
 .cadastro-aluno__projeto-icone--integrador {
-  background: var(--roxo-suave);
-  color: var(--roxo);
+  background: var(--roxo);
+  color: var(--branco);
 }
 .cadastro-aluno__projeto-icone--pesquisa {
-  background: var(--aviso-suave);
-  color: var(--aviso);
+  background: var(--aviso);
+  color: var(--branco);
 }
 .cadastro-aluno__projeto-icone--extensao {
-  background: var(--sucesso-suave);
-  color: var(--sucesso);
+  background: var(--sucesso);
+  color: var(--branco);
 }
 
 .cadastro-aluno__mensagem {
@@ -587,20 +587,20 @@
 }
 
 :root[data-tema='escuro'] .cadastro-aluno__projeto-icone--tcc {
-  background: var(--etiqueta);
-  color: var(--azul);
+  background: var(--azul-vivo);
+  color: var(--preto);
 }
 :root[data-tema='escuro'] .cadastro-aluno__projeto-icone--integrador {
-  background: var(--roxo-suave);
-  color: var(--roxo);
+  background: var(--roxo);
+  color: var(--preto);
 }
 :root[data-tema='escuro'] .cadastro-aluno__projeto-icone--pesquisa {
-  background: var(--aviso-suave);
-  color: var(--aviso);
+  background: var(--aviso);
+  color: var(--preto);
 }
 :root[data-tema='escuro'] .cadastro-aluno__projeto-icone--extensao {
-  background: var(--sucesso-suave);
-  color: var(--verde);
+  background: var(--sucesso);
+  color: var(--preto);
 }
 
 .cadastro-aluno {
@@ -635,44 +635,33 @@
 .cadastro-aluno__campo .acesso-senha button {
   position: absolute;
   top: 50%;
-  right: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: auto;
-  height: 34px;
-  min-height: 34px;
-  padding: 0 9px;
+  right: 8px;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
   transform: translateY(-50%);
-  border: 1px solid var(--borda-suave);
-  border-radius: 9px;
-  background: var(--fundo);
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
   color: var(--texto);
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
   cursor: pointer;
 }
 
-.cadastro-aluno__campo .acesso-senha button svg {
-  width: 15px;
-  height: 15px;
-  flex: 0 0 auto;
-  stroke: currentColor;
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.cadastro-aluno__campo .acesso-senha button .icone {
+  width: 18px;
+  height: 18px;
 }
 
 .cadastro-aluno__campo .acesso-senha button:hover {
-  border-color: var(--borda);
-  background: var(--azul-suave);
+  background: transparent;
+  color: var(--azul-vivo);
 }
 
 .cadastro-aluno__campo .acesso-senha button:focus-visible {
-  outline: 3px solid rgb(21 89 255 / 22%);
+  outline: 2px solid var(--azul-vivo);
   outline-offset: 2px;
 }
 
@@ -701,12 +690,11 @@
 }
 
 :root[data-tema='escuro'] .cadastro-aluno__campo .acesso-senha button {
-  border-color: var(--roxo-suave);
-  background: var(--borda-suave);
-  color: var(--titulo);
+  background: transparent;
+  color: var(--texto);
 }
 
 :root[data-tema='escuro'] .cadastro-aluno__campo .acesso-senha button:hover {
-  border-color: var(--roxo-suave);
-  background: var(--borda-suave);
+  background: transparent;
+  color: var(--azul);
 }

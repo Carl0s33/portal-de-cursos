@@ -152,7 +152,7 @@ export default function Icone({ nome, classe = '' }) {
     <Componente
       className={`icone icone--${nome} ${classe}`.trim()}
       size={20}
-      strokeWidth={2}
+      strokeWidth={2.2}
       aria-hidden="true"
       focusable="false"
     />

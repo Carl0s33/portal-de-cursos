@@ -35,10 +35,15 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  background: var(--suave);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--azul);
+  color: var(--branco);
+}
+
+:root[data-tema='escuro'] .cartao-catalogo__simbolo {
+  color: var(--preto);
 }
 
 .cartao-catalogo__grau {

@@ -55,58 +55,41 @@
 
 .coordenacao-indicador {
   --cor: var(--azul);
-  --cor-suave: var(--azul-suave);
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 1.5rem 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--cor) 18%, var(--borda));
-  border-radius: 16px;
+  padding: 1.35rem 1.4rem 1.2rem;
+  border: 1px solid var(--borda);
+  border-top: 3px solid var(--cor);
+  border-radius: 14px;
   background: var(--superficie);
   text-decoration: none;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--marinho) 4%, transparent);
+  box-shadow: var(--sombra);
   transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.coordenacao-indicador::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--cor),
-    color-mix(in srgb, var(--cor) 60%, var(--superficie))
-  );
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .coordenacao-indicador:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--marinho) 8%, transparent);
+  border-color: var(--cor);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--marinho) 8%, transparent);
 }
 
 .coordenacao-indicador--total {
   --cor: var(--roxo);
-  --cor-suave: var(--roxo-suave);
 }
 
 .coordenacao-indicador--analise {
   --cor: var(--aviso);
-  --cor-suave: var(--aviso-suave);
 }
 
 .coordenacao-indicador--curso {
   --cor: var(--azul);
-  --cor-suave: var(--azul-suave);
 }
 
 .coordenacao-indicador--aprovado {
   --cor: var(--sucesso);
-  --cor-suave: var(--sucesso-suave);
 }
 
 .coordenacao-indicador__topo {
@@ -120,33 +103,32 @@
   flex: none;
   display: inline-grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0.6rem;
-  border-radius: 12px;
-  background: var(--cor-suave);
-  color: var(--cor);
-  border: 1px solid color-mix(in srgb, var(--cor) 20%, transparent);
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 10px;
+  background: var(--cor);
+  color: var(--branco);
+  border: 0;
 }
 
 .coordenacao-indicador__icone .icone {
-  width: 100%;
-  height: 100%;
+  width: 19px;
+  height: 19px;
 }
 
 .coordenacao-indicador__rotulo {
   overflow: hidden;
-  color: var(--texto);
+  color: var(--titulo);
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .coordenacao-indicador__valor {
-  margin: 1rem 0 0;
+  margin: 0.9rem 0 0;
   color: var(--titulo);
-  font-size: 2.5rem;
+  font-size: 2.4rem;
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -157,20 +139,20 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 1rem 0 0;
-  padding-top: 0.75rem;
+  margin: 0.9rem 0 0;
+  padding-top: 0.7rem;
   border-top: 1px solid var(--borda-suave);
   color: var(--texto);
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.4;
 }
 
 .coordenacao-indicador__detalhe::before {
   content: '';
   flex: none;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--cor);
 }
@@ -306,9 +288,17 @@
 :root[data-tema='escuro'] .coordenacao-boas-vindas,
 :root[data-tema='escuro'] .coordenacao-indicador,
 :root[data-tema='escuro'] .coordenacao-categoria {
-  background: var(--preto);
-  border-color: var(--borda-suave);
+  background: var(--superficie);
+  border-color: var(--borda);
   box-shadow: none;
+}
+
+:root[data-tema='escuro'] .coordenacao-indicador {
+  border-top-color: var(--cor);
+}
+
+:root[data-tema='escuro'] .coordenacao-indicador__icone {
+  color: var(--preto);
 }
 
 :root[data-tema='escuro'] .coordenacao-boas-vindas {
@@ -316,8 +306,8 @@
 }
 
 :root[data-tema='escuro'] .coordenacao-indicador:hover {
-  border-color: var(--roxo-suave);
-  box-shadow: 0 5px 16px color-mix(in srgb, var(--preto) 35%, transparent);
+  border-color: var(--cor);
+  box-shadow: 0 5px 16px rgb(0 0 0 / 45%);
 }
 
 @media (max-width: 1100px) {

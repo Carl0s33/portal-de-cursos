@@ -270,9 +270,9 @@ export default function PaginaAcesso({
                     aria-controls="senha"
                     aria-pressed={mostrarSenha}
                     aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                    title={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
                   >
                     <Icone nome={mostrarSenha ? 'ocultar' : 'mostrar'} />
-                    <span>{mostrarSenha ? 'Ocultar' : 'Mostrar'}</span>
                   </button>
                 </div>
                 <MensagemErro id="erro-senha" texto={erros.senha} />
