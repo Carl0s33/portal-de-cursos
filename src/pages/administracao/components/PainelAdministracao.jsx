@@ -81,28 +81,48 @@ export default function PainelAdministracao({ token }) {
         <>
           <section className="administracao-indicadores" aria-label="Resumo da instituição">
             {[
-              ['Cursos', resumo.cursos.length, 'cursos', 'administracao/cursos'],
+              [
+                'Cursos',
+                resumo.cursos.length,
+                'cursos',
+                'administracao/cursos',
+                'formações cadastradas',
+              ],
               [
                 'Disciplinas',
                 resumo.disciplinas.length,
                 'disciplinas',
                 'administracao/disciplinas',
+                'componentes curriculares',
               ],
-              ['Campus', resumo.campus.length, 'campus', 'administracao/campus'],
-              ['Áreas de conhecimento', resumo.areas.length, 'areas', 'administracao/areas'],
-            ].map(([rotulo, total, tipo, destino]) => {
+              [
+                'Campus',
+                resumo.campus.length,
+                'campus',
+                'administracao/campus',
+                'unidades acadêmicas',
+              ],
+              [
+                'Áreas de conhecimento',
+                resumo.areas.length,
+                'areas',
+                'administracao/areas',
+                'eixos temáticos',
+              ],
+            ].map(([rotulo, total, tipo, destino, detalhe]) => {
               const conteudo = (
                 <>
-                  <span
-                    className={`administracao-indicador__icone administracao-indicador__icone--${tipo}`}
-                    aria-hidden="true"
-                  >
-                    <Icone nome={iconesIndicadores[tipo]} />
+                  <span className="administracao-indicador__topo">
+                    <span
+                      className={`administracao-indicador__icone administracao-indicador__icone--${tipo}`}
+                      aria-hidden="true"
+                    >
+                      <Icone nome={iconesIndicadores[tipo]} />
+                    </span>
+                    <span className="administracao-indicador__rotulo">{rotulo}</span>
                   </span>
-                  <span className="administracao-indicador__texto">
-                    <span>{rotulo}</span>
-                    <strong>{total}</strong>
-                  </span>
+                  <strong className="administracao-indicador__valor">{total}</strong>
+                  <span className="administracao-indicador__detalhe">{detalhe}</span>
                   {destino && (
                     <span className="administracao-indicador__seta" aria-hidden="true">
                       →
@@ -111,11 +131,18 @@ export default function PainelAdministracao({ token }) {
                 </>
               )
               return destino ? (
-                <a className="administracao-indicador" href={enderecoPrivado(destino)} key={rotulo}>
+                <a
+                  className={`administracao-indicador administracao-indicador--${tipo}`}
+                  href={enderecoPrivado(destino)}
+                  key={rotulo}
+                >
                   {conteudo}
                 </a>
               ) : (
-                <div className="administracao-indicador" key={rotulo}>
+                <div
+                  className={`administracao-indicador administracao-indicador--${tipo}`}
+                  key={rotulo}
+                >
                   {conteudo}
                 </div>
               )

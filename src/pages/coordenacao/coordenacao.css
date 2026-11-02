@@ -49,89 +49,136 @@
 
 .coordenacao-indicadores {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
 }
 
 .coordenacao-indicador {
+  --cor: var(--azul);
+  --cor-suave: var(--azul-suave);
   position: relative;
-  display: grid;
-  grid-template-columns: 38px minmax(0, 1fr);
-  align-items: center;
-  gap: 14px;
-  min-height: 104px;
-  padding: 18px;
-  border: 1px solid var(--borda-suave);
-  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--cor) 18%, var(--borda));
+  border-radius: 16px;
   background: var(--superficie);
   text-decoration: none;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--marinho) 4%, transparent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--marinho) 4%, transparent);
   transition:
-    transform var(--transicao),
-    border-color var(--transicao),
-    box-shadow var(--transicao);
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.coordenacao-indicador::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--cor),
+    color-mix(in srgb, var(--cor) 60%, var(--superficie))
+  );
 }
 
 .coordenacao-indicador:hover {
-  transform: translateY(-1px);
-  border-color: var(--borda);
-  box-shadow: 0 7px 18px color-mix(in srgb, var(--marinho) 9%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--marinho) 8%, transparent);
+}
+
+.coordenacao-indicador--total {
+  --cor: var(--roxo);
+  --cor-suave: var(--roxo-suave);
+}
+
+.coordenacao-indicador--analise {
+  --cor: var(--aviso);
+  --cor-suave: var(--aviso-suave);
+}
+
+.coordenacao-indicador--curso {
+  --cor: var(--azul);
+  --cor-suave: var(--azul-suave);
+}
+
+.coordenacao-indicador--aprovado {
+  --cor: var(--sucesso);
+  --cor-suave: var(--sucesso-suave);
+}
+
+.coordenacao-indicador__topo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-right: 1.25rem;
 }
 
 .coordenacao-indicador__icone {
-  display: grid;
+  flex: none;
+  display: inline-grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 9px;
-  background: var(--azul-suave);
-  color: var(--azul);
-  border: 1px solid color-mix(in srgb, var(--azul) 18%, transparent);
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.6rem;
+  border-radius: 12px;
+  background: var(--cor-suave);
+  color: var(--cor);
+  border: 1px solid color-mix(in srgb, var(--cor) 20%, transparent);
 }
 
-.coordenacao-indicador__icone--analise {
-  background: var(--aviso-suave);
-  color: var(--aviso);
-  border-color: color-mix(in srgb, var(--aviso) 25%, transparent);
+.coordenacao-indicador__icone .icone {
+  width: 100%;
+  height: 100%;
 }
 
-.coordenacao-indicador__icone--aprovado {
-  background: var(--sucesso-suave);
-  color: var(--sucesso);
-  border-color: color-mix(in srgb, var(--sucesso) 25%, transparent);
-}
-
-.coordenacao-indicador__icone--total {
-  background: var(--roxo-suave);
-  color: var(--roxo);
-  border-color: color-mix(in srgb, var(--roxo) 25%, transparent);
-}
-
-.coordenacao-indicador__texto {
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-}
-
-.coordenacao-indicador__texto > span {
+.coordenacao-indicador__rotulo {
   overflow: hidden;
   color: var(--texto);
-  font-size: 13px;
+  font-size: 0.875rem;
+  font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.coordenacao-indicador__texto strong {
+.coordenacao-indicador__valor {
+  margin: 1rem 0 0;
   color: var(--titulo);
-  font-size: 30px;
+  font-size: 2.5rem;
+  font-weight: 800;
   line-height: 1;
+  letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
+}
+
+.coordenacao-indicador__detalhe {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--borda-suave);
+  color: var(--texto);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.coordenacao-indicador__detalhe::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cor);
 }
 
 .coordenacao-indicador__seta {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 1.25rem;
+  right: 1.25rem;
   color: var(--texto);
   font-size: 15px;
 }

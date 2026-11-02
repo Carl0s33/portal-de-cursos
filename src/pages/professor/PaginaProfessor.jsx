@@ -84,45 +84,45 @@ export default function PaginaProfessor({ submissoes, usuario }) {
       </header>
 
       <dl className="painel-indicadores">
-        <div className="painel-indicador--total">
-          <div className="painel-indicador__cabecalho">
-            <dt>Total de orientações</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--total">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="projetos-detalhe" />
             </span>
-          </div>
-          <dd>{totais.total}</dd>
-          <p className="painel-indicadores__detalhe">vinculadas ao seu perfil</p>
+            <span>Total de orientações</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.total}</dd>
+          <dd className="painel-indicadores__detalhe">vinculadas ao seu perfil</dd>
         </div>
-        <div className="painel-indicador--pendente">
-          <div className="painel-indicador__cabecalho">
-            <dt>Aguardando aceite</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--aguardando">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="relogio-cursos" />
             </span>
-          </div>
-          <dd>{totais.pendentes}</dd>
-          <p className="painel-indicadores__detalhe">pendentes da sua decisão</p>
+            <span>Aguardando aceite</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.pendentes}</dd>
+          <dd className="painel-indicadores__detalhe">pendentes da sua decisão</dd>
         </div>
-        <div className="painel-indicador--analise">
-          <div className="painel-indicador__cabecalho">
-            <dt>Na coordenação</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--coordenacao">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="criterios-detalhe" />
             </span>
-          </div>
-          <dd>{totais.analise}</dd>
-          <p className="painel-indicadores__detalhe">aceitas e em análise final</p>
+            <span>Na coordenação</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.analise}</dd>
+          <dd className="painel-indicadores__detalhe">aceitas e em análise final</dd>
         </div>
-        <div className="painel-indicador--aprovado">
-          <div className="painel-indicador__cabecalho">
-            <dt>Publicadas</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--publicadas">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="confirmacao-cursos" />
             </span>
-          </div>
-          <dd>{totais.aprovados}</dd>
-          <p className="painel-indicadores__detalhe">no acervo público do portal</p>
+            <span>Publicadas</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.aprovados}</dd>
+          <dd className="painel-indicadores__detalhe">no acervo público do portal</dd>
         </div>
       </dl>
 

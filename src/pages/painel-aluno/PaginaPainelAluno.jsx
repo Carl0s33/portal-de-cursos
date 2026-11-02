@@ -70,45 +70,45 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
 
       {/* Indicadores */}
       <dl className="painel-indicadores painel-aluno-indicadores">
-        <div className="painel-indicador--total">
-          <div className="painel-indicador__cabecalho">
-            <dt>Total</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--total">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="projetos-detalhe" />
             </span>
-          </div>
-          <dd>{totais.total}</dd>
-          <p className="painel-indicadores__detalhe">submissões no portal</p>
+            <span>Total</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.total}</dd>
+          <dd className="painel-indicadores__detalhe">submissões no portal</dd>
         </div>
-        <div className="painel-indicador--pendente">
-          <div className="painel-indicador__cabecalho">
-            <dt>Em análise</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--aguardando">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="relogio-cursos" />
             </span>
-          </div>
-          <dd>{totais.analise}</dd>
-          <p className="painel-indicadores__detalhe">aguardando avaliação</p>
+            <span>Em análise</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.analise}</dd>
+          <dd className="painel-indicadores__detalhe">aguardando avaliação</dd>
         </div>
-        <div className="painel-indicador--aprovado">
-          <div className="painel-indicador__cabecalho">
-            <dt>Aprovados</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--publicadas">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="confirmacao-cursos" />
             </span>
-          </div>
-          <dd>{totais.aprovados}</dd>
-          <p className="painel-indicadores__detalhe">publicados no portal</p>
+            <span>Aprovados</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.aprovados}</dd>
+          <dd className="painel-indicadores__detalhe">publicados no portal</dd>
         </div>
-        <div className="painel-indicador--recusado">
-          <div className="painel-indicador__cabecalho">
-            <dt>Recusados</dt>
-            <span className="painel-indicador__icone" aria-hidden="true">
+        <div className="painel-indicadores__card painel-indicadores__card--recusadas">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
               <Icone nome="erro-cursos" />
             </span>
-          </div>
-          <dd>{totais.recusados}</dd>
-          <p className="painel-indicadores__detalhe">não publicados</p>
+            <span>Recusados</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.recusados}</dd>
+          <dd className="painel-indicadores__detalhe">não publicados</dd>
         </div>
       </dl>
 

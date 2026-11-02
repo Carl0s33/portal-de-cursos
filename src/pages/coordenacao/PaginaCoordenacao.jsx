@@ -153,27 +153,48 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
 
       <section className="coordenacao-indicadores" aria-label="Resumo do curso">
         {[
-          ['Total de submissões', indicadores.total, 'total', 'coordenacao/submissoes'],
+          [
+            'Total de submissões',
+            indicadores.total,
+            'total',
+            'coordenacao/submissoes',
+            'registradas no curso',
+          ],
           [
             'Aguardando coordenação',
             indicadores.emAnaliseCoord,
             'analise',
             'coordenacao/submissoes',
+            'prontas para decisão final',
           ],
-          ['Com o orientador', indicadores.aguardandoOrientador, 'curso', 'coordenacao/submissoes'],
-          ['Publicados no portal', indicadores.publicados, 'aprovado', 'coordenacao/projetos'],
-        ].map(([rotulo, total, tipo, destino]) => (
-          <a className="coordenacao-indicador" href={enderecoPrivado(destino)} key={rotulo}>
-            <span
-              className={`coordenacao-indicador__icone coordenacao-indicador__icone--${tipo}`}
-              aria-hidden="true"
-            >
-              <Icone nome={iconesIndicadores[tipo]} />
+          [
+            'Com o orientador',
+            indicadores.aguardandoOrientador,
+            'curso',
+            'coordenacao/submissoes',
+            'em avaliação inicial',
+          ],
+          [
+            'Publicados no portal',
+            indicadores.publicados,
+            'aprovado',
+            'coordenacao/projetos',
+            'disponíveis no acervo público',
+          ],
+        ].map(([rotulo, total, tipo, destino, detalhe]) => (
+          <a
+            className={`coordenacao-indicador coordenacao-indicador--${tipo}`}
+            href={enderecoPrivado(destino)}
+            key={rotulo}
+          >
+            <span className="coordenacao-indicador__topo">
+              <span className="coordenacao-indicador__icone" aria-hidden="true">
+                <Icone nome={iconesIndicadores[tipo]} />
+              </span>
+              <span className="coordenacao-indicador__rotulo">{rotulo}</span>
             </span>
-            <span className="coordenacao-indicador__texto">
-              <span>{rotulo}</span>
-              <strong>{total}</strong>
-            </span>
+            <strong className="coordenacao-indicador__valor">{total}</strong>
+            <span className="coordenacao-indicador__detalhe">{detalhe}</span>
             <span className="coordenacao-indicador__seta" aria-hidden="true">
               →
             </span>

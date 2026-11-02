@@ -160,59 +160,132 @@
   }
 }
 .administracao-indicadores {
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
   margin: 0;
 }
 .administracao-indicador {
-  min-height: 96px;
-  padding: 14px;
-  border-radius: 8px;
+  --cor: var(--azul);
+  --cor-suave: var(--azul-suave);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.5rem 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--cor) 18%, var(--borda));
+  border-radius: 16px;
   background: var(--superficie);
+  text-decoration: none;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--marinho) 4%, transparent);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
-.administracao-indicador span {
-  color: var(--texto);
-  font-size: 12px;
-}
-.administracao-indicador strong {
-  font-size: 26px;
-}
-
-.administracao-indicador {
-  border-color: var(--borda-suave);
-  background: var(--branco);
-  box-shadow: 0 2px 8px rgb(25 45 82 / 4%);
+.administracao-indicador::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--cor),
+    color-mix(in srgb, var(--cor) 60%, var(--superficie))
+  );
 }
 .administracao-indicador:hover {
-  transform: translateY(-1px);
-  border-color: var(--borda);
-  box-shadow: 0 7px 18px rgb(25 45 82 / 9%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--marinho) 8%, transparent);
+}
+.administracao-indicador--cursos {
+  --cor: var(--azul);
+  --cor-suave: var(--azul-suave);
+}
+.administracao-indicador--disciplinas {
+  --cor: var(--roxo);
+  --cor-suave: var(--roxo-suave);
+}
+.administracao-indicador--campus {
+  --cor: var(--aviso);
+  --cor-suave: var(--aviso-suave);
+}
+.administracao-indicador--areas {
+  --cor: var(--sucesso);
+  --cor-suave: var(--sucesso-suave);
+}
+.administracao-indicador__topo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-right: 1.25rem;
 }
 .administracao-indicador__icone {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgb(37 99 235 / 10%);
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.6rem;
+  border-radius: 12px;
+  background: var(--cor-suave);
+  color: var(--cor);
+  border: 1px solid color-mix(in srgb, var(--cor) 20%, transparent);
 }
-.administracao-indicador__icone svg {
-  width: 19px;
-  height: 19px;
-  stroke-width: 1.7;
+.administracao-indicador__icone .icone {
+  width: 100%;
+  height: 100%;
 }
-.administracao-indicador {
-  min-height: 108px;
-  padding: 18px;
+.administracao-indicador__rotulo {
+  overflow: hidden;
+  color: var(--texto);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.administracao-indicador__texto > span {
-  font-size: 14px;
+.administracao-indicador__valor {
+  margin: 1rem 0 0;
+  color: var(--titulo);
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
 }
-.administracao-indicador__texto strong {
-  font-size: 32px;
+.administracao-indicador__detalhe {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--borda-suave);
+  color: var(--texto);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.administracao-indicador__detalhe::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+.administracao-indicador__seta {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  color: var(--texto);
+  font-size: 15px;
 }
 :root[data-tema='escuro'] .administracao-indicador {
-  border-color: var(--borda-suave);
+  border-color: color-mix(in srgb, var(--cor) 26%, var(--borda-suave));
   background: var(--preto);
   box-shadow: none;
 }
 :root[data-tema='escuro'] .administracao-indicador:hover {
-  border-color: var(--roxo-suave);
+  border-color: color-mix(in srgb, var(--cor) 42%, var(--borda));
   box-shadow: 0 5px 16px rgb(0 0 0 / 35%);
 }
