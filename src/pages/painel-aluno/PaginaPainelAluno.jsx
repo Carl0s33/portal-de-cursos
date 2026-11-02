@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import '@/shared/styles/painel-informativo.css'
+import Icone from '@/shared/components/Icone.jsx'
 import { basePortal } from '../../app/rotas.js'
 import './painel-aluno.css'
 
@@ -68,26 +69,46 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
       </header>
 
       {/* Indicadores */}
-      <dl className="painel-aluno-indicadores">
-        <div>
-          <dt>Total</dt>
-          <dd>{totais.total}</dd>
-          <p className="painel-indicadores__detalhe">submissões no portal</p>
+      <dl className="painel-indicadores painel-aluno-indicadores">
+        <div className="painel-indicadores__card painel-indicadores__card--total">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="projetos-detalhe" />
+            </span>
+            <span>Total</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.total}</dd>
+          <dd className="painel-indicadores__detalhe">submissões no portal</dd>
         </div>
-        <div className="painel-aluno-indicadores__destaque">
-          <dt>Em análise</dt>
-          <dd>{totais.analise}</dd>
-          <p className="painel-indicadores__detalhe">aguardando avaliação</p>
+        <div className="painel-indicadores__card painel-indicadores__card--aguardando">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="relogio-cursos" />
+            </span>
+            <span>Em análise</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.analise}</dd>
+          <dd className="painel-indicadores__detalhe">aguardando avaliação</dd>
         </div>
-        <div>
-          <dt>Aprovados</dt>
-          <dd>{totais.aprovados}</dd>
-          <p className="painel-indicadores__detalhe">publicados no portal</p>
+        <div className="painel-indicadores__card painel-indicadores__card--publicadas">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="confirmacao-cursos" />
+            </span>
+            <span>Aprovados</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.aprovados}</dd>
+          <dd className="painel-indicadores__detalhe">publicados no portal</dd>
         </div>
-        <div>
-          <dt>Recusados</dt>
-          <dd>{totais.recusados}</dd>
-          <p className="painel-indicadores__detalhe">não publicados</p>
+        <div className="painel-indicadores__card painel-indicadores__card--recusadas">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="erro-cursos" />
+            </span>
+            <span>Recusados</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.recusados}</dd>
+          <dd className="painel-indicadores__detalhe">não publicados</dd>
         </div>
       </dl>
 
@@ -104,9 +125,9 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
         </header>
         {minhasSubmissoes.length === 0 ? (
           <div className="painel-vazio" role="status">
-            <p className="painel-aluno-vazio-icone" aria-hidden="true">
-              📂
-            </p>
+            <span className="painel-aluno-vazio-icone" aria-hidden="true">
+              <Icone nome="vazio-projetos-detalhe" />
+            </span>
             <p>
               Você ainda não tem nenhum projeto submetido. Use o botão acima para enviar o seu
               primeiro projeto.

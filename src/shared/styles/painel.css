@@ -47,39 +47,128 @@
 }
 .painel-indicadores {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
   margin: 0;
 }
-.painel-indicadores > div {
-  padding: 24px;
+:where(.painel-indicadores > div),
+.painel-indicadores__card {
+  --cor: var(--azul);
+  position: relative;
+  overflow: hidden;
   background: var(--superficie);
-  border: 1px solid var(--borda);
+  border: 1px solid color-mix(in srgb, var(--cor) 22%, var(--borda));
+  border-top: 4px solid var(--cor);
   border-radius: 14px;
+  padding: 1.35rem 1.4rem 1.2rem;
+  box-shadow: var(--sombra);
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
 }
+.painel-indicadores__card:hover,
+.painel-indicadores > div:hover {
+  transform: translateY(-2px);
+  border-color: var(--cor);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--cor) 14%, transparent);
+}
+.painel-indicadores__rotulo,
 .painel-indicadores dt {
-  font-size: 14px;
-  font-weight: 600;
-}
-.painel-indicadores dd {
-  margin: 16px 0 8px;
-  color: var(--titulo);
-  font-size: 34px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
+  color: var(--titulo);
+}
+.painel-indicadores__icone {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  background: var(--cor);
+  color: var(--branco);
+  box-shadow: 0 3px 8px color-mix(in srgb, var(--cor) 28%, transparent);
+}
+.painel-indicadores__icone .icone {
+  width: 19px;
+  height: 19px;
+}
+.painel-indicadores__valor,
+.painel-indicadores dd:not(.painel-indicadores__detalhe) {
+  margin: 0.9rem 0 0;
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
+  color: var(--titulo);
 }
-.painel-indicadores > div:nth-child(2) {
-  border-top: 3px solid var(--azul);
-  padding-top: 22px;
-}
+.painel-indicadores__detalhe,
 .painel-indicadores .painel-indicadores__detalhe {
-  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.9rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--borda-suave);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
   color: var(--texto);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: normal;
-  line-height: 1.5;
+}
+.painel-indicadores__detalhe::before,
+.painel-indicadores .painel-indicadores__detalhe::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cor);
+}
+.painel-indicadores > div.painel-indicadores__card--total,
+.painel-indicadores__card--total,
+.painel-indicador--total {
+  --cor: var(--roxo);
+}
+.painel-indicadores > div.painel-indicadores__card--aguardando,
+.painel-indicadores__card--aguardando,
+.painel-indicador--pendente {
+  --cor: var(--aviso);
+}
+.painel-indicadores > div.painel-indicadores__card--coordenacao,
+.painel-indicadores__card--coordenacao,
+.painel-indicador--analise {
+  --cor: var(--azul);
+}
+.painel-indicadores > div.painel-indicadores__card--publicadas,
+.painel-indicadores__card--publicadas,
+.painel-indicador--aprovado {
+  --cor: var(--sucesso);
+}
+.painel-indicadores > div.painel-indicadores__card--recusadas,
+.painel-indicadores__card--recusadas,
+.painel-indicador--recusado {
+  --cor: var(--erro);
+}
+:root[data-tema='escuro'] .painel-indicadores__card,
+:root[data-tema='escuro'] .painel-indicadores > div {
+  background: var(--superficie);
+  border-color: color-mix(in srgb, var(--cor) 28%, var(--borda));
+  border-top-color: var(--cor);
+  box-shadow: none;
+}
+:root[data-tema='escuro'] .painel-indicadores__icone {
+  color: var(--preto);
+  box-shadow: none;
+}
+:root[data-tema='escuro'] .painel-indicadores__card:hover,
+:root[data-tema='escuro'] .painel-indicadores > div:hover {
+  border-color: var(--cor);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 45%);
 }
 .painel-secao {
   min-width: 0;
@@ -107,7 +196,7 @@
 .tabela-submissoes table {
   border-collapse: collapse;
   width: 100%;
-  min-width: 680px;
+  min-width: 640px;
   text-align: left;
 }
 .tabela-submissoes thead {
@@ -115,9 +204,13 @@
   color: var(--titulo);
   font-size: 12px;
 }
+.tabela-submissoes thead th {
+  white-space: nowrap;
+  font-weight: 700;
+}
 .tabela-submissoes th,
 .tabela-submissoes td {
-  padding: 20px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--borda);
 }
 .tabela-submissoes tbody tr:last-child > * {
@@ -130,25 +223,67 @@
   background: var(--suave);
 }
 .tabela-submissoes tbody th {
-  width: 44%;
+  min-width: 220px;
   font-size: 15px;
   font-weight: 600;
   color: var(--titulo);
-  line-height: 1.5;
+  line-height: 1.45;
 }
 .tabela-submissoes tbody th > span {
   display: block;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--texto);
-  margin-top: 6px;
+  margin-top: 4px;
 }
 .tabela-submissoes td {
   font-size: 13px;
+  white-space: nowrap;
+}
+.tabela-submissoes .gestao-linha-expandida > td {
+  white-space: normal;
 }
 .tabela-submissoes .status {
-  white-space: nowrap;
+  --cor-status: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--cor-status);
+  background: var(--cor-status);
+  color: var(--branco);
   font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-status) 24%, transparent);
+}
+.tabela-submissoes .status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.9;
+}
+.tabela-submissoes .status--em-análise,
+.tabela-submissoes .status--em-analise {
+  --cor-status: var(--azul);
+}
+.tabela-submissoes .status--aguardando-orientador {
+  --cor-status: var(--aviso);
+}
+.tabela-submissoes .status--aprovado,
+.tabela-submissoes .status--publicado {
+  --cor-status: var(--sucesso);
+}
+.tabela-submissoes .status--recusado {
+  --cor-status: var(--erro);
+}
+:root[data-tema='escuro'] .tabela-submissoes .status {
+  color: var(--preto);
+  box-shadow: none;
 }
 .tabela-submissoes a:hover {
   color: var(--azul);

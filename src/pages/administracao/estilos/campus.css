@@ -201,9 +201,9 @@
   color: var(--azul);
 }
 .campus-detalhe-icone {
-  border: 1px solid var(--etiqueta);
-  background: var(--azul-suave);
-  color: var(--azul-vivo);
+  border: 0;
+  background: var(--azul);
+  color: var(--branco);
 }
 .campus-detalhe-icone svg {
   width: 16px;

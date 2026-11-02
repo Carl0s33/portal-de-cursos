@@ -4,34 +4,55 @@
 
 .pagina-professor {
   display: grid;
-  gap: 44px;
-  padding-top: 56px;
+  gap: 32px;
+  padding-top: 40px;
   padding-bottom: 80px;
 }
 
 .pagina-professor__topo {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 32px;
+  gap: 24px;
+}
+
+.pagina-professor__rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: var(--azul);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pagina-professor__rotulo::before {
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+  content: '';
 }
 
 .pagina-professor h1 {
   max-width: 720px;
-  margin: 0;
-  font-size: clamp(38px, 5vw, 58px);
-  line-height: 1;
-  letter-spacing: -0.06em;
+  margin: 0 0 8px;
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
 }
 
-.pagina-professor__topo p {
-  margin: 18px 0 0;
-  font-size: 17px;
+.pagina-professor__topo p:not(.pagina-professor__rotulo) {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 64ch;
 }
 
 .pagina-professor__layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 280px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
@@ -43,9 +64,9 @@
   top: 88px;
   display: grid;
   gap: 24px;
-  padding: 22px 20px;
+  padding: 24px 20px;
   border: 1px solid var(--borda);
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--superficie);
 }
 
@@ -68,7 +89,7 @@
 
 .pagina-professor__filtros {
   display: grid;
-  gap: 4px;
+  gap: 6px;
 }
 
 .pagina-professor__filtros button {
@@ -77,17 +98,53 @@
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  padding: 11px 10px;
-  border: 0;
-  border-radius: 8px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
   color: var(--texto);
   background: transparent;
   font-size: 14px;
+  font-weight: 600;
   text-align: left;
   cursor: pointer;
   transition:
     background-color 150ms ease-out,
+    border-color 150ms ease-out,
     color 150ms ease-out;
+}
+
+.pagina-professor__filtro-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.pagina-professor__filtro-rotulo .icone {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.pagina-professor__filtros button[data-tom='todas'] .icone {
+  color: var(--roxo);
+}
+
+.pagina-professor__filtros button[data-tom='pendente'] .icone {
+  color: var(--aviso);
+}
+
+.pagina-professor__filtros button[data-tom='analise'] .icone {
+  color: var(--azul);
+}
+
+.pagina-professor__filtros button[data-tom='aprovado'] .icone {
+  color: var(--sucesso);
+}
+
+.pagina-professor__filtros button[data-tom='recusado'] .icone {
+  color: var(--erro);
 }
 
 .pagina-professor__filtros button > span {
@@ -97,10 +154,11 @@
 
 .pagina-professor__filtros button small {
   flex-shrink: 0;
-  min-width: 22px;
-  padding: 2px 6px;
+  min-width: 24px;
+  padding: 2px 8px;
   border-radius: 999px;
-  color: var(--texto);
+  background: var(--fundo);
+  color: var(--titulo);
   font-size: 12px;
   font-weight: 700;
   text-align: center;
@@ -110,11 +168,13 @@
 .pagina-professor__filtro--ativo {
   color: var(--azul) !important;
   background: var(--suave) !important;
+  border-color: color-mix(in srgb, var(--azul) 24%, transparent) !important;
 }
 
 .pagina-professor__filtros button:hover small,
 .pagina-professor__filtro--ativo small {
-  color: var(--azul);
+  background: var(--azul);
+  color: var(--branco);
 }
 
 .pagina-professor__filtros button:focus-visible,
@@ -177,18 +237,38 @@
 /* ---------- Card ---------- */
 
 .submissao-feed {
+  --cor-card: var(--azul);
   overflow: hidden;
-  border: 1px solid var(--borda);
+  border: 1px solid color-mix(in srgb, var(--cor-card) 22%, var(--borda));
+  border-left: 4px solid var(--cor-card);
   border-radius: 12px;
   background: var(--superficie);
   transition:
     border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 180ms ease;
+}
+
+.submissao-feed--pendente {
+  --cor-card: var(--aviso);
+}
+
+.submissao-feed--analise {
+  --cor-card: var(--azul);
+}
+
+.submissao-feed--aprovado {
+  --cor-card: var(--sucesso);
+}
+
+.submissao-feed--recusado {
+  --cor-card: var(--erro);
 }
 
 .submissao-feed:hover {
-  border-color: var(--azul);
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--marinho) 6%, transparent);
+  transform: translateY(-1px);
+  border-color: var(--cor-card);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--cor-card) 12%, transparent);
 }
 
 .submissao-feed__gatilho {
@@ -209,26 +289,24 @@
   background-color: var(--suave);
 }
 
-/*
- * O avatar reaproveita o design do ícone de perfil (.cabecalho__iniciais).
- * Aqui só ajustamos o tamanho; cor, fundo e peso vêm de .cabecalho__iniciais.
- * Os valores abaixo são apenas um respaldo de baixa especificidade.
- */
 .submissao-feed__avatar {
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  font-size: 14px;
-}
-
-:where(.submissao-feed__avatar) {
   display: inline-grid;
   place-items: center;
-  border-radius: 50%;
-  color: var(--titulo);
-  background: var(--suave);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--cor-card);
+  color: var(--branco);
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.02em;
+  box-shadow: 0 3px 8px color-mix(in srgb, var(--cor-card) 26%, transparent);
+}
+
+:root[data-tema='escuro'] .submissao-feed__avatar {
+  color: var(--preto);
+  box-shadow: none;
 }
 
 .submissao-feed__conteudo {
@@ -325,33 +403,54 @@
 /* ---------- Status ---------- */
 
 .status {
+  --cor-status: var(--azul);
   display: inline-flex;
+  align-items: center;
+  gap: 6px;
   width: fit-content;
-  padding: 5px 9px;
-  border-radius: 6px;
-  color: var(--texto);
-  background: var(--suave);
-  font-size: 11px;
-  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--cor-status);
+  color: var(--branco);
+  background: var(--cor-status);
+  font-size: 12px;
+  font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-status) 24%, transparent);
+}
+
+.status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.9;
 }
 
 .status--em-análise,
+.status--em-analise {
+  --cor-status: var(--azul);
+}
+
 .status--aguardando-orientador {
-  color: var(--aviso);
-  background: var(--aviso-suave);
+  --cor-status: var(--aviso);
 }
 
 .status--aceito,
-.status--aprovado {
-  color: var(--verde);
-  background: var(--sucesso-suave);
+.status--aprovado,
+.status--publicado {
+  --cor-status: var(--sucesso);
 }
 
 .status--recusado {
-  color: var(--erro-escuro);
-  background: var(--erro-suave);
+  --cor-status: var(--erro);
+}
+
+:root[data-tema='escuro'] .status {
+  color: var(--preto);
+  box-shadow: none;
 }
 
 .pagina-professor__vazio {
@@ -377,45 +476,103 @@
   list-style: none;
 }
 
+.documentos-submissao-professor {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .documentos-submissao-professor li {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--borda);
+  border-radius: 0;
+  transition:
+    border-color var(--transicao),
+    color var(--transicao);
+}
+
+.documentos-submissao-professor li:first-child {
+  border-top: 1px solid var(--borda);
+}
+
+.documentos-submissao-professor li:hover {
+  box-shadow: none;
+  border-color: var(--borda);
+}
+
+.item-documento-interativo,
+.item-documento-estatico {
+  display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-1);
+  width: 100%;
   color: var(--texto);
-  font-size: 13px;
+  background: transparent;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: color var(--transicao);
+}
+
+.item-documento-interativo:hover {
+  background-color: transparent;
+  color: var(--azul);
 }
 
 .documento-tipo {
+  flex-shrink: 0;
   min-width: 44px;
-  padding: 5px 8px;
+  padding: 3px 8px;
   border: 1px solid var(--borda);
-  border-radius: 6px;
+  border-radius: var(--raio-p);
   color: var(--azul);
-  background: var(--suave);
-  font-size: 10px;
-  font-weight: 800;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-align: center;
   white-space: nowrap;
 }
 
-.documentos-submissao-professor strong {
+.item-documento-nome {
+  flex: 1;
+  font-size: var(--texto-s);
+  font-weight: 600;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--titulo);
+  transition: color var(--transicao);
 }
 
-.documento-link {
+.item-documento-interativo:hover .item-documento-nome {
   color: var(--azul);
-  font-size: 13px;
+}
+
+.item-documento-gatilho {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  font-size: var(--texto-xs);
   font-weight: 700;
-  text-decoration: none;
+  color: var(--azul);
   white-space: nowrap;
 }
 
-.documento-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.item-documento-seta {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 800;
+  transition: transform var(--transicao);
+}
+
+.item-documento-interativo:hover .item-documento-seta {
+  transform: translate(3px, -3px);
 }
 
 .documento-indisponivel {

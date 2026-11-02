@@ -1,6 +1,17 @@
-import { useEffect, useMemo, useState } from 'react'
-import { listarCampus, listarCursos } from '@/api/cursos.js'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  atualizarCampus,
+  cadastrarCampus,
+  excluirCampus,
+  listarCampus,
+  listarCursos,
+} from '@/api/cursos.js'
 import { enderecoPrivado } from '@/app/rotas.js'
+import Icone from '@/shared/components/Icone.jsx'
+import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
+import '../estilos/campus.css'
+import '../estilos/gestao.css'
+import '../estilos/geral.css'
 
 function iniciais(valor = '') {
   return valor
@@ -12,89 +23,182 @@ function iniciais(valor = '') {
     .toLocaleUpperCase('pt-BR')
 }
 
-function IconeCampus({ tipo }) {
-  const desenhos = {
-    cursos: (
-      <>
-        <path d="M3 9 12 4l9 5-9 5-9-5Z" />
-        <path d="M7 11.2v4.3c3 2.3 7 2.3 10 0v-4.3M21 9v6" />
-      </>
-    ),
-    identificacao: (
-      <>
-        <path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" />
-        <path d="M14 3v5h5M8 13h8M8 17h6" />
-      </>
-    ),
-    descricao: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 11v5M12 8h.01" />
-      </>
-    ),
-  }[tipo]
+function FormularioCampus({ inicial, salvando, aoSalvar, aoCancelar }) {
+  const [nome, definirNome] = useState(inicial?.nome || '')
+  const [acronimo, definirAcronimo] = useState(inicial?.acronimo || '')
+  const [cidade, definirCidade] = useState(inicial?.cidade || '')
+  const [endereco, definirEndereco] = useState(inicial?.endereco || '')
+
+  function enviar(evento) {
+    evento.preventDefault()
+    aoSalvar({
+      nome: nome.trim(),
+      acronimo: acronimo.trim(),
+      cidade: cidade.trim(),
+      endereco: endereco.trim(),
+    })
+  }
+
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {desenhos}
-    </svg>
+    <form className="gestao-formulario" onSubmit={enviar}>
+      <h2>{inicial?.id ? 'Editar campus' : 'Novo campus'}</h2>
+      <p className="gestao-formulario__orientacao">
+        Preencha todos os campos obrigatórios da unidade acadêmica (RN33).
+      </p>
+      <div className="gestao-campos">
+        <div className="gestao-campo">
+          <label htmlFor="campus-nome">Nome do campus *</label>
+          <input
+            id="campus-nome"
+            required
+            maxLength={100}
+            value={nome}
+            onChange={(e) => definirNome(e.target.value)}
+            placeholder="Ex.: Campus Nova Cruz"
+          />
+        </div>
+        <div className="gestao-campo">
+          <label htmlFor="campus-acronimo">Acrônimo (Sigla) *</label>
+          <input
+            id="campus-acronimo"
+            required
+            maxLength={10}
+            value={acronimo}
+            onChange={(e) => definirAcronimo(e.target.value)}
+            placeholder="Ex.: NC"
+          />
+        </div>
+        <div className="gestao-campo">
+          <label htmlFor="campus-cidade">Cidade *</label>
+          <input
+            id="campus-cidade"
+            required
+            maxLength={100}
+            value={cidade}
+            onChange={(e) => definirCidade(e.target.value)}
+            placeholder="Ex.: Nova Cruz"
+          />
+        </div>
+        <div className="gestao-campo">
+          <label htmlFor="campus-endereco">Endereço *</label>
+          <input
+            id="campus-endereco"
+            required
+            maxLength={200}
+            value={endereco}
+            onChange={(e) => definirEndereco(e.target.value)}
+            placeholder="Ex.: Av. José Rodrigues de Aquino Filho, 640"
+          />
+        </div>
+      </div>
+      <div className="gestao-acoes">
+        <button className="botao-primario" type="submit" disabled={salvando}>
+          {salvando ? 'Salvando…' : 'Salvar campus'}
+        </button>
+        <button className="botao-secundario" type="button" onClick={aoCancelar} disabled={salvando}>
+          Cancelar
+        </button>
+      </div>
+    </form>
   )
 }
 
-export default function GestaoCampus({ identificador }) {
+export default function GestaoCampus({ identificador, token }) {
   const [campus, definirCampus] = useState([])
   const [cursos, definirCursos] = useState(null)
   const [busca, definirBusca] = useState('')
+  const [cidadeFiltro, definirCidadeFiltro] = useState('todas')
   const [estado, definirEstado] = useState('carregando')
   const [erro, definirErro] = useState('')
-  const [tentativa, definirTentativa] = useState(0)
+  const [mensagem, definirMensagem] = useState('')
+  const [editor, definirEditor] = useState(null)
+  const [exclusao, definirExclusao] = useState(null)
+  const [salvando, definirSalvando] = useState(false)
+
+  const carregar = useCallback(async (sinal) => {
+    definirEstado('carregando')
+    definirErro('')
+    try {
+      const [itensCampus, itensCursos] = await Promise.all([
+        listarCampus(sinal),
+        listarCursos(sinal).catch(() => null),
+      ])
+      if (sinal?.aborted) return
+      if (!Array.isArray(itensCampus)) throw new Error('A lista de campus recebida é inválida.')
+      definirCampus(itensCampus)
+      definirCursos(itensCursos)
+      definirEstado('pronto')
+    } catch (falha) {
+      if (!sinal?.aborted) {
+        definirErro(falha.message || 'Não foi possível carregar os campus.')
+        definirEstado('erro')
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const controller = new AbortController()
-    Promise.all([
-      listarCampus(controller.signal),
-      listarCursos(controller.signal).catch(() => null),
-    ])
-      .then(([itensCampus, itensCursos]) => {
-        if (controller.signal.aborted) return
-        if (!Array.isArray(itensCampus)) throw new Error('A lista de campus recebida é inválida.')
-        definirCampus(itensCampus)
-        definirCursos(itensCursos)
-        definirEstado('pronto')
-      })
-      .catch((falha) => {
-        if (!controller.signal.aborted) {
-          definirErro(falha.message || 'Não foi possível carregar os campus.')
-          definirEstado('erro')
-        }
-      })
+    queueMicrotask(() => carregar(controller.signal))
     return () => controller.abort()
-  }, [tentativa])
+  }, [carregar])
+
+  const cidades = useMemo(
+    () => [...new Set(campus.map((item) => item.cidade).filter(Boolean))].sort(),
+    [campus],
+  )
 
   const resultados = useMemo(
     () =>
-      campus.filter((item) =>
-        `${item.nome || ''} ${item.acronimo || ''} ${item.descricao || ''}`
-          .toLocaleLowerCase('pt-BR')
-          .includes(busca.trim().toLocaleLowerCase('pt-BR')),
+      campus.filter(
+        (item) =>
+          (cidadeFiltro === 'todas' || item.cidade === cidadeFiltro) &&
+          `${item.nome || ''} ${item.acronimo || ''} ${item.cidade || ''} ${item.endereco || ''}`
+            .toLocaleLowerCase('pt-BR')
+            .includes(busca.trim().toLocaleLowerCase('pt-BR')),
       ),
-    [busca, campus],
+    [busca, campus, cidadeFiltro],
   )
 
-  function tentarNovamente() {
-    definirEstado('carregando')
-    definirErro('')
-    definirTentativa((valor) => valor + 1)
+  async function salvar(dados) {
+    definirSalvando(true)
+    definirMensagem('')
+    try {
+      if (editor?.id) {
+        await atualizarCampus(token, editor.id, dados)
+        definirMensagem('Campus atualizado com sucesso.')
+      } else {
+        await cadastrarCampus(token, dados)
+        definirMensagem('Campus cadastrado com sucesso.')
+      }
+      definirEditor(null)
+      await carregar()
+    } catch (falha) {
+      definirMensagem(falha.message || 'Não foi possível salvar o campus.')
+    } finally {
+      definirSalvando(false)
+    }
   }
 
-  if (estado === 'carregando')
+  async function confirmarExclusao() {
+    if (!exclusao || salvando) return
+    definirSalvando(true)
+    definirMensagem('')
+    try {
+      await excluirCampus(token, exclusao.id)
+      definirExclusao(null)
+      definirMensagem('Campus excluído com sucesso.')
+      await carregar()
+    } catch (falha) {
+      definirMensagem(
+        falha.message ||
+          'Não foi possível excluir o campus. Verifique se não há cursos vinculados (RN38).',
+      )
+    } finally {
+      definirSalvando(false)
+    }
+  }
+
+  if (estado === 'carregando' && !campus.length)
     return (
       <p className="gestao-aviso" role="status">
         Carregando campus…
@@ -104,7 +208,7 @@ export default function GestaoCampus({ identificador }) {
     return (
       <div className="gestao-aviso" role="alert">
         <p>{erro}</p>
-        <button className="botao-secundario" onClick={tentarNovamente}>
+        <button className="botao-secundario" onClick={() => carregar()}>
           Tentar novamente
         </button>
       </div>
@@ -126,9 +230,8 @@ export default function GestaoCampus({ identificador }) {
     )
 
   if (selecionado) {
-    const cursosVinculados = cursos?.filter(
-      (curso) => String(curso.campusId ?? '') === String(selecionado.id),
-    )
+    const cursosVinculados =
+      cursos?.filter((curso) => String(curso.campusId ?? '') === String(selecionado.id)) || []
     return (
       <>
         <nav className="campus-caminho" aria-label="Caminho da página">
@@ -147,7 +250,7 @@ export default function GestaoCampus({ identificador }) {
               Campus{selecionado.id != null ? ` · #${selecionado.id}` : ''}
             </span>
             <h1>{selecionado.nome}</h1>
-            {selecionado.descricao && <p>{selecionado.descricao}</p>}
+            {selecionado.cidade && <p>{selecionado.cidade}</p>}
           </div>
           {selecionado.acronimo && <span className="campus-sigla">{selecionado.acronimo}</span>}
         </header>
@@ -155,59 +258,80 @@ export default function GestaoCampus({ identificador }) {
           <section className="campus-detalhe-cartao">
             <header>
               <span className="campus-detalhe-icone">
-                <IconeCampus tipo="cursos" />
+                <Icone nome="formacao-cursos" />
               </span>
               <div>
                 <h2>Cursos vinculados</h2>
                 <p>Formações associadas a esta unidade.</p>
               </div>
             </header>
-            {cursosVinculados ? (
-              <strong className="campus-detalhe-valor">{cursosVinculados.length}</strong>
-            ) : (
-              <span className="campus-detalhe-valor campus-detalhe-valor--texto">Indisponível</span>
-            )}
+            <strong className="campus-detalhe-valor">{cursosVinculados.length}</strong>
           </section>
           <section className="campus-detalhe-cartao">
             <header>
               <span className="campus-detalhe-icone">
-                <IconeCampus tipo="identificacao" />
+                <Icone nome="localizacao" />
               </span>
               <div>
-                <h2>Identificação</h2>
+                <h2>Localização e identificação</h2>
                 <p>Dados cadastrados para esta unidade.</p>
               </div>
             </header>
             <dl>
-              {selecionado.nome && (
-                <div>
-                  <dt>Nome</dt>
-                  <dd>{selecionado.nome}</dd>
-                </div>
-              )}
-              {selecionado.acronimo && (
-                <div>
-                  <dt>Acrônimo</dt>
-                  <dd>{selecionado.acronimo}</dd>
-                </div>
-              )}
+              <div>
+                <dt>Nome</dt>
+                <dd>{selecionado.nome}</dd>
+              </div>
+              <div>
+                <dt>Acrônimo</dt>
+                <dd>{selecionado.acronimo || '—'}</dd>
+              </div>
+              <div>
+                <dt>Cidade</dt>
+                <dd>{selecionado.cidade || '—'}</dd>
+              </div>
+              <div>
+                <dt>Endereço</dt>
+                <dd>{selecionado.endereco || '—'}</dd>
+              </div>
             </dl>
           </section>
-          <section className="campus-detalhe-cartao">
+        </div>
+        {cursosVinculados.length > 0 && (
+          <section className="painel-secao">
             <header>
-              <span className="campus-detalhe-icone">
-                <IconeCampus tipo="descricao" />
-              </span>
               <div>
-                <h2>Descrição</h2>
-                <p>Texto institucional disponível no serviço.</p>
+                <h2>Cursos ofertados neste campus</h2>
+                <p>{cursosVinculados.length} curso(s) vinculado(s) à unidade.</p>
               </div>
             </header>
-            <p className="campus-detalhe-descricao">
-              {selecionado.descricao || 'Sem descrição cadastrada.'}
-            </p>
+            <div className="tabela-submissoes" role="region" aria-label="Cursos do campus">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Curso</th>
+                    <th scope="col">Grau</th>
+                    <th scope="col">Turno</th>
+                    <th scope="col">Modalidade</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cursosVinculados.map((curso) => (
+                    <tr key={curso.id}>
+                      <th scope="row">
+                        {curso.nome}
+                        <span>{curso.sigla || curso.acronimo}</span>
+                      </th>
+                      <td>{curso.grau || '—'}</td>
+                      <td>{curso.turno || '—'}</td>
+                      <td>{curso.modalidade || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
-        </div>
+        )}
       </>
     )
   }
@@ -218,19 +342,80 @@ export default function GestaoCampus({ identificador }) {
         <div>
           <span className="administracao-boas-vindas__rotulo">Estrutura acadêmica</span>
           <h1>Campus</h1>
-          <p>Unidades físicas e polos cadastrados no portal.</p>
+          <p>Gerencie as unidades físicas e polos onde os cursos são oferecidos.</p>
+        </div>
+        <div className="painel-titulo__acoes">
+          <button
+            className="botao-secundario"
+            type="button"
+            onClick={() => carregar()}
+            disabled={estado === 'carregando'}
+          >
+            Atualizar lista
+          </button>
+          <button
+            className="botao-primario"
+            type="button"
+            onClick={() => {
+              definirEditor((atual) => (atual?.novo ? null : { novo: true }))
+              definirExclusao(null)
+              definirMensagem('')
+            }}
+          >
+            {editor?.novo ? 'Fechar cadastro' : 'Novo campus'}
+          </button>
         </div>
       </header>
-      <section className="painel-secao campus-lista">
-        <label className="gestao-busca">
-          Buscar campus
-          <input
-            type="search"
-            value={busca}
-            onChange={(evento) => definirBusca(evento.target.value)}
-            placeholder="Nome, acrônimo ou descrição"
+
+      {mensagem && (
+        <p className="gestao-aviso" role="status">
+          {mensagem}
+        </p>
+      )}
+
+      {editor?.novo && (
+        <div className="gestao-expansao gestao-expansao--novo">
+          <FormularioCampus
+            salvando={salvando}
+            aoSalvar={salvar}
+            aoCancelar={() => definirEditor(null)}
           />
-        </label>
+        </div>
+      )}
+
+      <section className="painel-secao campus-lista">
+        <div className="gestao-lista-filtros">
+          <label className="gestao-busca">
+            Buscar campus por nome
+            <input
+              type="search"
+              value={busca}
+              onChange={(evento) => definirBusca(evento.target.value)}
+              placeholder="Nome, acrônimo, cidade ou endereço"
+            />
+          </label>
+          {cidades.length > 0 && (
+            <div className="gestao-filtro-cursos" role="group" aria-label="Filtrar por cidade">
+              <button
+                type="button"
+                aria-pressed={cidadeFiltro === 'todas'}
+                onClick={() => definirCidadeFiltro('todas')}
+              >
+                Todas as cidades <span>{campus.length}</span>
+              </button>
+              {cidades.map((cidade) => (
+                <button
+                  type="button"
+                  key={cidade}
+                  aria-pressed={cidadeFiltro === cidade}
+                  onClick={() => definirCidadeFiltro(cidade)}
+                >
+                  {cidade} <span>{campus.filter((item) => item.cidade === cidade).length}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div
           className="tabela-submissoes"
           role="region"
@@ -241,34 +426,106 @@ export default function GestaoCampus({ identificador }) {
             <thead>
               <tr>
                 <th scope="col">Nome</th>
-                <th scope="col">Sigla</th>
-                <th scope="col">Descrição</th>
+                <th scope="col">Acrônimo</th>
+                <th scope="col">Cidade</th>
+                <th scope="col">Endereço</th>
+                <th scope="col">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {resultados.map((item) => (
-                <tr key={item.id ?? item.nome}>
-                  <th scope="row">
-                    {item.id != null ? (
-                      <a
-                        href={enderecoPrivado(
-                          `administracao/campus/${encodeURIComponent(item.id)}`,
-                        )}
-                      >
-                        {item.nome}
-                      </a>
-                    ) : (
-                      item.nome
+              {resultados.map((item) => {
+                const editando = editor && !editor.novo && String(editor.id) === String(item.id)
+                const confirmando = exclusao && String(exclusao.id) === String(item.id)
+                return (
+                  <Fragment key={item.id ?? item.nome}>
+                    <tr>
+                      <th scope="row">
+                        <a
+                          href={enderecoPrivado(
+                            `administracao/campus/${encodeURIComponent(item.id)}`,
+                          )}
+                        >
+                          {item.nome}
+                        </a>
+                      </th>
+                      <td>
+                        <span className="campus-lista-sigla">
+                          {item.acronimo || iniciais(item.nome)}
+                        </span>
+                      </td>
+                      <td>{item.cidade || '—'}</td>
+                      <td>{item.endereco || '—'}</td>
+                      <td>
+                        <div className="gestao-acoes">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              definirEditor(editando ? null : item)
+                              definirExclusao(null)
+                              definirMensagem('')
+                            }}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            className="gestao-excluir"
+                            onClick={() => {
+                              definirExclusao(confirmando ? null : item)
+                              definirEditor(null)
+                            }}
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {editando && (
+                      <tr className="gestao-linha-expandida">
+                        <td colSpan={5}>
+                          <FormularioCampus
+                            inicial={item}
+                            salvando={salvando}
+                            aoSalvar={salvar}
+                            aoCancelar={() => definirEditor(null)}
+                          />
+                        </td>
+                      </tr>
                     )}
-                  </th>
-                  <td>
-                    <span className="campus-lista-sigla">
-                      {item.acronimo || iniciais(item.nome)}
-                    </span>
-                  </td>
-                  <td>{item.descricao || '—'}</td>
-                </tr>
-              ))}
+                    {confirmando && (
+                      <tr className="gestao-linha-expandida">
+                        <td colSpan={5}>
+                          <ConfirmacaoGestao rotulo={`excluir-campus-${item.id}`}>
+                            <h2 id={`excluir-campus-${item.id}`}>Excluir {item.nome}?</h2>
+                            <p>
+                              Este campus será removido. Não é possível excluir um campus que possua
+                              cursos vinculados (RN38).
+                            </p>
+                            <div className="gestao-acoes">
+                              <button
+                                type="button"
+                                className="botao-secundario"
+                                onClick={() => definirExclusao(null)}
+                                disabled={salvando}
+                              >
+                                Manter campus
+                              </button>
+                              <button
+                                type="button"
+                                className="gestao-excluir"
+                                onClick={confirmarExclusao}
+                                disabled={salvando}
+                              >
+                                {salvando ? 'Excluindo…' : 'Confirmar exclusão'}
+                              </button>
+                            </div>
+                          </ConfirmacaoGestao>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -277,10 +534,6 @@ export default function GestaoCampus({ identificador }) {
           {resultados.length} de {campus.length} campus
         </p>
       </section>
-      <p className="gestao-nota">
-        Esta tela consulta os campus disponíveis. O serviço atual não oferece operações de cadastro
-        ou edição de campus.
-      </p>
     </>
   )
 }

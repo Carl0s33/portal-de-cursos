@@ -14,10 +14,18 @@ import {
   listarDisciplinasPorCurso,
 } from '@/api/disciplinas.js'
 import { listarAlunos } from '@/api/alunos.js'
+import {
+  atualizarProjeto,
+  cadastrarProjeto,
+  excluirProjeto,
+  listarProjetos,
+} from '@/api/projetos.js'
 import { listarProfessores } from '../services/gerenciarProfessores.js'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
 import EditorConteudo from './conteudos/EditorConteudo.jsx'
 import { configuracoes } from './conteudos/configuracoes.js'
+import '../estilos/gestao.css'
+import '../estilos/geral.css'
 
 export default function GestaoConteudos({
   dominio,
@@ -43,9 +51,11 @@ export default function GestaoConteudos({
   const [disciplinasApi, definirDisciplinasApi] = useState([])
   const [campus, definirCampus] = useState([])
   const [areas, definirAreas] = useState([])
-  const [carregando, definirCarregando] = useState(['cursos', 'disciplinas'].includes(dominio))
+  const [carregando, definirCarregando] = useState(
+    ['cursos', 'disciplinas', 'projetos'].includes(dominio),
+  )
   const [salvando, definirSalvando] = useState(false)
-  const persistido = ['cursos', 'disciplinas'].includes(dominio)
+  const persistido = ['cursos', 'disciplinas', 'projetos'].includes(dominio)
   const carregarPersistidos = useCallback(
     async (sinal) => {
       definirCarregando(true)
@@ -60,7 +70,7 @@ export default function GestaoConteudos({
           definirCursosApi(lista)
           definirCampus(listaCampus)
           definirAreas(listaAreas)
-        } else {
+        } else if (dominio === 'disciplinas') {
           const listaCursos = await listarCursos(sinal)
           const listas = await Promise.all(
             listaCursos.map((item) => listarDisciplinasPorCurso(item.id, token, sinal)),
@@ -78,6 +88,30 @@ export default function GestaoConteudos({
           definirCursosApi(listaCursos)
           definirDisciplinasApi(listaDisciplinas)
           definirRegistrosApi(listaDisciplinas)
+        } else if (dominio === 'projetos') {
+          const [listaProjetos, listaCursos] = await Promise.all([
+            listarProjetos(token, sinal),
+            listarCursos(sinal).catch(() => []),
+          ])
+          const listasDisciplinas = await Promise.all(
+            listaCursos.map((item) =>
+              listarDisciplinasPorCurso(item.id, token, sinal).catch(() => []),
+            ),
+          )
+          const mapaCursos = new Map(listaCursos.map((c) => [String(c.id), c]))
+          const mapeados = (Array.isArray(listaProjetos) ? listaProjetos : []).map((p) => {
+            const infoCurso = mapaCursos.get(String(p.cursoId))
+            return {
+              ...p,
+              identificador: String(p.id),
+              curso: infoCurso?.sigla || infoCurso?.acronimo || infoCurso?.nome || '',
+              tipo: p.tipoProjeto || p.tipo || '',
+              status: p.statusProjeto || p.status || '',
+            }
+          })
+          definirCursosApi(listaCursos)
+          definirDisciplinasApi(listasDisciplinas.flat())
+          definirRegistrosApi(mapeados)
         }
       } catch (falha) {
         if (!sinal?.aborted)
@@ -94,33 +128,6 @@ export default function GestaoConteudos({
     queueMicrotask(() => carregarPersistidos(controller.signal))
     return () => controller.abort()
   }, [carregarPersistidos, persistido])
-  useEffect(() => {
-    if (dominio !== 'projetos') return
-    const controller = new AbortController()
-    async function carregarVinculos() {
-      definirCarregando(true)
-      try {
-        const listaCursos = await listarCursos(controller.signal)
-        const listasDisciplinas = await Promise.all(
-          listaCursos.map((item) => listarDisciplinasPorCurso(item.id, token, controller.signal)),
-        )
-        if (controller.signal.aborted) return
-        definirCursosApi(listaCursos)
-        definirDisciplinasApi(listasDisciplinas.flat())
-      } catch (falha) {
-        if (!controller.signal.aborted) {
-          definirMensagem(
-            falha.message ||
-              'Não foi possível carregar cursos e matérias para vincular ao projeto.',
-          )
-        }
-      } finally {
-        if (!controller.signal.aborted) definirCarregando(false)
-      }
-    }
-    carregarVinculos()
-    return () => controller.abort()
-  }, [dominio, token])
   const itensAtuais = persistido ? registrosApi : itens
   const cursosDisponiveis = persistido || dominio === 'projetos' ? cursosApi : cursos
   const disciplinasDisponiveis = persistido || dominio === 'projetos' ? disciplinasApi : disciplinas
@@ -204,7 +211,7 @@ export default function GestaoConteudos({
           }
           if (dados.id) await atualizarCurso(token, dados.id, payload)
           else await cadastrarCurso(token, payload)
-        } else {
+        } else if (dominio === 'disciplinas') {
           const payload = {
             cursoId: Number(dados.cursoId),
             nome: dados.nome,
@@ -216,6 +223,20 @@ export default function GestaoConteudos({
           }
           if (dados.id) await atualizarDisciplina(token, dados.id, payload)
           else await cadastrarDisciplina(token, payload)
+        } else if (dominio === 'projetos') {
+          const cursoSelecionado = cursosDisponiveis.find(
+            (c) => String(c.id) === String(dados.cursoId || cursoId),
+          )
+          const payload = {
+            nome: dados.nome,
+            resumo: dados.resumo || dados.descricao || '',
+            descricao: dados.descricao || dados.resumo || '',
+            tipoProjeto: dados.tipoProjeto || dados.tipo || 'TCC',
+            cursoId: Number(dados.cursoId || cursoId || cursoSelecionado?.id || 1),
+            campusId: Number(cursoSelecionado?.campusId || 1),
+          }
+          if (dados.id) await atualizarProjeto(dados.id, payload, token)
+          else await cadastrarProjeto(payload, token)
         }
         await carregarPersistidos()
         definirEditor(null)
@@ -350,7 +371,8 @@ export default function GestaoConteudos({
       let excluido = false
       try {
         if (dominio === 'cursos') await excluirCurso(token, exclusao.id)
-        else await excluirDisciplina(token, exclusao.id)
+        else if (dominio === 'disciplinas') await excluirDisciplina(token, exclusao.id)
+        else if (dominio === 'projetos') await excluirProjeto(exclusao.id, token)
         await carregarPersistidos()
         definirMensagem('Registro excluído com sucesso.')
         excluido = true
@@ -403,12 +425,6 @@ export default function GestaoConteudos({
           </div>
         )}
       </header>
-      {dominio === 'projetos' && (
-        <p className="gestao-nota">
-          Os projetos ficam só nesta sessão. Ainda falta ligar a página ao serviço de projetos para
-          guardá-los e publicá-los.
-        </p>
-      )}
       {mensagem && (
         <p className="gestao-aviso" role="status">
           {mensagem}

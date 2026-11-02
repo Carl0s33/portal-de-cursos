@@ -194,33 +194,78 @@ a:hover {
   text-underline-offset: 4px;
 }
 
-.botao-primario {
+.botao-primario,
+.botao-secundario {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: var(--azul);
-  color: var(--branco);
-  border: 0;
-  border-radius: 6px;
-  padding: 14px 22px;
+  gap: var(--esp-2);
   min-height: 48px;
-  font-size: 14px;
+  padding: var(--esp-3) var(--esp-5);
+  border: 1px solid transparent;
+  border-radius: var(--raio-m);
+  font-size: var(--texto-s);
   font-weight: 600;
-  box-shadow: none;
+  line-height: 20px;
+  cursor: pointer;
   transition:
-    background-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    background-color var(--transicao),
+    border-color var(--transicao),
+    color var(--transicao),
+    box-shadow var(--transicao),
+    transform var(--transicao);
+}
+
+.botao-primario {
+  background: var(--azul);
+  border-color: var(--azul);
+  color: var(--texto-sobre-azul);
 }
 
 .botao-primario:hover {
-  background: var(--azul);
-  color: var(--branco);
+  background: var(--azul-hover);
+  border-color: var(--azul-hover);
+  color: var(--texto-sobre-azul);
+}
+
+.botao-secundario {
+  background: transparent;
+  border-color: var(--borda);
+  color: var(--titulo);
+}
+
+.botao-secundario:hover {
+  background: var(--suave);
+  border-color: var(--azul);
+  color: var(--azul);
+}
+
+.botao-primario:focus-visible,
+.botao-secundario:focus-visible {
+  outline: none;
+  box-shadow: var(--anel-foco);
 }
 
 .botao-primario:active,
 .botao-secundario:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
+}
+
+.botao-primario:disabled,
+.botao-secundario:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.botao--grande {
+  min-height: 52px;
+  font-size: var(--texto-m);
+}
+
+.botao--pequeno {
+  min-height: 40px;
+  padding: var(--esp-2) var(--esp-4);
 }
 
 .etiqueta {
@@ -292,28 +337,6 @@ a:hover {
   height: 12px;
 }
 
-.botao-secundario {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  font-size: 14px;
-  color: var(--titulo);
-  background: var(--suave);
-  cursor: pointer;
-  transition:
-    color 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.botao-secundario:hover {
-  color: var(--azul);
-  border-color: var(--azul);
-}
 .somente-leitores {
   position: absolute;
   width: 1px;
@@ -322,28 +345,4 @@ a:hover {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-/* Estilo Flat / Minimalista - Sem Glassmorphism */
-.botao-primario {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: var(--azul);
-  color: var(--branco);
-  border: 2px solid var(--azul);
-  border-radius: 4px; /* Linhas mais retas e estruturadas */
-  padding: 12px 24px;
-  min-height: 48px;
-  font-size: 15px;
-  font-weight: 600;
-  transition:
-    background-color 200ms ease,
-    color 200ms ease;
-}
-
-/* Feedback visual direto pela inversão de cores, sem elevação */
-.botao-primario:hover {
-  background: transparent;
-  color: var(--azul);
 }

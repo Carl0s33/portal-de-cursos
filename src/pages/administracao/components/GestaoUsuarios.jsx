@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { consultarUsuarios } from '@/api/usuarios.js'
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '../services/gerenciarProfessores.js'
+import '../estilos/gestao.css'
+import '../estilos/usuarios.css'
+import '../estilos/geral.css'
 
 export default function GestaoUsuarios({ token }) {
   const [consulta, definirConsulta] = useState({ estado: 'carregando', itens: [], erro: '' })
@@ -116,6 +119,7 @@ export default function GestaoUsuarios({ token }) {
             <div className="gestao-papeis" role="group" aria-label="Filtrar por papel">
               <button
                 type="button"
+                data-papel="todos"
                 aria-pressed={papel === 'todos'}
                 onClick={() => definirPapel('todos')}
               >
@@ -125,6 +129,7 @@ export default function GestaoUsuarios({ token }) {
                 <button
                   type="button"
                   key={tipo}
+                  data-papel={tipo.toLowerCase()}
                   aria-pressed={papel === tipo}
                   onClick={() => definirPapel(tipo)}
                 >

@@ -79,40 +79,14 @@ function MensagemErro({ id, texto }) {
 }
 
 function IconeCampo({ tipo }) {
-  const desenhos = {
-    usuario: (
-      <>
-        <circle cx="12" cy="8" r="3.5" />
-        <path d="M5 20v-1a7 7 0 0 1 14 0v1" />
-      </>
-    ),
-    email: (
-      <>
-        <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
-        <path d="m4.5 7 7.5 6 7.5-6" />
-      </>
-    ),
-    curso: (
-      <>
-        <path d="m3 9 9-5 9 5-9 5-9-5Z" />
-        <path d="M7 11.5v4c2.8 2.3 7.2 2.3 10 0v-4M21 9v6" />
-      </>
-    ),
-    senha: (
-      <>
-        <rect x="5" y="10" width="14" height="10" rx="2" />
-        <path d="M8 10V7a4 4 0 1 1 8 0v3" />
-      </>
-    ),
+  const mapaTipo = {
+    usuario: 'usuario',
+    email: 'email',
+    curso: 'formacao-cursos',
+    senha: 'senha',
   }
 
-  return (
-    <svg className="cadastro-aluno__icone-campo" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <g stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-        {desenhos[tipo]}
-      </g>
-    </svg>
-  )
+  return <Icone nome={mapaTipo[tipo] || 'ponto'} classe="cadastro-aluno__icone-campo" />
 }
 
 export default function PaginaCadastroAluno() {
@@ -360,11 +334,7 @@ export default function PaginaCadastroAluno() {
                   aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
                   title={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
                 >
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z" />
-                    <circle cx="12" cy="12" r="2.5" />
-                    {mostrarSenha && <path d="m4 4 16 16" />}
-                  </svg>
+                  <Icone nome={mostrarSenha ? 'ocultar' : 'mostrar'} />
                 </button>
               </div>
               <p id="ajuda-senha" className="acesso-ajuda-campo cadastro-aluno__dica">
@@ -426,7 +396,7 @@ export default function PaginaCadastroAluno() {
             </header>
             <div className="cadastro-aluno__projeto">
               <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--tcc">
-                ⌂
+                <Icone nome="formacao-cursos" />
               </span>
               <div>
                 <strong>TCC</strong>
@@ -435,7 +405,7 @@ export default function PaginaCadastroAluno() {
             </div>
             <div className="cadastro-aluno__projeto">
               <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--integrador">
-                ⌘
+                <Icone nome="projetos-cursos" />
               </span>
               <div>
                 <strong>Projeto Integrador</strong>
@@ -444,7 +414,7 @@ export default function PaginaCadastroAluno() {
             </div>
             <div className="cadastro-aluno__projeto">
               <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--pesquisa">
-                ⌕
+                <Icone nome="laboratorio" />
               </span>
               <div>
                 <strong>Projeto de Pesquisa</strong>
@@ -453,7 +423,7 @@ export default function PaginaCadastroAluno() {
             </div>
             <div className="cadastro-aluno__projeto">
               <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--extensao">
-                ♧
+                <Icone nome="docentes-detalhe" />
               </span>
               <div>
                 <strong>Projeto de Extensão</strong>
