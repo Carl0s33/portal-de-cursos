@@ -342,7 +342,8 @@
   color: var(--texto);
 }
 
-.painel-navegacao__icone svg {
+.painel-navegacao__icone svg,
+.painel-navegacao__icone .icone {
   width: 17px;
   height: 17px;
 }

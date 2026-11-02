@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import { listarCursos } from '@/api/cursos.js'
-import { listarProjetos } from '@/api/projetos.js'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import Ligacao from '@/shared/components/Ligacao.jsx'
+import { consultarProjetosEmDestaque } from '../services/consultarProjetosEmDestaque.js'
 
 export default function ProjetosEmDestaque() {
   const [projetos, definirProjetos] = useState([])
@@ -10,45 +9,9 @@ export default function ProjetosEmDestaque() {
 
   useEffect(() => {
     const controle = new AbortController()
-    Promise.all([
-      listarProjetos(null, controle.signal),
-      listarCursos(controle.signal).catch(() => []),
-    ])
-      .then(([dados, cursos]) => {
+    consultarProjetosEmDestaque(controle.signal)
+      .then((publicados) => {
         if (controle.signal.aborted) return
-        const mapaCursos = new Map(
-          (Array.isArray(cursos) ? cursos : []).map((c) => [
-            String(c.id),
-            c.sigla || c.acronimo || c.nome,
-          ]),
-        )
-        const publicados = (Array.isArray(dados) ? dados : [])
-          .filter((p) => !p.statusProjeto || p.statusProjeto === 'PUBLICADO')
-          .slice(0, 3)
-          .map((p) => ({
-            id: p.id,
-            identificador: String(p.id),
-            nome: p.nome,
-            descricao: p.descricao || p.resumo,
-            tipo:
-              p.tipoProjeto === 'TCC'
-                ? 'TCC'
-                : p.tipoProjeto === 'PROJETO_INTEGRADOR'
-                  ? 'Projeto Integrador'
-                  : p.tipoProjeto === 'PROJETO_PESQUISA'
-                    ? 'Pesquisa'
-                    : p.tipoProjeto === 'PROJETO_EXTENSAO'
-                      ? 'Extensão'
-                      : p.tipoProjeto || 'Projeto',
-            curso: mapaCursos.get(String(p.cursoId)) || (p.cursoId ? `#${p.cursoId}` : ''),
-            orientador: (() => {
-              if (p.orientador) return p.orientador
-              const orientador = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')
-              if (orientador?.nome) return orientador.nome
-              if (orientador?.professorId) return `Prof. #${orientador.professorId}`
-              return 'Orientação acadêmica'
-            })(),
-          }))
         definirProjetos(publicados)
         definirEstado('pronto')
       })

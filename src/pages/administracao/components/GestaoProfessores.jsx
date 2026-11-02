@@ -6,6 +6,8 @@ import {
 } from '../services/gerenciarProfessores.js'
 import FormularioProfessor from './FormularioProfessor.jsx'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
+import '../estilos/gestao.css'
+import '../estilos/geral.css'
 
 export default function GestaoProfessores({ token, cursoId }) {
   const [consulta, definirConsulta] = useState({ estado: 'carregando', dados: [], erro: '' })

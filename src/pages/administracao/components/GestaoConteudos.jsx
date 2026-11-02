@@ -18,6 +18,8 @@ import { listarProfessores } from '../services/gerenciarProfessores.js'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
 import EditorConteudo from './conteudos/EditorConteudo.jsx'
 import { configuracoes } from './conteudos/configuracoes.js'
+import '../estilos/gestao.css'
+import '../estilos/geral.css'
 
 export default function GestaoConteudos({
   dominio,

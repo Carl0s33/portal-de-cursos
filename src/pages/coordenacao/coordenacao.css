@@ -1,0 +1,305 @@
+.coordenacao-painel {
+  display: grid;
+  gap: 24px;
+}
+
+.coordenacao-boas-vindas {
+  min-height: 102px;
+  padding: 18px 20px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--superficie);
+}
+
+.coordenacao-boas-vindas__rotulo {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--azul);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.coordenacao-boas-vindas h1 {
+  font-size: clamp(26px, 2.5vw, 34px);
+  letter-spacing: -0.035em;
+}
+
+.coordenacao-boas-vindas p {
+  margin: 5px 0 0;
+  color: var(--texto);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.coordenacao-boas-vindas__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.coordenacao-boas-vindas__acoes a,
+.coordenacao-boas-vindas__acoes button {
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.coordenacao-indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.coordenacao-indicador {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  min-height: 104px;
+  padding: 18px;
+  border: 1px solid var(--borda-suave);
+  border-radius: 12px;
+  background: var(--superficie);
+  text-decoration: none;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--marinho) 4%, transparent);
+  transition:
+    transform var(--transicao),
+    border-color var(--transicao),
+    box-shadow var(--transicao);
+}
+
+.coordenacao-indicador:hover {
+  transform: translateY(-1px);
+  border-color: var(--borda);
+  box-shadow: 0 7px 18px color-mix(in srgb, var(--marinho) 9%, transparent);
+}
+
+.coordenacao-indicador__icone {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: var(--azul-suave);
+  color: var(--azul);
+  border: 1px solid color-mix(in srgb, var(--azul) 18%, transparent);
+}
+
+.coordenacao-indicador__icone--analise {
+  background: var(--aviso-suave);
+  color: var(--aviso);
+  border-color: color-mix(in srgb, var(--aviso) 25%, transparent);
+}
+
+.coordenacao-indicador__icone--aprovado {
+  background: var(--sucesso-suave);
+  color: var(--sucesso);
+  border-color: color-mix(in srgb, var(--sucesso) 25%, transparent);
+}
+
+.coordenacao-indicador__icone--total {
+  background: var(--roxo-suave);
+  color: var(--roxo);
+  border-color: color-mix(in srgb, var(--roxo) 25%, transparent);
+}
+
+.coordenacao-indicador__texto {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.coordenacao-indicador__texto > span {
+  overflow: hidden;
+  color: var(--texto);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coordenacao-indicador__texto strong {
+  color: var(--titulo);
+  font-size: 30px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.coordenacao-indicador__seta {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: var(--texto);
+  font-size: 15px;
+}
+
+.coordenacao-registros {
+  margin: 0;
+}
+
+.coordenacao-registros > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px;
+  border-bottom: 1px solid var(--borda);
+}
+
+.coordenacao-registros > header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.coordenacao-registros > header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: var(--texto);
+}
+
+.coordenacao-registros > header a {
+  color: var(--azul);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.coordenacao-secao-atalhos > header {
+  margin-bottom: 14px;
+}
+
+.coordenacao-secao-atalhos > header h2 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.coordenacao-secao-atalhos > header p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.coordenacao-categorias {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.coordenacao-categoria {
+  padding: 20px 24px;
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: 14px;
+}
+
+.coordenacao-categoria h3 {
+  margin: 0;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--borda-suave);
+  color: var(--azul);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.coordenacao-categoria ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.coordenacao-categoria li + li {
+  border-top: 1px solid color-mix(in srgb, var(--borda) 55%, transparent);
+}
+
+.coordenacao-categoria a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 62px;
+  padding: 10px 8px;
+  margin-inline: -8px;
+  border-radius: 8px;
+  transition:
+    color 140ms,
+    background-color 140ms;
+}
+
+.coordenacao-categoria a:hover {
+  background: var(--suave);
+}
+
+.coordenacao-categoria a:hover .coordenacao-categoria__texto strong {
+  color: var(--azul);
+}
+
+.coordenacao-categoria__texto {
+  display: grid;
+  gap: 3px;
+}
+
+.coordenacao-categoria__texto strong {
+  color: var(--titulo);
+  font-size: 14px;
+}
+
+.coordenacao-categoria__texto small {
+  color: var(--texto);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+:root[data-tema='escuro'] .coordenacao-boas-vindas,
+:root[data-tema='escuro'] .coordenacao-indicador,
+:root[data-tema='escuro'] .coordenacao-categoria {
+  background: var(--preto);
+  border-color: var(--borda-suave);
+  box-shadow: none;
+}
+
+:root[data-tema='escuro'] .coordenacao-boas-vindas {
+  border-left: 2px solid var(--azul-vivo);
+}
+
+:root[data-tema='escuro'] .coordenacao-indicador:hover {
+  border-color: var(--roxo-suave);
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--preto) 35%, transparent);
+}
+
+@media (max-width: 1100px) {
+  .coordenacao-indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .coordenacao-indicadores {
+    gap: 10px;
+  }
+
+  .coordenacao-indicador {
+    min-height: 92px;
+    padding: 14px;
+  }
+
+  .coordenacao-indicador__texto strong {
+    font-size: 26px;
+  }
+
+  .coordenacao-registros > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .coordenacao-categorias {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}

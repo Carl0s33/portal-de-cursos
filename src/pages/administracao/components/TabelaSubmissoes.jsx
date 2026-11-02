@@ -1,3 +1,6 @@
+import '../estilos/submissoes.css'
+import '../estilos/registros.css'
+
 export default function TabelaSubmissoes({ itens = [], baseDetalhes }) {
   if (!itens.length) {
     return (
