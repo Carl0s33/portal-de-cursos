@@ -8,7 +8,22 @@
       content="Conheça os cursos, disciplinas, professores e produções acadêmicas dos estudantes no Portal de Cursos."
     />
     <meta name="theme-color" content="#0046d2" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <meta property="og:title" content="Portal de Cursos" />
+    <meta
+      property="og:description"
+      content="Cursos, disciplinas, professores e produções acadêmicas."
+    />
+    <meta property="og:type" content="website" />
     <title>Portal de Cursos — Formação e produção acadêmica</title>
+    <script>
+      try {
+        var t = localStorage.getItem('portal-cursos-tema')
+        if (t !== 'claro' && t !== 'escuro')
+          t = matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro'
+        document.documentElement.dataset.tema = t
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

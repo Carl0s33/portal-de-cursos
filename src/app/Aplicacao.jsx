@@ -23,6 +23,7 @@ import PaginaDetalhesSubmissao from '@/pages/professor/PaginaDetalhesSubmissao.j
 import { listarCursos } from '@/api/cursos.js'
 import { atualizarStatusProjeto } from '@/api/projetos.js'
 import { listarSubmissoes } from '@/api/submissoes.js'
+import { limparDadosLocais } from './limparDadosLocais.js'
 
 function identificarPagina(rota) {
   if (['projetos', 'biblioteca'].includes(rota)) return 'projetos'
@@ -205,6 +206,7 @@ export default function Aplicacao() {
       if (Date.now() >= sessao.expiraEm) {
         definirSessao(null)
         definirSessaoExpirada(true)
+        limparDadosLocais()
       }
     }
     const temporizador = window.setTimeout(
@@ -329,12 +331,7 @@ export default function Aplicacao() {
     definirListaSubmissoes([])
     definirListaProjetos([])
     definirRascunhos({ cursos: [], projetos: [], disciplinas: [] })
-    try {
-      localStorage.removeItem('portal-cursos-submissoes')
-      localStorage.removeItem('portal-cursos-decisoes')
-    } catch {
-      /* Ignora falha ao limpar armazenamento local */
-    }
+    limparDadosLocais()
     navegar(enderecoPrivado('login'), true)
   }
   useEffect(() => {
@@ -449,8 +446,8 @@ export default function Aplicacao() {
           : 'professor'
     if (sessao && (ePaginaLogin || pagina !== areaDaSessao))
       return (
-        <main id="conteudo" className="limite pagina-painel" role="status">
-          Abrindo sua área…
+        <main id="conteudo" className="limite pagina-painel">
+          <p role="status">Abrindo sua área…</p>
         </main>
       )
     return (
