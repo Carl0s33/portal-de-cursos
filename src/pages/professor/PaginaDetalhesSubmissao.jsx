@@ -74,7 +74,6 @@ export default function PaginaDetalhesSubmissao({
   const [erro, definirErro] = useState('')
   const [editando, definirEditando] = useState(false)
   const [confirmandoRemocao, definirConfirmandoRemocao] = useState(false)
-  const [documentoVisualizando, definirDocumentoVisualizando] = useState(null)
   const [edicao, definirEdicao] = useState(() => ({
     titulo: item?.titulo || '',
     resumo: item?.resumo || '',
@@ -302,53 +301,41 @@ export default function PaginaDetalhesSubmissao({
                     const tipo = rotuloDoTipo(objeto ? documento.tipoDocumento : null)
                     const localizacao = objeto ? documento.localizacao : null
                     const ehUrl = localizacao && /^https?:\/\//i.test(localizacao)
-                    const linkDownload =
-                      item?.id && documento?.id
+                    const urlDestino = ehUrl
+                      ? localizacao
+                      : item?.id && documento?.id
                         ? obterUrlDownloadDocumento(item.id, documento.id)
                         : null
 
                     return (
                       <li key={documento?.id || nome || indice}>
-                        <span className="documento-tipo" aria-hidden="true">
-                          {tipo}
-                        </span>
-                        <strong>{nome}</strong>
-                        {ehUrl ? (
+                        {urlDestino ? (
                           <a
-                            href={localizacao}
+                            href={urlDestino}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="documento-link"
+                            className="item-documento-interativo"
+                            title={`Abrir ${nome} em nova guia para pré-visualizar`}
                           >
-                            Acessar link externo ↗
+                            <span className="documento-tipo" aria-hidden="true">
+                              {tipo}
+                            </span>
+                            <span className="item-documento-nome">{nome}</span>
+                            <span className="item-documento-gatilho">
+                              Abrir em nova guia{' '}
+                              <span className="item-documento-seta" aria-hidden="true">
+                                ↗
+                              </span>
+                            </span>
                           </a>
-                        ) : linkDownload ? (
-                          <div className="documento-acoes">
-                            <button
-                              type="button"
-                              className="botao-secundario botao--pequeno documento-botao-visualizar"
-                              onClick={() =>
-                                definirDocumentoVisualizando({
-                                  nome,
-                                  url: linkDownload,
-                                })
-                              }
-                            >
-                              Visualizar 👁️
-                            </button>
-                            <a
-                              href={linkDownload}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="documento-link"
-                              download={nome}
-                              title="Baixar arquivo no computador"
-                            >
-                              Baixar ⬇
-                            </a>
-                          </div>
                         ) : (
-                          <span className="documento-indisponivel">Arquivo enviado</span>
+                          <div className="item-documento-estatico">
+                            <span className="documento-tipo" aria-hidden="true">
+                              {tipo}
+                            </span>
+                            <strong className="item-documento-nome">{nome}</strong>
+                            <span className="documento-indisponivel">Arquivo enviado</span>
+                          </div>
                         )}
                       </li>
                     )
@@ -480,51 +467,6 @@ export default function PaginaDetalhesSubmissao({
             </button>
           </div>
         </ConfirmacaoGestao>
-      )}
-
-      {documentoVisualizando && (
-        <div
-          className="modal-pdf"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-pdf-titulo"
-        >
-          <div className="modal-pdf__backdrop" onClick={() => definirDocumentoVisualizando(null)} />
-          <div className="modal-pdf__conteudo">
-            <header className="modal-pdf__cabecalho">
-              <div>
-                <span className="modal-pdf__subtitulo">Visualização de Documento</span>
-                <h2 id="modal-pdf-titulo">{documentoVisualizando.nome}</h2>
-              </div>
-              <div className="modal-pdf__cabecalho-acoes">
-                <a
-                  href={documentoVisualizando.url}
-                  download={documentoVisualizando.nome}
-                  className="botao-secundario botao--pequeno"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Baixar ⬇
-                </a>
-                <button
-                  type="button"
-                  className="botao-secundario botao--pequeno modal-pdf__fechar"
-                  onClick={() => definirDocumentoVisualizando(null)}
-                  aria-label="Fechar visualizador"
-                >
-                  Fechar ✕
-                </button>
-              </div>
-            </header>
-            <div className="modal-pdf__corpo">
-              <iframe
-                src={documentoVisualizando.url}
-                title={documentoVisualizando.nome}
-                className="modal-pdf__iframe"
-              />
-            </div>
-          </div>
-        </div>
       )}
 
       {tipoUsuario === 'COORDENADOR' && (aoEditar || aoRemover) && (

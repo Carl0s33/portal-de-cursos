@@ -377,141 +377,102 @@
   list-style: none;
 }
 
+.documentos-submissao-professor {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
 .documentos-submissao-professor li {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 0;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-m);
+  background: var(--superficie);
+  overflow: hidden;
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao),
+    transform var(--transicao);
+}
+
+.documentos-submissao-professor li:hover {
+  border-color: var(--azul);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--azul) 12%, transparent);
+}
+
+.item-documento-interativo,
+.item-documento-estatico {
+  display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-4);
+  width: 100%;
   color: var(--texto);
-  font-size: 13px;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition:
+    background-color var(--transicao),
+    color var(--transicao);
+}
+
+.item-documento-interativo:hover {
+  background-color: var(--suave);
+  color: var(--azul);
 }
 
 .documento-tipo {
+  flex-shrink: 0;
   min-width: 44px;
-  padding: 5px 8px;
+  padding: 4px 8px;
   border: 1px solid var(--borda);
-  border-radius: 6px;
+  border-radius: var(--raio-p);
   color: var(--azul);
-  background: var(--suave);
-  font-size: 10px;
-  font-weight: 800;
+  background: var(--superficie);
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-align: center;
   white-space: nowrap;
 }
 
-.documentos-submissao-professor strong {
+.item-documento-nome {
+  flex: 1;
+  font-size: var(--texto-s);
+  font-weight: 600;
   min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.documento-link {
-  color: var(--azul);
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.documento-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.documento-acoes {
-  display: flex;
-  align-items: center;
-  gap: var(--esp-2);
-}
-
-.documento-botao-visualizar {
-  font-size: 12px;
-  min-height: 32px;
-  padding: 4px 10px;
-}
-
-/* ==========================================================================
-   Modal do Visualizador de PDF
-   ========================================================================== */
-
-.modal-pdf {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--esp-4);
-}
-
-.modal-pdf__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 5, 14, 0.7);
-  backdrop-filter: blur(4px);
-}
-
-.modal-pdf__conteudo {
-  position: relative;
-  z-index: 1001;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1100px;
-  height: 90vh;
-  background: var(--superficie);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-g);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-}
-
-.modal-pdf__cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--esp-3);
-  padding: var(--esp-3) var(--esp-5);
-  border-bottom: 1px solid var(--borda);
-  background: var(--fundo);
-}
-
-.modal-pdf__subtitulo {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--azul);
-}
-
-.modal-pdf__cabecalho h2 {
-  margin: 0;
-  font-size: var(--texto-m);
-  font-weight: 700;
-  color: var(--titulo);
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 600px;
+  white-space: nowrap;
+  color: var(--titulo);
+  transition: color var(--transicao);
 }
 
-.modal-pdf__cabecalho-acoes {
-  display: flex;
+.item-documento-interativo:hover .item-documento-nome {
+  color: var(--azul);
+}
+
+.item-documento-gatilho {
+  display: inline-flex;
   align-items: center;
-  gap: var(--esp-2);
+  gap: var(--esp-1);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--azul);
+  white-space: nowrap;
 }
 
-.modal-pdf__corpo {
-  flex: 1;
-  background: #2b2b2b;
-  position: relative;
+.item-documento-seta {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 800;
+  transition: transform var(--transicao);
 }
 
-.modal-pdf__iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+.item-documento-interativo:hover .item-documento-seta {
+  transform: translate(3px, -3px);
 }
 
 .documento-indisponivel {
