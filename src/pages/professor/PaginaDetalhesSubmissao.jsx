@@ -463,7 +463,7 @@ export default function PaginaDetalhesSubmissao({
       {confirmandoRemocao && (
         <ConfirmacaoGestao rotulo="titulo-remover-submissao">
           <h2 id="titulo-remover-submissao">Remover esta submissão?</h2>
-          <p>A remoção afeta apenas os dados desta sessão.</p>
+          <p>Este registro será removido permanentemente do sistema.</p>
           <div className="gestao-acoes">
             <button
               className="botao-secundario"
@@ -484,13 +484,6 @@ export default function PaginaDetalhesSubmissao({
             </button>
           </div>
         </ConfirmacaoGestao>
-      )}
-
-      {tipoUsuario === 'COORDENADOR' && (aoEditar || aoRemover) && (
-        <p className="gestao-nota">
-          Decisões, edições e remoções ficam nesta sessão enquanto a API de submissões não estiver
-          integrada.
-        </p>
       )}
     </main>
   )

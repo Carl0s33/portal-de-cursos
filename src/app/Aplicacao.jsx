@@ -21,7 +21,7 @@ import PaginaPainelAluno from '@/pages/painel-aluno/PaginaPainelAluno.jsx'
 import PaginaDetalhesSubmissao from '@/pages/professor/PaginaDetalhesSubmissao.jsx'
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
-import { atualizarStatusProjeto } from '@/api/projetos.js'
+import { atualizarStatusProjeto, excluirProjeto } from '@/api/projetos.js'
 import { listarSubmissoes } from '@/api/submissoes.js'
 import { limparDadosLocais } from './limparDadosLocais.js'
 
@@ -65,23 +65,8 @@ export default function Aplicacao() {
       return null
     }
   })
-  const [decisoes, definirDecisoes] = useState(() => {
-    try {
-      const salvas = localStorage.getItem('portal-cursos-decisoes')
-      return salvas ? JSON.parse(salvas) : {}
-    } catch {
-      return {}
-    }
-  })
-  const [listaSubmissoes, definirListaSubmissoes] = useState(() => {
-    try {
-      const salvas = localStorage.getItem('portal-cursos-submissoes')
-      return salvas ? JSON.parse(salvas) : []
-    } catch {
-      return []
-    }
-  })
-  const [listaProjetos, definirListaProjetos] = useState([])
+  const [decisoes, definirDecisoes] = useState({})
+  const [listaSubmissoes, definirListaSubmissoes] = useState([])
   const [rascunhos, definirRascunhos] = useState({ cursos: [], projetos: [], disciplinas: [] })
   const [sessaoExpirada, definirSessaoExpirada] = useState(false)
   const [tema, definirTema] = useState(lerTema)
@@ -90,20 +75,6 @@ export default function Aplicacao() {
   const [rotaCurso, definirRotaCurso] = useState(() =>
     window.location.hash.startsWith('#curso/') ? window.location.hash.slice(1) : '',
   )
-  useEffect(() => {
-    try {
-      localStorage.setItem('portal-cursos-submissoes', JSON.stringify(listaSubmissoes))
-    } catch {
-      /* Ignora falha de armazenamento local */
-    }
-  }, [listaSubmissoes])
-  useEffect(() => {
-    try {
-      localStorage.setItem('portal-cursos-decisoes', JSON.stringify(decisoes))
-    } catch {
-      /* Ignora falha de armazenamento local */
-    }
-  }, [decisoes])
   useEffect(() => {
     try {
       if (sessao) sessionStorage.setItem('portal-cursos-sessao', JSON.stringify(sessao))
@@ -310,16 +281,9 @@ export default function Aplicacao() {
               tipoAutor: 'ALUNO',
             }
           })
-          definirListaSubmissoes((locais) => {
-            const mapaNovas = new Map(mapeadas.map((m) => [String(m.id), m]))
-            const atualizadas = locais.map((local) => {
-              const doBack = mapaNovas.get(String(local.id || local.identificador))
-              return doBack ? { ...local, ...doBack } : local
-            })
-            const idsAtualizados = new Set(atualizadas.map((l) => String(l.id || l.identificador)))
-            const novasFaltando = mapeadas.filter((m) => !idsAtualizados.has(String(m.id)))
-            return [...novasFaltando, ...atualizadas]
-          })
+          definirListaSubmissoes(mapeadas)
+        } else if (Array.isArray(dados)) {
+          definirListaSubmissoes([])
         }
       } catch {
         /* Mantém as submissões já existentes */
@@ -344,7 +308,6 @@ export default function Aplicacao() {
     definirSessaoExpirada(false)
     definirDecisoes({})
     definirListaSubmissoes([])
-    definirListaProjetos([])
     definirRascunhos({ cursos: [], projetos: [], disciplinas: [] })
     limparDadosLocais()
     navegar(enderecoPrivado('login'), true)
@@ -551,29 +514,6 @@ export default function Aplicacao() {
               const submissao = listaSubmissoes.find(
                 (item) => item.identificador === identificadorSubmissao,
               )
-              if (sessao.tipoUsuario === 'COORDENADOR' && status === 'Aprovado' && submissao) {
-                const projetoPublicado = {
-                  identificador: submissao.identificador,
-                  cursoId: submissao.cursoId,
-                  identificadorCurso: submissao.identificadorCurso,
-                  nome: submissao.titulo,
-                  tipo: submissao.tipo,
-                  curso: submissao.curso,
-                  cursoCompleto: submissao.cursoCompleto,
-                  descricao: submissao.objetivo || submissao.resumo,
-                  autores: Array.isArray(submissao.autores)
-                    ? submissao.autores
-                        .map((autor) => (typeof autor === 'string' ? autor : autor.nome))
-                        .join(' e ')
-                    : submissao.autor || '',
-                  orientador: submissao.orientador,
-                  status: 'PUBLICADO',
-                }
-                definirListaProjetos((atuais) => [
-                  ...atuais.filter((item) => item.identificador !== submissao.identificador),
-                  projetoPublicado,
-                ])
-              }
 
               // Sincroniza com o backend via PATCH /api/projetos/{id}/status
               if (submissao?.id && sessao?.token) {
@@ -583,7 +523,6 @@ export default function Aplicacao() {
                   else if (status === 'Recusado') statusBackend = 'RECUSADO'
                 } else if (sessao.tipoUsuario === 'COORDENADOR') {
                   if (status === 'Aprovado') {
-                    // Transição no backend: APROVADO -> ANALISE_PUBLICACAO -> PUBLICADO
                     atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
                       .then(() => atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token))
                       .catch(() => {})
@@ -592,9 +531,7 @@ export default function Aplicacao() {
                   }
                 }
                 if (statusBackend) {
-                  atualizarStatusProjeto(submissao.id, statusBackend, sessao.token).catch(() => {
-                    /* fallback local se API falhar */
-                  })
+                  atualizarStatusProjeto(submissao.id, statusBackend, sessao.token).catch(() => {})
                 }
               }
 
@@ -622,24 +559,14 @@ export default function Aplicacao() {
                   item.identificador === identificadorSubmissao ? { ...item, ...alteracoes } : item,
                 ),
               )
-              definirListaProjetos((itens) =>
-                itens.map((projeto) =>
-                  projeto.identificador === identificadorSubmissao
-                    ? {
-                        ...projeto,
-                        nome: alteracoes.titulo,
-                        descricao: alteracoes.objetivo,
-                        tipo: alteracoes.tipo,
-                        autores: (alteracoes.autores || [])
-                          .map((autor) => (typeof autor === 'string' ? autor : autor.nome))
-                          .join(' e '),
-                        orientador: alteracoes.orientador,
-                      }
-                    : projeto,
-                ),
-              )
             }}
             aoRemover={() => {
+              const submissao = listaSubmissoes.find(
+                (item) => item.identificador === identificadorSubmissao,
+              )
+              if (submissao?.id && sessao?.token) {
+                excluirProjeto(submissao.id, sessao.token).catch(() => {})
+              }
               definirListaSubmissoes((itens) =>
                 itens.filter((item) => item.identificador !== identificadorSubmissao),
               )
@@ -648,9 +575,6 @@ export default function Aplicacao() {
                 delete proxima[identificadorSubmissao]
                 return proxima
               })
-              definirListaProjetos((itens) =>
-                itens.filter((projeto) => projeto.identificador !== identificadorSubmissao),
-              )
             }}
           />
         ) : (
@@ -695,7 +619,7 @@ export default function Aplicacao() {
         alternarTema={(proximoTema) => definirTema(proximoTema)}
       />
       {pagina === 'cursos' && <PaginaCursos />}
-      {pagina === 'projetos' && <PaginaProjetos itens={listaProjetos} />}
+      {pagina === 'projetos' && <PaginaProjetos />}
       {pagina === 'detalhes-curso' && (
         <PaginaDetalhesCurso key={identificador} identificador={identificador} aba={aba} />
       )}

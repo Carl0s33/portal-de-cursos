@@ -48,38 +48,146 @@
 .painel-indicadores {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
+  gap: 18px;
   margin: 0;
 }
 .painel-indicadores > div {
-  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 24px;
   background: var(--superficie);
   border: 1px solid var(--borda);
+  border-top: 3px solid var(--azul);
   border-radius: 14px;
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--marinho) 4%, transparent);
+  transition:
+    transform var(--transicao),
+    border-color var(--transicao),
+    box-shadow var(--transicao);
+}
+.painel-indicadores > div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--marinho) 8%, transparent);
+}
+.painel-indicador--total {
+  border-top-color: var(--roxo) !important;
+}
+.painel-indicador--pendente {
+  border-top-color: var(--aviso) !important;
+}
+.painel-indicador--analise {
+  border-top-color: var(--azul) !important;
+}
+.painel-indicador--aprovado {
+  border-top-color: var(--sucesso) !important;
+}
+.painel-indicador--recusado {
+  border-top-color: var(--erro) !important;
+}
+.painel-indicador__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 .painel-indicadores dt {
-  font-size: 14px;
-  font-weight: 600;
+  color: var(--titulo);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.painel-indicador__icone {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--azul-suave);
+  color: var(--azul);
+  border: 1px solid color-mix(in srgb, var(--azul) 18%, transparent);
+  flex-shrink: 0;
+}
+.painel-indicador--total .painel-indicador__icone {
+  background: var(--roxo-suave);
+  color: var(--roxo);
+  border-color: color-mix(in srgb, var(--roxo) 22%, transparent);
+}
+.painel-indicador--pendente .painel-indicador__icone {
+  background: var(--aviso-suave);
+  color: var(--aviso);
+  border-color: color-mix(in srgb, var(--aviso) 25%, transparent);
+}
+.painel-indicador--analise .painel-indicador__icone {
+  background: var(--azul-suave);
+  color: var(--azul);
+  border-color: color-mix(in srgb, var(--azul) 22%, transparent);
+}
+.painel-indicador--aprovado .painel-indicador__icone {
+  background: var(--sucesso-suave);
+  color: var(--sucesso);
+  border-color: color-mix(in srgb, var(--sucesso) 25%, transparent);
+}
+.painel-indicador--recusado .painel-indicador__icone {
+  background: var(--erro-suave);
+  color: var(--erro);
+  border-color: color-mix(in srgb, var(--erro) 25%, transparent);
 }
 .painel-indicadores dd {
-  margin: 16px 0 8px;
+  margin: 2px 0;
   color: var(--titulo);
-  font-size: 34px;
-  font-weight: 700;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
 }
-.painel-indicadores > div:nth-child(2) {
-  border-top: 3px solid var(--azul);
-  padding-top: 22px;
-}
 .painel-indicadores .painel-indicadores__detalhe {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--borda-suave);
   color: var(--texto);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: normal;
-  line-height: 1.5;
+  line-height: 1.4;
+}
+.painel-indicadores .painel-indicadores__detalhe::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--azul);
+  content: '';
+  flex-shrink: 0;
+}
+.painel-indicador--total .painel-indicadores__detalhe::before {
+  background: var(--roxo);
+}
+.painel-indicador--pendente .painel-indicadores__detalhe::before {
+  background: var(--aviso);
+}
+.painel-indicador--analise .painel-indicadores__detalhe::before {
+  background: var(--azul);
+}
+.painel-indicador--aprovado .painel-indicadores__detalhe::before {
+  background: var(--sucesso);
+}
+.painel-indicador--recusado .painel-indicadores__detalhe::before {
+  background: var(--erro);
+}
+:root[data-tema='escuro'] .painel-indicadores > div {
+  background: var(--preto);
+  border-color: var(--borda-suave);
+  box-shadow: none;
+}
+:root[data-tema='escuro'] .painel-indicadores > div:hover {
+  border-color: var(--borda);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--preto) 45%, transparent);
 }
 .painel-secao {
   min-width: 0;

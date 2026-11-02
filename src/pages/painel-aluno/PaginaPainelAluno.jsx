@@ -69,24 +69,44 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
       </header>
 
       {/* Indicadores */}
-      <dl className="painel-aluno-indicadores">
-        <div>
-          <dt>Total</dt>
+      <dl className="painel-indicadores painel-aluno-indicadores">
+        <div className="painel-indicador--total">
+          <div className="painel-indicador__cabecalho">
+            <dt>Total</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="projetos-detalhe" />
+            </span>
+          </div>
           <dd>{totais.total}</dd>
           <p className="painel-indicadores__detalhe">submissões no portal</p>
         </div>
-        <div className="painel-aluno-indicadores__destaque">
-          <dt>Em análise</dt>
+        <div className="painel-indicador--pendente">
+          <div className="painel-indicador__cabecalho">
+            <dt>Em análise</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="relogio-cursos" />
+            </span>
+          </div>
           <dd>{totais.analise}</dd>
           <p className="painel-indicadores__detalhe">aguardando avaliação</p>
         </div>
-        <div>
-          <dt>Aprovados</dt>
+        <div className="painel-indicador--aprovado">
+          <div className="painel-indicador__cabecalho">
+            <dt>Aprovados</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="confirmacao-cursos" />
+            </span>
+          </div>
           <dd>{totais.aprovados}</dd>
           <p className="painel-indicadores__detalhe">publicados no portal</p>
         </div>
-        <div>
-          <dt>Recusados</dt>
+        <div className="painel-indicador--recusado">
+          <div className="painel-indicador__cabecalho">
+            <dt>Recusados</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="erro-cursos" />
+            </span>
+          </div>
           <dd>{totais.recusados}</dd>
           <p className="painel-indicadores__detalhe">não publicados</p>
         </div>

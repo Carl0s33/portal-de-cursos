@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { listarProjetos } from '@/api/projetos.js'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import FiltrosProjetos from './components/FiltrosProjetos.jsx'
+import { consultarProjetosPublicados } from './services/consultarProjetosPublicados.js'
 import './projetos.css'
 
-export default function PaginaProjetos({ itens = [] }) {
-  const [projetosApi, definirProjetosApi] = useState(null)
+export default function PaginaProjetos() {
+  const [publicados, definirPublicados] = useState([])
   const [filtrosAbertos, definirFiltrosAbertos] = useState(false)
   const [ordem, definirOrdem] = useState('nome')
   const [busca, definirBusca] = useState('')
@@ -14,55 +14,16 @@ export default function PaginaProjetos({ itens = [] }) {
 
   useEffect(() => {
     const controle = new AbortController()
-    listarProjetos(null, controle.signal)
-      .then((dados) => {
-        if (Array.isArray(dados)) {
-          const mapeados = dados.map((p) => ({
-            id: p.id,
-            identificador: String(p.id),
-            nome: p.nome,
-            descricao: p.descricao,
-            tipo:
-              p.tipoProjeto === 'TCC'
-                ? 'TCC'
-                : p.tipoProjeto === 'PROJETO_INTEGRADOR'
-                  ? 'Projeto integrador'
-                  : p.tipoProjeto === 'PROJETO_PESQUISA'
-                    ? 'Pesquisa'
-                    : p.tipoProjeto === 'PROJETO_EXTENSAO'
-                      ? 'Extensão'
-                      : p.tipoProjeto || '',
-            curso: p.cursoId ? `Curso ${p.cursoId}` : '',
-            autores:
-              Array.isArray(p.autores) && p.autores.length
-                ? p.autores.map((a) => (typeof a === 'string' ? a : a.nome)).join(', ')
-                : 'Não informado',
-            orientador: (() => {
-              if (p.orientador) return p.orientador
-              if (p.orientadorId) return `Orientador ${p.orientadorId}`
-              const orientador = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')
-              if (orientador) return `Orientador ${orientador.professorId}`
-              if (p.professores?.length) return `Professor ${p.professores[0].professorId}`
-              return 'Não informado'
-            })(),
-            status: p.statusProjeto,
-          }))
-          definirProjetosApi(mapeados)
-        }
+    consultarProjetosPublicados(controle.signal)
+      .then((registros) => {
+        if (!controle.signal.aborted) definirPublicados(registros)
       })
       .catch(() => {
-        // Se falhar ou rota não implementada no back, mantém fallback para itens recebidos via props
+        if (!controle.signal.aborted) definirPublicados([])
       })
 
     return () => controle.abort()
   }, [])
-
-  // O catálogo público exibe apenas projetos que já foram aprovados pela coordenação para publicação (status PUBLICADO)
-  // Projetos com status APROVADO (aceitos apenas pelo orientador) aguardam aprovação do coordenador antes de serem exibidos aqui
-  const publicados = (projetosApi !== null ? projetosApi : itens).filter((p) => {
-    if (!p.status) return true
-    return p.status === 'PUBLICADO' || p.status === 'Publicado'
-  })
 
   const normalizar = (texto) =>
     (texto || '')

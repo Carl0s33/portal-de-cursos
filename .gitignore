@@ -35,8 +35,6 @@ desktop.ini
 /scripts/
 .husky/
 .agents/
+*.md
 commitlint.config.*
 /verificacoes/
-/DESIGN-E-REGRAS.md
-/PENDENCIAS-MINIMUNDO.md
-/VINCULO-JIRA.md

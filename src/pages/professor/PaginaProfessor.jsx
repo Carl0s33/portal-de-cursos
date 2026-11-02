@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import Icone from '@/shared/components/Icone.jsx'
 import '@/shared/styles/painel.css'
 import './professor.css'
 import { basePortal, enderecoPrivado } from '../../app/rotas.js'
@@ -92,23 +93,43 @@ export default function PaginaProfessor({ submissoes, usuario }) {
       </header>
 
       <dl className="painel-indicadores">
-        <div>
-          <dt>Total de orientações</dt>
+        <div className="painel-indicador--total">
+          <div className="painel-indicador__cabecalho">
+            <dt>Total de orientações</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="projetos-detalhe" />
+            </span>
+          </div>
           <dd>{totais.total}</dd>
           <p className="painel-indicadores__detalhe">vinculadas ao seu perfil</p>
         </div>
-        <div>
-          <dt>Aguardando aceite</dt>
+        <div className="painel-indicador--pendente">
+          <div className="painel-indicador__cabecalho">
+            <dt>Aguardando aceite</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="relogio-cursos" />
+            </span>
+          </div>
           <dd>{totais.pendentes}</dd>
           <p className="painel-indicadores__detalhe">pendentes da sua decisão</p>
         </div>
-        <div>
-          <dt>Na coordenação</dt>
+        <div className="painel-indicador--analise">
+          <div className="painel-indicador__cabecalho">
+            <dt>Na coordenação</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="criterios-detalhe" />
+            </span>
+          </div>
           <dd>{totais.analise}</dd>
           <p className="painel-indicadores__detalhe">aceitas e em análise final</p>
         </div>
-        <div>
-          <dt>Publicadas</dt>
+        <div className="painel-indicador--aprovado">
+          <div className="painel-indicador__cabecalho">
+            <dt>Publicadas</dt>
+            <span className="painel-indicador__icone" aria-hidden="true">
+              <Icone nome="confirmacao-cursos" />
+            </span>
+          </div>
           <dd>{totais.aprovados}</dd>
           <p className="painel-indicadores__detalhe">no acervo público do portal</p>
         </div>
