@@ -51,25 +51,27 @@
   gap: 1rem;
   margin: 0;
 }
-.painel-indicadores__card,
-.painel-indicadores > div {
+:where(.painel-indicadores > div),
+.painel-indicadores__card {
   --cor: var(--azul);
   position: relative;
   overflow: hidden;
   background: var(--superficie);
-  border: 1px solid var(--borda);
-  border-top: 3px solid var(--cor);
+  border: 1px solid color-mix(in srgb, var(--cor) 22%, var(--borda));
+  border-top: 4px solid var(--cor);
   border-radius: 14px;
   padding: 1.35rem 1.4rem 1.2rem;
   box-shadow: var(--sombra);
   transition:
     box-shadow 0.18s ease,
-    border-color 0.18s ease;
+    border-color 0.18s ease,
+    transform 0.18s ease;
 }
 .painel-indicadores__card:hover,
 .painel-indicadores > div:hover {
+  transform: translateY(-2px);
   border-color: var(--cor);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--marinho) 8%, transparent);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--cor) 14%, transparent);
 }
 .painel-indicadores__rotulo,
 .painel-indicadores dt {
@@ -84,11 +86,12 @@
   flex: none;
   display: inline-grid;
   place-items: center;
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 2.4rem;
+  height: 2.4rem;
   border-radius: 10px;
   background: var(--cor);
   color: var(--branco);
+  box-shadow: 0 3px 8px color-mix(in srgb, var(--cor) 28%, transparent);
 }
 .painel-indicadores__icone .icone {
   width: 19px;
@@ -126,22 +129,27 @@
   border-radius: 50%;
   background: var(--cor);
 }
+.painel-indicadores > div.painel-indicadores__card--total,
 .painel-indicadores__card--total,
 .painel-indicador--total {
   --cor: var(--roxo);
 }
+.painel-indicadores > div.painel-indicadores__card--aguardando,
 .painel-indicadores__card--aguardando,
 .painel-indicador--pendente {
   --cor: var(--aviso);
 }
+.painel-indicadores > div.painel-indicadores__card--coordenacao,
 .painel-indicadores__card--coordenacao,
 .painel-indicador--analise {
   --cor: var(--azul);
 }
+.painel-indicadores > div.painel-indicadores__card--publicadas,
 .painel-indicadores__card--publicadas,
 .painel-indicador--aprovado {
   --cor: var(--sucesso);
 }
+.painel-indicadores > div.painel-indicadores__card--recusadas,
 .painel-indicadores__card--recusadas,
 .painel-indicador--recusado {
   --cor: var(--erro);
@@ -149,12 +157,13 @@
 :root[data-tema='escuro'] .painel-indicadores__card,
 :root[data-tema='escuro'] .painel-indicadores > div {
   background: var(--superficie);
-  border-color: var(--borda);
+  border-color: color-mix(in srgb, var(--cor) 28%, var(--borda));
   border-top-color: var(--cor);
   box-shadow: none;
 }
 :root[data-tema='escuro'] .painel-indicadores__icone {
   color: var(--preto);
+  box-shadow: none;
 }
 :root[data-tema='escuro'] .painel-indicadores__card:hover,
 :root[data-tema='escuro'] .painel-indicadores > div:hover {
@@ -187,7 +196,7 @@
 .tabela-submissoes table {
   border-collapse: collapse;
   width: 100%;
-  min-width: 680px;
+  min-width: 640px;
   text-align: left;
 }
 .tabela-submissoes thead {
@@ -195,9 +204,13 @@
   color: var(--titulo);
   font-size: 12px;
 }
+.tabela-submissoes thead th {
+  white-space: nowrap;
+  font-weight: 700;
+}
 .tabela-submissoes th,
 .tabela-submissoes td {
-  padding: 20px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--borda);
 }
 .tabela-submissoes tbody tr:last-child > * {
@@ -210,49 +223,66 @@
   background: var(--suave);
 }
 .tabela-submissoes tbody th {
-  width: 44%;
+  min-width: 220px;
   font-size: 15px;
   font-weight: 600;
   color: var(--titulo);
-  line-height: 1.5;
+  line-height: 1.45;
 }
 .tabela-submissoes tbody th > span {
   display: block;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--texto);
-  margin-top: 6px;
+  margin-top: 4px;
 }
 .tabela-submissoes td {
   font-size: 13px;
+  white-space: nowrap;
+}
+.tabela-submissoes .gestao-linha-expandida > td {
+  white-space: normal;
 }
 .tabela-submissoes .status {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  gap: 6px;
+  padding: 5px 11px;
   border-radius: 999px;
+  border: 1px solid currentColor;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
+.tabela-submissoes .status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
 .tabela-submissoes .status--em-análise,
 .tabela-submissoes .status--em-analise {
   color: var(--azul);
   background: var(--azul-suave);
+  border-color: color-mix(in srgb, var(--azul) 30%, transparent);
 }
 .tabela-submissoes .status--aguardando-orientador {
   color: var(--aviso);
   background: var(--aviso-suave);
+  border-color: color-mix(in srgb, var(--aviso) 32%, transparent);
 }
 .tabela-submissoes .status--aprovado,
 .tabela-submissoes .status--publicado {
-  color: var(--verde);
+  color: var(--sucesso);
   background: var(--sucesso-suave);
+  border-color: color-mix(in srgb, var(--sucesso) 32%, transparent);
 }
 .tabela-submissoes .status--recusado {
-  color: var(--erro-escuro);
+  color: var(--erro);
   background: var(--erro-suave);
+  border-color: color-mix(in srgb, var(--erro) 32%, transparent);
 }
 .tabela-submissoes a:hover {
   color: var(--azul);

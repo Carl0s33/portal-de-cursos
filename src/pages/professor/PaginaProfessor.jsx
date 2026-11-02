@@ -14,6 +14,14 @@ const iconesFiltro = {
   Recusado: 'erro-cursos',
 }
 
+const tonsFiltro = {
+  Todas: 'todas',
+  'Aguardando Orientador': 'pendente',
+  'Em análise': 'analise',
+  Aprovado: 'aprovado',
+  Recusado: 'recusado',
+}
+
 function normalizar(txt) {
   return (txt || '')
     .normalize('NFD')
@@ -144,6 +152,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             {filtros.map((opcao) => (
               <button
                 className={filtro === opcao ? 'pagina-professor__filtro--ativo' : ''}
+                data-tom={tonsFiltro[opcao]}
                 type="button"
                 key={opcao}
                 aria-pressed={filtro === opcao}
@@ -194,7 +203,10 @@ export default function PaginaProfessor({ submissoes, usuario }) {
               const totalAnexos = item.documentos?.length || 0
 
               return (
-                <article className="submissao-feed" key={item.identificador}>
+                <article
+                  className={`submissao-feed submissao-feed--${tonsFiltro[status] || 'pendente'}`}
+                  key={item.identificador}
+                >
                   <a
                     href={enderecoPrivado(`professor/submissao/${item.identificador}`)}
                     className="submissao-feed__gatilho"

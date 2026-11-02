@@ -74,34 +74,6 @@
   margin-top: 4px;
 }
 
-/* Badges de Status das Submissões */
-.pagina-painel-aluno .status {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-
-.pagina-painel-aluno .status--em-análise,
-.pagina-painel-aluno .status--aguardando-orientador {
-  color: var(--aviso);
-  background: var(--aviso-suave);
-}
-
-.pagina-painel-aluno .status--aprovado {
-  color: var(--verde);
-  background: var(--sucesso-suave);
-}
-
-.pagina-painel-aluno .status--recusado {
-  color: var(--erro-escuro);
-  background: var(--erro-suave);
-}
-
 @media (max-width: 1000px) {
   .painel-aluno-indicadores {
     grid-template-columns: repeat(2, minmax(0, 1fr));

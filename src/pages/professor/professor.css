@@ -127,6 +127,26 @@
   height: 18px;
 }
 
+.pagina-professor__filtros button[data-tom='todas'] .icone {
+  color: var(--roxo);
+}
+
+.pagina-professor__filtros button[data-tom='pendente'] .icone {
+  color: var(--aviso);
+}
+
+.pagina-professor__filtros button[data-tom='analise'] .icone {
+  color: var(--azul);
+}
+
+.pagina-professor__filtros button[data-tom='aprovado'] .icone {
+  color: var(--sucesso);
+}
+
+.pagina-professor__filtros button[data-tom='recusado'] .icone {
+  color: var(--erro);
+}
+
 .pagina-professor__filtros button > span {
   min-width: 0;
   overflow-wrap: anywhere;
@@ -138,7 +158,7 @@
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--fundo);
-  color: var(--texto);
+  color: var(--titulo);
   font-size: 12px;
   font-weight: 700;
   text-align: center;
@@ -148,12 +168,13 @@
 .pagina-professor__filtro--ativo {
   color: var(--azul) !important;
   background: var(--suave) !important;
-  border-color: color-mix(in srgb, var(--azul) 20%, transparent) !important;
+  border-color: color-mix(in srgb, var(--azul) 24%, transparent) !important;
 }
 
 .pagina-professor__filtros button:hover small,
 .pagina-professor__filtro--ativo small {
-  color: var(--azul);
+  background: var(--azul);
+  color: var(--branco);
 }
 
 .pagina-professor__filtros button:focus-visible,
@@ -216,18 +237,38 @@
 /* ---------- Card ---------- */
 
 .submissao-feed {
+  --cor-card: var(--azul);
   overflow: hidden;
-  border: 1px solid var(--borda);
+  border: 1px solid color-mix(in srgb, var(--cor-card) 22%, var(--borda));
+  border-left: 4px solid var(--cor-card);
   border-radius: 12px;
   background: var(--superficie);
   transition:
     border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 180ms ease;
+}
+
+.submissao-feed--pendente {
+  --cor-card: var(--aviso);
+}
+
+.submissao-feed--analise {
+  --cor-card: var(--azul);
+}
+
+.submissao-feed--aprovado {
+  --cor-card: var(--sucesso);
+}
+
+.submissao-feed--recusado {
+  --cor-card: var(--erro);
 }
 
 .submissao-feed:hover {
-  border-color: var(--azul);
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--marinho) 6%, transparent);
+  transform: translateY(-1px);
+  border-color: var(--cor-card);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--cor-card) 12%, transparent);
 }
 
 .submissao-feed__gatilho {
@@ -248,26 +289,24 @@
   background-color: var(--suave);
 }
 
-/*
- * O avatar reaproveita o design do ícone de perfil (.cabecalho__iniciais).
- * Aqui só ajustamos o tamanho; cor, fundo e peso vêm de .cabecalho__iniciais.
- * Os valores abaixo são apenas um respaldo de baixa especificidade.
- */
 .submissao-feed__avatar {
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  font-size: 14px;
-}
-
-:where(.submissao-feed__avatar) {
   display: inline-grid;
   place-items: center;
-  border-radius: 50%;
-  color: var(--titulo);
-  background: var(--suave);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--cor-card);
+  color: var(--branco);
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.02em;
+  box-shadow: 0 3px 8px color-mix(in srgb, var(--cor-card) 26%, transparent);
+}
+
+:root[data-tema='escuro'] .submissao-feed__avatar {
+  color: var(--preto);
+  box-shadow: none;
 }
 
 .submissao-feed__conteudo {

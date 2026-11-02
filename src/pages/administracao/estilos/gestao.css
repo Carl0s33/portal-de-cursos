@@ -1,17 +1,38 @@
 .gestao-cursos-resumo {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 16px;
 }
 .gestao-curso-cartao {
+  --cor-curso: var(--azul);
   display: grid;
   align-content: start;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
-  padding: 16px;
-  border: 1px solid var(--borda);
-  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid color-mix(in srgb, var(--cor-curso) 20%, var(--borda));
+  border-top: 4px solid var(--cor-curso);
+  border-radius: 14px;
   background: var(--superficie);
+  box-shadow: var(--sombra);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+.gestao-curso-cartao:nth-child(4n + 2) {
+  --cor-curso: var(--roxo);
+}
+.gestao-curso-cartao:nth-child(4n + 3) {
+  --cor-curso: var(--sucesso);
+}
+.gestao-curso-cartao:nth-child(4n + 4) {
+  --cor-curso: var(--aviso);
+}
+.gestao-curso-cartao:hover {
+  transform: translateY(-2px);
+  border-color: var(--cor-curso);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--cor-curso) 12%, transparent);
 }
 .gestao-curso-cartao > header {
   display: flex;
@@ -23,23 +44,28 @@
   display: inline-flex;
   align-items: center;
   min-height: 28px;
-  padding: 0 10px;
-  border-radius: 4px;
-  background: var(--suave);
-  color: var(--azul);
+  padding: 0 11px;
+  border-radius: 7px;
+  background: var(--cor-curso);
+  color: var(--branco);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-curso) 26%, transparent);
+}
+:root[data-tema='escuro'] .gestao-curso-cartao > header span {
+  color: var(--preto);
+  box-shadow: none;
 }
 .gestao-curso-cartao > header small {
   color: var(--texto);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
 }
 .gestao-curso-cartao h2 {
   margin: 0;
   color: var(--titulo);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.35;
 }
 .gestao-curso-cartao > p {
@@ -50,28 +76,34 @@
 }
 .gestao-curso-cartao dl {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  margin: 2px 0 0;
+  margin: 4px 0 0;
 }
 .gestao-curso-cartao dl > div {
   display: grid;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
-  padding: 9px;
-  border-radius: 5px;
+  padding: 10px 11px;
+  border: 1px solid var(--borda-suave);
+  border-radius: 10px;
   background: var(--fundo);
 }
 .gestao-curso-cartao dt {
   color: var(--texto);
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .gestao-curso-cartao dd {
   margin: 0;
   color: var(--titulo);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 :root[data-tema='escuro'] .gestao-curso-cartao dl > div {
   background: var(--superficie);
@@ -89,10 +121,11 @@
 .gestao-busca {
   display: grid;
   gap: 8px;
-  padding: 24px;
+  padding: 20px 24px;
   max-width: 520px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--titulo);
 }
 .gestao-busca input,
 .gestao-busca select,
@@ -101,8 +134,8 @@
 .gestao-campos textarea {
   width: 100%;
   min-width: 0;
-  min-height: 48px;
-  padding: 11px 13px;
+  min-height: 44px;
+  padding: 10px 13px;
   border: 1px solid color-mix(in srgb, var(--borda) 82%, transparent);
   border-radius: 9px;
   background: var(--fundo);
@@ -142,13 +175,19 @@
 }
 .gestao-filtros {
   display: grid;
-  grid-template-columns: minmax(220px, 1.5fr) repeat(2, minmax(160px, 1fr));
-  gap: 8px;
+  grid-template-columns: minmax(240px, 1fr) minmax(220px, 320px);
+  gap: 14px 20px;
   align-items: end;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--borda);
 }
 .gestao-filtros .gestao-busca {
   max-width: none;
-  padding: 16px 12px 20px;
+  padding: 0;
+}
+.gestao-filtros .gestao-papeis {
+  grid-column: 1 / -1;
+  order: 2;
 }
 .gestao-campos select[multiple] {
   min-height: 150px;
@@ -397,138 +436,194 @@
     transition: none;
   }
 }
-.gestao-busca {
-  max-width: none;
-  padding: 14px 16px;
-  font-size: 12px;
-}
-.gestao-busca input {
-  min-height: 40px;
-  border-radius: 6px;
-}
-.gestao-cursos-resumo {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-.gestao-curso-cartao {
-  gap: 8px;
-  padding: 14px;
-  border-radius: 7px;
-}
-.gestao-curso-cartao h2 {
-  font-size: 14px;
-}
-.gestao-curso-cartao dl > div {
-  padding: 8px;
-}
-.gestao-curso-cartao dt {
-  font-size: 10px;
-}
-.gestao-curso-cartao dd {
-  font-size: 13px;
-}
-@media (max-width: 900px) {
-  .gestao-cursos-resumo {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 .gestao-lista-filtros {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 24px;
   border-bottom: 1px solid var(--borda);
 }
 .gestao-lista-filtros .gestao-busca {
-  flex: 0 1 280px;
-  padding: 4px;
+  flex: 1 1 280px;
+  max-width: 380px;
+  padding: 0;
 }
 .gestao-lista-filtros .gestao-busca input {
-  min-height: 38px;
+  min-height: 42px;
 }
 .gestao-filtro-cursos,
 .gestao-papeis {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 8px;
   min-width: 0;
-  padding: 3px;
+  padding: 6px;
   border: 1px solid var(--borda);
-  border-radius: 6px;
+  border-radius: 12px;
   background: var(--fundo);
 }
 .gestao-filtro-cursos button,
 .gestao-papeis button {
+  --cor-papel: var(--azul);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 30px;
-  padding: 5px 8px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--texto);
-  font-size: 10px;
+  gap: 8px;
+  min-height: 38px;
+  padding: 7px 13px;
+  border: 1px solid var(--borda-suave);
+  border-radius: 9px;
+  background: var(--superficie);
+  color: var(--titulo);
+  font-size: 13px;
+  font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+.gestao-papeis button::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-papel);
+  flex: none;
+}
+.gestao-papeis button[data-papel='todos'] {
+  --cor-papel: var(--azul);
+}
+.gestao-papeis button[data-papel='admin'] {
+  --cor-papel: var(--marinho);
+}
+.gestao-papeis button[data-papel='coordenador'] {
+  --cor-papel: var(--aviso);
+}
+.gestao-papeis button[data-papel='professor'] {
+  --cor-papel: var(--roxo);
+}
+.gestao-papeis button[data-papel='aluno'] {
+  --cor-papel: var(--sucesso);
+}
+.gestao-filtro-cursos button:hover:not([aria-pressed='true']),
+.gestao-papeis button:hover:not([aria-pressed='true']) {
+  border-color: var(--cor-papel);
+  color: var(--cor-papel);
+  background: var(--superficie);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-papel) 14%, transparent);
 }
 .gestao-filtro-cursos button[aria-pressed='true'],
 .gestao-papeis button[aria-pressed='true'] {
-  background: var(--superficie);
-  color: var(--titulo);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--preto) 8%, transparent);
+  border-color: var(--cor-papel);
+  background: var(--cor-papel);
+  color: var(--branco);
+  box-shadow: 0 3px 10px color-mix(in srgb, var(--cor-papel) 28%, transparent);
+}
+.gestao-papeis button[aria-pressed='true']::before {
+  background: var(--branco);
 }
 .gestao-filtro-cursos button span,
 .gestao-papeis button span {
-  color: var(--texto);
-  font-size: 9px;
+  display: inline-grid;
+  min-width: 22px;
+  height: 22px;
+  padding-inline: 6px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--cor-papel);
+  color: var(--branco);
+  font-size: 11px;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
+}
+.gestao-filtro-cursos button[aria-pressed='true'] span,
+.gestao-papeis button[aria-pressed='true'] span {
+  background: rgb(255 255 255 / 22%);
+  color: var(--branco);
+}
+.gestao-filtro-cursos button:focus-visible,
+.gestao-papeis button:focus-visible {
+  outline: 2px solid var(--cor-papel);
+  outline-offset: 2px;
 }
 .gestao-codigo {
   display: inline-flex !important;
   width: fit-content;
   margin: 0 8px 0 0 !important;
-  padding: 4px 6px;
-  border-radius: 4px;
-  background: var(--suave);
-  color: var(--texto) !important;
-  font-size: 9px !important;
-  font-weight: 700 !important;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--azul);
+  color: var(--branco) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
 }
 .gestao-tipo-disciplina {
   display: inline-flex;
-  padding: 4px 7px;
-  border-radius: 5px;
-  background: color-mix(in srgb, var(--borda) 18%, var(--superficie));
-  color: var(--roxo);
-  font-size: 10px;
-  font-weight: 650;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--roxo);
+  color: var(--branco);
+  font-size: 11px;
+  font-weight: 700;
   white-space: nowrap;
 }
 .gestao-tipo-disciplina--obrigatoria {
-  background: color-mix(in srgb, var(--azul-vivo) 15%, var(--superficie));
-  color: var(--azul);
+  background: var(--azul);
+  color: var(--branco);
+}
+:root[data-tema='escuro'] .gestao-papeis button[data-papel='admin'] {
+  --cor-papel: #94a3b8;
 }
 :root[data-tema='escuro'] .gestao-filtro-cursos,
 :root[data-tema='escuro'] .gestao-papeis {
   border-color: var(--borda-suave);
+  background: var(--suave);
+}
+:root[data-tema='escuro'] .gestao-filtro-cursos button,
+:root[data-tema='escuro'] .gestao-papeis button {
   background: var(--superficie);
+  border-color: var(--borda-suave);
+  color: var(--titulo);
+}
+:root[data-tema='escuro'] .gestao-filtro-cursos button span,
+:root[data-tema='escuro'] .gestao-papeis button span {
+  color: var(--preto);
 }
 :root[data-tema='escuro'] .gestao-filtro-cursos button[aria-pressed='true'],
 :root[data-tema='escuro'] .gestao-papeis button[aria-pressed='true'] {
+  background: var(--cor-papel);
+  color: var(--preto);
+  box-shadow: none;
+}
+:root[data-tema='escuro'] .gestao-papeis button[aria-pressed='true']::before {
   background: var(--preto);
-  box-shadow: 0 0 0 1px var(--borda-suave);
+}
+:root[data-tema='escuro'] .gestao-filtro-cursos button[aria-pressed='true'] span,
+:root[data-tema='escuro'] .gestao-papeis button[aria-pressed='true'] span {
+  background: rgb(0 0 0 / 20%);
+  color: var(--preto);
+}
+:root[data-tema='escuro'] .gestao-codigo,
+:root[data-tema='escuro'] .gestao-tipo-disciplina {
+  color: var(--preto) !important;
 }
 @media (max-width: 760px) {
   .gestao-lista-filtros {
     align-items: stretch;
     flex-direction: column;
+    padding: 16px;
   }
 
   .gestao-lista-filtros .gestao-busca {
     flex-basis: auto;
-    padding: 6px;
+    max-width: none;
   }
 
   .gestao-filtro-cursos,
@@ -612,8 +707,7 @@
   border-radius: 0 0 8px 8px;
   background: var(--fundo);
 }
-.gestao-relacao__resumo span,
-.gestao-codigo {
+.gestao-relacao__resumo span {
   border: 1px solid var(--etiqueta);
   background: var(--branco);
   color: var(--texto) !important;
@@ -626,16 +720,6 @@
   color: var(--branco);
   box-shadow: 0 2px 5px rgb(36 91 214 / 18%);
 }
-.gestao-tipo-disciplina {
-  border: 1px solid var(--etiqueta);
-  background: var(--roxo-suave);
-  color: var(--roxo);
-}
-.gestao-tipo-disciplina--obrigatoria {
-  border-color: var(--etiqueta);
-  background: var(--azul-suave);
-  color: var(--azul);
-}
 :root[data-tema='escuro'] .gestao-formulario,
 :root[data-tema='escuro'] .gestao-confirmacao {
   border-color: var(--borda-suave);
@@ -644,75 +728,6 @@
 }
 :root[data-tema='escuro'] .gestao-formulario__grupo {
   border-top-color: var(--borda-suave);
-}
-.gestao-papeis {
-  gap: 6px;
-  padding: 6px;
-  border-color: var(--borda-suave);
-  border-radius: 12px;
-  background: var(--fundo);
-}
-.gestao-papeis button {
-  min-height: 38px;
-  gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  color: var(--texto);
-  font-size: 13px;
-  font-weight: 600;
-  transition:
-    background-color 140ms,
-    color 140ms,
-    border-color 140ms,
-    box-shadow 140ms;
-}
-.gestao-papeis button:hover:not([aria-pressed='true']) {
-  border-color: var(--borda-suave);
-  background: var(--branco);
-  color: var(--azul-escuro);
-}
-.gestao-papeis button[aria-pressed='true'] {
-  border-color: var(--azul);
-  background: var(--azul-vivo);
-  color: var(--branco);
-  box-shadow: 0 2px 5px rgb(36 91 214 / 18%);
-}
-.gestao-papeis button span {
-  display: inline-grid;
-  min-width: 22px;
-  height: 22px;
-  padding-inline: 5px;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--suave);
-  color: var(--texto-suave);
-  font-size: 11px;
-  font-weight: 700;
-}
-.gestao-papeis button[aria-pressed='true'] span {
-  background: rgb(255 255 255 / 20%);
-  color: var(--branco);
-}
-.gestao-papeis button:focus-visible {
-  outline: 3px solid rgb(36 91 214 / 30%);
-  outline-offset: 2px;
-}
-:root[data-tema='escuro'] .gestao-papeis {
-  border-color: var(--borda-suave);
-  background: var(--suave);
-}
-:root[data-tema='escuro'] .gestao-papeis button {
-  color: var(--texto);
-}
-:root[data-tema='escuro'] .gestao-papeis button:hover:not([aria-pressed='true']) {
-  border-color: var(--roxo-suave);
-  background: var(--superficie-escura);
-  color: var(--branco);
-}
-:root[data-tema='escuro'] .gestao-papeis button span {
-  background: var(--borda-suave);
-  color: var(--texto);
 }
 :root[data-tema='escuro'] .gestao-formulario__grupo > header p,
 :root[data-tema='escuro'] .gestao-formulario__orientacao,
@@ -739,14 +754,8 @@
   background: var(--superficie-escura);
   color: var(--titulo);
 }
-:root[data-tema='escuro'] .gestao-relacao__resumo span,
-:root[data-tema='escuro'] .gestao-codigo {
+:root[data-tema='escuro'] .gestao-relacao__resumo span {
   border-color: var(--roxo-suave);
   background: var(--superficie-escura);
   color: var(--azul-escuro) !important;
-}
-@media (max-width: 560px) {
-  .gestao-cursos-resumo {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
