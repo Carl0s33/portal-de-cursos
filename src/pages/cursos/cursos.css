@@ -113,14 +113,6 @@
 .pagina-cursos__abrir-filtros {
   display: none;
 }
-:root {
-  --erro: var(--erro);
-  --erro-suave: var(--erro-suave);
-}
-:root[data-tema='escuro'] {
-  --erro: var(--erro-escuro);
-  --erro-suave: var(--erro-suave);
-}
 .pagina-cursos .icone {
   width: auto;
   height: auto;

@@ -403,33 +403,54 @@
 /* ---------- Status ---------- */
 
 .status {
+  --cor-status: var(--azul);
   display: inline-flex;
+  align-items: center;
+  gap: 6px;
   width: fit-content;
-  padding: 5px 9px;
-  border-radius: 6px;
-  color: var(--texto);
-  background: var(--suave);
-  font-size: 11px;
-  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--cor-status);
+  color: var(--branco);
+  background: var(--cor-status);
+  font-size: 12px;
+  font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-status) 24%, transparent);
+}
+
+.status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.9;
 }
 
 .status--em-análise,
+.status--em-analise {
+  --cor-status: var(--azul);
+}
+
 .status--aguardando-orientador {
-  color: var(--aviso);
-  background: var(--aviso-suave);
+  --cor-status: var(--aviso);
 }
 
 .status--aceito,
-.status--aprovado {
-  color: var(--verde);
-  background: var(--sucesso-suave);
+.status--aprovado,
+.status--publicado {
+  --cor-status: var(--sucesso);
 }
 
 .status--recusado {
-  color: var(--erro-escuro);
-  background: var(--erro-suave);
+  --cor-status: var(--erro);
+}
+
+:root[data-tema='escuro'] .status {
+  color: var(--preto);
+  box-shadow: none;
 }
 
 .pagina-professor__vazio {

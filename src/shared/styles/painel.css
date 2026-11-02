@@ -244,16 +244,20 @@
   white-space: normal;
 }
 .tabela-submissoes .status {
+  --cor-status: var(--azul);
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 11px;
+  padding: 5px 12px;
   border-radius: 999px;
-  border: 1px solid currentColor;
+  border: 1px solid var(--cor-status);
+  background: var(--cor-status);
+  color: var(--branco);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: -0.01em;
   white-space: nowrap;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-status) 24%, transparent);
 }
 .tabela-submissoes .status::before {
   content: '';
@@ -261,28 +265,25 @@
   height: 6px;
   border-radius: 50%;
   background: currentColor;
+  opacity: 0.9;
 }
 .tabela-submissoes .status--em-análise,
 .tabela-submissoes .status--em-analise {
-  color: var(--azul);
-  background: var(--azul-suave);
-  border-color: color-mix(in srgb, var(--azul) 30%, transparent);
+  --cor-status: var(--azul);
 }
 .tabela-submissoes .status--aguardando-orientador {
-  color: var(--aviso);
-  background: var(--aviso-suave);
-  border-color: color-mix(in srgb, var(--aviso) 32%, transparent);
+  --cor-status: var(--aviso);
 }
 .tabela-submissoes .status--aprovado,
 .tabela-submissoes .status--publicado {
-  color: var(--sucesso);
-  background: var(--sucesso-suave);
-  border-color: color-mix(in srgb, var(--sucesso) 32%, transparent);
+  --cor-status: var(--sucesso);
 }
 .tabela-submissoes .status--recusado {
-  color: var(--erro);
-  background: var(--erro-suave);
-  border-color: color-mix(in srgb, var(--erro) 32%, transparent);
+  --cor-status: var(--erro);
+}
+:root[data-tema='escuro'] .tabela-submissoes .status {
+  color: var(--preto);
+  box-shadow: none;
 }
 .tabela-submissoes a:hover {
   color: var(--azul);

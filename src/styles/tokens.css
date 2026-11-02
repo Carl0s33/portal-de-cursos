@@ -24,9 +24,9 @@
   --preto: #000000;
 
   /* Estados e feedback */
-  --erro: #b42318;
-  --erro-suave: #fef3f2;
-  --erro-escuro: #9f1d27;
+  --erro: #dc2626;
+  --erro-suave: #fef2f2;
+  --erro-escuro: #b91c1c;
   --sucesso: #067647;
   --sucesso-suave: #dff3e7;
   --aviso: #a8510b;
@@ -95,9 +95,10 @@
   --brilho: transparent;
   --sombra: 0 0 0 1px var(--borda);
 
-  --erro: #f97066;
+  --erro: #f87171;
   --erro-suave: #2a1210;
   --erro-escuro: #ff8a80;
+  --sucesso: #7ed9aa;
   --sucesso-suave: #12301f;
   --aviso: #ffc14d;
   --aviso-suave: #33280a;
