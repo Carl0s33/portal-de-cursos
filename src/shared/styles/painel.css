@@ -147,8 +147,32 @@
   font-size: 13px;
 }
 .tabela-submissoes .status {
-  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
   font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.tabela-submissoes .status--em-análise,
+.tabela-submissoes .status--em-analise {
+  color: var(--azul);
+  background: var(--azul-suave);
+}
+.tabela-submissoes .status--aguardando-orientador {
+  color: var(--aviso);
+  background: var(--aviso-suave);
+}
+.tabela-submissoes .status--aprovado,
+.tabela-submissoes .status--publicado {
+  color: var(--verde);
+  background: var(--sucesso-suave);
+}
+.tabela-submissoes .status--recusado {
+  color: var(--erro-escuro);
+  background: var(--erro-suave);
 }
 .tabela-submissoes a:hover {
   color: var(--azul);

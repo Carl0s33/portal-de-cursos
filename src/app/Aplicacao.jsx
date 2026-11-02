@@ -5,7 +5,6 @@ import Cabecalho from '@/shared/components/Cabecalho.jsx'
 import Rodape from '@/shared/components/Rodape.jsx'
 import PaginaInicial from '@/pages/inicio/PaginaInicial.jsx'
 import PaginaCursos from '@/pages/cursos/PaginaCursos.jsx'
-import RodapeCatalogo from '@/pages/cursos/components/RodapeCatalogo.jsx'
 import PaginaDetalhesCurso from '@/pages/detalhes-curso/PaginaDetalhesCurso.jsx'
 import PaginaProjetos from '@/pages/projetos/PaginaProjetos.jsx'
 import PaginaSubmissao from '@/pages/submissao/PaginaSubmissao.jsx'
@@ -442,7 +441,7 @@ export default function Aplicacao() {
         </a>
         <Cabecalho modoAcesso tema={tema} alternarTema={definirTema} pagina="acesso" />
         <PaginaCadastroAluno />
-        <RodapeCatalogo pagina="acesso" />
+        <Rodape pagina="acesso" />
       </>
     )
   }
@@ -710,7 +709,7 @@ export default function Aplicacao() {
       )}
       {pagina === 'aluno-cadastro' && <PaginaCadastroAluno />}
       {pagina === 'inicio' && <PaginaInicial />}
-      {pagina === 'inicio' ? <Rodape /> : <RodapeCatalogo pagina={pagina} />}
+      <Rodape pagina={pagina} />
     </>
   )
 }

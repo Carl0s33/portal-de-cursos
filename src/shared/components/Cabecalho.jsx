@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
 import Icone from './Icone.jsx'
 import logoPortal from '@/assets/marca/logo-portal.png'
-import '@/shared/styles/estrutura.css'
 import './cabecalho.css'
 
 const PAGINAS_ADMIN = ['acesso', 'acesso-administracao', 'administracao']

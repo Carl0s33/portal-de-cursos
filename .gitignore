@@ -34,6 +34,7 @@ desktop.ini
 # Scripts e arquivos auxiliares
 /scripts/
 .husky/
+.agents/
 commitlint.config.*
 /verificacoes/
 /DESIGN-E-REGRAS.md

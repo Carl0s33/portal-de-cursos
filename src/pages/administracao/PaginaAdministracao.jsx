@@ -317,19 +317,22 @@ export default function PaginaAdministracao({
   if (secao === 'submissoes')
     return (
       <main id="conteudo" className="pagina-painel pagina-painel--administracao">
-        <header className="painel-titulo">
+        <header className="painel-titulo administracao-boas-vindas">
           <div>
+            <span className="administracao-boas-vindas__rotulo">Acompanhamento acadêmico</span>
             <h1>Submissões do portal</h1>
-            <p>Consulte as submissões de todos os cursos.</p>
+            <p>Consulte as produções submetidas pelos estudantes em todos os cursos.</p>
           </div>
         </header>
-        <section className="painel-secao">
-          <TabelaSubmissoes itens={submissoes} somenteConsulta />
+        <section className="painel-secao administracao-registros">
+          <header>
+            <div>
+              <h2>Todas as submissões</h2>
+              <p>{submissoes.length} produções registradas no portal.</p>
+            </div>
+          </header>
+          <TabelaSubmissoes itens={submissoes} />
         </section>
-        <p className="gestao-nota">
-          As submissões aparecerão aqui quando o serviço estiver conectado. Nenhum dado de exemplo é
-          exibido.
-        </p>
       </main>
     )
   return (

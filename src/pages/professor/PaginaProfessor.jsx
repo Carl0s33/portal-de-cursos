@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import '@/shared/styles/painel.css'
 import './professor.css'
 import { basePortal, enderecoPrivado } from '../../app/rotas.js'
 
@@ -52,6 +53,16 @@ export default function PaginaProfessor({ submissoes, usuario }) {
     [submissoes, usuario],
   )
 
+  const totais = useMemo(
+    () => ({
+      total: orientacoes.length,
+      pendentes: orientacoes.filter((item) => item.status === 'Aguardando Orientador').length,
+      analise: orientacoes.filter((item) => item.status === 'Em análise').length,
+      aprovados: orientacoes.filter((item) => item.status === 'Aprovado').length,
+    }),
+    [orientacoes],
+  )
+
   const resultados = useMemo(
     () =>
       orientacoes.filter(
@@ -66,8 +77,9 @@ export default function PaginaProfessor({ submissoes, usuario }) {
 
   return (
     <main id="conteudo" className="limite pagina-professor">
-      <div className="pagina-professor__topo">
+      <header className="pagina-professor__topo">
         <div>
+          <p className="pagina-professor__rotulo">Área do Professor</p>
           <h1>Submissões para acompanhar</h1>
           <p>
             Veja somente as submissões em que você consta como orientador e faça a avaliação
@@ -75,9 +87,32 @@ export default function PaginaProfessor({ submissoes, usuario }) {
           </p>
         </div>
         <a className="botao-primario" href={`${basePortal}#submeter`}>
-          Submeter projeto
+          + Submeter projeto
         </a>
-      </div>
+      </header>
+
+      <dl className="painel-indicadores">
+        <div>
+          <dt>Total de orientações</dt>
+          <dd>{totais.total}</dd>
+          <p className="painel-indicadores__detalhe">vinculadas ao seu perfil</p>
+        </div>
+        <div>
+          <dt>Aguardando aceite</dt>
+          <dd>{totais.pendentes}</dd>
+          <p className="painel-indicadores__detalhe">pendentes da sua decisão</p>
+        </div>
+        <div>
+          <dt>Na coordenação</dt>
+          <dd>{totais.analise}</dd>
+          <p className="painel-indicadores__detalhe">aceitas e em análise final</p>
+        </div>
+        <div>
+          <dt>Publicadas</dt>
+          <dd>{totais.aprovados}</dd>
+          <p className="painel-indicadores__detalhe">no acervo público do portal</p>
+        </div>
+      </dl>
 
       <div className="pagina-professor__layout">
         <aside className="pagina-professor__filtro-painel" aria-label="Filtros de submissões">
@@ -179,7 +214,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                       </span>
                     </span>
 
-                    <span className="submissao-feed__expandir">Abrir projeto →</span>
+                    <span className="submissao-feed__expandir">Avaliar projeto →</span>
                   </a>
                 </article>
               )
