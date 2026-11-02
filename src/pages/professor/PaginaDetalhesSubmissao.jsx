@@ -74,6 +74,7 @@ export default function PaginaDetalhesSubmissao({
   const [erro, definirErro] = useState('')
   const [editando, definirEditando] = useState(false)
   const [confirmandoRemocao, definirConfirmandoRemocao] = useState(false)
+  const [documentoVisualizando, definirDocumentoVisualizando] = useState(null)
   const [edicao, definirEdicao] = useState(() => ({
     titulo: item?.titulo || '',
     resumo: item?.resumo || '',
@@ -322,15 +323,30 @@ export default function PaginaDetalhesSubmissao({
                             Acessar link externo ↗
                           </a>
                         ) : linkDownload ? (
-                          <a
-                            href={linkDownload}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="documento-link"
-                            download={nome}
-                          >
-                            Baixar / Abrir documento ↗
-                          </a>
+                          <div className="documento-acoes">
+                            <button
+                              type="button"
+                              className="botao-secundario botao--pequeno documento-botao-visualizar"
+                              onClick={() =>
+                                definirDocumentoVisualizando({
+                                  nome,
+                                  url: linkDownload,
+                                })
+                              }
+                            >
+                              Visualizar 👁️
+                            </button>
+                            <a
+                              href={linkDownload}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="documento-link"
+                              download={nome}
+                              title="Baixar arquivo no computador"
+                            >
+                              Baixar ⬇
+                            </a>
+                          </div>
                         ) : (
                           <span className="documento-indisponivel">Arquivo enviado</span>
                         )}
@@ -464,6 +480,51 @@ export default function PaginaDetalhesSubmissao({
             </button>
           </div>
         </ConfirmacaoGestao>
+      )}
+
+      {documentoVisualizando && (
+        <div
+          className="modal-pdf"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-pdf-titulo"
+        >
+          <div className="modal-pdf__backdrop" onClick={() => definirDocumentoVisualizando(null)} />
+          <div className="modal-pdf__conteudo">
+            <header className="modal-pdf__cabecalho">
+              <div>
+                <span className="modal-pdf__subtitulo">Visualização de Documento</span>
+                <h2 id="modal-pdf-titulo">{documentoVisualizando.nome}</h2>
+              </div>
+              <div className="modal-pdf__cabecalho-acoes">
+                <a
+                  href={documentoVisualizando.url}
+                  download={documentoVisualizando.nome}
+                  className="botao-secundario botao--pequeno"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Baixar ⬇
+                </a>
+                <button
+                  type="button"
+                  className="botao-secundario botao--pequeno modal-pdf__fechar"
+                  onClick={() => definirDocumentoVisualizando(null)}
+                  aria-label="Fechar visualizador"
+                >
+                  Fechar ✕
+                </button>
+              </div>
+            </header>
+            <div className="modal-pdf__corpo">
+              <iframe
+                src={documentoVisualizando.url}
+                title={documentoVisualizando.nome}
+                className="modal-pdf__iframe"
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {tipoUsuario === 'COORDENADOR' && (aoEditar || aoRemover) && (
