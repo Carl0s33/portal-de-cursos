@@ -158,12 +158,17 @@ export async function enviarDocumentoProjeto(projetoId, arquivo, token = null, s
   const formData = new FormData()
   formData.append('arquivo', arquivo)
 
-  return requisitarApi(url, {
-    metodo: 'POST',
-    corpo: formData,
-    token,
-    sinal,
+  // fetch direto: o cliente padrão serializa o corpo como JSON, o que quebra o multipart
+  const resposta = await fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    signal: sinal,
   })
+  if (!resposta.ok) {
+    throw new ErroApi('Não foi possível enviar o documento.', { status: resposta.status })
+  }
+  return resposta.json()
 }
 
 /**

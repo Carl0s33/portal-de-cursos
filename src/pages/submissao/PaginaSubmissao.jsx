@@ -315,14 +315,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
             localizacao: formulario.linkMemoria.trim(),
           },
         ]
-      : Object.values(formulario.documentos)
-          .flat()
-          .filter(Boolean)
-          .map((arquivo) => ({
-            nomeArquivo: arquivo.name,
-            tipoDocumento: 'DOCUMENTO',
-            localizacao: arquivo.name,
-          }))
+      : [] // PDFs são enviados depois via upload multipart
 
     const dto = {
       cursoId: cursoProjeto?.id ? Number(cursoProjeto.id) : null,
