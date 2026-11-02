@@ -1,6 +1,6 @@
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
-import { listarProjetos } from '@/api/projetos.js'
+import { listarProjetos, listarProjetosAprovados } from '@/api/projetos.js'
 
 const ROTULOS_TIPO = {
   TCC: 'TCC',
@@ -9,11 +9,24 @@ const ROTULOS_TIPO = {
   PROJETO_EXTENSAO: 'Extensão',
 }
 
+function obterTokenSessao() {
+  try {
+    const salva = JSON.parse(sessionStorage.getItem('portal-cursos-sessao') || 'null')
+    return salva && Date.now() < salva.expiraEm ? salva.token : null
+  } catch {
+    return null
+  }
+}
+
 export async function consultarProjetosPublicados(sinal) {
+  const token = obterTokenSessao()
   const [dadosProjetos, dadosCursos, dadosProfessores] = await Promise.all([
-    listarProjetos(null, sinal),
+    (token
+      ? listarProjetos(token, sinal).catch(() => listarProjetosAprovados(sinal))
+      : listarProjetosAprovados(sinal)
+    ).catch(() => []),
     listarCursos(sinal).catch(() => []),
-    listarProfessores(null, {}, sinal).catch(() => []),
+    token ? listarProfessores(token, {}, sinal).catch(() => []) : Promise.resolve([]),
   ])
 
   if (!Array.isArray(dadosProjetos)) return []
@@ -29,7 +42,7 @@ export async function consultarProjetosPublicados(sinal) {
   )
 
   return dadosProjetos
-    .filter((p) => p.statusProjeto === 'PUBLICADO' || p.status === 'PUBLICADO')
+    .filter((p) => ['PUBLICADO', 'APROVADO'].includes(p.statusProjeto || p.status))
     .map((p) => {
       const infoCurso = mapaCursos.get(String(p.cursoId))
       const orientadorVinculo = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')

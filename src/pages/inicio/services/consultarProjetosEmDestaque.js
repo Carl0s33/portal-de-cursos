@@ -1,9 +1,22 @@
 import { listarCursos } from '@/api/cursos.js'
-import { listarProjetos } from '@/api/projetos.js'
+import { listarProjetos, listarProjetosAprovados } from '@/api/projetos.js'
+
+function obterTokenSessao() {
+  try {
+    const salva = JSON.parse(sessionStorage.getItem('portal-cursos-sessao') || 'null')
+    return salva && Date.now() < salva.expiraEm ? salva.token : null
+  } catch {
+    return null
+  }
+}
 
 export async function consultarProjetosEmDestaque(sinal) {
+  const token = obterTokenSessao()
   const [dados, cursos] = await Promise.all([
-    listarProjetos(null, sinal),
+    (token
+      ? listarProjetos(token, sinal).catch(() => listarProjetosAprovados(sinal))
+      : listarProjetosAprovados(sinal)
+    ).catch(() => []),
     listarCursos(sinal).catch(() => []),
   ])
 
@@ -15,7 +28,7 @@ export async function consultarProjetosEmDestaque(sinal) {
   )
 
   return (Array.isArray(dados) ? dados : [])
-    .filter((p) => !p.statusProjeto || p.statusProjeto === 'PUBLICADO')
+    .filter((p) => !p.statusProjeto || ['PUBLICADO', 'APROVADO'].includes(p.statusProjeto))
     .slice(0, 3)
     .map((p) => ({
       id: p.id,

@@ -285,8 +285,12 @@ export default function Aplicacao() {
         } else if (Array.isArray(dados)) {
           definirListaSubmissoes([])
         }
-      } catch {
-        /* Mantém as submissões já existentes */
+      } catch (falha) {
+        if (falha?.status === 401) {
+          definirSessao(null)
+          definirSessaoExpirada(true)
+          limparDadosLocais()
+        }
       }
     }
 
