@@ -10,6 +10,7 @@ Use esta skill para transformar especificações visuais, mockups e protótipos 
 ## Especificação Técnica de Componente
 
 Ao realizar o handoff, documente:
+
 1. **Nome do Componente e Escopo de Uso:**
    - Domínio da aplicação (`pages/<dominio>/components/` ou `shared/components/`).
 2. **Propriedades (Props) e Contratos de Dados:**

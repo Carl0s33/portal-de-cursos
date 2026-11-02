@@ -33,9 +33,10 @@ export default function PaginaProjetos({ itens = [] }) {
                       ? 'Extensão'
                       : p.tipoProjeto || '',
             curso: p.cursoId ? `Curso ${p.cursoId}` : '',
-            autores: Array.isArray(p.autores) && p.autores.length
-              ? p.autores.map((a) => (typeof a === 'string' ? a : a.nome)).join(', ')
-              : 'Não informado',
+            autores:
+              Array.isArray(p.autores) && p.autores.length
+                ? p.autores.map((a) => (typeof a === 'string' ? a : a.nome)).join(', ')
+                : 'Não informado',
             orientador: (() => {
               if (p.orientador) return p.orientador
               if (p.orientadorId) return `Orientador ${p.orientadorId}`

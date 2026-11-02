@@ -335,9 +335,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       tipoProjeto: mapasTipoProjeto[formulario.tipo] || formulario.tipo,
       dataInicio,
       dataFim,
-      professores: orientadorId
-        ? [{ professorId: Number(orientadorId), papel: 'ORIENTADOR' }]
-        : [],
+      professores: orientadorId ? [{ professorId: Number(orientadorId), papel: 'ORIENTADOR' }] : [],
       documentos: documentosDto.length > 0 ? documentosDto : null,
     }
 
@@ -345,7 +343,14 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     aoSubmeter?.(submissaoLocal)
     definirEnviado(true)
 
-    if (sessao?.token && dto.cursoId && dto.campusId && dto.disciplinaIds && dto.documentos && dto.professores.length > 0) {
+    if (
+      sessao?.token &&
+      dto.cursoId &&
+      dto.campusId &&
+      dto.disciplinaIds &&
+      dto.documentos &&
+      dto.professores.length > 0
+    ) {
       cadastrarProjeto(dto, sessao.token).catch(() => {
         /* Submissão salva localmente; falha no backend não bloqueia o usuário */
       })

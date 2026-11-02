@@ -49,10 +49,10 @@ Ele executa lint, verificação de padrões (`npm run padroes`) e build.
 
 ## O que o `npm run padroes` verifica
 
-| Regra | Resultado |
-| --- | --- |
-| Cor hexadecimal fora de `tokens.css` | **erro** (bloqueia) |
-| Arquivo acima de 400 linhas (CSS/JSX) ou 300 (JS) | aviso |
-| Uso de `!important` | aviso |
+| Regra                                             | Resultado           |
+| ------------------------------------------------- | ------------------- |
+| Cor hexadecimal fora de `tokens.css`              | **erro** (bloqueia) |
+| Arquivo acima de 400 linhas (CSS/JSX) ou 300 (JS) | aviso               |
+| Uso de `!important`                               | aviso               |
 
 Os avisos existentes são dívida conhecida (veja `docs/PROXIMOS-PASSOS.md`). Quando zerarem, transforme-os em erro em `ferramentas/verificar-padroes.mjs`.

@@ -36,11 +36,14 @@ export async function autenticar(email, senha, sinal) {
     })
   } catch (erro) {
     if (erro.status === 400 || erro.status === 401 || erro.status === 403) {
-      throw new ErroApi(erro.message || 'Não foi possível entrar. Confira seu e-mail e sua senha.', {
-        status: erro.status,
-        dados: erro.dados,
-        causa: erro,
-      })
+      throw new ErroApi(
+        erro.message || 'Não foi possível entrar. Confira seu e-mail e sua senha.',
+        {
+          status: erro.status,
+          dados: erro.dados,
+          causa: erro,
+        },
+      )
     }
     throw erro
   }

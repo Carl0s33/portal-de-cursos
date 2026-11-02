@@ -257,7 +257,8 @@ export default function Aplicacao() {
               id: p.id,
               cursoId: p.cursoId,
               campusId: p.campusId,
-              curso: infoCurso?.sigla || infoCurso?.acronimo || (p.cursoId ? `Curso #${p.cursoId}` : ''),
+              curso:
+                infoCurso?.sigla || infoCurso?.acronimo || (p.cursoId ? `Curso #${p.cursoId}` : ''),
               cursoCompleto: infoCurso?.nome || (p.cursoId ? `Curso #${p.cursoId}` : ''),
               titulo: p.nome,
               tipo:

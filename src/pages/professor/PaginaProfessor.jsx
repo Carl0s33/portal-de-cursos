@@ -105,7 +105,10 @@ export default function PaginaProfessor({ submissoes, usuario }) {
           </nav>
           <label className="pagina-professor__tipo">
             <span>Tipo de produção</span>
-            <select value={tipoFiltro} onChange={(evento) => definirTipoFiltro(evento.target.value)}>
+            <select
+              value={tipoFiltro}
+              onChange={(evento) => definirTipoFiltro(evento.target.value)}
+            >
               {tipos.map((tipo) => (
                 <option value={tipo} key={tipo}>
                   {tipo}
@@ -127,7 +130,9 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             {resultados.map((item) => {
               const status = item.status || 'Aguardando Orientador'
               const nomeAutor = nomeDoAutor(item)
-              const totalCoautores = Array.isArray(item.autores) ? Math.max(item.autores.length - 1, 0) : 0
+              const totalCoautores = Array.isArray(item.autores)
+                ? Math.max(item.autores.length - 1, 0)
+                : 0
               const totalAnexos = item.documentos?.length || 0
 
               return (
@@ -151,13 +156,17 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                         <span className="submissao-feed__separador" aria-hidden="true">
                           ·
                         </span>
-                        <span>enviou {item.enviadoEm ? `em ${item.enviadoEm}` : 'recentemente'}</span>
+                        <span>
+                          enviou {item.enviadoEm ? `em ${item.enviadoEm}` : 'recentemente'}
+                        </span>
                       </span>
 
                       <h2 className="submissao-feed__titulo">{item.titulo}</h2>
 
                       <span className="submissao-feed__rodape">
-                        <span className={`status status--${status.toLowerCase().replace(/\s+/g, '-')}`}>
+                        <span
+                          className={`status status--${status.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
                           {status}
                         </span>
                         {item.tipo && <span className="submissao-feed__chip">{item.tipo}</span>}

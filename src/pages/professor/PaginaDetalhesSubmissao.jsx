@@ -180,7 +180,10 @@ export default function PaginaDetalhesSubmissao({
       <div className="pagina-detalhes-submissao__grid">
         <section className="pagina-detalhes-submissao__principal">
           {editando ? (
-            <form className="avaliacao-submissao avaliacao-submissao--formulario" onSubmit={salvarEdicao}>
+            <form
+              className="avaliacao-submissao avaliacao-submissao--formulario"
+              onSubmit={salvarEdicao}
+            >
               <h2>Editar submissão</h2>
               <label>
                 Título
@@ -193,7 +196,10 @@ export default function PaginaDetalhesSubmissao({
               </label>
               <label>
                 Tipo de projeto
-                <select value={edicao.tipo} onChange={(evento) => atualizar('tipo', evento.target.value)}>
+                <select
+                  value={edicao.tipo}
+                  onChange={(evento) => atualizar('tipo', evento.target.value)}
+                >
                   {tiposDeProjeto.map((tipo) => (
                     <option key={tipo}>{tipo}</option>
                   ))}
@@ -234,7 +240,9 @@ export default function PaginaDetalhesSubmissao({
                   defaultValue={edicao.autores
                     .map((autor) => `${autor.nome || ''}${autor.email ? ` <${autor.email}>` : ''}`)
                     .join('\n')}
-                  onChange={(evento) => atualizar('autores', linhasParaAutores(evento.target.value))}
+                  onChange={(evento) =>
+                    atualizar('autores', linhasParaAutores(evento.target.value))
+                  }
                 />
               </label>
               <label>
@@ -242,7 +250,9 @@ export default function PaginaDetalhesSubmissao({
                 <textarea
                   rows="3"
                   defaultValue={(edicao.disciplinas || []).join('\n')}
-                  onChange={(evento) => atualizar('disciplinas', linhasParaLista(evento.target.value))}
+                  onChange={(evento) =>
+                    atualizar('disciplinas', linhasParaLista(evento.target.value))
+                  }
                 />
               </label>
               <label>
@@ -250,14 +260,20 @@ export default function PaginaDetalhesSubmissao({
                 <textarea
                   rows="3"
                   defaultValue={(edicao.documentos || []).join('\n')}
-                  onChange={(evento) => atualizar('documentos', linhasParaLista(evento.target.value))}
+                  onChange={(evento) =>
+                    atualizar('documentos', linhasParaLista(evento.target.value))
+                  }
                 />
               </label>
               <div className="avaliacao-submissao__acoes">
                 <button className="botao-primario" type="submit">
                   Salvar edição
                 </button>
-                <button className="botao-secundario" type="button" onClick={() => definirEditando(false)}>
+                <button
+                  className="botao-secundario"
+                  type="button"
+                  onClick={() => definirEditando(false)}
+                >
                   Cancelar
                 </button>
               </div>
@@ -328,7 +344,9 @@ export default function PaginaDetalhesSubmissao({
           {avaliacaoOrientador || avaliacaoCoordenador ? (
             <div className="avaliacao-submissao pagina-detalhes-submissao__decisao">
               <span className="pagina-detalhes-submissao__indice">Próxima decisão</span>
-              <h2>{avaliacaoCoordenador ? 'Avaliação do coordenador' : 'Avaliação do orientador'}</h2>
+              <h2>
+                {avaliacaoCoordenador ? 'Avaliação do coordenador' : 'Avaliação do orientador'}
+              </h2>
               <p className="pagina-detalhes-submissao__decisao-intro">
                 {avaliacaoCoordenador
                   ? 'O orientador aceitou esta submissão. Decida se ela será publicada no portal.'
@@ -360,7 +378,11 @@ export default function PaginaDetalhesSubmissao({
                 >
                   {avaliacaoCoordenador ? 'Aprovar e publicar' : 'Aceitar como orientador'}
                 </button>
-                <button type="button" className="botao-secundario" onClick={() => registrarDecisao('Recusado')}>
+                <button
+                  type="button"
+                  className="botao-secundario"
+                  onClick={() => registrarDecisao('Recusado')}
+                >
                   Recusar submissão
                 </button>
               </div>
@@ -370,10 +392,15 @@ export default function PaginaDetalhesSubmissao({
               <span className="pagina-detalhes-submissao__indice">Gestão do curso</span>
               <h2>Editar ou remover</h2>
               <p className="pagina-detalhes-submissao__decisao-intro">
-                Você pode corrigir ou remover submissões do curso, inclusive as que enviou ou orienta.
+                Você pode corrigir ou remover submissões do curso, inclusive as que enviou ou
+                orienta.
               </p>
               <div className="avaliacao-submissao__acoes">
-                <button type="button" className="botao-primario" onClick={() => definirEditando(true)}>
+                <button
+                  type="button"
+                  className="botao-primario"
+                  onClick={() => definirEditando(true)}
+                >
                   Editar submissão
                 </button>
                 <button
@@ -403,7 +430,11 @@ export default function PaginaDetalhesSubmissao({
           <h2 id="titulo-remover-submissao">Remover esta submissão?</h2>
           <p>A remoção afeta apenas os dados desta sessão.</p>
           <div className="gestao-acoes">
-            <button className="botao-secundario" type="button" onClick={() => definirConfirmandoRemocao(false)}>
+            <button
+              className="botao-secundario"
+              type="button"
+              onClick={() => definirConfirmandoRemocao(false)}
+            >
               Manter submissão
             </button>
             <button
