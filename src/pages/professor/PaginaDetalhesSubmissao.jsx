@@ -25,7 +25,6 @@ function submetidaAoOrientador(item, usuario) {
   return Boolean(nomeOrientador.includes(nomeUsuario) || nomeUsuario.includes(nomeOrientador))
 }
 
-// "LINK_MEMORIA" -> "Link", "PDF" -> "PDF"
 function rotuloDoTipo(tipoDocumento) {
   if (!tipoDocumento) return 'PDF'
   const texto = String(tipoDocumento)
@@ -317,7 +316,6 @@ export default function PaginaDetalhesSubmissao({
                         const blobUrl = await baixarDocumentoBlob(item.id, documento.id, token)
                         window.open(blobUrl, '_blank', 'noopener,noreferrer')
                       } catch {
-                        // fallback abrindo direto
                         window.open(urlDestino, '_blank', 'noopener,noreferrer')
                       } finally {
                         definirAbrindoDocumento(false)

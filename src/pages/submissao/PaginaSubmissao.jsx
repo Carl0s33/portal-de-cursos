@@ -166,7 +166,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         return false
       }
     }
-    // TCC: valida link do Memória
     if (etapa === 3 && ehTCC) {
       const link = formulario.linkMemoria.trim()
       if (!link) {
@@ -243,7 +242,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       .map((autor) => ({ nome: autor.nome.trim(), email: autor.email.trim() }))
     const ehTCC = formulario.tipo === 'TCC'
 
-    // Mapeamento do tipo de produção para o enum do backend
     const mapasTipoProjeto = {
       TCC: 'TCC',
       'Projeto Integrador': 'PROJETO_INTEGRADOR',
@@ -256,7 +254,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         ? [{ nome: formulario.nome.trim(), email: formulario.email.trim() }, ...autoresLista]
         : autoresLista
 
-    // Monta o objeto local para o estado (UI imediata)
     const submissaoLocal = {
       identificador: crypto.randomUUID(),
       cursoId: cursoProjeto?.id,
@@ -292,7 +289,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       tipoAutor: sessao?.tipoUsuario || 'ALUNO',
     }
 
-    // Monta o DTO para a API do backend
     const orientadorObj = orientadores.find((o) => o.nome === formulario.orientador)
     const orientadorId =
       orientadorObj?.id || orientadorObj?.professorId || orientadorObj?.identificador || null
@@ -315,7 +311,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
             localizacao: formulario.linkMemoria.trim(),
           },
         ]
-      : [] // PDFs são enviados depois via upload multipart
+      : []
 
     const dto = {
       cursoId: cursoProjeto?.id ? Number(cursoProjeto.id) : null,
@@ -332,7 +328,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       documentos: documentosDto.length > 0 ? documentosDto : null,
     }
 
-    // Salva localmente de imediato e tenta enviar para o backend
     aoSubmeter?.(submissaoLocal)
     definirEnviado(true)
 
@@ -346,7 +341,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       cadastrarProjeto(dto, sessao.token)
         .then(async (projetoCriado) => {
           if (!projetoCriado?.id) return
-          // Faz o upload dos arquivos reais associados ao projeto criado
           const arquivosReais =
             formulario.tipo === 'TCC'
               ? []
@@ -357,14 +351,12 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
               try {
                 await enviarDocumentoProjeto(projetoCriado.id, arq, sessao.token)
               } catch {
-                /* segue para o próximo arquivo se falhar */
+                continue
               }
             }
           }
         })
-        .catch(() => {
-          /* Submissão salva localmente; falha no backend não bloqueia o usuário */
-        })
+        .catch(() => {})
     }
   }
 

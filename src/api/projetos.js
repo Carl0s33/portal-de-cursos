@@ -31,9 +31,6 @@ function obterUrlBaseProjetos() {
   return `${window.location.origin}${baseLimpa}api/${segmentoVersao}projetos`
 }
 
-/**
- * Lista os projetos aprovados/publicados para o catálogo público (sem token)
- */
 export async function listarProjetosAprovados(sinal = null) {
   const url = `${obterUrlBaseProjetos()}/aprovados`
   const dados = await requisitarApi(url, {
@@ -48,9 +45,6 @@ export async function listarProjetosAprovados(sinal = null) {
   return dados
 }
 
-/**
- * Lista os projetos em análise pelo professor orientador
- */
 export async function listarProjetosEmAnalise(token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/em-analise`
   const dados = await requisitarApi(url, {
@@ -66,9 +60,6 @@ export async function listarProjetosEmAnalise(token = null, sinal = null) {
   return dados
 }
 
-/**
- * Lista todos os projetos acadêmicos cadastrados no microsserviço
- */
 export async function listarProjetos(token = null, sinal = null) {
   const url = obterUrlBaseProjetos()
   const dados = await requisitarApi(url, {
@@ -84,9 +75,6 @@ export async function listarProjetos(token = null, sinal = null) {
   return dados
 }
 
-/**
- * Busca os dados de um projeto específico por ID
- */
 export async function obterProjetoPorId(id, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}`
   return requisitarApi(url, {
@@ -96,10 +84,6 @@ export async function obterProjetoPorId(id, token = null, sinal = null) {
   })
 }
 
-/**
- * Cadastra um novo projeto no microsserviço de projetos
- * @param {Object} projeto - DTO com { cursoId, orientadorId, autores, disciplinaIds, nome, descricao, tipoProjeto, arquivoPdf }
- */
 export async function cadastrarProjeto(projeto, token = null, sinal = null) {
   const url = obterUrlBaseProjetos()
   return requisitarApi(url, {
@@ -110,9 +94,6 @@ export async function cadastrarProjeto(projeto, token = null, sinal = null) {
   })
 }
 
-/**
- * Atualiza os dados de um projeto existente
- */
 export async function atualizarProjeto(id, projeto, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}`
   return requisitarApi(url, {
@@ -123,11 +104,6 @@ export async function atualizarProjeto(id, projeto, token = null, sinal = null) 
   })
 }
 
-/**
- * Altera o status de avaliação ou publicação de um projeto (PATCH /api/v1/projetos/{id}/status)
- * @param {number|string} id
- * @param {string} status - Um dos valores de STATUS_PROJETO
- */
 export async function atualizarStatusProjeto(id, status, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}/status`
   return requisitarApi(url, {
@@ -138,9 +114,6 @@ export async function atualizarStatusProjeto(id, status, token = null, sinal = n
   })
 }
 
-/**
- * Remove um projeto pelo ID
- */
 export async function excluirProjeto(id, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}`
   return requisitarApi(url, {
@@ -150,15 +123,11 @@ export async function excluirProjeto(id, token = null, sinal = null) {
   })
 }
 
-/**
- * Envia um arquivo PDF associado a um projeto (POST /api/projetos/{projetoId}/documentos)
- */
 export async function enviarDocumentoProjeto(projetoId, arquivo, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos`
   const formData = new FormData()
   formData.append('arquivo', arquivo)
 
-  // fetch direto: o cliente padrão serializa o corpo como JSON, o que quebra o multipart
   const resposta = await fetch(url, {
     method: 'POST',
     body: formData,
@@ -171,9 +140,6 @@ export async function enviarDocumentoProjeto(projetoId, arquivo, token = null, s
   return resposta.json()
 }
 
-/**
- * Lista os documentos de um projeto (GET /api/projetos/{projetoId}/documentos)
- */
 export async function listarDocumentosProjeto(projetoId, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos`
   return requisitarApi(url, {
@@ -187,9 +153,6 @@ export function obterUrlDownloadDocumento(projetoId, documentoId) {
   return `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos/${encodeURIComponent(documentoId)}/download`
 }
 
-/**
- * Baixa um documento retornando a URL do Blob (para abrir na aba com token)
- */
 export async function baixarDocumentoBlob(projetoId, documentoId, token = null, sinal = null) {
   const url = obterUrlDownloadDocumento(projetoId, documentoId)
   const cabecalhos = {
@@ -210,9 +173,6 @@ export async function baixarDocumentoBlob(projetoId, documentoId, token = null, 
   return window.URL.createObjectURL(blob)
 }
 
-/**
- * Exclui um documento de um projeto (DELETE /api/projetos/{projetoId}/documentos/{documentoId})
- */
 export async function excluirDocumentoProjeto(projetoId, documentoId, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos/${encodeURIComponent(documentoId)}`
   return requisitarApi(url, {
