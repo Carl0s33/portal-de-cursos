@@ -150,6 +150,53 @@ export async function excluirProjeto(id, token = null, sinal = null) {
   })
 }
 
+/**
+ * Envia um arquivo PDF associado a um projeto (POST /api/projetos/{projetoId}/documentos)
+ */
+export async function enviarDocumentoProjeto(projetoId, arquivo, token = null, sinal = null) {
+  const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos`
+  const formData = new FormData()
+  formData.append('arquivo', arquivo)
+
+  return requisitarApi(url, {
+    metodo: 'POST',
+    corpo: formData,
+    token,
+    sinal,
+  })
+}
+
+/**
+ * Lista os documentos de um projeto (GET /api/projetos/{projetoId}/documentos)
+ */
+export async function listarDocumentosProjeto(projetoId, token = null, sinal = null) {
+  const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos`
+  return requisitarApi(url, {
+    metodo: 'GET',
+    token,
+    sinal,
+  })
+}
+
+/**
+ * Retorna a URL de download de um documento
+ */
+export function obterUrlDownloadDocumento(projetoId, documentoId) {
+  return `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos/${encodeURIComponent(documentoId)}/download`
+}
+
+/**
+ * Exclui um documento de um projeto (DELETE /api/projetos/{projetoId}/documentos/{documentoId})
+ */
+export async function excluirDocumentoProjeto(projetoId, documentoId, token = null, sinal = null) {
+  const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos/${encodeURIComponent(documentoId)}`
+  return requisitarApi(url, {
+    metodo: 'DELETE',
+    token,
+    sinal,
+  })
+}
+
 export const moduloProjetos = {
   versao: VERSAO,
   listarAprovados: listarProjetosAprovados,
@@ -160,6 +207,10 @@ export const moduloProjetos = {
   atualizar: atualizarProjeto,
   atualizarStatus: atualizarStatusProjeto,
   excluir: excluirProjeto,
+  enviarDocumento: enviarDocumentoProjeto,
+  listarDocumentos: listarDocumentosProjeto,
+  obterUrlDownload: obterUrlDownloadDocumento,
+  excluirDocumento: excluirDocumentoProjeto,
 }
 
 export default moduloProjetos
