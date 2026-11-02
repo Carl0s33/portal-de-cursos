@@ -26,7 +26,7 @@ import { listarSubmissoes } from '@/api/submissoes.js'
 import { limparDadosLocais } from './limparDadosLocais.js'
 
 function identificarPagina(rota) {
-  if (['projetos', 'biblioteca'].includes(rota)) return 'projetos'
+  if (['projetos', 'biblioteca'].includes(rota) || rota.startsWith('projeto/')) return 'projetos'
   if (['acesso', 'acesso-professor', 'acesso-administracao'].includes(rota)) return 'acesso'
   if (rota === 'aluno/cadastro') return 'aluno-cadastro'
   if (rota === 'aluno/painel') return 'aluno-painel'

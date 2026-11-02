@@ -35,11 +35,13 @@ export default function ProjetosEmDestaque() {
           <p role="status">Carregando produções acadêmicas…</p>
         </div>
       ) : projetos.length > 0 ? (
-        <div className="lista-projetos">
+        <ul className="lista-projetos">
           {projetos.map((projeto) => (
-            <ItemProjeto key={projeto.identificador} projeto={projeto} />
+            <li key={projeto.identificador}>
+              <ItemProjeto projeto={projeto} />
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
         <div className="painel-vazio painel-vazio--caixa">
           <p>Os trabalhos aprovados pela coordenação aparecerão aqui assim que forem publicados.</p>

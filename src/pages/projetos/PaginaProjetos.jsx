@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Icone from '@/shared/components/Icone.jsx'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import FiltrosProjetos from './components/FiltrosProjetos.jsx'
 import { consultarProjetosPublicados } from './services/consultarProjetosPublicados.js'
@@ -111,13 +112,18 @@ export default function PaginaProjetos() {
             </label>
           </div>
           {resultados.length ? (
-            <div className="lista-projetos">
+            <ul className="lista-projetos">
               {resultados.map((item) => (
-                <ItemProjeto key={item.identificador} projeto={item} />
+                <li key={item.identificador}>
+                  <ItemProjeto projeto={item} />
+                </li>
               ))}
-            </div>
+            </ul>
           ) : (
-            <div className="pagina-projetos__vazio">
+            <div className="pagina-projetos__vazio" role="status">
+              <span className="pagina-projetos__vazio-icone" aria-hidden="true">
+                <Icone nome="vazio-projetos-detalhe" />
+              </span>
               <h2>
                 {publicados.length
                   ? 'Nenhum projeto encontrado'
@@ -126,11 +132,13 @@ export default function PaginaProjetos() {
               <p>
                 {publicados.length
                   ? 'Tente outra palavra-chave ou remova os filtros para ampliar a busca.'
-                  : 'Os trabalhos publicados aparecerão aqui quando forem cadastrados.'}
+                  : 'Os trabalhos publicados aparecerão aqui quando forem aprovados pela coordenação.'}
               </p>
-              <button className="botao-secundario" onClick={limpar}>
-                Ver todos os projetos
-              </button>
+              {publicados.length > 0 && (
+                <button className="botao-secundario" type="button" onClick={limpar}>
+                  Ver todos os projetos
+                </button>
+              )}
             </div>
           )}
         </section>

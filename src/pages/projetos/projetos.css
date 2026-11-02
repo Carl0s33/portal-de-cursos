@@ -25,24 +25,36 @@
   line-height: 26px;
 }
 .pagina-projetos__titulo .pagina-projetos__rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--azul);
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.08em;
   margin: 0 0 8px;
+}
+.pagina-projetos__titulo .pagina-projetos__rotulo::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: currentColor;
 }
 .pagina-projetos__titulo > a {
   flex-shrink: 0;
 }
 .pagina-projetos__grade {
   display: grid;
-  grid-template-columns: 252px minmax(0, 1fr);
-  gap: 24px;
+  grid-template-columns: 268px minmax(0, 1fr);
+  gap: 28px;
   align-items: start;
 }
 .pagina-projetos__contagem {
   margin: 0 0 16px;
   font-size: 14px;
+  font-weight: 700;
+  color: var(--titulo);
 }
 .pagina-projetos__painel {
   position: sticky;
@@ -57,7 +69,9 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--borda-suave);
 }
 .pagina-projetos__resumo .pagina-projetos__contagem {
   margin: 0;
@@ -65,16 +79,20 @@
 .pagina-projetos__resumo label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto);
 }
 .pagina-projetos__resumo select {
   background: var(--superficie);
-  color: var(--texto);
+  color: var(--titulo);
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: 10px;
   min-height: 40px;
-  padding: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
 }
 @media (max-width: 760px) {
   .pagina-projetos__painel {
@@ -102,17 +120,37 @@
   }
 }
 .pagina-projetos__vazio {
-  padding: 40px 24px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 48px 24px;
   text-align: center;
   background: var(--superficie);
-  border-radius: 12px;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+}
+.pagina-projetos__vazio-icone {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--azul);
+  color: var(--branco);
+  margin-bottom: 4px;
+}
+:root[data-tema='escuro'] .pagina-projetos__vazio-icone {
+  color: var(--preto);
 }
 .pagina-projetos__vazio h2 {
-  font-size: 24px;
+  margin: 0;
+  font-size: 22px;
 }
 .pagina-projetos__vazio p {
+  margin: 0 0 8px;
+  max-width: 52ch;
   font-size: 14px;
-  line-height: 24px;
+  line-height: 1.6;
 }
 @media (max-width: 760px) {
   .pagina-projetos__titulo {
