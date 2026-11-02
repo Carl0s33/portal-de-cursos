@@ -39,10 +39,3 @@ commitlint.config.*
 /DESIGN-E-REGRAS.md
 /PENDENCIAS-MINIMUNDO.md
 /VINCULO-JIRA.md
-
-
-.prettierrc
-.prettierignore
-eslint.config.js
-.eslintrc*
-.vscode/
