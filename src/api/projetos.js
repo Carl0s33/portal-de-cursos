@@ -178,11 +178,31 @@ export async function listarDocumentosProjeto(projetoId, token = null, sinal = n
   })
 }
 
-/**
- * Retorna a URL de download de um documento
- */
 export function obterUrlDownloadDocumento(projetoId, documentoId) {
   return `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos/${encodeURIComponent(documentoId)}/download`
+}
+
+/**
+ * Baixa um documento retornando a URL do Blob (para abrir na aba com token)
+ */
+export async function baixarDocumentoBlob(projetoId, documentoId, token = null, sinal = null) {
+  const url = obterUrlDownloadDocumento(projetoId, documentoId)
+  const cabecalhos = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  }
+
+  const resposta = await fetch(url, {
+    method: 'GET',
+    headers: cabecalhos,
+    signal: sinal,
+  })
+
+  if (!resposta.ok) {
+    throw new ErroApi('Não foi possível obter o documento.', { status: resposta.status })
+  }
+
+  const blob = await resposta.blob()
+  return window.URL.createObjectURL(blob)
 }
 
 /**

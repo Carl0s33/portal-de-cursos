@@ -402,7 +402,7 @@
 
 .documentos-submissao-professor li:hover {
   box-shadow: none;
-  border-color: var(--azul);
+  border-color: var(--borda);
 }
 
 .item-documento-interativo,

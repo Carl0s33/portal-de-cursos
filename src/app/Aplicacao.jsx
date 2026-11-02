@@ -529,6 +529,7 @@ export default function Aplicacao() {
             item={listaSubmissoes.find((item) => item.identificador === identificadorSubmissao)}
             tipoUsuario={sessao.tipoUsuario}
             usuario={sessao.usuario}
+            token={sessao.token}
             cursoId={sessao.usuario.cursoId}
             decisao={decisoes[identificadorSubmissao]}
             aoDecidir={(status, justificativa) => {

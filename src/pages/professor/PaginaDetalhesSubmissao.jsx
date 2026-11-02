@@ -3,7 +3,7 @@ import '@/shared/styles/painel-informativo.css'
 import './professor.css'
 import { enderecoPrivado, navegar } from '../../app/rotas.js'
 import ConfirmacaoGestao from '@/pages/administracao/components/ConfirmacaoGestao.jsx'
-import { obterUrlDownloadDocumento } from '@/api/projetos.js'
+import { baixarDocumentoBlob, obterUrlDownloadDocumento } from '@/api/projetos.js'
 
 const tiposDeProjeto = ['TCC', 'Projeto Integrador', 'Pesquisa', 'Extensão']
 
@@ -64,6 +64,7 @@ export default function PaginaDetalhesSubmissao({
   item,
   tipoUsuario,
   usuario,
+  token,
   cursoId,
   decisao,
   aoDecidir,
@@ -74,6 +75,7 @@ export default function PaginaDetalhesSubmissao({
   const [erro, definirErro] = useState('')
   const [editando, definirEditando] = useState(false)
   const [confirmandoRemocao, definirConfirmandoRemocao] = useState(false)
+  const [abrindoDocumento, definirAbrindoDocumento] = useState(false)
   const [edicao, definirEdicao] = useState(() => ({
     titulo: item?.titulo || '',
     resumo: item?.resumo || '',
@@ -307,6 +309,21 @@ export default function PaginaDetalhesSubmissao({
                         ? obterUrlDownloadDocumento(item.id, documento.id)
                         : null
 
+                    async function manipularCliqueDocumento(e) {
+                      if (ehUrl) return
+                      e.preventDefault()
+                      definirAbrindoDocumento(true)
+                      try {
+                        const blobUrl = await baixarDocumentoBlob(item.id, documento.id, token)
+                        window.open(blobUrl, '_blank', 'noopener,noreferrer')
+                      } catch {
+                        // fallback abrindo direto
+                        window.open(urlDestino, '_blank', 'noopener,noreferrer')
+                      } finally {
+                        definirAbrindoDocumento(false)
+                      }
+                    }
+
                     return (
                       <li key={documento?.id || nome || indice}>
                         {urlDestino ? (
@@ -315,6 +332,7 @@ export default function PaginaDetalhesSubmissao({
                             target="_blank"
                             rel="noopener noreferrer"
                             className="item-documento-interativo"
+                            onClick={manipularCliqueDocumento}
                             title={`Abrir ${nome} em nova guia para pré-visualizar`}
                           >
                             <span className="documento-tipo" aria-hidden="true">
@@ -322,7 +340,7 @@ export default function PaginaDetalhesSubmissao({
                             </span>
                             <span className="item-documento-nome">{nome}</span>
                             <span className="item-documento-gatilho">
-                              Abrir em nova guia{' '}
+                              {abrindoDocumento ? 'Abrindo…' : 'Abrir em nova guia'}{' '}
                               <span className="item-documento-seta" aria-hidden="true">
                                 ↗
                               </span>
