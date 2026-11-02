@@ -1,176 +1,35 @@
+/* ==========================================================================
+   Indicadores e Visão Geral da Administração
+   ========================================================================== */
+
 .administracao-visao {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(270px, 0.75fr);
   align-items: start;
   gap: 16px;
 }
-.administracao-indicadores {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.administracao-indicador {
-  display: grid;
-  gap: 8px;
-  min-height: 104px;
-  align-content: space-between;
-  padding: 18px 20px;
-  border: 1px solid var(--borda);
-  border-radius: 10px;
-  background: var(--superficie);
-}
-.administracao-indicador span {
-  color: var(--texto);
-  font-size: 13px;
-}
-.administracao-indicador strong {
-  color: var(--titulo);
-  font-size: 28px;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.administracao-indicador:hover {
-  border-color: var(--azul);
-}
-.administracao-indicador:focus-visible,
-.administracao-categoria a:focus-visible,
-.administracao-registros a:focus-visible,
-.administracao-registros button:focus-visible {
-  outline: 3px solid var(--superficie-escura);
-  outline-offset: 3px;
-}
+
 .administracao-visao > * {
   min-width: 0;
 }
-.administracao-indicador {
-  position: relative;
-  grid-template-columns: 32px minmax(0, 1fr);
-  align-items: center;
-  justify-content: start;
-  gap: 12px;
-  min-height: 96px;
-  padding: 16px;
-  text-decoration: none;
-}
-.administracao-indicador__icone {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border-radius: 8px;
-  background: var(--azul-suave);
-  color: var(--azul);
-  border: 1px solid rgb(37 99 235 / 15%);
-}
-.administracao-indicador__icone svg {
-  width: 20px;
-  height: 20px;
-}
-.administracao-indicador__icone--cursos {
-  background: var(--azul-suave);
-  color: var(--azul);
-  border-color: rgb(37 99 235 / 20%);
-}
-.administracao-indicador__icone--disciplinas {
-  background: var(--roxo-suave);
-  color: var(--roxo);
-  border-color: rgb(139 92 246 / 25%);
-}
-.administracao-indicador__icone--campus {
-  background: var(--aviso-suave);
-  color: var(--aviso);
-  border-color: rgb(245 158 11 / 25%);
-}
-.administracao-indicador__icone--areas {
-  background: var(--sucesso-suave);
-  color: var(--sucesso);
-  border-color: rgb(16 185 129 / 25%);
-}
-.administracao-indicador__texto {
-  display: grid;
-  align-content: center;
-  gap: 2px;
-  min-width: 0;
-}
-.administracao-indicador__texto > span {
-  overflow: hidden;
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.administracao-indicador__texto strong {
-  font-size: 25px;
-}
-.administracao-indicador__seta {
-  position: absolute;
-  top: 13px;
-  right: 14px;
-  color: var(--texto);
-  font-size: 15px;
-}
-@media (max-width: 1100px) {
-  .administracao-indicadores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .administracao-visao {
-    grid-template-columns: 1fr;
-  }
-  .administracao-etapas dl {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-  .administracao-etapas dl > div {
-    align-items: start;
-    flex-direction: column;
-  }
-  .administracao-etapas .administracao-etapas__total {
-    margin-top: 0;
-  }
-}
-@media (max-width: 760px) {
-  .administracao-indicadores {
-    gap: 8px;
-  }
-  .administracao-indicador {
-    min-height: 90px;
-    padding: 14px;
-  }
-  .administracao-indicador strong {
-    font-size: 24px;
-  }
-  .administracao-registros > header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .administracao-categorias {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
-  .administracao-etapas dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 18px;
-    padding-inline: 20px;
-  }
-  .administracao-etapas .administracao-etapas__total {
-    grid-column: 1 / -1;
-  }
-  .administracao-etapas__nota {
-    padding-inline: 20px;
-  }
-}
+
 .administracao-indicadores {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
-  margin: 0;
+  margin: 0 0 18px;
 }
+
 .administracao-indicador {
   --cor: var(--azul);
+
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 150px;
   padding: 1.35rem 1.4rem 1.2rem;
   border: 1px solid var(--borda);
   border-top: 3px solid var(--cor);
@@ -180,54 +39,75 @@
   box-shadow: var(--sombra);
   transition:
     border-color 0.18s ease,
-    box-shadow 0.18s ease;
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
+
 .administracao-indicador:hover {
+  transform: translateY(-2px);
   border-color: var(--cor);
   box-shadow: 0 6px 16px color-mix(in srgb, var(--marinho) 8%, transparent);
 }
+
+.administracao-indicador:focus-visible,
+.administracao-categoria a:focus-visible,
+.administracao-registros a:focus-visible,
+.administracao-registros button:focus-visible {
+  outline: 3px solid var(--azul);
+  outline-offset: 3px;
+}
+
 .administracao-indicador--cursos {
   --cor: var(--azul);
 }
+
 .administracao-indicador--disciplinas {
   --cor: var(--roxo);
 }
+
 .administracao-indicador--campus {
   --cor: var(--aviso);
 }
+
 .administracao-indicador--areas {
   --cor: var(--sucesso);
 }
+
 .administracao-indicador__topo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding-right: 1.25rem;
+  width: 100%;
+  padding-right: 1.75rem;
 }
+
 .administracao-indicador__icone {
-  flex: none;
+  flex: 0 0 2.35rem;
   display: inline-grid;
   place-items: center;
   width: 2.35rem;
   height: 2.35rem;
+  border: 0;
   border-radius: 10px;
   background: var(--cor);
   color: var(--branco);
-  border: 0;
 }
-.administracao-indicador__icone .icone {
+
+.administracao-indicador__icone .icone,
+.administracao-indicador__icone svg {
   width: 19px;
   height: 19px;
 }
-.administracao-indicador__rotulo {
-  overflow: hidden;
+
+.administracao-indicador .administracao-indicador__rotulo {
+  min-width: 0;
   color: var(--titulo);
   font-size: 0.875rem;
   font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
 }
-.administracao-indicador__valor {
+
+.administracao-indicador .administracao-indicador__valor {
   margin: 0.9rem 0 0;
   color: var(--titulo);
   font-size: 2.4rem;
@@ -236,19 +116,21 @@
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
 }
-.administracao-indicador__detalhe {
+
+.administracao-indicador .administracao-indicador__detalhe {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 0.9rem 0 0;
-  padding-top: 0.7rem;
+  margin: auto 0 0;
+  padding-top: 0.75rem;
   border-top: 1px solid var(--borda-suave);
   color: var(--texto);
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.4;
 }
-.administracao-indicador__detalhe::before {
+
+.administracao-indicador .administracao-indicador__detalhe::before {
   content: '';
   flex: none;
   width: 7px;
@@ -256,23 +138,111 @@
   border-radius: 50%;
   background: var(--cor);
 }
+
 .administracao-indicador__seta {
   position: absolute;
-  top: 1.25rem;
+  top: 1.35rem;
   right: 1.25rem;
-  color: var(--texto);
-  font-size: 15px;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--suave);
+  color: var(--titulo);
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
 }
+
+.administracao-indicador__seta .icone {
+  width: 15px;
+  height: 15px;
+}
+
+.administracao-indicador:hover .administracao-indicador__seta {
+  background: var(--cor);
+  color: var(--branco);
+  transform: translateX(2px);
+}
+
 :root[data-tema='escuro'] .administracao-indicador {
   border-color: var(--borda);
   border-top-color: var(--cor);
   background: var(--superficie);
   box-shadow: none;
 }
-:root[data-tema='escuro'] .administracao-indicador__icone {
+
+:root[data-tema='escuro'] .administracao-indicador__icone,
+:root[data-tema='escuro'] .administracao-indicador:hover .administracao-indicador__seta {
   color: var(--preto);
 }
+
 :root[data-tema='escuro'] .administracao-indicador:hover {
   border-color: var(--cor);
   box-shadow: 0 5px 16px rgb(0 0 0 / 45%);
+}
+
+@media (max-width: 1100px) {
+  .administracao-indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .administracao-visao {
+    grid-template-columns: 1fr;
+  }
+
+  .administracao-etapas dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .administracao-etapas dl > div {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .administracao-etapas .administracao-etapas__total {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .administracao-indicadores {
+    gap: 10px;
+  }
+
+  .administracao-indicador {
+    min-height: 136px;
+    padding: 1.15rem 1.2rem 1rem;
+  }
+
+  .administracao-indicador .administracao-indicador__valor {
+    font-size: 2rem;
+  }
+
+  .administracao-registros > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .administracao-categorias {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .administracao-etapas dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 18px;
+    padding-inline: 20px;
+  }
+
+  .administracao-etapas .administracao-etapas__total {
+    grid-column: 1 / -1;
+  }
+
+  .administracao-etapas__nota {
+    padding-inline: 20px;
+  }
 }

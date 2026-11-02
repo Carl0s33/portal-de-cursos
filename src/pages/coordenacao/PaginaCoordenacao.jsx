@@ -196,7 +196,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             <strong className="coordenacao-indicador__valor">{total}</strong>
             <span className="coordenacao-indicador__detalhe">{detalhe}</span>
             <span className="coordenacao-indicador__seta" aria-hidden="true">
-              →
+              <Icone nome="seta" />
             </span>
           </a>
         ))}

@@ -125,7 +125,7 @@ export default function PainelAdministracao({ token }) {
                   <span className="administracao-indicador__detalhe">{detalhe}</span>
                   {destino && (
                     <span className="administracao-indicador__seta" aria-hidden="true">
-                      →
+                      <Icone nome="seta" />
                     </span>
                   )}
                 </>
