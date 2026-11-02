@@ -2,11 +2,39 @@ import { useEffect, useRef, useState } from 'react'
 import { autenticarConta } from './services/autenticarConta.js'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
 import logoPortal from '@/assets/marca/logo-portal.png'
+import Icone from '@/shared/components/Icone.jsx'
 import './acesso.css'
 
 const TEMPO_LIMITE_MS = 15000
 const MOTIVO_TEMPO_ESGOTADO = 'tempo-esgotado'
 const MOTIVO_DESMONTADO = 'desmontado'
+
+const TIPOS_PROJETO = [
+  {
+    id: 'tcc',
+    icone: 'formacao-cursos',
+    titulo: 'TCC',
+    descricao: 'Trabalho de conclusão de curso',
+  },
+  {
+    id: 'integrador',
+    icone: 'projetos-cursos',
+    titulo: 'Projeto Integrador',
+    descricao: 'Soluções aplicadas ao curso',
+  },
+  {
+    id: 'pesquisa',
+    icone: 'laboratorio',
+    titulo: 'Pesquisa',
+    descricao: 'Conhecimento em construção',
+  },
+  {
+    id: 'extensao',
+    icone: 'docentes-detalhe',
+    titulo: 'Extensão',
+    descricao: 'Projetos conectados à comunidade',
+  },
+]
 
 function validarFormulario(identificacao, senha) {
   const erros = {}
@@ -28,7 +56,8 @@ function MensagemErro({ id, texto }) {
   if (!texto) return null
   return (
     <p className="acesso-erro-campo" id={id}>
-      {texto}
+      <Icone nome="erro-cursos" classe="acesso-erro-campo__icone" />
+      <span>{texto}</span>
     </p>
   )
 }
@@ -123,16 +152,34 @@ export default function PaginaAcesso({
     }
   }
 
+  const rotuloPerfil =
+    perfil === 'aluno'
+      ? 'Portal do Aluno'
+      : perfil === 'professor'
+        ? 'Portal Docente'
+        : perfil === 'administracao'
+          ? 'Gestão Institucional'
+          : 'Acesso Institucional'
+
   return (
     <main id="conteudo" className={`limite pagina-acesso acesso-login acesso-login--${perfil}`}>
       <div className="acesso-login__coluna">
         <section className="acesso-login__cartao" aria-labelledby="titulo-entrar">
           <div className="acesso-login__conteudo">
-            <div className="acesso-login__marca">
-              <span className="acesso-login__logo">
-                <img src={logoPortal} alt="" width="26" height="26" />
+            <div className="acesso-login__topo">
+              <div className="acesso-login__marca">
+                <span className="acesso-login__logo">
+                  <img src={logoPortal} alt="" width="28" height="28" />
+                </span>
+                <div className="acesso-login__marca-textos">
+                  <strong>Portal de Cursos</strong>
+                  <span>{rotuloPerfil}</span>
+                </div>
+              </div>
+              <span className="acesso-login__etiqueta">
+                <Icone nome="seguranca-detalhe" />
+                <span>Ambiente seguro</span>
               </span>
-              <span>Portal de Cursos</span>
             </div>
 
             <div className="acesso-login__cabecalho">
@@ -158,46 +205,58 @@ export default function PaginaAcesso({
 
             {cadastroConcluido && (
               <p className="acesso-aviso acesso-aviso--sucesso" role="status">
-                Conta criada. Entre com seu e-mail e senha.
+                <Icone nome="confirmacao-cursos" classe="acesso-aviso__icone" />
+                <span>Conta criada com sucesso. Entre com seu e-mail e senha.</span>
               </p>
             )}
 
             {sessaoExpirada && (
               <p className="acesso-aviso" role="status">
-                Sua sessão expirou. Entre novamente para continuar.
+                <Icone nome="informacao-cursos" classe="acesso-aviso__icone" />
+                <span>Sua sessão expirou. Entre novamente para continuar.</span>
               </p>
             )}
 
             <form onSubmit={entrar} noValidate aria-busy={enviando}>
               <div className="acesso-campo">
-                <label htmlFor="identificacao">E-mail</label>
-                <input
-                  ref={campoIdentificacao}
-                  id="identificacao"
-                  type="email"
-                  inputMode="email"
-                  name="username"
-                  autoComplete="username"
-                  autoCapitalize="none"
-                  spellCheck={false}
-                  maxLength={254}
-                  value={identificacao}
-                  onChange={(evento) => alterarCampo('identificacao', evento.target.value)}
-                  readOnly={enviando}
-                  aria-invalid={erros.identificacao ? true : undefined}
-                  aria-describedby={erros.identificacao ? 'erro-identificacao' : undefined}
-                />
+                <label htmlFor="identificacao">E-mail institucional</label>
+                <div className="acesso-entrada">
+                  <span className="acesso-entrada__icone" aria-hidden="true">
+                    <Icone nome="email" />
+                  </span>
+                  <input
+                    ref={campoIdentificacao}
+                    id="identificacao"
+                    type="email"
+                    inputMode="email"
+                    name="username"
+                    placeholder="voce@instituicao.edu.br"
+                    autoComplete="username"
+                    autoCapitalize="none"
+                    spellCheck={false}
+                    maxLength={254}
+                    value={identificacao}
+                    onChange={(evento) => alterarCampo('identificacao', evento.target.value)}
+                    readOnly={enviando}
+                    aria-invalid={erros.identificacao ? true : undefined}
+                    aria-describedby={erros.identificacao ? 'erro-identificacao' : undefined}
+                  />
+                </div>
                 <MensagemErro id="erro-identificacao" texto={erros.identificacao} />
               </div>
 
               <div className="acesso-campo">
                 <label htmlFor="senha">Senha</label>
                 <div className="acesso-senha">
+                  <span className="acesso-entrada__icone" aria-hidden="true">
+                    <Icone nome="senha" />
+                  </span>
                   <input
                     ref={campoSenha}
                     id="senha"
                     name="password"
                     type={mostrarSenha ? 'text' : 'password'}
+                    placeholder="Digite sua senha"
                     autoComplete="current-password"
                     value={senha}
                     onChange={(evento) => alterarCampo('senha', evento.target.value)}
@@ -210,8 +269,10 @@ export default function PaginaAcesso({
                     onClick={() => definirMostrarSenha((mostrando) => !mostrando)}
                     aria-controls="senha"
                     aria-pressed={mostrarSenha}
+                    aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
                   >
-                    {mostrarSenha ? 'Ocultar' : 'Mostrar'}
+                    <Icone nome={mostrarSenha ? 'ocultar' : 'mostrar'} />
+                    <span>{mostrarSenha ? 'Ocultar' : 'Mostrar'}</span>
                   </button>
                 </div>
                 <MensagemErro id="erro-senha" texto={erros.senha} />
@@ -224,12 +285,14 @@ export default function PaginaAcesso({
                   role="alert"
                   tabIndex={-1}
                 >
-                  {erroGeral}
+                  <Icone nome="aviso-projetos-detalhe" classe="acesso-aviso__icone" />
+                  <span>{erroGeral}</span>
                 </p>
               )}
 
               <button className="botao-primario acesso-entrar" type="submit" disabled={enviando}>
-                {enviando ? 'Entrando…' : 'Entrar'}
+                <span>{enviando ? 'Entrando…' : 'Entrar na plataforma'}</span>
+                <Icone nome="seta" classe="acesso-entrar__icone" />
               </button>
 
               <span className="somente-leitores" role="status">
@@ -238,50 +301,65 @@ export default function PaginaAcesso({
             </form>
 
             <div className="acesso-login__aluno">
-              <span>Primeiro acesso?</span>
-              <a href={enderecoPrivado('aluno/cadastro')}>Crie sua conta de aluno</a>
+              <div className="acesso-login__aluno-texto">
+                <strong>Primeiro acesso?</strong>
+                <span>Exclusivo para estudantes matriculados</span>
+              </div>
+              <a href={enderecoPrivado('aluno/cadastro')}>
+                <Icone nome="cadastro-aluno" />
+                <span>Crie sua conta de aluno</span>
+              </a>
             </div>
           </div>
+
           <aside className="acesso-login__vitrine" aria-label="Conheça os projetos do portal">
+            <div className="acesso-login__vitrine-cabecalho">
+              <span className="acesso-login__vitrine-selo-topo">
+                <Icone nome="destaque" />
+                <span>Repositório Institucional</span>
+              </span>
+              <h2>Onde a produção acadêmica ganha visibilidade</h2>
+              <p>
+                Submeta trabalhos, receba orientação docente e publique no acervo oficial do curso.
+              </p>
+            </div>
+
             <article className="acesso-login__projetos">
               <header>
                 <div>
                   <strong>Tipos de projeto</strong>
-                  <span>Publicados após aprovação do orientador</span>
+                  <span>Publicados após aprovação do orientador e coordenação</span>
                 </div>
-                <b>4 tipos</b>
+                <b>
+                  <Icone nome="confirmacao-cursos" />4 modalidades
+                </b>
               </header>
-              <div className="acesso-login__projeto acesso-login__projeto--tcc">
-                <span aria-hidden="true">T</span>
-                <div>
-                  <strong>TCC</strong>
-                  <small>Trabalho de conclusão de curso</small>
-                </div>
+
+              <div className="acesso-login__lista-projetos">
+                {TIPOS_PROJETO.map((tipo) => (
+                  <div
+                    key={tipo.id}
+                    className={`acesso-login__projeto acesso-login__projeto--${tipo.id}`}
+                  >
+                    <span className="acesso-login__projeto-icone" aria-hidden="true">
+                      <Icone nome={tipo.icone} />
+                    </span>
+                    <div>
+                      <strong>{tipo.titulo}</strong>
+                      <small>{tipo.descricao}</small>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="acesso-login__projeto acesso-login__projeto--integrador">
-                <span aria-hidden="true">P</span>
-                <div>
-                  <strong>Projeto Integrador</strong>
-                  <small>Soluções aplicadas ao curso</small>
-                </div>
-              </div>
-              <div className="acesso-login__projeto acesso-login__projeto--pesquisa">
-                <span aria-hidden="true">I</span>
-                <div>
-                  <strong>Pesquisa</strong>
-                  <small>Conhecimento em construção</small>
-                </div>
-              </div>
-              <div className="acesso-login__projeto acesso-login__projeto--extensao">
-                <span aria-hidden="true">E</span>
-                <div>
-                  <strong>Extensão</strong>
-                  <small>Projetos conectados à comunidade</small>
-                </div>
-              </div>
+
               <footer>
-                <span>PRODUÇÃO ACADÊMICA</span>
-                <b>Seu próximo projeto começa aqui.</b>
+                <div className="acesso-login__projetos-rodape">
+                  <span>PRODUÇÃO ACADÊMICA</span>
+                  <b>Seu próximo projeto começa aqui.</b>
+                </div>
+                <span className="acesso-login__projetos-indicador" aria-hidden="true">
+                  <Icone nome="reconhecimento-detalhe" />
+                </span>
               </footer>
             </article>
           </aside>
