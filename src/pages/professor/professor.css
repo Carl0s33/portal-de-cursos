@@ -383,24 +383,26 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--esp-2);
 }
 
 .documentos-submissao-professor li {
   padding: 0;
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-m);
-  background: var(--superficie);
-  overflow: hidden;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--borda);
+  border-radius: 0;
   transition:
     border-color var(--transicao),
-    box-shadow var(--transicao),
-    transform var(--transicao);
+    color var(--transicao);
+}
+
+.documentos-submissao-professor li:first-child {
+  border-top: 1px solid var(--borda);
 }
 
 .documentos-submissao-professor li:hover {
+  box-shadow: none;
   border-color: var(--azul);
-  box-shadow: 0 4px 14px color-mix(in srgb, var(--azul) 12%, transparent);
 }
 
 .item-documento-interativo,
@@ -408,29 +410,28 @@
   display: flex;
   align-items: center;
   gap: var(--esp-3);
-  padding: var(--esp-3) var(--esp-4);
+  padding: var(--esp-3) var(--esp-1);
   width: 100%;
   color: var(--texto);
+  background: transparent;
   text-decoration: none;
   box-sizing: border-box;
-  transition:
-    background-color var(--transicao),
-    color var(--transicao);
+  transition: color var(--transicao);
 }
 
 .item-documento-interativo:hover {
-  background-color: var(--suave);
+  background-color: transparent;
   color: var(--azul);
 }
 
 .documento-tipo {
   flex-shrink: 0;
   min-width: 44px;
-  padding: 4px 8px;
+  padding: 3px 8px;
   border: 1px solid var(--borda);
   border-radius: var(--raio-p);
   color: var(--azul);
-  background: var(--superficie);
+  background: transparent;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
