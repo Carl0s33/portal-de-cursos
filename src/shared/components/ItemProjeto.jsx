@@ -14,25 +14,41 @@ function obterModificadorTipo(tipo) {
   return 'tcc'
 }
 
-function extrairIniciais(nome) {
-  const limpo = (nome || '').trim()
-  if (!limpo) return 'OR'
-  const partes = limpo.split(/\s+/).filter(Boolean)
-  if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase()
-  return `${partes[0][0]}${partes[partes.length - 1][0]}`.toUpperCase()
+function obterIconeTipo(modificador) {
+  switch (modificador) {
+    case 'integrador':
+      return 'projetos-cursos'
+    case 'pesquisa':
+      return 'laboratorio'
+    case 'extensao':
+      return 'docentes-detalhe'
+    case 'tcc':
+    default:
+      return 'grau-detalhe'
+  }
 }
 
 export default function ItemProjeto({ projeto }) {
   const modificador = obterModificadorTipo(projeto.tipo)
   const orientador = projeto.orientador || 'Não informado'
   const curso = (projeto.curso || '').replace(/^Curso\s+/i, '').trim()
+  const iconeTipo = obterIconeTipo(modificador)
+
+  const informacoes = [
+    ['Tipo', projeto.tipo || 'TCC', iconeTipo],
+    ['Curso', curso || 'Geral', 'catalogo-cursos'],
+    ['Orientador', orientador, 'usuario'],
+  ]
 
   return (
-    <article className={`item-projeto item-projeto--${modificador}`}>
-      <header className="item-projeto__topo">
-        <span className={`etiqueta etiqueta--${modificador}`}>{projeto.tipo || 'TCC'}</span>
-        {curso && <span className="item-projeto__curso">{curso}</span>}
-      </header>
+    <article className="item-projeto">
+      <div className="item-projeto__topo">
+        <span className="item-projeto__simbolo">
+          <Icone nome={iconeTipo} />
+        </span>
+        <span className="item-projeto__tipo-rotulo">{projeto.tipo || 'TCC'}</span>
+        {curso && <span className="item-projeto__sigla">{curso}</span>}
+      </div>
 
       <h3 className="item-projeto__titulo">
         <a className="item-projeto__link" href={`#projeto/${projeto.identificador}`}>
@@ -42,22 +58,23 @@ export default function ItemProjeto({ projeto }) {
 
       <p className="item-projeto__descricao">{projeto.descricao}</p>
 
-      <footer className="item-projeto__rodape">
-        <div className="item-projeto__orientador">
-          <span className="item-projeto__avatar" aria-hidden="true">
-            {extrairIniciais(orientador)}
-          </span>
-          <div>
-            <small>Orientador</small>
-            <strong>{orientador}</strong>
+      <dl className="item-projeto__metadados">
+        {informacoes.map(([rotulo, valor, icone]) => (
+          <div key={rotulo}>
+            <dt>
+              <Icone nome={icone} />
+              {rotulo}
+            </dt>
+            <dd title={valor}>{valor}</dd>
           </div>
-        </div>
+        ))}
+      </dl>
 
+      <div className="item-projeto__base">
         <span className="item-projeto__acao" aria-hidden="true">
-          Ver projeto
-          <Icone nome="seta" />
+          Ver projeto <Icone nome="seta-cursos" />
         </span>
-      </footer>
+      </div>
     </article>
   )
 }
