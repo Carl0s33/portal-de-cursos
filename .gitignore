@@ -34,15 +34,7 @@ desktop.ini
 # Scripts e arquivos auxiliares
 /scripts/
 .husky/
+.agents/
+*.md
 commitlint.config.*
 /verificacoes/
-/DESIGN-E-REGRAS.md
-/PENDENCIAS-MINIMUNDO.md
-/VINCULO-JIRA.md
-
-
-.prettierrc
-.prettierignore
-eslint.config.js
-.eslintrc*
-.vscode/

@@ -1,108 +1,118 @@
 .usuario-papel {
+  --cor-papel: var(--azul);
   display: inline-flex;
-  padding: 4px 8px;
-  border-radius: 5px;
-  background: var(--suave);
-  color: var(--titulo);
-  font-size: 10px;
-  font-weight: 650;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--cor-papel);
+  background: var(--cor-papel);
+  color: var(--branco);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
   white-space: nowrap;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-papel) 24%, transparent);
 }
+
+.usuario-papel::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.85;
+}
+
 .usuario-papel--admin {
-  background: var(--marinho);
-  color: var(--etiqueta);
+  --cor-papel: var(--marinho);
 }
+
 .usuario-papel--coordenador {
-  background: var(--aviso-suave);
-  color: var(--aviso);
+  --cor-papel: var(--aviso);
 }
+
 .usuario-papel--professor {
-  background: var(--roxo-suave);
-  color: var(--roxo);
+  --cor-papel: var(--roxo);
 }
+
 .usuario-papel--aluno {
-  background: var(--suave);
-  color: var(--azul-vivo);
+  --cor-papel: var(--azul);
 }
+
+:root[data-tema='escuro'] .usuario-papel {
+  color: var(--preto);
+  box-shadow: none;
+}
+
 :root[data-tema='escuro'] .usuario-papel--admin {
-  background: var(--etiqueta);
-  color: var(--azul-escuro);
+  --cor-papel: #94a3b8;
 }
+
 :root[data-tema='escuro'] .usuario-papel--coordenador {
-  background: var(--aviso-suave);
-  color: var(--aviso);
+  --cor-papel: var(--aviso);
 }
+
 :root[data-tema='escuro'] .usuario-papel--professor {
-  background: var(--roxo-suave);
-  color: var(--roxo);
+  --cor-papel: var(--roxo);
 }
+
 :root[data-tema='escuro'] .usuario-papel--aluno {
-  background: var(--etiqueta);
-  color: var(--azul);
+  --cor-papel: var(--azul);
 }
-.usuario-papel {
-  border: 1px solid transparent;
-}
-.usuario-papel--admin {
-  border-color: var(--etiqueta);
-  background: var(--suave);
-  color: var(--texto);
-}
-.usuario-papel--coordenador {
-  border-color: var(--aviso-suave);
-  background: var(--aviso-suave);
-  color: var(--aviso);
-}
-.usuario-papel--professor {
-  border-color: var(--etiqueta);
-  background: var(--roxo-suave);
-  color: var(--roxo);
-}
-.usuario-papel--aluno {
-  border-color: var(--etiqueta);
-  background: var(--azul-suave);
-  color: var(--azul-vivo);
-}
+
 .usuario-acesso {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 9px;
+  padding: 5px 11px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
 }
+
 .usuario-acesso > span {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: currentColor;
 }
+
 .usuario-acesso--ativo {
-  border-color: var(--borda);
-  background: var(--sucesso-suave);
-  color: var(--sucesso);
+  border-color: var(--sucesso);
+  background: var(--sucesso);
+  color: var(--branco);
 }
+
 .usuario-acesso--inativo,
 .usuario-acesso--bloqueado {
-  border-color: var(--borda-suave);
-  background: var(--fundo);
-  color: var(--texto-suave);
+  border-color: var(--erro);
+  background: var(--erro);
+  color: var(--branco);
 }
+
 .usuario-acesso--indefinido {
-  border-color: var(--borda-suave);
+  border-color: var(--borda);
   background: var(--fundo);
-  color: var(--texto-suave);
+  color: var(--texto);
 }
+
 :root[data-tema='escuro'] .usuario-acesso--ativo {
-  border-color: var(--sucesso-suave);
-  background: var(--sucesso-suave);
-  color: var(--verde);
+  border-color: var(--sucesso);
+  background: var(--sucesso);
+  color: var(--preto);
 }
+
 :root[data-tema='escuro'] .usuario-acesso--inativo,
-:root[data-tema='escuro'] .usuario-acesso--bloqueado,
+:root[data-tema='escuro'] .usuario-acesso--bloqueado {
+  border-color: var(--erro);
+  background: var(--erro);
+  color: var(--preto);
+}
+
 :root[data-tema='escuro'] .usuario-acesso--indefinido {
   border-color: var(--borda-suave);
   background: var(--superficie-escura);

@@ -7,8 +7,8 @@
    ========================================================================== */
 
 :root {
-  --cabecalho-altura: 56px;
-  --cabecalho-item: 32px;
+  --cabecalho-altura: 64px;
+  --cabecalho-item: 36px;
   --cabecalho-transicao: 160ms ease;
 }
 
@@ -18,17 +18,19 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--fundo) 86%, transparent);
-  border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--fundo) 88%, transparent);
+  border-bottom: 1px solid var(--borda-suave);
   -webkit-backdrop-filter: saturate(140%) blur(14px);
   backdrop-filter: saturate(140%) blur(14px);
   transition:
     border-color var(--cabecalho-transicao),
-    background-color var(--cabecalho-transicao);
+    background-color var(--cabecalho-transicao),
+    box-shadow var(--cabecalho-transicao);
 }
 
 .cabecalho--rolado {
   border-bottom-color: var(--borda);
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--preto) 5%, transparent);
 }
 
 .cabecalho__conteudo {

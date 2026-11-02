@@ -1,8 +1,26 @@
 import { useMemo, useState } from 'react'
+import Icone from '@/shared/components/Icone.jsx'
+import '@/shared/styles/painel.css'
 import './professor.css'
-import { basePortal, enderecoPrivado } from '../../app/rotas.js'
+import { enderecoPrivado } from '../../app/rotas.js'
 
 const filtros = ['Todas', 'Aguardando Orientador', 'Em análise', 'Aprovado', 'Recusado']
+
+const iconesFiltro = {
+  Todas: 'projetos-detalhe',
+  'Aguardando Orientador': 'relogio-cursos',
+  'Em análise': 'criterios-detalhe',
+  Aprovado: 'confirmacao-cursos',
+  Recusado: 'erro-cursos',
+}
+
+const tonsFiltro = {
+  Todas: 'todas',
+  'Aguardando Orientador': 'pendente',
+  'Em análise': 'analise',
+  Aprovado: 'aprovado',
+  Recusado: 'recusado',
+}
 
 function normalizar(txt) {
   return (txt || '')
@@ -42,14 +60,18 @@ export default function PaginaProfessor({ submissoes, usuario }) {
   const [tipoFiltro, definirTipoFiltro] = useState('Todos')
 
   const orientacoes = useMemo(
-    () =>
-      submissoes.filter(
-        (item) =>
-          orientaSubmissao(item, usuario) &&
-          item.tipoAutor !== 'PROFESSOR' &&
-          item.tipoAutor !== 'COORDENADOR',
-      ),
+    () => submissoes.filter((item) => orientaSubmissao(item, usuario)),
     [submissoes, usuario],
+  )
+
+  const totais = useMemo(
+    () => ({
+      total: orientacoes.length,
+      pendentes: orientacoes.filter((item) => item.status === 'Aguardando Orientador').length,
+      analise: orientacoes.filter((item) => item.status === 'Em análise').length,
+      aprovados: orientacoes.filter((item) => item.status === 'Aprovado').length,
+    }),
+    [orientacoes],
   )
 
   const resultados = useMemo(
@@ -66,18 +88,59 @@ export default function PaginaProfessor({ submissoes, usuario }) {
 
   return (
     <main id="conteudo" className="limite pagina-professor">
-      <div className="pagina-professor__topo">
+      <header className="pagina-professor__topo">
         <div>
+          <p className="pagina-professor__rotulo">Área do Professor</p>
           <h1>Submissões para acompanhar</h1>
           <p>
             Veja somente as submissões em que você consta como orientador e faça a avaliação
             inicial.
           </p>
         </div>
-        <a className="botao-primario" href={`${basePortal}#submeter`}>
-          Submeter projeto
-        </a>
-      </div>
+      </header>
+
+      <dl className="painel-indicadores">
+        <div className="painel-indicadores__card painel-indicadores__card--total">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="projetos-detalhe" />
+            </span>
+            <span>Total de orientações</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.total}</dd>
+          <dd className="painel-indicadores__detalhe">vinculadas ao seu perfil</dd>
+        </div>
+        <div className="painel-indicadores__card painel-indicadores__card--aguardando">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="relogio-cursos" />
+            </span>
+            <span>Aguardando aceite</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.pendentes}</dd>
+          <dd className="painel-indicadores__detalhe">pendentes da sua decisão</dd>
+        </div>
+        <div className="painel-indicadores__card painel-indicadores__card--coordenacao">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="criterios-detalhe" />
+            </span>
+            <span>Na coordenação</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.analise}</dd>
+          <dd className="painel-indicadores__detalhe">aceitas e em análise final</dd>
+        </div>
+        <div className="painel-indicadores__card painel-indicadores__card--publicadas">
+          <dt className="painel-indicadores__rotulo">
+            <span className="painel-indicadores__icone" aria-hidden="true">
+              <Icone nome="confirmacao-cursos" />
+            </span>
+            <span>Publicadas</span>
+          </dt>
+          <dd className="painel-indicadores__valor">{totais.aprovados}</dd>
+          <dd className="painel-indicadores__detalhe">no acervo público do portal</dd>
+        </div>
+      </dl>
 
       <div className="pagina-professor__layout">
         <aside className="pagina-professor__filtro-painel" aria-label="Filtros de submissões">
@@ -89,12 +152,16 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             {filtros.map((opcao) => (
               <button
                 className={filtro === opcao ? 'pagina-professor__filtro--ativo' : ''}
+                data-tom={tonsFiltro[opcao]}
                 type="button"
                 key={opcao}
                 aria-pressed={filtro === opcao}
                 onClick={() => definirFiltro(opcao)}
               >
-                <span>{opcao}</span>
+                <span className="pagina-professor__filtro-rotulo">
+                  <Icone nome={iconesFiltro[opcao]} />
+                  <span>{opcao}</span>
+                </span>
                 <small>
                   {opcao === 'Todas'
                     ? orientacoes.length
@@ -105,7 +172,10 @@ export default function PaginaProfessor({ submissoes, usuario }) {
           </nav>
           <label className="pagina-professor__tipo">
             <span>Tipo de produção</span>
-            <select value={tipoFiltro} onChange={(evento) => definirTipoFiltro(evento.target.value)}>
+            <select
+              value={tipoFiltro}
+              onChange={(evento) => definirTipoFiltro(evento.target.value)}
+            >
               {tipos.map((tipo) => (
                 <option value={tipo} key={tipo}>
                   {tipo}
@@ -127,11 +197,16 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             {resultados.map((item) => {
               const status = item.status || 'Aguardando Orientador'
               const nomeAutor = nomeDoAutor(item)
-              const totalCoautores = Array.isArray(item.autores) ? Math.max(item.autores.length - 1, 0) : 0
+              const totalCoautores = Array.isArray(item.autores)
+                ? Math.max(item.autores.length - 1, 0)
+                : 0
               const totalAnexos = item.documentos?.length || 0
 
               return (
-                <article className="submissao-feed" key={item.identificador}>
+                <article
+                  className={`submissao-feed submissao-feed--${tonsFiltro[status] || 'pendente'}`}
+                  key={item.identificador}
+                >
                   <a
                     href={enderecoPrivado(`professor/submissao/${item.identificador}`)}
                     className="submissao-feed__gatilho"
@@ -151,13 +226,17 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                         <span className="submissao-feed__separador" aria-hidden="true">
                           ·
                         </span>
-                        <span>enviou {item.enviadoEm ? `em ${item.enviadoEm}` : 'recentemente'}</span>
+                        <span>
+                          enviou {item.enviadoEm ? `em ${item.enviadoEm}` : 'recentemente'}
+                        </span>
                       </span>
 
                       <h2 className="submissao-feed__titulo">{item.titulo}</h2>
 
                       <span className="submissao-feed__rodape">
-                        <span className={`status status--${status.toLowerCase().replace(/\s+/g, '-')}`}>
+                        <span
+                          className={`status status--${status.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
                           {status}
                         </span>
                         {item.tipo && <span className="submissao-feed__chip">{item.tipo}</span>}
@@ -170,7 +249,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                       </span>
                     </span>
 
-                    <span className="submissao-feed__expandir">Abrir projeto →</span>
+                    <span className="submissao-feed__expandir">Avaliar projeto →</span>
                   </a>
                 </article>
               )

@@ -51,83 +51,27 @@
 }
 
 .painel-aluno-indicadores {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
   margin: 0;
-}
-
-.painel-aluno-indicadores > div {
-  padding: 24px;
-  background: var(--superficie);
-  border: 1px solid var(--borda);
-  border-radius: 14px;
-}
-
-.painel-aluno-indicadores dt {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--texto);
-}
-
-.painel-aluno-indicadores dd {
-  margin: 16px 0 8px;
-  color: var(--titulo);
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  font-variant-numeric: tabular-nums;
-}
-
-.painel-aluno-indicadores__destaque {
-  border-top: 3px solid var(--azul);
-  padding-top: 22px !important;
-}
-
-.painel-indicadores__detalhe {
-  margin: 0;
-  color: var(--texto);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.5;
 }
 
 .painel-aluno-vazio-icone {
-  font-size: 40px;
-  margin: 0 0 8px;
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  border-radius: 16px;
+  background: var(--azul);
+  color: var(--branco);
+}
+
+:root[data-tema='escuro'] .painel-aluno-vazio-icone {
+  color: var(--preto);
 }
 
 /* Aviso de somente-leitura */
 .painel-aluno-aviso {
   margin-top: 4px;
-}
-
-/* Badges de Status das Submissões */
-.pagina-painel-aluno .status {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-
-.pagina-painel-aluno .status--em-análise,
-.pagina-painel-aluno .status--aguardando-orientador {
-  color: var(--aviso);
-  background: var(--aviso-suave);
-}
-
-.pagina-painel-aluno .status--aprovado {
-  color: var(--verde);
-  background: var(--sucesso-suave);
-}
-
-.pagina-painel-aluno .status--recusado {
-  color: var(--erro-escuro);
-  background: var(--erro-suave);
 }
 
 @media (max-width: 1000px) {

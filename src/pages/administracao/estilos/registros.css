@@ -75,17 +75,27 @@
 .administracao-categorias {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 40px;
+  gap: 20px;
   padding-top: 4px;
+}
+.administracao-categoria {
+  padding: 20px 24px;
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: 14px;
+}
+:root[data-tema='escuro'] .administracao-categoria {
+  background: var(--preto);
+  border-color: var(--borda-suave);
 }
 .administracao-categoria h3 {
   margin: 0;
-  padding: 0 0 8px;
-  border-bottom: 1px solid var(--borda);
-  color: var(--texto);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.035em;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--borda-suave);
+  color: var(--azul);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 .administracao-categoria ul {
@@ -94,22 +104,26 @@
   padding: 0;
 }
 .administracao-categoria li + li {
-  border-top: 1px solid color-mix(in srgb, var(--borda) 68%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--borda) 55%, transparent);
 }
 .administracao-categoria a {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 68px;
-  padding: 10px 4px;
-  border-radius: 6px;
+  min-height: 62px;
+  padding: 10px 8px;
+  margin-inline: -8px;
+  border-radius: 8px;
   transition:
     color 140ms,
     background-color 140ms;
 }
 .administracao-categoria a:hover {
-  background: color-mix(in srgb, var(--azul) 4%, var(--fundo));
+  background: var(--suave);
+}
+.administracao-categoria a:hover .administracao-categoria__texto strong {
+  color: var(--azul);
 }
 .administracao-categoria__texto {
   display: grid;

@@ -8,7 +8,7 @@ const grupos = [
     itens: [
       ['curso', 'Dados do curso', 'formacao-cursos', 'Informações e apresentação'],
       ['disciplinas', 'Disciplinas', 'matriz-detalhe', 'Matriz curricular'],
-      ['professores', 'Professores', 'usuario', 'Equipe docente'],
+      ['professores', 'Professores', 'docentes-detalhe', 'Equipe docente'],
       ['projetos', 'Projetos', 'projetos-detalhe', 'Produção acadêmica'],
     ],
   },
@@ -19,7 +19,17 @@ const grupos = [
   { titulo: 'Conta', itens: [['perfil', 'Meu perfil', 'usuario', 'Dados de acesso']] },
 ]
 
-export default function NavegacaoCoordenacao({ rota }) {
+function iniciais(nome = '') {
+  return nome
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((parte) => parte[0])
+    .join('')
+    .toLocaleUpperCase('pt-BR')
+}
+
+export default function NavegacaoCoordenacao({ rota, usuario }) {
   return (
     <aside className="painel-navegacao">
       <span className="painel-navegacao__titulo">Coordenação do curso</span>
@@ -38,7 +48,9 @@ export default function NavegacaoCoordenacao({ rota }) {
                     : undefined
                 }
               >
-                <Icone nome={icone} />
+                <span className="painel-navegacao__icone" aria-hidden="true">
+                  <Icone nome={icone} />
+                </span>
                 <span className="painel-navegacao__texto">
                   <strong>{titulo}</strong>
                   <small>{descricao}</small>
@@ -48,7 +60,19 @@ export default function NavegacaoCoordenacao({ rota }) {
           </section>
         ))}
       </nav>
-      <p className="painel-navegacao__nota">Gestão e avaliação do seu curso</p>
+      {usuario ? (
+        <div className="painel-navegacao__conta">
+          <span className="painel-navegacao__avatar" aria-hidden="true">
+            {iniciais(usuario.nome)}
+          </span>
+          <span>
+            <strong>{usuario.nome}</strong>
+            <small>Coordenação</small>
+          </span>
+        </div>
+      ) : (
+        <p className="painel-navegacao__nota">Gestão e avaliação do seu curso</p>
+      )}
     </aside>
   )
 }

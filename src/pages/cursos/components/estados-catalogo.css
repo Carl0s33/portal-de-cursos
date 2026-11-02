@@ -72,8 +72,12 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--suave);
+  background: var(--azul);
+  color: var(--branco);
   margin-bottom: 16px;
+}
+:root[data-tema='escuro'] .estado-catalogo__icone {
+  color: var(--preto);
 }
 .catalogo-vazio h2,
 .erro-catalogo h2 {

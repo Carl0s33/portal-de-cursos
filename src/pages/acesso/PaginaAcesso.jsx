@@ -1,182 +1,236 @@
-  import { useEffect, useRef, useState } from 'react'
-  import { autenticarConta } from './services/autenticarConta.js'
-  import { basePortal, enderecoPrivado } from '@/app/rotas.js'
-  import logoPortal from '@/assets/marca/logo-portal.png'
-  import './acesso.css'
+import { useEffect, useRef, useState } from 'react'
+import { autenticarConta } from './services/autenticarConta.js'
+import { basePortal, enderecoPrivado } from '@/app/rotas.js'
+import logoPortal from '@/assets/marca/logo-portal.png'
+import Icone from '@/shared/components/Icone.jsx'
+import './acesso.css'
 
-  const TEMPO_LIMITE_MS = 15000
-  const MOTIVO_TEMPO_ESGOTADO = 'tempo-esgotado'
-  const MOTIVO_DESMONTADO = 'desmontado'
+const TEMPO_LIMITE_MS = 15000
+const MOTIVO_TEMPO_ESGOTADO = 'tempo-esgotado'
+const MOTIVO_DESMONTADO = 'desmontado'
 
-  function validarFormulario(identificacao, senha) {
-    const erros = {}
+const TIPOS_PROJETO = [
+  {
+    id: 'tcc',
+    icone: 'formacao-cursos',
+    titulo: 'TCC',
+    descricao: 'Trabalho de conclusão de curso',
+  },
+  {
+    id: 'integrador',
+    icone: 'projetos-cursos',
+    titulo: 'Projeto Integrador',
+    descricao: 'Soluções aplicadas ao curso',
+  },
+  {
+    id: 'pesquisa',
+    icone: 'laboratorio',
+    titulo: 'Pesquisa',
+    descricao: 'Conhecimento em construção',
+  },
+  {
+    id: 'extensao',
+    icone: 'docentes-detalhe',
+    titulo: 'Extensão',
+    descricao: 'Projetos conectados à comunidade',
+  },
+]
 
-    if (!identificacao.trim()) {
-      erros.identificacao = 'Informe seu e-mail.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identificacao.trim())) {
-      erros.identificacao = 'Informe um e-mail válido.'
-    }
+function validarFormulario(identificacao, senha) {
+  const erros = {}
 
-    if (!senha) {
-      erros.senha = 'Informe sua senha.'
-    }
-
-    return erros
+  if (!identificacao.trim()) {
+    erros.identificacao = 'Informe seu e-mail.'
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identificacao.trim())) {
+    erros.identificacao = 'Informe um e-mail válido.'
   }
 
-  function MensagemErro({ id, texto }) {
-    if (!texto) return null
-    return (
-      <p className="acesso-erro-campo" id={id}>
-        {texto}
-      </p>
-    )
+  if (!senha) {
+    erros.senha = 'Informe sua senha.'
   }
 
-  export default function PaginaAcesso({
-    aoEntrar,
-    sessaoExpirada = false,
-    perfil = 'institucional',
-  }) {
-    const [identificacao, definirIdentificacao] = useState('')
-    const [senha, definirSenha] = useState('')
-    const [mostrarSenha, definirMostrarSenha] = useState(false)
-    const [enviando, definirEnviando] = useState(false)
-    const [erroGeral, definirErroGeral] = useState('')
-    const [erros, definirErros] = useState({})
-    const [cadastroConcluido] = useState(
-      () => new URLSearchParams(window.location.search).get('cadastro') === 'sucesso',
-    )
-    const enviandoRef = useRef(false)
-    const requisicao = useRef(null)
-    const campoIdentificacao = useRef(null)
-    const campoSenha = useRef(null)
-    const avisoGeral = useRef(null)
+  return erros
+}
 
-    /* Remove o parâmetro da URL depois de exibir o aviso, para ele não reaparecer ao recarregar */
-    useEffect(() => {
-      if (cadastroConcluido) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.hash)
-      }
-    }, [cadastroConcluido])
+function MensagemErro({ id, texto }) {
+  if (!texto) return null
+  return (
+    <p className="acesso-erro-campo" id={id}>
+      <Icone nome="erro-cursos" classe="acesso-erro-campo__icone" />
+      <span>{texto}</span>
+    </p>
+  )
+}
 
-    /* Cancela a requisição se o usuário sair da tela */
-    useEffect(() => {
-      return () => requisicao.current?.abort(MOTIVO_DESMONTADO)
-    }, [])
+export default function PaginaAcesso({
+  aoEntrar,
+  sessaoExpirada = false,
+  perfil = 'institucional',
+}) {
+  const [identificacao, definirIdentificacao] = useState('')
+  const [senha, definirSenha] = useState('')
+  const [mostrarSenha, definirMostrarSenha] = useState(false)
+  const [enviando, definirEnviando] = useState(false)
+  const [erroGeral, definirErroGeral] = useState('')
+  const [erros, definirErros] = useState({})
+  const [cadastroConcluido] = useState(
+    () => new URLSearchParams(window.location.search).get('cadastro') === 'sucesso',
+  )
+  const enviandoRef = useRef(false)
+  const requisicao = useRef(null)
+  const campoIdentificacao = useRef(null)
+  const campoSenha = useRef(null)
+  const avisoGeral = useRef(null)
 
-    function alterarCampo(campo, valor) {
-      if (campo === 'identificacao') {
-        definirIdentificacao(valor)
-      } else {
-        definirSenha(valor)
-      }
-      definirErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
-      definirErroGeral('')
+  /* Remove o parâmetro da URL depois de exibir o aviso, para ele não reaparecer ao recarregar */
+  useEffect(() => {
+    if (cadastroConcluido) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.hash)
+    }
+  }, [cadastroConcluido])
+
+  /* Cancela a requisição se o usuário sair da tela */
+  useEffect(() => {
+    return () => requisicao.current?.abort(MOTIVO_DESMONTADO)
+  }, [])
+
+  function alterarCampo(campo, valor) {
+    if (campo === 'identificacao') {
+      definirIdentificacao(valor)
+    } else {
+      definirSenha(valor)
+    }
+    definirErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
+    definirErroGeral('')
+  }
+
+  async function entrar(evento) {
+    evento.preventDefault()
+    if (enviandoRef.current) return
+
+    const novosErros = validarFormulario(identificacao, senha)
+    definirErros(novosErros)
+    definirErroGeral('')
+
+    if (Object.keys(novosErros).length) {
+      const campo = novosErros.identificacao ? campoIdentificacao.current : campoSenha.current
+      campo?.focus()
+      return
     }
 
-    async function entrar(evento) {
-      evento.preventDefault()
-      if (enviandoRef.current) return
+    enviandoRef.current = true
+    definirEnviando(true)
 
-      const novosErros = validarFormulario(identificacao, senha)
-      definirErros(novosErros)
-      definirErroGeral('')
+    const controle = new AbortController()
+    requisicao.current = controle
+    const limite = window.setTimeout(() => controle.abort(MOTIVO_TEMPO_ESGOTADO), TEMPO_LIMITE_MS)
+    let concluido = false
 
-      if (Object.keys(novosErros).length) {
-        const campo = novosErros.identificacao ? campoIdentificacao.current : campoSenha.current
-        campo?.focus()
-        return
-      }
+    try {
+      const sessao = await autenticarConta(identificacao.trim(), senha, controle.signal)
+      concluido = true
+      definirSenha('')
+      aoEntrar(sessao)
+    } catch (falha) {
+      if (controle.signal.reason === MOTIVO_DESMONTADO) return
 
-      enviandoRef.current = true
-      definirEnviando(true)
+      definirErroGeral(
+        controle.signal.reason === MOTIVO_TEMPO_ESGOTADO
+          ? 'O serviço demorou para responder. Tente novamente.'
+          : falha.message,
+      )
+      definirSenha('')
+      window.requestAnimationFrame(() => avisoGeral.current?.focus())
+    } finally {
+      window.clearTimeout(limite)
 
-      const controle = new AbortController()
-      requisicao.current = controle
-      const limite = window.setTimeout(() => controle.abort(MOTIVO_TEMPO_ESGOTADO), TEMPO_LIMITE_MS)
-      let concluido = false
-
-      try {
-        const sessao = await autenticarConta(identificacao.trim(), senha, controle.signal)
-        concluido = true
-        definirSenha('')
-        aoEntrar(sessao)
-      } catch (falha) {
-        if (controle.signal.reason === MOTIVO_DESMONTADO) return
-
-        definirErroGeral(
-          controle.signal.reason === MOTIVO_TEMPO_ESGOTADO
-            ? 'O serviço demorou para responder. Tente novamente.'
-            : falha.message,
-        )
-        definirSenha('')
-        window.requestAnimationFrame(() => avisoGeral.current?.focus())
-      } finally {
-        window.clearTimeout(limite)
-
-        /* Após sucesso, o botão continua bloqueado até a navegação acontecer */
-        if (!concluido) {
-          enviandoRef.current = false
-          if (controle.signal.reason !== MOTIVO_DESMONTADO) definirEnviando(false)
-        }
+      /* Após sucesso, o botão continua bloqueado até a navegação acontecer */
+      if (!concluido) {
+        enviandoRef.current = false
+        if (controle.signal.reason !== MOTIVO_DESMONTADO) definirEnviando(false)
       }
     }
+  }
 
-    return (
-      <main id="conteudo" className={`limite pagina-acesso acesso-login acesso-login--${perfil}`}>
-        <div className="acesso-login__coluna">
-          <section className="acesso-login__cartao" aria-labelledby="titulo-entrar">
-            <div className="acesso-login__conteudo">
+  const rotuloPerfil =
+    perfil === 'aluno'
+      ? 'Portal do Aluno'
+      : perfil === 'professor'
+        ? 'Portal Docente'
+        : perfil === 'administracao'
+          ? 'Gestão Institucional'
+          : 'Acesso Institucional'
+
+  return (
+    <main id="conteudo" className={`limite pagina-acesso acesso-login acesso-login--${perfil}`}>
+      <div className="acesso-login__coluna">
+        <section className="acesso-login__cartao" aria-labelledby="titulo-entrar">
+          <div className="acesso-login__conteudo">
+            <div className="acesso-login__topo">
               <div className="acesso-login__marca">
                 <span className="acesso-login__logo">
-                  <img src={logoPortal} alt="" width="26" height="26" />
+                  <img src={logoPortal} alt="" width="28" height="28" />
                 </span>
-                <span>Portal de Cursos</span>
+                <div className="acesso-login__marca-textos">
+                  <strong>Portal de Cursos</strong>
+                  <span>{rotuloPerfil}</span>
+                </div>
               </div>
+              <span className="acesso-login__etiqueta">
+                <Icone nome="seguranca-detalhe" />
+                <span>Ambiente seguro</span>
+              </span>
+            </div>
 
-              <div className="acesso-login__cabecalho">
-                <h1 id="titulo-entrar">
-                  {perfil === 'aluno'
-                    ? 'Acesse sua conta de aluno'
-                    : perfil === 'professor'
-                      ? 'Acesso do professor'
-                      : perfil === 'administracao'
-                        ? 'Acesso administrativo'
-                        : 'Entre na sua conta'}
-                </h1>
-                <p className="acesso-login__subtitulo">
-                  {perfil === 'aluno'
-                    ? 'Acompanhe seus projetos e cada etapa da avaliação.'
-                    : perfil === 'professor'
-                      ? 'Acesse as submissões e acompanhe seus orientandos.'
-                      : perfil === 'administracao'
-                        ? 'Gerencie os cursos e acompanhe a produção acadêmica.'
-                        : 'Acompanhe seus projetos e cada etapa da avaliação.'}
-                </p>
-              </div>
+            <div className="acesso-login__cabecalho">
+              <h1 id="titulo-entrar">
+                {perfil === 'aluno'
+                  ? 'Acesse sua conta de aluno'
+                  : perfil === 'professor'
+                    ? 'Acesso do professor'
+                    : perfil === 'administracao'
+                      ? 'Acesso administrativo'
+                      : 'Entre na sua conta'}
+              </h1>
+              <p className="acesso-login__subtitulo">
+                {perfil === 'aluno'
+                  ? 'Acompanhe seus projetos e cada etapa da avaliação.'
+                  : perfil === 'professor'
+                    ? 'Acesse as submissões e acompanhe seus orientandos.'
+                    : perfil === 'administracao'
+                      ? 'Gerencie os cursos e acompanhe a produção acadêmica.'
+                      : 'Acompanhe seus projetos e cada etapa da avaliação.'}
+              </p>
+            </div>
 
-              {cadastroConcluido && (
-                <p className="acesso-aviso acesso-aviso--sucesso" role="status">
-                  Conta criada. Entre com seu e-mail e senha.
-                </p>
-              )}
+            {cadastroConcluido && (
+              <p className="acesso-aviso acesso-aviso--sucesso" role="status">
+                <Icone nome="confirmacao-cursos" classe="acesso-aviso__icone" />
+                <span>Conta criada com sucesso. Entre com seu e-mail e senha.</span>
+              </p>
+            )}
 
-              {sessaoExpirada && (
-                <p className="acesso-aviso" role="status">
-                  Sua sessão expirou. Entre novamente para continuar.
-                </p>
-              )}
+            {sessaoExpirada && (
+              <p className="acesso-aviso" role="status">
+                <Icone nome="informacao-cursos" classe="acesso-aviso__icone" />
+                <span>Sua sessão expirou. Entre novamente para continuar.</span>
+              </p>
+            )}
 
-              <form onSubmit={entrar} noValidate aria-busy={enviando}>
-                <div className="acesso-campo">
-                  <label htmlFor="identificacao">E-mail</label>
+            <form onSubmit={entrar} noValidate aria-busy={enviando}>
+              <div className="acesso-campo">
+                <label htmlFor="identificacao">E-mail institucional</label>
+                <div className="acesso-entrada">
+                  <span className="acesso-entrada__icone" aria-hidden="true">
+                    <Icone nome="email" />
+                  </span>
                   <input
                     ref={campoIdentificacao}
                     id="identificacao"
                     type="email"
                     inputMode="email"
                     name="username"
+                    placeholder="voce@instituicao.edu.br"
                     autoComplete="username"
                     autoCapitalize="none"
                     spellCheck={false}
@@ -187,111 +241,135 @@
                     aria-invalid={erros.identificacao ? true : undefined}
                     aria-describedby={erros.identificacao ? 'erro-identificacao' : undefined}
                   />
-                  <MensagemErro id="erro-identificacao" texto={erros.identificacao} />
                 </div>
-
-                <div className="acesso-campo">
-                  <label htmlFor="senha">Senha</label>
-                  <div className="acesso-senha">
-                    <input
-                      ref={campoSenha}
-                      id="senha"
-                      name="password"
-                      type={mostrarSenha ? 'text' : 'password'}
-                      autoComplete="current-password"
-                      value={senha}
-                      onChange={(evento) => alterarCampo('senha', evento.target.value)}
-                      readOnly={enviando}
-                      aria-invalid={erros.senha ? true : undefined}
-                      aria-describedby={erros.senha ? 'erro-senha' : undefined}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => definirMostrarSenha((mostrando) => !mostrando)}
-                      aria-controls="senha"
-                      aria-pressed={mostrarSenha}
-                    >
-                      {mostrarSenha ? 'Ocultar' : 'Mostrar'}
-                    </button>
-                  </div>
-                  <MensagemErro id="erro-senha" texto={erros.senha} />
-                </div>
-
-                {erroGeral && (
-                  <p
-                    ref={avisoGeral}
-                    className="acesso-aviso acesso-aviso--erro"
-                    role="alert"
-                    tabIndex={-1}
-                  >
-                    {erroGeral}
-                  </p>
-                )}
-
-                <button className="botao-primario acesso-entrar" type="submit" disabled={enviando}>
-                  {enviando ? 'Entrando…' : 'Entrar'}
-                </button>
-
-                <span className="somente-leitores" role="status">
-                  {enviando ? 'Verificando seus dados de acesso.' : ''}
-                </span>
-              </form>
-
-              <div className="acesso-login__aluno">
-                <span>Primeiro acesso?</span>
-                <a href={enderecoPrivado('aluno/cadastro')}>Crie sua conta de aluno</a>
+                <MensagemErro id="erro-identificacao" texto={erros.identificacao} />
               </div>
+
+              <div className="acesso-campo">
+                <label htmlFor="senha">Senha</label>
+                <div className="acesso-senha">
+                  <span className="acesso-entrada__icone" aria-hidden="true">
+                    <Icone nome="senha" />
+                  </span>
+                  <input
+                    ref={campoSenha}
+                    id="senha"
+                    name="password"
+                    type={mostrarSenha ? 'text' : 'password'}
+                    placeholder="Digite sua senha"
+                    autoComplete="current-password"
+                    value={senha}
+                    onChange={(evento) => alterarCampo('senha', evento.target.value)}
+                    readOnly={enviando}
+                    aria-invalid={erros.senha ? true : undefined}
+                    aria-describedby={erros.senha ? 'erro-senha' : undefined}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => definirMostrarSenha((mostrando) => !mostrando)}
+                    aria-controls="senha"
+                    aria-pressed={mostrarSenha}
+                    aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                    title={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                  >
+                    <Icone nome={mostrarSenha ? 'ocultar' : 'mostrar'} />
+                  </button>
+                </div>
+                <MensagemErro id="erro-senha" texto={erros.senha} />
+              </div>
+
+              {erroGeral && (
+                <p
+                  ref={avisoGeral}
+                  className="acesso-aviso acesso-aviso--erro"
+                  role="alert"
+                  tabIndex={-1}
+                >
+                  <Icone nome="aviso-projetos-detalhe" classe="acesso-aviso__icone" />
+                  <span>{erroGeral}</span>
+                </p>
+              )}
+
+              <button className="botao-primario acesso-entrar" type="submit" disabled={enviando}>
+                <span>{enviando ? 'Entrando…' : 'Entrar na plataforma'}</span>
+                <Icone nome="seta" classe="acesso-entrar__icone" />
+              </button>
+
+              <span className="somente-leitores" role="status">
+                {enviando ? 'Verificando seus dados de acesso.' : ''}
+              </span>
+            </form>
+
+            <div className="acesso-login__aluno">
+              <div className="acesso-login__aluno-texto">
+                <strong>Primeiro acesso?</strong>
+                <span>Exclusivo para estudantes matriculados</span>
+              </div>
+              <a href={enderecoPrivado('aluno/cadastro')}>
+                <Icone nome="cadastro-aluno" />
+                <span>Crie sua conta de aluno</span>
+              </a>
             </div>
-            <aside className="acesso-login__vitrine" aria-label="Conheça os projetos do portal">
-              <article className="acesso-login__projetos">
-                <header>
-                  <div>
-                    <strong>Tipos de projeto</strong>
-                    <span>Publicados após aprovação do orientador</span>
-                  </div>
-                  <b>4 tipos</b>
-                </header>
-                <div className="acesso-login__projeto acesso-login__projeto--tcc">
-                  <span aria-hidden="true">T</span>
-                  <div>
-                    <strong>TCC</strong>
-                    <small>Trabalho de conclusão de curso</small>
-                  </div>
+          </div>
+
+          <aside className="acesso-login__vitrine" aria-label="Conheça os projetos do portal">
+            <div className="acesso-login__vitrine-cabecalho">
+              <span className="acesso-login__vitrine-selo-topo">
+                <Icone nome="destaque" />
+                <span>Repositório Institucional</span>
+              </span>
+              <h2>Onde a produção acadêmica ganha visibilidade</h2>
+              <p>
+                Submeta trabalhos, receba orientação docente e publique no acervo oficial do curso.
+              </p>
+            </div>
+
+            <article className="acesso-login__projetos">
+              <header>
+                <div>
+                  <strong>Tipos de projeto</strong>
+                  <span>Publicados após aprovação do orientador e coordenação</span>
                 </div>
-                <div className="acesso-login__projeto acesso-login__projeto--integrador">
-                  <span aria-hidden="true">P</span>
-                  <div>
-                    <strong>Projeto Integrador</strong>
-                    <small>Soluções aplicadas ao curso</small>
+                <b>
+                  <Icone nome="confirmacao-cursos" />4 modalidades
+                </b>
+              </header>
+
+              <div className="acesso-login__lista-projetos">
+                {TIPOS_PROJETO.map((tipo) => (
+                  <div
+                    key={tipo.id}
+                    className={`acesso-login__projeto acesso-login__projeto--${tipo.id}`}
+                  >
+                    <span className="acesso-login__projeto-icone" aria-hidden="true">
+                      <Icone nome={tipo.icone} />
+                    </span>
+                    <div>
+                      <strong>{tipo.titulo}</strong>
+                      <small>{tipo.descricao}</small>
+                    </div>
                   </div>
-                </div>
-                <div className="acesso-login__projeto acesso-login__projeto--pesquisa">
-                  <span aria-hidden="true">I</span>
-                  <div>
-                    <strong>Pesquisa</strong>
-                    <small>Conhecimento em construção</small>
-                  </div>
-                </div>
-                <div className="acesso-login__projeto acesso-login__projeto--extensao">
-                  <span aria-hidden="true">E</span>
-                  <div>
-                    <strong>Extensão</strong>
-                    <small>Projetos conectados à comunidade</small>
-                  </div>
-                </div>
-                <footer>
+                ))}
+              </div>
+
+              <footer>
+                <div className="acesso-login__projetos-rodape">
                   <span>PRODUÇÃO ACADÊMICA</span>
                   <b>Seu próximo projeto começa aqui.</b>
-                </footer>
-              </article>
-            </aside>
-          </section>
+                </div>
+                <span className="acesso-login__projetos-indicador" aria-hidden="true">
+                  <Icone nome="reconhecimento-detalhe" />
+                </span>
+              </footer>
+            </article>
+          </aside>
+        </section>
 
-          <p className="acesso-login__ajuda">
-            Professores, coordenadores e administradores acessam com as credenciais fornecidas pela
-            coordenação. <a href={basePortal}>Voltar ao portal</a>
-          </p>
-        </div>
-      </main>
-    )
-  }
+        <p className="acesso-login__ajuda">
+          Professores, coordenadores e administradores acessam com as credenciais fornecidas pela
+          coordenação. <a href={basePortal}>Voltar ao portal</a>
+        </p>
+      </div>
+    </main>
+  )
+}

@@ -5,7 +5,6 @@ import Cabecalho from '@/shared/components/Cabecalho.jsx'
 import Rodape from '@/shared/components/Rodape.jsx'
 import PaginaInicial from '@/pages/inicio/PaginaInicial.jsx'
 import PaginaCursos from '@/pages/cursos/PaginaCursos.jsx'
-import RodapeCatalogo from '@/pages/cursos/components/RodapeCatalogo.jsx'
 import PaginaDetalhesCurso from '@/pages/detalhes-curso/PaginaDetalhesCurso.jsx'
 import PaginaProjetos from '@/pages/projetos/PaginaProjetos.jsx'
 import PaginaSubmissao from '@/pages/submissao/PaginaSubmissao.jsx'
@@ -21,11 +20,13 @@ import PaginaCadastroAluno from '@/pages/cadastro-aluno/PaginaCadastroAluno.jsx'
 import PaginaPainelAluno from '@/pages/painel-aluno/PaginaPainelAluno.jsx'
 import PaginaDetalhesSubmissao from '@/pages/professor/PaginaDetalhesSubmissao.jsx'
 import { listarCursos } from '@/api/cursos.js'
-import { atualizarStatusProjeto } from '@/api/projetos.js'
+import { listarProfessores } from '@/api/professores.js'
+import { atualizarStatusProjeto, excluirProjeto } from '@/api/projetos.js'
 import { listarSubmissoes } from '@/api/submissoes.js'
+import { limparDadosLocais } from './limparDadosLocais.js'
 
 function identificarPagina(rota) {
-  if (['projetos', 'biblioteca'].includes(rota)) return 'projetos'
+  if (['projetos', 'biblioteca'].includes(rota) || rota.startsWith('projeto/')) return 'projetos'
   if (['acesso', 'acesso-professor', 'acesso-administracao'].includes(rota)) return 'acesso'
   if (rota === 'aluno/cadastro') return 'aluno-cadastro'
   if (rota === 'aluno/painel') return 'aluno-painel'
@@ -64,23 +65,8 @@ export default function Aplicacao() {
       return null
     }
   })
-  const [decisoes, definirDecisoes] = useState(() => {
-    try {
-      const salvas = localStorage.getItem('portal-cursos-decisoes')
-      return salvas ? JSON.parse(salvas) : {}
-    } catch {
-      return {}
-    }
-  })
-  const [listaSubmissoes, definirListaSubmissoes] = useState(() => {
-    try {
-      const salvas = localStorage.getItem('portal-cursos-submissoes')
-      return salvas ? JSON.parse(salvas) : []
-    } catch {
-      return []
-    }
-  })
-  const [listaProjetos, definirListaProjetos] = useState([])
+  const [decisoes, definirDecisoes] = useState({})
+  const [listaSubmissoes, definirListaSubmissoes] = useState([])
   const [rascunhos, definirRascunhos] = useState({ cursos: [], projetos: [], disciplinas: [] })
   const [sessaoExpirada, definirSessaoExpirada] = useState(false)
   const [tema, definirTema] = useState(lerTema)
@@ -89,20 +75,6 @@ export default function Aplicacao() {
   const [rotaCurso, definirRotaCurso] = useState(() =>
     window.location.hash.startsWith('#curso/') ? window.location.hash.slice(1) : '',
   )
-  useEffect(() => {
-    try {
-      localStorage.setItem('portal-cursos-submissoes', JSON.stringify(listaSubmissoes))
-    } catch {
-      /* Ignora falha de armazenamento local */
-    }
-  }, [listaSubmissoes])
-  useEffect(() => {
-    try {
-      localStorage.setItem('portal-cursos-decisoes', JSON.stringify(decisoes))
-    } catch {
-      /* Ignora falha de armazenamento local */
-    }
-  }, [decisoes])
   useEffect(() => {
     try {
       if (sessao) sessionStorage.setItem('portal-cursos-sessao', JSON.stringify(sessao))
@@ -205,6 +177,7 @@ export default function Aplicacao() {
       if (Date.now() >= sessao.expiraEm) {
         definirSessao(null)
         definirSessaoExpirada(true)
+        limparDadosLocais()
       }
     }
     const temporizador = window.setTimeout(
@@ -226,9 +199,10 @@ export default function Aplicacao() {
 
     async function sincronizarSubmissoes() {
       try {
-        const [dados, cursosCadastrados] = await Promise.all([
+        const [dados, cursosCadastrados, professoresCadastrados] = await Promise.all([
           listarSubmissoes(sessao.token, controller.signal),
           listarCursos(controller.signal).catch(() => []),
+          listarProfessores(sessao.token, {}, controller.signal).catch(() => []),
         ])
 
         if (Array.isArray(dados) && dados.length > 0) {
@@ -236,6 +210,12 @@ export default function Aplicacao() {
             (Array.isArray(cursosCadastrados) ? cursosCadastrados : []).map((c) => [
               String(c.id),
               c,
+            ]),
+          )
+          const mapaProfessores = new Map(
+            (Array.isArray(professoresCadastrados) ? professoresCadastrados : []).map((prof) => [
+              String(prof.id),
+              prof.nome || prof.usuario?.nome || '',
             ]),
           )
 
@@ -251,13 +231,19 @@ export default function Aplicacao() {
               ? new Date(p.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR')
               : ''
             const infoCurso = mapaCursos.get(String(p.cursoId))
+            const nomeProfessorReal = orientadorObj?.professorId
+              ? mapaProfessores.get(String(orientadorObj.professorId)) ||
+                orientadorObj?.nome ||
+                `Professor ${orientadorObj.professorId}`
+              : ''
 
             return {
               identificador: String(p.id),
               id: p.id,
               cursoId: p.cursoId,
               campusId: p.campusId,
-              curso: infoCurso?.sigla || infoCurso?.acronimo || (p.cursoId ? `Curso #${p.cursoId}` : ''),
+              curso:
+                infoCurso?.sigla || infoCurso?.acronimo || (p.cursoId ? `Curso #${p.cursoId}` : ''),
               cursoCompleto: infoCurso?.nome || (p.cursoId ? `Curso #${p.cursoId}` : ''),
               titulo: p.nome,
               tipo:
@@ -270,9 +256,7 @@ export default function Aplicacao() {
                       : p.tipoProjeto === 'PROJETO_EXTENSAO'
                         ? 'Extensão'
                         : p.tipoProjeto || '',
-              orientador: orientadorObj?.professorId
-                ? `Professor ${orientadorObj.professorId}`
-                : '',
+              orientador: nomeProfessorReal,
               orientadorId: orientadorObj?.professorId || null,
               autor: nomeAutor,
               autores: Array.isArray(p.autores) ? p.autores : [],
@@ -280,31 +264,56 @@ export default function Aplicacao() {
               dataInicio: p.dataInicio,
               dataFim: p.dataFim,
               documentos: Array.isArray(p.documentos) ? p.documentos : [],
+              statusBackend: p.statusProjeto,
               status:
                 p.statusProjeto === 'EM_ANALISE'
                   ? 'Aguardando Orientador'
-                  : p.statusProjeto === 'APROVADO'
+                  : p.statusProjeto === 'APROVADO' || p.statusProjeto === 'ANALISE_PUBLICACAO'
                     ? 'Em análise'
-                    : p.statusProjeto === 'ANALISE_PUBLICACAO'
-                      ? 'Em análise'
-                      : p.statusProjeto === 'PUBLICADO'
-                        ? 'Aprovado'
-                        : p.statusProjeto === 'RECUSADO'
-                          ? 'Recusado'
-                          : p.statusProjeto,
+                    : p.statusProjeto === 'PUBLICADO'
+                      ? 'Aprovado'
+                      : p.statusProjeto === 'RECUSADO' || p.statusProjeto === 'RECUSADO_PUBLICACAO'
+                        ? 'Recusado'
+                        : p.statusProjeto,
               resumo: p.resumo,
               objetivo: p.descricao,
               tipoAutor: 'ALUNO',
             }
           })
-          definirListaSubmissoes((locais) => {
-            const idsExistentes = new Set(locais.map((l) => String(l.id || l.identificador)))
-            const novasDoBack = mapeadas.filter((m) => !idsExistentes.has(String(m.id)))
-            return [...novasDoBack, ...locais]
-          })
+          definirListaSubmissoes(mapeadas)
+          try {
+            const publicadosCache = dados
+              .filter((p) => p.statusProjeto === 'PUBLICADO')
+              .map((p) => {
+                const orientadorObj = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')
+                const nomeOrientador = orientadorObj?.professorId
+                  ? mapaProfessores.get(String(orientadorObj.professorId)) ||
+                    orientadorObj?.nome ||
+                    ''
+                  : ''
+                return {
+                  ...p,
+                  orientador: nomeOrientador || p.orientador || '',
+                }
+              })
+            localStorage.setItem('portal-cursos-publicados-cache', JSON.stringify(publicadosCache))
+          } catch {
+            /* Cache público opcional. */
+          }
+        } else if (Array.isArray(dados)) {
+          definirListaSubmissoes([])
+          try {
+            localStorage.setItem('portal-cursos-publicados-cache', '[]')
+          } catch {
+            /* Cache público opcional. */
+          }
         }
-      } catch {
-        /* Mantém as submissões já existentes */
+      } catch (falha) {
+        if (falha?.status === 401) {
+          definirSessao(null)
+          definirSessaoExpirada(true)
+          limparDadosLocais()
+        }
       }
     }
 
@@ -326,14 +335,8 @@ export default function Aplicacao() {
     definirSessaoExpirada(false)
     definirDecisoes({})
     definirListaSubmissoes([])
-    definirListaProjetos([])
     definirRascunhos({ cursos: [], projetos: [], disciplinas: [] })
-    try {
-      localStorage.removeItem('portal-cursos-submissoes')
-      localStorage.removeItem('portal-cursos-decisoes')
-    } catch {
-      /* Ignora falha ao limpar armazenamento local */
-    }
+    limparDadosLocais()
     navegar(enderecoPrivado('login'), true)
   }
   useEffect(() => {
@@ -428,7 +431,7 @@ export default function Aplicacao() {
         </a>
         <Cabecalho modoAcesso tema={tema} alternarTema={definirTema} pagina="acesso" />
         <PaginaCadastroAluno />
-        <RodapeCatalogo pagina="acesso" />
+        <Rodape pagina="acesso" />
       </>
     )
   }
@@ -448,8 +451,8 @@ export default function Aplicacao() {
           : 'professor'
     if (sessao && (ePaginaLogin || pagina !== areaDaSessao))
       return (
-        <main id="conteudo" className="limite pagina-painel" role="status">
-          Abrindo sua área…
+        <main id="conteudo" className="limite pagina-painel">
+          <p role="status">Abrindo sua área…</p>
         </main>
       )
     return (
@@ -531,64 +534,87 @@ export default function Aplicacao() {
             item={listaSubmissoes.find((item) => item.identificador === identificadorSubmissao)}
             tipoUsuario={sessao.tipoUsuario}
             usuario={sessao.usuario}
+            token={sessao.token}
             cursoId={sessao.usuario.cursoId}
             decisao={decisoes[identificadorSubmissao]}
             aoDecidir={(status, justificativa) => {
               const submissao = listaSubmissoes.find(
                 (item) => item.identificador === identificadorSubmissao,
               )
-              if (sessao.tipoUsuario === 'COORDENADOR' && status === 'Aprovado' && submissao) {
-                const projetoPublicado = {
-                  identificador: submissao.identificador,
-                  cursoId: submissao.cursoId,
-                  identificadorCurso: submissao.identificadorCurso,
-                  nome: submissao.titulo,
-                  tipo: submissao.tipo,
-                  curso: submissao.curso,
-                  cursoCompleto: submissao.cursoCompleto,
-                  descricao: submissao.objetivo || submissao.resumo,
-                  autores: Array.isArray(submissao.autores)
-                    ? submissao.autores
-                        .map((autor) => (typeof autor === 'string' ? autor : autor.nome))
-                        .join(' e ')
-                    : submissao.autor || '',
-                  orientador: submissao.orientador,
-                  status: 'PUBLICADO',
-                }
-                definirListaProjetos((atuais) => [
-                  ...atuais.filter((item) => item.identificador !== submissao.identificador),
-                  projetoPublicado,
-                ])
-              }
 
               // Sincroniza com o backend via PATCH /api/projetos/{id}/status
+              let proximoStatusBackend = submissao?.statusBackend
               if (submissao?.id && sessao?.token) {
-                let statusBackend = null
                 if (sessao.tipoUsuario === 'PROFESSOR') {
-                  if (status === 'Em análise' || status === 'Aceito') statusBackend = 'APROVADO'
-                  else if (status === 'Recusado') statusBackend = 'RECUSADO'
-                } else if (sessao.tipoUsuario === 'COORDENADOR') {
-                  if (status === 'Aprovado') {
-                    // Transição no backend: APROVADO -> ANALISE_PUBLICACAO -> PUBLICADO
-                    atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
-                      .then(() => atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token))
+                  if (status === 'Em análise' || status === 'Aceito') {
+                    proximoStatusBackend = 'ANALISE_PUBLICACAO'
+                    atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
+                      .then(() =>
+                        atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token),
+                      )
                       .catch(() => {})
                   } else if (status === 'Recusado') {
-                    statusBackend = 'RECUSADO'
+                    proximoStatusBackend = 'RECUSADO'
+                    atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token).catch(() => {})
                   }
-                }
-                if (statusBackend) {
-                  atualizarStatusProjeto(submissao.id, statusBackend, sessao.token).catch(() => {
-                    /* fallback local se API falhar */
-                  })
+                } else if (sessao.tipoUsuario === 'COORDENADOR') {
+                  if (status === 'Aprovado') {
+                    proximoStatusBackend = 'PUBLICADO'
+                    atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token).catch(() =>
+                      atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                        .then(() => atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token))
+                        .catch(() => {}),
+                    )
+                  } else if (status === 'Recusado') {
+                    proximoStatusBackend = 'RECUSADO_PUBLICACAO'
+                    atualizarStatusProjeto(submissao.id, 'RECUSADO_PUBLICACAO', sessao.token).catch(
+                      () =>
+                        atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                          .then(() =>
+                            atualizarStatusProjeto(
+                              submissao.id,
+                              'RECUSADO_PUBLICACAO',
+                              sessao.token,
+                            ),
+                          )
+                          .catch(() => {}),
+                    )
+                  }
                 }
               }
 
-              definirListaSubmissoes((atuais) =>
-                atuais.map((item) =>
-                  item.identificador === identificadorSubmissao ? { ...item, status } : item,
-                ),
-              )
+              definirListaSubmissoes((atuais) => {
+                const atualizadas = atuais.map((item) =>
+                  item.identificador === identificadorSubmissao
+                    ? { ...item, status, statusBackend: proximoStatusBackend }
+                    : item,
+                )
+                try {
+                  const publicadosCache = atualizadas
+                    .filter(
+                      (item) => item.statusBackend === 'PUBLICADO' || item.status === 'Aprovado',
+                    )
+                    .map((item) => ({
+                      id: item.id,
+                      nome: item.titulo,
+                      descricao: item.objetivo || item.resumo || '',
+                      resumo: item.resumo || '',
+                      tipoProjeto: item.tipo,
+                      cursoId: item.cursoId,
+                      curso: item.curso,
+                      orientador: item.orientador,
+                      autores: item.autores,
+                      statusProjeto: 'PUBLICADO',
+                    }))
+                  localStorage.setItem(
+                    'portal-cursos-publicados-cache',
+                    JSON.stringify(publicadosCache),
+                  )
+                } catch {
+                  /* Cache público opcional. */
+                }
+                return atualizadas
+              })
 
               definirDecisoes((atuais) => ({
                 ...atuais,
@@ -608,24 +634,14 @@ export default function Aplicacao() {
                   item.identificador === identificadorSubmissao ? { ...item, ...alteracoes } : item,
                 ),
               )
-              definirListaProjetos((itens) =>
-                itens.map((projeto) =>
-                  projeto.identificador === identificadorSubmissao
-                    ? {
-                        ...projeto,
-                        nome: alteracoes.titulo,
-                        descricao: alteracoes.objetivo,
-                        tipo: alteracoes.tipo,
-                        autores: (alteracoes.autores || [])
-                          .map((autor) => (typeof autor === 'string' ? autor : autor.nome))
-                          .join(' e '),
-                        orientador: alteracoes.orientador,
-                      }
-                    : projeto,
-                ),
-              )
             }}
             aoRemover={() => {
+              const submissao = listaSubmissoes.find(
+                (item) => item.identificador === identificadorSubmissao,
+              )
+              if (submissao?.id && sessao?.token) {
+                excluirProjeto(submissao.id, sessao.token).catch(() => {})
+              }
               definirListaSubmissoes((itens) =>
                 itens.filter((item) => item.identificador !== identificadorSubmissao),
               )
@@ -634,9 +650,6 @@ export default function Aplicacao() {
                 delete proxima[identificadorSubmissao]
                 return proxima
               })
-              definirListaProjetos((itens) =>
-                itens.filter((projeto) => projeto.identificador !== identificadorSubmissao),
-              )
             }}
           />
         ) : (
@@ -681,7 +694,7 @@ export default function Aplicacao() {
         alternarTema={(proximoTema) => definirTema(proximoTema)}
       />
       {pagina === 'cursos' && <PaginaCursos />}
-      {pagina === 'projetos' && <PaginaProjetos itens={listaProjetos} />}
+      {pagina === 'projetos' && <PaginaProjetos />}
       {pagina === 'detalhes-curso' && (
         <PaginaDetalhesCurso key={identificador} identificador={identificador} aba={aba} />
       )}
@@ -695,7 +708,7 @@ export default function Aplicacao() {
       )}
       {pagina === 'aluno-cadastro' && <PaginaCadastroAluno />}
       {pagina === 'inicio' && <PaginaInicial />}
-      {pagina === 'inicio' ? <Rodape /> : <RodapeCatalogo pagina={pagina} />}
+      <Rodape pagina={pagina} />
     </>
   )
 }

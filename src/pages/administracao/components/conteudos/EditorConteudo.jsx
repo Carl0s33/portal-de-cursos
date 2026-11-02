@@ -172,6 +172,7 @@ export default function EditorConteudo({
                         id={idCampo}
                         aria-describedby={idAjuda}
                         required
+                        disabled={opcoes === 'campus' && Boolean(item?.id)}
                         value={dados[chave]}
                         onChange={(e) => definirDados({ ...dados, [chave]: e.target.value })}
                       >

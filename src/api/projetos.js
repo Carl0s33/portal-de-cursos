@@ -31,9 +31,6 @@ function obterUrlBaseProjetos() {
   return `${window.location.origin}${baseLimpa}api/${segmentoVersao}projetos`
 }
 
-/**
- * Lista os projetos aprovados/publicados para o catálogo público (sem token)
- */
 export async function listarProjetosAprovados(sinal = null) {
   const url = `${obterUrlBaseProjetos()}/aprovados`
   const dados = await requisitarApi(url, {
@@ -48,9 +45,6 @@ export async function listarProjetosAprovados(sinal = null) {
   return dados
 }
 
-/**
- * Lista os projetos em análise pelo professor orientador
- */
 export async function listarProjetosEmAnalise(token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/em-analise`
   const dados = await requisitarApi(url, {
@@ -66,9 +60,6 @@ export async function listarProjetosEmAnalise(token = null, sinal = null) {
   return dados
 }
 
-/**
- * Lista todos os projetos acadêmicos cadastrados no microsserviço
- */
 export async function listarProjetos(token = null, sinal = null) {
   const url = obterUrlBaseProjetos()
   const dados = await requisitarApi(url, {
@@ -84,9 +75,6 @@ export async function listarProjetos(token = null, sinal = null) {
   return dados
 }
 
-/**
- * Busca os dados de um projeto específico por ID
- */
 export async function obterProjetoPorId(id, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}`
   return requisitarApi(url, {
@@ -96,10 +84,6 @@ export async function obterProjetoPorId(id, token = null, sinal = null) {
   })
 }
 
-/**
- * Cadastra um novo projeto no microsserviço de projetos
- * @param {Object} projeto - DTO com { cursoId, orientadorId, autores, disciplinaIds, nome, descricao, tipoProjeto, arquivoPdf }
- */
 export async function cadastrarProjeto(projeto, token = null, sinal = null) {
   const url = obterUrlBaseProjetos()
   return requisitarApi(url, {
@@ -110,9 +94,6 @@ export async function cadastrarProjeto(projeto, token = null, sinal = null) {
   })
 }
 
-/**
- * Atualiza os dados de um projeto existente
- */
 export async function atualizarProjeto(id, projeto, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}`
   return requisitarApi(url, {
@@ -123,11 +104,6 @@ export async function atualizarProjeto(id, projeto, token = null, sinal = null) 
   })
 }
 
-/**
- * Altera o status de avaliação ou publicação de um projeto (PATCH /api/v1/projetos/{id}/status)
- * @param {number|string} id
- * @param {string} status - Um dos valores de STATUS_PROJETO
- */
 export async function atualizarStatusProjeto(id, status, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}/status`
   return requisitarApi(url, {
@@ -138,11 +114,67 @@ export async function atualizarStatusProjeto(id, status, token = null, sinal = n
   })
 }
 
-/**
- * Remove um projeto pelo ID
- */
 export async function excluirProjeto(id, token = null, sinal = null) {
   const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(id)}`
+  return requisitarApi(url, {
+    metodo: 'DELETE',
+    token,
+    sinal,
+  })
+}
+
+export async function enviarDocumentoProjeto(projetoId, arquivo, token = null, sinal = null) {
+  const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos`
+  const formData = new FormData()
+  formData.append('arquivo', arquivo)
+
+  const resposta = await fetch(url, {
+    method: 'POST',
+    body: formData,
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    signal: sinal,
+  })
+  if (!resposta.ok) {
+    throw new ErroApi('Não foi possível enviar o documento.', { status: resposta.status })
+  }
+  return resposta.json()
+}
+
+export async function listarDocumentosProjeto(projetoId, token = null, sinal = null) {
+  const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos`
+  return requisitarApi(url, {
+    metodo: 'GET',
+    token,
+    sinal,
+  })
+}
+
+export function obterUrlDownloadDocumento(projetoId, documentoId) {
+  return `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos/${encodeURIComponent(documentoId)}/download`
+}
+
+export async function baixarDocumentoBlob(projetoId, documentoId, token = null, sinal = null) {
+  const url = obterUrlDownloadDocumento(projetoId, documentoId)
+  const cabecalhos = {
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  }
+
+  const resposta = await fetch(url, {
+    method: 'GET',
+    headers: cabecalhos,
+    signal: sinal,
+  })
+
+  if (!resposta.ok) {
+    throw new ErroApi('Não foi possível obter o documento.', { status: resposta.status })
+  }
+
+  const blob = await resposta.blob()
+  return window.URL.createObjectURL(blob)
+}
+
+export async function excluirDocumentoProjeto(projetoId, documentoId, token = null, sinal = null) {
+  const url = `${obterUrlBaseProjetos()}/${encodeURIComponent(projetoId)}/documentos/${encodeURIComponent(documentoId)}`
   return requisitarApi(url, {
     metodo: 'DELETE',
     token,
@@ -160,6 +192,10 @@ export const moduloProjetos = {
   atualizar: atualizarProjeto,
   atualizarStatus: atualizarStatusProjeto,
   excluir: excluirProjeto,
+  enviarDocumento: enviarDocumentoProjeto,
+  listarDocumentos: listarDocumentosProjeto,
+  obterUrlDownload: obterUrlDownloadDocumento,
+  excluirDocumento: excluirDocumentoProjeto,
 }
 
 export default moduloProjetos

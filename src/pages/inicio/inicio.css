@@ -89,15 +89,27 @@ h1 {
 
 .grade-cursos {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
   gap: 20px;
 }
 
-.lista-projetos {
+.painel-vazio--caixa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 48px 24px;
+  text-align: center;
   background: var(--superficie);
   border: 1px solid var(--borda);
-  border-radius: 10px;
-  overflow: hidden;
+  border-radius: 14px;
+}
+
+.painel-vazio--caixa p {
+  margin: 0;
+  color: var(--texto);
+  font-size: 15px;
 }
 
 .convite {
@@ -105,10 +117,11 @@ h1 {
   align-items: center;
   justify-content: space-between;
   gap: 40px;
-  background: var(--suave);
+  background: var(--superficie);
   border: 1px solid var(--borda);
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 44px;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--marinho) 4%, transparent);
 }
 
 .convite > div {
@@ -131,7 +144,7 @@ h1 {
   font-size: 28px;
   line-height: 36px;
   letter-spacing: -0.56px;
-  margin: 0 0 4px;
+  margin: 0 0 6px;
 }
 
 .convite p {
@@ -142,14 +155,14 @@ h1 {
 
 .convite small {
   display: inline-block;
-  font-family: monospace;
   color: var(--texto);
-  background: var(--superficie);
-  border: 1px solid var(--borda);
-  padding: 4px 10px;
-  border-radius: 4px;
-  margin-top: 10px;
+  background: var(--suave);
+  border: 1px solid var(--borda-suave);
+  padding: 5px 12px;
+  border-radius: 6px;
+  margin-top: 12px;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .convite > .botao-primario {

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
 import Icone from './Icone.jsx'
 import logoPortal from '@/assets/marca/logo-portal.png'
-import '@/shared/styles/estrutura.css'
 import './cabecalho.css'
 
 const PAGINAS_ADMIN = ['acesso', 'acesso-administracao', 'administracao']
@@ -219,13 +218,15 @@ export default function Cabecalho({
       <a href="#projetos" aria-current={ativoSe(pagina === 'projetos')}>
         Projetos
       </a>
-      <a
-        className="navegacao__submeter"
-        href="#submeter"
-        aria-current={ativoSe(pagina === 'submeter')}
-      >
-        Enviar projeto
-      </a>
+      {(!autenticado || ['ALUNO', 'COORDENADOR'].includes(tipoUsuario)) && (
+        <a
+          className="navegacao__submeter"
+          href="#submeter"
+          aria-current={ativoSe(pagina === 'submeter')}
+        >
+          Enviar projeto
+        </a>
+      )}
 
       {linkPapel && (
         <a
