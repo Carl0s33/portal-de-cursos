@@ -3,6 +3,7 @@ import '@/shared/styles/painel-informativo.css'
 import './professor.css'
 import { enderecoPrivado, navegar } from '../../app/rotas.js'
 import ConfirmacaoGestao from '@/pages/administracao/components/ConfirmacaoGestao.jsx'
+import { obterUrlDownloadDocumento } from '@/api/projetos.js'
 
 const tiposDeProjeto = ['TCC', 'Projeto Integrador', 'Pesquisa', 'Extensão']
 
@@ -300,6 +301,10 @@ export default function PaginaDetalhesSubmissao({
                     const tipo = rotuloDoTipo(objeto ? documento.tipoDocumento : null)
                     const localizacao = objeto ? documento.localizacao : null
                     const ehUrl = localizacao && /^https?:\/\//i.test(localizacao)
+                    const linkDownload =
+                      item?.id && documento?.id
+                        ? obterUrlDownloadDocumento(item.id, documento.id)
+                        : null
 
                     return (
                       <li key={documento?.id || nome || indice}>
@@ -315,6 +320,16 @@ export default function PaginaDetalhesSubmissao({
                             className="documento-link"
                           >
                             Acessar link externo ↗
+                          </a>
+                        ) : linkDownload ? (
+                          <a
+                            href={linkDownload}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="documento-link"
+                            download={nome}
+                          >
+                            Baixar / Abrir documento ↗
                           </a>
                         ) : (
                           <span className="documento-indisponivel">Arquivo enviado</span>
