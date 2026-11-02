@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'
 import { listarProfessores } from '@/api/professores.js'
-import { cadastrarProjeto } from '@/api/projetos.js'
+import { cadastrarProjeto, enviarDocumentoProjeto } from '@/api/projetos.js'
 import { enderecoPrivado } from '../../app/rotas.js'
 import {
   TAMANHO_MAXIMO_DOCUMENTO,
@@ -348,12 +348,30 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       dto.cursoId &&
       dto.campusId &&
       dto.disciplinaIds &&
-      dto.documentos &&
       dto.professores.length > 0
     ) {
-      cadastrarProjeto(dto, sessao.token).catch(() => {
-        /* Submissão salva localmente; falha no backend não bloqueia o usuário */
-      })
+      cadastrarProjeto(dto, sessao.token)
+        .then(async (projetoCriado) => {
+          if (!projetoCriado?.id) return
+          // Faz o upload dos arquivos reais associados ao projeto criado
+          const arquivosReais =
+            formulario.tipo === 'TCC'
+              ? []
+              : Object.values(formulario.documentos).flat().filter(Boolean)
+
+          for (const arq of arquivosReais) {
+            if (arq instanceof File) {
+              try {
+                await enviarDocumentoProjeto(projetoCriado.id, arq, sessao.token)
+              } catch {
+                /* segue para o próximo arquivo se falhar */
+              }
+            }
+          }
+        })
+        .catch(() => {
+          /* Submissão salva localmente; falha no backend não bloqueia o usuário */
+        })
     }
   }
 
