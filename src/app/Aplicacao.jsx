@@ -264,26 +264,49 @@ export default function Aplicacao() {
               dataInicio: p.dataInicio,
               dataFim: p.dataFim,
               documentos: Array.isArray(p.documentos) ? p.documentos : [],
+              statusBackend: p.statusProjeto,
               status:
                 p.statusProjeto === 'EM_ANALISE'
                   ? 'Aguardando Orientador'
-                  : p.statusProjeto === 'APROVADO'
+                  : p.statusProjeto === 'APROVADO' || p.statusProjeto === 'ANALISE_PUBLICACAO'
                     ? 'Em análise'
-                    : p.statusProjeto === 'ANALISE_PUBLICACAO'
-                      ? 'Em análise'
-                      : p.statusProjeto === 'PUBLICADO'
-                        ? 'Aprovado'
-                        : p.statusProjeto === 'RECUSADO'
-                          ? 'Recusado'
-                          : p.statusProjeto,
+                    : p.statusProjeto === 'PUBLICADO'
+                      ? 'Aprovado'
+                      : p.statusProjeto === 'RECUSADO' || p.statusProjeto === 'RECUSADO_PUBLICACAO'
+                        ? 'Recusado'
+                        : p.statusProjeto,
               resumo: p.resumo,
               objetivo: p.descricao,
               tipoAutor: 'ALUNO',
             }
           })
           definirListaSubmissoes(mapeadas)
+          try {
+            const publicadosCache = dados
+              .filter((p) => p.statusProjeto === 'PUBLICADO')
+              .map((p) => {
+                const orientadorObj = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')
+                const nomeOrientador = orientadorObj?.professorId
+                  ? mapaProfessores.get(String(orientadorObj.professorId)) ||
+                    orientadorObj?.nome ||
+                    ''
+                  : ''
+                return {
+                  ...p,
+                  orientador: nomeOrientador || p.orientador || '',
+                }
+              })
+            localStorage.setItem('portal-cursos-publicados-cache', JSON.stringify(publicadosCache))
+          } catch {
+            /* Cache público opcional. */
+          }
         } else if (Array.isArray(dados)) {
           definirListaSubmissoes([])
+          try {
+            localStorage.setItem('portal-cursos-publicados-cache', '[]')
+          } catch {
+            /* Cache público opcional. */
+          }
         }
       } catch (falha) {
         if (falha?.status === 401) {
@@ -520,30 +543,78 @@ export default function Aplicacao() {
               )
 
               // Sincroniza com o backend via PATCH /api/projetos/{id}/status
+              let proximoStatusBackend = submissao?.statusBackend
               if (submissao?.id && sessao?.token) {
-                let statusBackend = null
                 if (sessao.tipoUsuario === 'PROFESSOR') {
-                  if (status === 'Em análise' || status === 'Aceito') statusBackend = 'APROVADO'
-                  else if (status === 'Recusado') statusBackend = 'RECUSADO'
-                } else if (sessao.tipoUsuario === 'COORDENADOR') {
-                  if (status === 'Aprovado') {
-                    atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
-                      .then(() => atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token))
+                  if (status === 'Em análise' || status === 'Aceito') {
+                    proximoStatusBackend = 'ANALISE_PUBLICACAO'
+                    atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
+                      .then(() =>
+                        atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token),
+                      )
                       .catch(() => {})
                   } else if (status === 'Recusado') {
-                    statusBackend = 'RECUSADO'
+                    proximoStatusBackend = 'RECUSADO'
+                    atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token).catch(() => {})
                   }
-                }
-                if (statusBackend) {
-                  atualizarStatusProjeto(submissao.id, statusBackend, sessao.token).catch(() => {})
+                } else if (sessao.tipoUsuario === 'COORDENADOR') {
+                  if (status === 'Aprovado') {
+                    proximoStatusBackend = 'PUBLICADO'
+                    atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token).catch(() =>
+                      atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                        .then(() => atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token))
+                        .catch(() => {}),
+                    )
+                  } else if (status === 'Recusado') {
+                    proximoStatusBackend = 'RECUSADO_PUBLICACAO'
+                    atualizarStatusProjeto(submissao.id, 'RECUSADO_PUBLICACAO', sessao.token).catch(
+                      () =>
+                        atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                          .then(() =>
+                            atualizarStatusProjeto(
+                              submissao.id,
+                              'RECUSADO_PUBLICACAO',
+                              sessao.token,
+                            ),
+                          )
+                          .catch(() => {}),
+                    )
+                  }
                 }
               }
 
-              definirListaSubmissoes((atuais) =>
-                atuais.map((item) =>
-                  item.identificador === identificadorSubmissao ? { ...item, status } : item,
-                ),
-              )
+              definirListaSubmissoes((atuais) => {
+                const atualizadas = atuais.map((item) =>
+                  item.identificador === identificadorSubmissao
+                    ? { ...item, status, statusBackend: proximoStatusBackend }
+                    : item,
+                )
+                try {
+                  const publicadosCache = atualizadas
+                    .filter(
+                      (item) => item.statusBackend === 'PUBLICADO' || item.status === 'Aprovado',
+                    )
+                    .map((item) => ({
+                      id: item.id,
+                      nome: item.titulo,
+                      descricao: item.objetivo || item.resumo || '',
+                      resumo: item.resumo || '',
+                      tipoProjeto: item.tipo,
+                      cursoId: item.cursoId,
+                      curso: item.curso,
+                      orientador: item.orientador,
+                      autores: item.autores,
+                      statusProjeto: 'PUBLICADO',
+                    }))
+                  localStorage.setItem(
+                    'portal-cursos-publicados-cache',
+                    JSON.stringify(publicadosCache),
+                  )
+                } catch {
+                  /* Cache público opcional. */
+                }
+                return atualizadas
+              })
 
               definirDecisoes((atuais) => ({
                 ...atuais,
