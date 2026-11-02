@@ -21,6 +21,7 @@ import PaginaCadastroAluno from '@/pages/cadastro-aluno/PaginaCadastroAluno.jsx'
 import PaginaPainelAluno from '@/pages/painel-aluno/PaginaPainelAluno.jsx'
 import PaginaDetalhesSubmissao from '@/pages/professor/PaginaDetalhesSubmissao.jsx'
 import { listarCursos } from '@/api/cursos.js'
+import { listarProfessores } from '@/api/professores.js'
 import { atualizarStatusProjeto } from '@/api/projetos.js'
 import { listarSubmissoes } from '@/api/submissoes.js'
 import { limparDadosLocais } from './limparDadosLocais.js'
@@ -228,9 +229,10 @@ export default function Aplicacao() {
 
     async function sincronizarSubmissoes() {
       try {
-        const [dados, cursosCadastrados] = await Promise.all([
+        const [dados, cursosCadastrados, professoresCadastrados] = await Promise.all([
           listarSubmissoes(sessao.token, controller.signal),
           listarCursos(controller.signal).catch(() => []),
+          listarProfessores(sessao.token, {}, controller.signal).catch(() => []),
         ])
 
         if (Array.isArray(dados) && dados.length > 0) {
@@ -238,6 +240,12 @@ export default function Aplicacao() {
             (Array.isArray(cursosCadastrados) ? cursosCadastrados : []).map((c) => [
               String(c.id),
               c,
+            ]),
+          )
+          const mapaProfessores = new Map(
+            (Array.isArray(professoresCadastrados) ? professoresCadastrados : []).map((prof) => [
+              String(prof.id),
+              prof.nome || prof.usuario?.nome || '',
             ]),
           )
 
@@ -253,6 +261,11 @@ export default function Aplicacao() {
               ? new Date(p.dataInicio + 'T12:00:00').toLocaleDateString('pt-BR')
               : ''
             const infoCurso = mapaCursos.get(String(p.cursoId))
+            const nomeProfessorReal = orientadorObj?.professorId
+              ? mapaProfessores.get(String(orientadorObj.professorId)) ||
+                orientadorObj?.nome ||
+                `Professor ${orientadorObj.professorId}`
+              : ''
 
             return {
               identificador: String(p.id),
@@ -273,9 +286,7 @@ export default function Aplicacao() {
                       : p.tipoProjeto === 'PROJETO_EXTENSAO'
                         ? 'Extensão'
                         : p.tipoProjeto || '',
-              orientador: orientadorObj?.professorId
-                ? `Professor ${orientadorObj.professorId}`
-                : '',
+              orientador: nomeProfessorReal,
               orientadorId: orientadorObj?.professorId || null,
               autor: nomeAutor,
               autores: Array.isArray(p.autores) ? p.autores : [],
@@ -301,9 +312,14 @@ export default function Aplicacao() {
             }
           })
           definirListaSubmissoes((locais) => {
-            const idsExistentes = new Set(locais.map((l) => String(l.id || l.identificador)))
-            const novasDoBack = mapeadas.filter((m) => !idsExistentes.has(String(m.id)))
-            return [...novasDoBack, ...locais]
+            const mapaNovas = new Map(mapeadas.map((m) => [String(m.id), m]))
+            const atualizadas = locais.map((local) => {
+              const doBack = mapaNovas.get(String(local.id || local.identificador))
+              return doBack ? { ...local, ...doBack } : local
+            })
+            const idsAtualizados = new Set(atualizadas.map((l) => String(l.id || l.identificador)))
+            const novasFaltando = mapeadas.filter((m) => !idsAtualizados.has(String(m.id)))
+            return [...novasFaltando, ...atualizadas]
           })
         }
       } catch {

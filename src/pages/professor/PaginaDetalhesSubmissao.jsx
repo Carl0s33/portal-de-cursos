@@ -16,8 +16,9 @@ function submissaoDoCurso(item, cursoId) {
 }
 
 function submetidaAoOrientador(item, usuario) {
-  if (item?.orientadorId && usuario?.professorId) {
-    return String(item.orientadorId) === String(usuario.professorId)
+  const idUsuario = usuario?.professorId || usuario?.id
+  if (item?.orientadorId && idUsuario) {
+    return String(item.orientadorId) === String(idUsuario)
   }
   const nomeOrientador = item?.orientador?.toLocaleLowerCase('pt-BR') || ''
   const nomeUsuario = usuario?.nome?.toLocaleLowerCase('pt-BR') || ''
