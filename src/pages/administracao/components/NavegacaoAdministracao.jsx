@@ -47,6 +47,7 @@ export default function NavegacaoAdministracao({ rota, usuario }) {
   const papel = usuario?.tipoUsuario === 'ADMIN' ? 'Administrador' : 'Coordenação'
   return (
     <aside className="painel-navegacao">
+      <span className="painel-navegacao__titulo">Administração do portal</span>
       <nav aria-label="Navegação administrativa">
         {grupos.map((grupo) => (
           <section className="painel-navegacao__grupo" key={grupo.titulo}>

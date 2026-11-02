@@ -6,6 +6,14 @@ import { enderecoPrivado } from '../../app/rotas.js'
 
 const filtros = ['Todas', 'Aguardando Orientador', 'Em análise', 'Aprovado', 'Recusado']
 
+const iconesFiltro = {
+  Todas: 'projetos-detalhe',
+  'Aguardando Orientador': 'relogio-cursos',
+  'Em análise': 'criterios-detalhe',
+  Aprovado: 'confirmacao-cursos',
+  Recusado: 'erro-cursos',
+}
+
 function normalizar(txt) {
   return (txt || '')
     .normalize('NFD')
@@ -141,7 +149,10 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                 aria-pressed={filtro === opcao}
                 onClick={() => definirFiltro(opcao)}
               >
-                <span>{opcao}</span>
+                <span className="pagina-professor__filtro-rotulo">
+                  <Icone nome={iconesFiltro[opcao]} />
+                  <span>{opcao}</span>
+                </span>
                 <small>
                   {opcao === 'Todas'
                     ? orientacoes.length

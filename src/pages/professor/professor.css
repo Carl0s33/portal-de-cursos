@@ -52,7 +52,7 @@
 
 .pagina-professor__layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 280px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
 }
@@ -64,9 +64,9 @@
   top: 88px;
   display: grid;
   gap: 24px;
-  padding: 22px 20px;
+  padding: 24px 20px;
   border: 1px solid var(--borda);
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--superficie);
 }
 
@@ -89,7 +89,7 @@
 
 .pagina-professor__filtros {
   display: grid;
-  gap: 4px;
+  gap: 6px;
 }
 
 .pagina-professor__filtros button {
@@ -98,17 +98,33 @@
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  padding: 11px 10px;
-  border: 0;
-  border-radius: 8px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
   color: var(--texto);
   background: transparent;
   font-size: 14px;
+  font-weight: 600;
   text-align: left;
   cursor: pointer;
   transition:
     background-color 150ms ease-out,
+    border-color 150ms ease-out,
     color 150ms ease-out;
+}
+
+.pagina-professor__filtro-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.pagina-professor__filtro-rotulo .icone {
+  flex: none;
+  width: 18px;
+  height: 18px;
 }
 
 .pagina-professor__filtros button > span {
@@ -118,9 +134,10 @@
 
 .pagina-professor__filtros button small {
   flex-shrink: 0;
-  min-width: 22px;
-  padding: 2px 6px;
+  min-width: 24px;
+  padding: 2px 8px;
   border-radius: 999px;
+  background: var(--fundo);
   color: var(--texto);
   font-size: 12px;
   font-weight: 700;
@@ -131,6 +148,7 @@
 .pagina-professor__filtro--ativo {
   color: var(--azul) !important;
   background: var(--suave) !important;
+  border-color: color-mix(in srgb, var(--azul) 20%, transparent) !important;
 }
 
 .pagina-professor__filtros button:hover small,
