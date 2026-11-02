@@ -218,13 +218,15 @@ export default function Cabecalho({
       <a href="#projetos" aria-current={ativoSe(pagina === 'projetos')}>
         Projetos
       </a>
-      <a
-        className="navegacao__submeter"
-        href="#submeter"
-        aria-current={ativoSe(pagina === 'submeter')}
-      >
-        Enviar projeto
-      </a>
+      {(!autenticado || ['ALUNO', 'COORDENADOR'].includes(tipoUsuario)) && (
+        <a
+          className="navegacao__submeter"
+          href="#submeter"
+          aria-current={ativoSe(pagina === 'submeter')}
+        >
+          Enviar projeto
+        </a>
+      )}
 
       {linkPapel && (
         <a

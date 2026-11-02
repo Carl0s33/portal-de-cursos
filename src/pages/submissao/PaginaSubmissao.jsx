@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'
 import { listarProfessores } from '@/api/professores.js'
-import { cadastrarProjeto, enviarDocumentoProjeto } from '@/api/projetos.js'
+import { atualizarStatusProjeto, cadastrarProjeto, enviarDocumentoProjeto } from '@/api/projetos.js'
 import { enderecoPrivado } from '../../app/rotas.js'
 import {
   TAMANHO_MAXIMO_DOCUMENTO,
@@ -341,6 +341,13 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       cadastrarProjeto(dto, sessao.token)
         .then(async (projetoCriado) => {
           if (!projetoCriado?.id) return
+          if (sessao?.tipoUsuario === 'COORDENADOR') {
+            try {
+              await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
+            } catch {
+              /* Continua envio de documentos */
+            }
+          }
           const arquivosReais =
             formulario.tipo === 'TCC'
               ? []
@@ -401,31 +408,33 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
   }
 
   if (enviado) {
+    const destinoPainel =
+      sessao?.tipoUsuario === 'COORDENADOR'
+        ? enderecoPrivado('coordenacao/submissoes')
+        : enderecoPrivado('aluno/painel')
+
     return (
       <main className="limite pagina-submissao pagina-submissao--confirmacao" id="conteudo">
         <section className="submissao-confirmacao" aria-labelledby="titulo-confirmacao">
           <span className="submissao-confirmacao__selo" aria-hidden="true">
             ✓
           </span>
-          <p className="pagina-submissao__rotulo">Rascunho pronto</p>
-          <h1 id="titulo-confirmacao">Os dados foram guardados nesta sessão.</h1>
+          <p className="pagina-submissao__rotulo">Submissão registrada</p>
+          <h1 id="titulo-confirmacao">Seu projeto foi enviado para avaliação.</h1>
           <p>
-            Esta submissão ainda não foi enviada para avaliação. O serviço de submissões não está
-            conectado.
+            {sessao?.tipoUsuario === 'COORDENADOR'
+              ? 'O projeto foi encaminhado diretamente para a fila de avaliação da coordenação do curso (RN19).'
+              : 'O professor orientador indicado receberá a solicitação para aceite inicial antes da avaliação final da coordenação (RN19).'}
           </p>
           <div className="submissao-confirmacao__resumo">
             <strong>{formulario.titulo}</strong>
             <span>
-              {nomesTiposProjeto[formulario.tipo]} · {formulario.nome} ·{' '}
-              {Object.values(formulario.documentos)
-                .flat()
-                .map((arquivo) => arquivo.name)
-                .join(', ')}
+              {nomesTiposProjeto[formulario.tipo]} · {formulario.nome}
             </span>
           </div>
           <div className="submissao-confirmacao__acoes">
-            <a className="botao-primario" href="#projetos">
-              Ver projetos publicados
+            <a className="botao-primario" href={destinoPainel}>
+              Acompanhar submissão
             </a>
             <button
               className="botao-secundario"
@@ -470,7 +479,27 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     )
   }
 
-  if (!sessao || !['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao.tipoUsuario)) {
+  if (sessao?.tipoUsuario === 'PROFESSOR') {
+    return (
+      <main className="limite pagina-submissao" id="conteudo">
+        <section className="submissao-confirmacao" aria-labelledby="titulo-professor-orientador">
+          <p className="pagina-submissao__rotulo">Papel de orientação</p>
+          <h1 id="titulo-professor-orientador">
+            Somente alunos e coordenadores de curso submetem projetos.
+          </h1>
+          <p>
+            Como professor orientador, você acompanha e realiza a avaliação inicial das submissões
+            em que foi indicado (RN20).
+          </p>
+          <a className="botao-primario" href={enderecoPrivado('professor/feed')}>
+            Ver submissões para orientar
+          </a>
+        </section>
+      </main>
+    )
+  }
+
+  if (!sessao || !['ALUNO', 'COORDENADOR'].includes(sessao.tipoUsuario)) {
     return (
       <main className="limite pagina-submissao" id="conteudo">
         <section
@@ -534,7 +563,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
               </li>
             </ol>
             <p className="submissao-acesso__perfis">
-              Acesso para alunos, professores e coordenação.
+              Acesso exclusivo para alunos e coordenação de curso.
             </p>
           </aside>
         </section>

@@ -170,8 +170,50 @@ export async function listarCampus(sinal) {
   return requisitarApi(enderecoCampus, { metodo: 'GET', sinal })
 }
 
+export async function cadastrarCampus(token, dados, sinal) {
+  return requisitarApi(enderecoCampus, { metodo: 'POST', corpo: dados, token, sinal })
+}
+
+export async function atualizarCampus(token, id, dados, sinal) {
+  return requisitarApi(`${enderecoCampus.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+}
+
+export async function excluirCampus(token, id, sinal) {
+  return requisitarApi(`${enderecoCampus.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+    metodo: 'DELETE',
+    token,
+    sinal,
+  })
+}
+
 export async function listarAreasConhecimento(sinal) {
   return requisitarApi(enderecoAreas, { metodo: 'GET', sinal })
+}
+
+export async function cadastrarAreaConhecimento(token, dados, sinal) {
+  return requisitarApi(enderecoAreas, { metodo: 'POST', corpo: dados, token, sinal })
+}
+
+export async function atualizarAreaConhecimento(token, id, dados, sinal) {
+  return requisitarApi(`${enderecoAreas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+}
+
+export async function excluirAreaConhecimento(token, id, sinal) {
+  return requisitarApi(`${enderecoAreas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+    metodo: 'DELETE',
+    token,
+    sinal,
+  })
 }
 
 export const moduloCursos = {
@@ -182,7 +224,13 @@ export const moduloCursos = {
   atualizar: atualizarCurso,
   excluir: excluirCurso,
   listarCampus,
+  cadastrarCampus,
+  atualizarCampus,
+  excluirCampus,
   listarAreas: listarAreasConhecimento,
+  cadastrarArea: cadastrarAreaConhecimento,
+  atualizarArea: atualizarAreaConhecimento,
+  excluirArea: excluirAreaConhecimento,
 }
 
 export default moduloCursos

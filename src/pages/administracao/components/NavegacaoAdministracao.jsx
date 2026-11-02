@@ -19,6 +19,7 @@ const grupos = [
       ['cursos', 'Cursos', 'formacao-cursos', 'Cursos do portal'],
       ['disciplinas', 'Disciplinas', 'matriz-detalhe', 'Matrizes curriculares'],
       ['campus', 'Campus', 'localizacao', 'Unidades acadêmicas'],
+      ['areas', 'Áreas', 'areas-detalhe', 'Áreas do conhecimento'],
       ['projetos', 'Projetos', 'projetos-detalhe', 'Acervo acadêmico'],
     ],
   },

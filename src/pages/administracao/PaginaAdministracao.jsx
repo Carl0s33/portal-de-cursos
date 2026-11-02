@@ -1,3 +1,4 @@
+import GestaoAreas from './components/GestaoAreas.jsx'
 import GestaoConteudos from './components/GestaoConteudos.jsx'
 import GestaoCampus from './components/GestaoCampus.jsx'
 import GestaoProfessores from './components/GestaoProfessores.jsx'
@@ -18,7 +19,13 @@ export default function PaginaAdministracao({
   if (secao === 'campus')
     return (
       <main id="conteudo" className="pagina-painel pagina-painel--administracao">
-        <GestaoCampus identificador={identificador} />
+        <GestaoCampus identificador={identificador} token={sessao.token} />
+      </main>
+    )
+  if (secao === 'areas')
+    return (
+      <main id="conteudo" className="pagina-painel pagina-painel--administracao">
+        <GestaoAreas token={sessao.token} />
       </main>
     )
   if (secao === 'usuarios')

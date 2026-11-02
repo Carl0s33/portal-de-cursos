@@ -97,8 +97,8 @@ export default function EtapaSubmissaoDocumentos({
         <span className="consentimento-submissao__texto">
           <strong>Autorizar publicação</strong>
           <span>
-            O projeto poderá ser publicado no portal somente se for aprovado pelo professor
-            orientador.
+            O projeto será avaliado pelo professor orientador e pela coordenação do curso antes de
+            ser publicado no portal.
           </span>
         </span>
       </label>

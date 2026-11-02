@@ -89,7 +89,7 @@ export default function PainelAdministracao({ token }) {
                 'administracao/disciplinas',
               ],
               ['Campus', resumo.campus.length, 'campus', 'administracao/campus'],
-              ['Áreas de conhecimento', resumo.areas.length, 'areas', null],
+              ['Áreas de conhecimento', resumo.areas.length, 'areas', 'administracao/areas'],
             ].map(([rotulo, total, tipo, destino]) => {
               const conteudo = (
                 <>

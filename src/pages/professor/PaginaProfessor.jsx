@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
 import '@/shared/styles/painel.css'
 import './professor.css'
-import { basePortal, enderecoPrivado } from '../../app/rotas.js'
+import { enderecoPrivado } from '../../app/rotas.js'
 
 const filtros = ['Todas', 'Aguardando Orientador', 'Em análise', 'Aprovado', 'Recusado']
 
@@ -44,13 +44,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
   const [tipoFiltro, definirTipoFiltro] = useState('Todos')
 
   const orientacoes = useMemo(
-    () =>
-      submissoes.filter(
-        (item) =>
-          orientaSubmissao(item, usuario) &&
-          item.tipoAutor !== 'PROFESSOR' &&
-          item.tipoAutor !== 'COORDENADOR',
-      ),
+    () => submissoes.filter((item) => orientaSubmissao(item, usuario)),
     [submissoes, usuario],
   )
 
@@ -87,9 +81,6 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             inicial.
           </p>
         </div>
-        <a className="botao-primario" href={`${basePortal}#submeter`}>
-          + Submeter projeto
-        </a>
       </header>
 
       <dl className="painel-indicadores">
