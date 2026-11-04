@@ -1,0 +1,175 @@
+/* ==========================================================================
+   Indicadores Numéricos Institucionais e Planos
+   Padrão unificado para: Aluno, Professor, Coordenação e Administração
+   Diretrizes: Fundo sólido, borda neutra 1px, sem faixas coloridas (border-top),
+   sem sombras difusas, ícone tingido em base suave.
+   ========================================================================== */
+
+.painel-indicadores,
+.administracao-indicadores,
+.coordenacao-indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--esp-4);
+  margin: 0;
+  padding: 0;
+}
+
+:where(.painel-indicadores > div),
+.painel-indicadores__card,
+.administracao-indicador,
+.coordenacao-indicador {
+  --cor: var(--azul);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 144px;
+  padding: var(--esp-4) var(--esp-5);
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-g);
+  text-decoration: none;
+  transition: border-color var(--transicao);
+}
+
+:where(.painel-indicadores > div):hover,
+.painel-indicadores__card:hover,
+.administracao-indicador:hover,
+.coordenacao-indicador:hover {
+  border-color: var(--borda);
+}
+
+.administracao-indicador:focus-visible,
+.coordenacao-indicador:focus-visible,
+.painel-indicadores__card:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+/* Cores por papel semântico */
+.painel-indicadores__card--total,
+.administracao-indicador--disciplinas,
+.coordenacao-indicador--total {
+  --cor: var(--roxo);
+}
+
+.painel-indicadores__card--aguardando,
+.administracao-indicador--campus,
+.coordenacao-indicador--analise {
+  --cor: var(--aviso);
+}
+
+.painel-indicadores__card--coordenacao,
+.administracao-indicador--cursos,
+.coordenacao-indicador--curso {
+  --cor: var(--azul);
+}
+
+.painel-indicadores__card--publicadas,
+.administracao-indicador--areas,
+.coordenacao-indicador--aprovado {
+  --cor: var(--sucesso);
+}
+
+.painel-indicadores__card--recusadas {
+  --cor: var(--erro);
+}
+
+/* Topo do indicador: Ícone tingido + Rótulo textual */
+.painel-indicadores__rotulo,
+.painel-indicadores dt,
+.administracao-indicador__topo,
+.coordenacao-indicador__topo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  font-size: var(--texto-s);
+  font-weight: 600;
+  color: var(--titulo);
+}
+
+.painel-indicadores__icone,
+.administracao-indicador__icone,
+.coordenacao-indicador__icone {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor) 12%, var(--superficie));
+  color: var(--cor);
+}
+
+:root[data-tema='escuro'] .painel-indicadores__icone,
+:root[data-tema='escuro'] .administracao-indicador__icone,
+:root[data-tema='escuro'] .coordenacao-indicador__icone {
+  background: color-mix(in srgb, var(--cor) 18%, var(--superficie));
+  color: var(--cor);
+}
+
+.painel-indicadores__icone .icone,
+.administracao-indicador__icone .icone,
+.coordenacao-indicador__icone .icone {
+  width: 18px;
+  height: 18px;
+}
+
+/* Valor numérico tabular de alto contraste */
+.painel-indicadores__valor,
+.painel-indicadores dd:not(.painel-indicadores__detalhe),
+.administracao-indicador__valor,
+.coordenacao-indicador__valor {
+  margin: var(--esp-3) 0 0;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--titulo);
+}
+
+/* Detalhe / legenda inferior com marcador de estado */
+.painel-indicadores__detalhe,
+.administracao-indicador__detalhe,
+.coordenacao-indicador__detalhe {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  margin: var(--esp-3) 0 0;
+  padding-top: var(--esp-2);
+  border-top: 1px solid var(--borda-suave);
+  font-size: var(--texto-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--texto-suave);
+}
+
+.painel-indicadores__detalhe::before,
+.administracao-indicador__detalhe::before,
+.coordenacao-indicador__detalhe::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--raio-pilula);
+  background: var(--cor);
+}
+
+/* Seta discreta quando o indicador for link navegável */
+.administracao-indicador__seta,
+.coordenacao-indicador__seta {
+  position: absolute;
+  top: var(--esp-4);
+  right: var(--esp-4);
+  color: var(--texto-suave);
+  opacity: 0.6;
+  transition: color var(--transicao), opacity var(--transicao);
+}
+
+.administracao-indicador:hover .administracao-indicador__seta,
+.coordenacao-indicador:hover .coordenacao-indicador__seta {
+  color: var(--azul);
+  opacity: 1;
+}

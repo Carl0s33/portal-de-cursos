@@ -1,3 +1,4 @@
+@import '@/shared/styles/indicadores.css';
 /* ==========================================================================
    Indicadores e Visão Geral da Administração
    ========================================================================== */
@@ -20,34 +21,7 @@
   margin: 0 0 18px;
 }
 
-.administracao-indicador {
-  --cor: var(--azul);
 
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  min-height: 150px;
-  padding: 1.35rem 1.4rem 1.2rem;
-  border: 1px solid var(--borda);
-  border-top: 3px solid var(--cor);
-  border-radius: 14px;
-  background: var(--superficie);
-  text-decoration: none;
-  box-shadow: var(--sombra);
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
-}
-
-.administracao-indicador:hover {
-  transform: translateY(-2px);
-  border-color: var(--cor);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--marinho) 8%, transparent);
-}
 
 .administracao-indicador:focus-visible,
 .administracao-categoria a:focus-visible,
