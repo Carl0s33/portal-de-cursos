@@ -50,7 +50,6 @@ export default function Rodape({ pagina = 'inicio' }) {
         </div>
         <div className="rodape__base">
           <p>© {new Date().getFullYear()} Portal de Cursos. Todos os direitos reservados.</p>
-          <small>Formação, projetos e acompanhamento acadêmico</small>
         </div>
       </div>
     </footer>

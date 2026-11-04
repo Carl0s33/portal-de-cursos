@@ -87,7 +87,7 @@
   flex-direction: column;
   background: var(--hero-campo);
   color: var(--hero-tinta);
-  border: 1px solid var(--borda);
+  border: 1px solid var(--borda-suave); box-shadow: var(--sombra-card);
   border-radius: 20px;
   overflow: hidden;
 }

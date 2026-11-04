@@ -3,14 +3,12 @@
   flex-direction: column;
   min-width: 0;
   padding: 24px;
-  border: 1px solid var(--borda);
-  border-radius: 14px;
-  background: var(--superficie);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--preto) 1%, transparent);
+  border: 1px solid var(--borda-suave);
+  box-shadow: var(--sombra-card);
   transition:
-    border-color 180ms ease-out,
-    box-shadow 180ms ease-out,
-    transform 180ms ease-out;
+    border-color 160ms var(--ease-emil),
+    box-shadow 160ms var(--ease-emil),
+    transform 160ms var(--ease-emil);
 }
 
 .cartao-catalogo:focus-within {
@@ -20,8 +18,8 @@
 @media (hover: hover) and (pointer: fine) {
   .cartao-catalogo:hover {
     border-color: var(--azul);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--azul) 10%, transparent);
-    transform: translateY(-4px);
+    box-shadow: var(--sombra-hover);
+    transform: translateY(-2px);
   }
 }
 

@@ -248,7 +248,7 @@ a:hover {
 
 .botao-primario:active,
 .botao-secundario:active {
-  transform: translateY(1px);
+  transform: scale(0.97);
 }
 
 .botao-primario:disabled,

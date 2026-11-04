@@ -140,9 +140,9 @@
   width: 100%;
   padding: 24px;
   background: var(--superficie);
-  border: 1px solid var(--borda);
+  border: 1px solid var(--borda-suave);
   border-radius: 14px;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--preto) 2%, transparent);
+  box-shadow: var(--sombra-card);
   transition:
     border-color 180ms ease-out,
     box-shadow 180ms ease-out,
@@ -157,7 +157,7 @@
 @media (hover: hover) and (pointer: fine) {
   .item-projeto:hover {
     border-color: var(--azul);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--azul) 10%, transparent);
+    box-shadow: var(--sombra-hover);
     transform: translateY(-4px);
   }
 }

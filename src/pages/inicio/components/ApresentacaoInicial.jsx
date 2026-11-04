@@ -33,7 +33,7 @@ export default function ApresentacaoInicial() {
         </p>
         <div className="hero-inicial__acoes">
           <a className="botao-primario" href="#cursos">
-            Explorar cursos <span aria-hidden="true">→</span>
+            Explorar cursos
           </a>
           <a className="hero-inicial__acao-secundaria" href="#projetos">
             Conhecer os projetos
@@ -57,7 +57,7 @@ export default function ApresentacaoInicial() {
             para a sua formação.
           </p>
           <a className="hero-destaque__acao" href="#cursos">
-            Ver formações disponíveis <span aria-hidden="true">→</span>
+            Ver formações disponíveis
           </a>
         </div>
       </aside>

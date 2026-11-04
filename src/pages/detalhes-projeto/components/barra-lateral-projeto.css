@@ -1,0 +1,207 @@
+.barra-lateral-projeto {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cartao-lateral-projeto {
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition:
+    transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cartao-lateral-projeto__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--borda-suave);
+  padding-bottom: 12px;
+  gap: 8px;
+}
+
+.cartao-lateral-projeto__titulo {
+  font-size: 17px;
+  line-height: 24px;
+  letter-spacing: -0.1px;
+  font-weight: 700;
+  color: var(--titulo);
+  margin: 0;
+}
+
+.cartao-lateral-projeto__contador {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.cartao-lateral-projeto__lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cartao-lateral-projeto__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  transition:
+    background-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cartao-lateral-projeto__icone-container {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--azul-suave);
+  border: 1px solid color-mix(in srgb, var(--azul) 12%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+:root[data-tema='escuro'] .cartao-lateral-projeto__icone-container {
+  background: rgba(21, 89, 255, 0.12);
+  border-color: rgba(21, 89, 255, 0.25);
+}
+
+.cartao-lateral-projeto__icone {
+  width: 16px;
+  height: 16px;
+  color: var(--azul);
+}
+
+.cartao-lateral-projeto__item-detalhe {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cartao-lateral-projeto__nome {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--titulo);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cartao-lateral-projeto__subtexto {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--texto-suave);
+}
+
+/* Documentos */
+.cartao-lateral-projeto__lista-docs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cartao-lateral-projeto__item-doc {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--borda-suave);
+  background: var(--fundo);
+  transition:
+    background-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cartao-lateral-projeto__doc-icone-container {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.cartao-lateral-projeto__doc-icone {
+  width: 18px;
+  height: 18px;
+  color: var(--azul);
+}
+
+.cartao-lateral-projeto__doc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.cartao-lateral-projeto__doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--azul);
+  text-decoration: none;
+  max-width: 100%;
+}
+
+.cartao-lateral-projeto__doc-link:hover {
+  text-decoration: underline;
+}
+
+.cartao-lateral-projeto__doc-link:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.cartao-lateral-projeto__doc-nome {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cartao-lateral-projeto__icone-externo {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--azul);
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cartao-lateral-projeto__doc-meta {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--texto-suave);
+}
+
+.cartao-lateral-projeto__vazio {
+  font-size: 13px;
+  color: var(--texto-suave);
+  margin: 0;
+  font-style: italic;
+}

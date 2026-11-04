@@ -35,12 +35,7 @@
   letter-spacing: 0.08em;
   margin: 0 0 8px;
 }
-.pagina-projetos__titulo .pagina-projetos__rotulo::before {
-  content: '';
-  width: 24px;
-  height: 2px;
-  background: currentColor;
-}
+
 .pagina-projetos__titulo > a {
   flex-shrink: 0;
 }

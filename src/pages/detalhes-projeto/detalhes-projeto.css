@@ -1,0 +1,278 @@
+.pagina-detalhe-projeto {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 32px;
+  padding-bottom: 48px;
+  min-height: 70dvh;
+}
+
+/* Caminho de navegação (Breadcrumbs) */
+.detalhe-projeto__caminho {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.detalhe-projeto__caminho-link {
+  color: var(--texto-suave);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 2px 4px;
+  transition: color 150ms ease;
+}
+
+.detalhe-projeto__caminho-link:hover {
+  color: var(--azul);
+  text-decoration: underline;
+}
+
+.detalhe-projeto__caminho-link:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.detalhe-projeto__caminho-separador {
+  width: 12px;
+  height: 12px;
+  color: var(--texto-suave);
+  flex-shrink: 0;
+}
+
+.detalhe-projeto__caminho-atual {
+  font-weight: 700;
+  color: var(--titulo);
+  max-width: 580px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Layout em duas colunas no desktop: Esquerda 8 cols, Direita 4 cols (aprox. 68% / 32%) */
+.detalhe-projeto__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(320px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.detalhe-projeto__coluna-principal {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Rodapé com botão 'Voltar aos projetos' conforme Figma */
+.detalhe-projeto__rodape-acao {
+  border-top: 1px solid var(--borda-suave);
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.detalhe-projeto__botao-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 10px;
+  border: 1px solid var(--borda-suave);
+  background: var(--superficie);
+  color: var(--titulo);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.detalhe-projeto__botao-voltar:hover {
+  border-color: var(--azul);
+  color: var(--azul);
+}
+
+.detalhe-projeto__botao-voltar:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.detalhe-projeto__botao-voltar:active {
+  transform: scale(0.97);
+}
+
+.detalhe-projeto__icone-voltar {
+  width: 15px;
+  height: 15px;
+  color: currentColor;
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .detalhe-projeto__botao-voltar:hover .detalhe-projeto__icone-voltar {
+    transform: translateX(-3px);
+  }
+}
+
+/* Erro e 404 */
+.detalhe-projeto__erro {
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: 16px;
+  padding: 48px 32px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.detalhe-projeto__erro h1 {
+  font-size: 28px;
+  line-height: 36px;
+  color: var(--titulo);
+  margin: 0 0 12px;
+}
+
+.detalhe-projeto__erro p {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--texto-suave);
+  margin: 0;
+  max-width: 500px;
+  margin-inline: auto;
+}
+
+.detalhe-projeto__erro-acoes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.pagina-detalhe-projeto .botao-primario,
+.pagina-detalhe-projeto .botao-secundario {
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pagina-detalhe-projeto .botao-primario:active,
+.pagina-detalhe-projeto .botao-secundario:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   Design Engineering: Transições discretas, escalonadas e institucionais
+   ========================================================================== */
+
+@keyframes entrada-institucional {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detalhe-projeto__caminho,
+.cartao-abertura-projeto,
+.cartao-resumo-projeto,
+.cartao-lateral-projeto,
+.detalhe-projeto__rodape-acao {
+  animation: entrada-institucional 360ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.cartao-abertura-projeto {
+  animation-delay: 50ms;
+}
+.cartao-resumo-projeto {
+  animation-delay: 110ms;
+}
+.cartao-lateral-projeto:nth-child(1) {
+  animation-delay: 150ms;
+}
+.cartao-lateral-projeto:nth-child(2) {
+  animation-delay: 200ms;
+}
+.cartao-lateral-projeto:nth-child(3) {
+  animation-delay: 250ms;
+}
+.detalhe-projeto__rodape-acao {
+  animation-delay: 290ms;
+}
+
+/* Interações sutis no desktop */
+@media (hover: hover) and (pointer: fine) {
+  .cartao-abertura-projeto__quadro:hover {
+    border-color: color-mix(in srgb, var(--azul) 28%, var(--borda-suave));
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    transform: translateY(-1px);
+  }
+
+  .cartao-lateral-projeto:hover {
+    border-color: color-mix(in srgb, var(--azul) 20%, var(--borda-suave));
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+    transform: translateY(-1px);
+  }
+
+  .cartao-lateral-projeto__item:hover {
+    background: var(--suave);
+    transform: translateX(2px);
+  }
+
+  .cartao-lateral-projeto__item-doc:hover {
+    border-color: color-mix(in srgb, var(--azul) 35%, var(--borda-suave));
+    background: var(--superficie);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    transform: translateY(-1px);
+  }
+
+  .cartao-lateral-projeto__item-doc:hover .cartao-lateral-projeto__icone-externo {
+    transform: translate(2px, -2px);
+  }
+}
+
+/* Responsividade: abaixo de 860px (mobile e tablet), barra lateral vira coluna única */
+@media (max-width: 860px) {
+  .pagina-detalhe-projeto {
+    padding-top: 20px;
+    gap: 20px;
+  }
+  .detalhe-projeto__layout {
+    grid-template-columns: 1fr;
+  }
+  .detalhe-projeto__caminho-atual {
+    max-width: 100%;
+  }
+}
+
+/* Acessibilidade: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .detalhe-projeto__caminho,
+  .cartao-abertura-projeto,
+  .cartao-resumo-projeto,
+  .cartao-lateral-projeto,
+  .detalhe-projeto__rodape-acao {
+    animation: none;
+  }
+
+  .cartao-abertura-projeto *,
+  .cartao-resumo-projeto,
+  .cartao-lateral-projeto,
+  .cartao-lateral-projeto *,
+  .detalhe-projeto__botao-voltar,
+  .detalhe-projeto__botao-voltar * {
+    transition: none !important;
+    transform: none !important;
+  }
+}

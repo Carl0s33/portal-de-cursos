@@ -210,7 +210,7 @@ export default function PaginaCadastroAluno() {
 
           <form onSubmit={cadastrar} noValidate aria-busy={enviando}>
             <div className="acesso-campo cadastro-aluno__campo">
-              <label className="somente-leitores" htmlFor="aluno-nome">
+              <label htmlFor="aluno-nome">
                 Nome completo
               </label>
               <IconeCampo tipo="usuario" />
@@ -232,7 +232,7 @@ export default function PaginaCadastroAluno() {
             </div>
 
             <div className="acesso-campo cadastro-aluno__campo">
-              <label className="somente-leitores" htmlFor="aluno-email">
+              <label htmlFor="aluno-email">
                 E-mail institucional
               </label>
               <IconeCampo tipo="email" />
@@ -256,7 +256,7 @@ export default function PaginaCadastroAluno() {
             </div>
 
             <div className="acesso-campo cadastro-aluno__campo">
-              <label className="somente-leitores" htmlFor="aluno-curso">
+              <label htmlFor="aluno-curso">
                 Curso
               </label>
               <IconeCampo tipo="curso" />
@@ -308,7 +308,7 @@ export default function PaginaCadastroAluno() {
             </div>
 
             <div className="acesso-campo cadastro-aluno__campo">
-              <label className="somente-leitores" htmlFor="aluno-senha">
+              <label htmlFor="aluno-senha">
                 Senha
               </label>
               <IconeCampo tipo="senha" />
@@ -344,7 +344,7 @@ export default function PaginaCadastroAluno() {
             </div>
 
             <div className="acesso-campo cadastro-aluno__campo">
-              <label className="somente-leitores" htmlFor="aluno-confirmar-senha">
+              <label htmlFor="aluno-confirmar-senha">
                 Confirmar senha
               </label>
               <IconeCampo tipo="senha" />
@@ -392,7 +392,7 @@ export default function PaginaCadastroAluno() {
                 <strong>Tipos de projeto</strong>
                 <span>Publicados após aprovação do orientador</span>
               </div>
-              <b>4 tipos</b>
+              
             </header>
             <div className="cadastro-aluno__projeto">
               <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--tcc">

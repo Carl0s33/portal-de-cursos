@@ -176,10 +176,6 @@ export default function PaginaAcesso({
                   <span>{rotuloPerfil}</span>
                 </div>
               </div>
-              <span className="acesso-login__etiqueta">
-                <Icone nome="seguranca-detalhe" />
-                <span>Ambiente seguro</span>
-              </span>
             </div>
 
             <div className="acesso-login__cabecalho">
@@ -314,10 +310,6 @@ export default function PaginaAcesso({
 
           <aside className="acesso-login__vitrine" aria-label="Conheça os projetos do portal">
             <div className="acesso-login__vitrine-cabecalho">
-              <span className="acesso-login__vitrine-selo-topo">
-                <Icone nome="destaque" />
-                <span>Repositório Institucional</span>
-              </span>
               <h2>Onde a produção acadêmica ganha visibilidade</h2>
               <p>
                 Submeta trabalhos, receba orientação docente e publique no acervo oficial do curso.
@@ -330,9 +322,6 @@ export default function PaginaAcesso({
                   <strong>Tipos de projeto</strong>
                   <span>Publicados após aprovação do orientador e coordenação</span>
                 </div>
-                <b>
-                  <Icone nome="confirmacao-cursos" />4 modalidades
-                </b>
               </header>
 
               <div className="acesso-login__lista-projetos">
@@ -352,15 +341,6 @@ export default function PaginaAcesso({
                 ))}
               </div>
 
-              <footer>
-                <div className="acesso-login__projetos-rodape">
-                  <span>PRODUÇÃO ACADÊMICA</span>
-                  <b>Seu próximo projeto começa aqui.</b>
-                </div>
-                <span className="acesso-login__projetos-indicador" aria-hidden="true">
-                  <Icone nome="reconhecimento-detalhe" />
-                </span>
-              </footer>
             </article>
           </aside>
         </section>

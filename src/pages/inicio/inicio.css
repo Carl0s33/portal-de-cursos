@@ -102,26 +102,8 @@ h1 {
   padding: 48px 24px;
   text-align: center;
   background: var(--superficie);
-  border: 1px solid var(--borda);
-  border-radius: 14px;
-}
-
-.painel-vazio--caixa p {
-  margin: 0;
-  color: var(--texto);
-  font-size: 15px;
-}
-
-.convite {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  background: var(--superficie);
-  border: 1px solid var(--borda);
-  border-radius: 16px;
-  padding: 44px;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--marinho) 4%, transparent);
+  border: 1px solid var(--borda-suave);
+  box-shadow: var(--sombra-card);
 }
 
 .convite > div {

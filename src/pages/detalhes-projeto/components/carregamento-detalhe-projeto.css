@@ -1,0 +1,122 @@
+.esqueleto-detalhe-projeto {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.esqueleto-detalhe-projeto [aria-hidden='true'] {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.esqueleto-detalhe-projeto__linhas {
+  display: grid;
+  gap: 8px;
+}
+
+.esqueleto-detalhe-projeto__linhas span {
+  display: block;
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--suave) 25%, var(--borda-suave) 50%, var(--suave) 75%);
+  background-size: 200% 100%;
+  animation: esqueleto-animacao 1.5s infinite;
+}
+
+.esqueleto-detalhe-projeto__linhas span:nth-child(2) {
+  width: 85%;
+}
+
+.esqueleto-detalhe-projeto__linhas span:nth-child(3) {
+  width: 65%;
+}
+
+/* Cartão superior esqueleto */
+.esqueleto-detalhe-projeto__topo {
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.esqueleto-detalhe-projeto__badge {
+  display: inline-block;
+  width: 120px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--suave);
+}
+
+.esqueleto-detalhe-projeto__titulo {
+  height: 36px;
+  width: 70%;
+  border-radius: 6px;
+  background: var(--suave);
+}
+
+.esqueleto-detalhe-projeto__subtitulo {
+  height: 18px;
+  width: 40%;
+  border-radius: 4px;
+  background: var(--suave);
+  margin-bottom: 12px;
+}
+
+.esqueleto-detalhe-projeto__metadados {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  border-top: 1px solid var(--borda-suave);
+  padding-top: 20px;
+}
+
+.esqueleto-detalhe-projeto__card {
+  padding: 16px;
+  background: var(--azul-suave);
+  border-radius: 8px;
+}
+
+/* Duas colunas esqueleto */
+.esqueleto-detalhe-projeto__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(320px, 1fr);
+  gap: 24px;
+}
+
+.esqueleto-detalhe-projeto__bloco {
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.esqueleto-detalhe-projeto__lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@keyframes esqueleto-animacao {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .esqueleto-detalhe-projeto__metadados {
+    grid-template-columns: 1fr;
+  }
+  .esqueleto-detalhe-projeto__grid {
+    grid-template-columns: 1fr;
+  }
+}

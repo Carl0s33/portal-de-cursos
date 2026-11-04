@@ -1,0 +1,62 @@
+.cartao-resumo-projeto {
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cartao-resumo-projeto__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--borda-suave);
+  padding-bottom: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cartao-resumo-projeto__titulo {
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.2px;
+  font-weight: 700;
+  color: var(--titulo);
+  margin: 0;
+}
+
+.cartao-resumo-projeto__publicado {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.cartao-resumo-projeto__corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cartao-resumo-projeto__paragrafo {
+  font-size: 15px;
+  line-height: 25px;
+  color: var(--texto);
+  margin: 0;
+}
+
+.cartao-resumo-projeto__vazio {
+  font-size: 14px;
+  color: var(--texto-suave);
+  font-style: italic;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .cartao-resumo-projeto {
+    padding: 24px;
+  }
+}

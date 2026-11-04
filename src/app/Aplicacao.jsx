@@ -6,6 +6,7 @@ import Rodape from '@/shared/components/Rodape.jsx'
 import PaginaInicial from '@/pages/inicio/PaginaInicial.jsx'
 import PaginaCursos from '@/pages/cursos/PaginaCursos.jsx'
 import PaginaDetalhesCurso from '@/pages/detalhes-curso/PaginaDetalhesCurso.jsx'
+import PaginaDetalhesProjeto from '@/pages/detalhes-projeto/PaginaDetalhesProjeto.jsx'
 import PaginaProjetos from '@/pages/projetos/PaginaProjetos.jsx'
 import PaginaSubmissao from '@/pages/submissao/PaginaSubmissao.jsx'
 import PaginaAcesso from '../pages/acesso/PaginaAcesso.jsx'
@@ -26,7 +27,8 @@ import { listarSubmissoes } from '@/api/submissoes.js'
 import { limparDadosLocais } from './limparDadosLocais.js'
 
 function identificarPagina(rota) {
-  if (['projetos', 'biblioteca'].includes(rota) || rota.startsWith('projeto/')) return 'projetos'
+  if (rota.startsWith('projeto/')) return 'detalhes-projeto'
+  if (['projetos', 'biblioteca'].includes(rota)) return 'projetos'
   if (['acesso', 'acesso-professor', 'acesso-administracao'].includes(rota)) return 'acesso'
   if (rota === 'aluno/cadastro') return 'aluno-cadastro'
   if (rota === 'aluno/painel') return 'aluno-painel'
@@ -153,7 +155,7 @@ export default function Aplicacao() {
     }
   }, [])
   useEffect(() => {
-    if (pagina !== 'detalhes-curso')
+    if (pagina !== 'detalhes-curso' && pagina !== 'detalhes-projeto')
       document.title =
         pagina === 'projetos'
           ? 'Projetos — Portal de Cursos'
@@ -399,12 +401,13 @@ export default function Aplicacao() {
     }
   }, [pagina, rota, sessao])
   const [, identificador, aba] = rotaCurso.split('/')
+  const idProjeto = rota.startsWith('projeto/') ? rota.slice('projeto/'.length) : ''
   const identificadorSubmissao =
     rota.startsWith('professor/submissao/') || rota.startsWith('coordenacao/submissao/')
       ? rota.split('/')[2]
       : ''
   const secaoAtiva =
-    rota === 'biblioteca' || rota.startsWith('projeto/')
+    rota === 'biblioteca' || rota.startsWith('projeto/') || pagina === 'detalhes-projeto'
       ? 'projetos'
       : rota === 'submeter'
         ? 'submeter'
@@ -695,6 +698,9 @@ export default function Aplicacao() {
       />
       {pagina === 'cursos' && <PaginaCursos />}
       {pagina === 'projetos' && <PaginaProjetos />}
+      {pagina === 'detalhes-projeto' && (
+        <PaginaDetalhesProjeto key={idProjeto} identificador={idProjeto} />
+      )}
       {pagina === 'detalhes-curso' && (
         <PaginaDetalhesCurso key={identificador} identificador={identificador} aba={aba} />
       )}
