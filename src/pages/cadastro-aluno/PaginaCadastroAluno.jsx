@@ -213,21 +213,23 @@ export default function PaginaCadastroAluno() {
               <label htmlFor="aluno-nome">
                 Nome completo
               </label>
-              <IconeCampo tipo="usuario" />
-              <input
-                id="aluno-nome"
-                type="text"
-                autoComplete="name"
-                autoCapitalize="words"
-                maxLength={120}
-                placeholder="Nome completo"
-                value={valores.nome}
-                onChange={(evento) => alterar('nome', evento.target.value)}
-                onBlur={() => sairDoCampo('nome')}
-                readOnly={enviando}
-                aria-invalid={erros.nome ? true : undefined}
-                aria-describedby={descrever(erros.nome && 'erro-nome')}
-              />
+              <div className="acesso-entrada">
+                <IconeCampo tipo="usuario" />
+                <input
+                  id="aluno-nome"
+                  type="text"
+                  autoComplete="name"
+                  autoCapitalize="words"
+                  maxLength={120}
+                  placeholder="Nome completo"
+                  value={valores.nome}
+                  onChange={(evento) => alterar('nome', evento.target.value)}
+                  onBlur={() => sairDoCampo('nome')}
+                  readOnly={enviando}
+                  aria-invalid={erros.nome ? true : undefined}
+                  aria-describedby={descrever(erros.nome && 'erro-nome')}
+                />
+              </div>
               <MensagemErro id="erro-nome" texto={erros.nome} />
             </div>
 
@@ -235,23 +237,25 @@ export default function PaginaCadastroAluno() {
               <label htmlFor="aluno-email">
                 E-mail institucional
               </label>
-              <IconeCampo tipo="email" />
-              <input
-                id="aluno-email"
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                autoCapitalize="none"
-                spellCheck={false}
-                maxLength={254}
-                placeholder="E-mail institucional"
-                value={valores.email}
-                onChange={(evento) => alterar('email', evento.target.value)}
-                onBlur={() => sairDoCampo('email')}
-                readOnly={enviando}
-                aria-invalid={erros.email ? true : undefined}
-                aria-describedby={descrever(erros.email && 'erro-email')}
-              />
+              <div className="acesso-entrada">
+                <IconeCampo tipo="email" />
+                <input
+                  id="aluno-email"
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  maxLength={254}
+                  placeholder="E-mail institucional"
+                  value={valores.email}
+                  onChange={(evento) => alterar('email', evento.target.value)}
+                  onBlur={() => sairDoCampo('email')}
+                  readOnly={enviando}
+                  aria-invalid={erros.email ? true : undefined}
+                  aria-describedby={descrever(erros.email && 'erro-email')}
+                />
+              </div>
               <MensagemErro id="erro-email" texto={erros.email} />
             </div>
 
@@ -259,32 +263,34 @@ export default function PaginaCadastroAluno() {
               <label htmlFor="aluno-curso">
                 Curso
               </label>
-              <IconeCampo tipo="curso" />
-              <div className="acesso-select">
-                <select
-                  id="aluno-curso"
-                  value={valores.curso}
-                  onChange={(evento) => alterar('curso', evento.target.value)}
-                  onBlur={() => sairDoCampo('curso')}
-                  disabled={
-                    enviando || carregandoCursos || Boolean(erroCursos) || cursos.length === 0
-                  }
-                  aria-invalid={erros.curso ? true : undefined}
-                  aria-describedby={descrever(
-                    erros.curso && 'erro-curso',
-                    erroCursos && 'erro-cursos',
-                  )}
-                >
-                  <option value="">
-                    {carregandoCursos ? 'Carregando cursos…' : 'Selecione seu curso'}
-                  </option>
-                  {cursos.map((curso) => (
-                    <option key={curso.id} value={String(curso.id)}>
-                      {curso.nome}
-                      {curso.sigla ? ` (${curso.sigla})` : ''}
+              <div className="acesso-entrada">
+                <IconeCampo tipo="curso" />
+                <div className="acesso-select">
+                  <select
+                    id="aluno-curso"
+                    value={valores.curso}
+                    onChange={(evento) => alterar('curso', evento.target.value)}
+                    onBlur={() => sairDoCampo('curso')}
+                    disabled={
+                      enviando || carregandoCursos || Boolean(erroCursos) || cursos.length === 0
+                    }
+                    aria-invalid={erros.curso ? true : undefined}
+                    aria-describedby={descrever(
+                      erros.curso && 'erro-curso',
+                      erroCursos && 'erro-cursos',
+                    )}
+                  >
+                    <option value="">
+                      {carregandoCursos ? 'Carregando cursos…' : 'Selecione seu curso'}
                     </option>
-                  ))}
-                </select>
+                    {cursos.map((curso) => (
+                      <option key={curso.id} value={String(curso.id)}>
+                        {curso.nome}
+                        {curso.sigla ? ` (${curso.sigla})` : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {erroCursos && (
@@ -311,31 +317,33 @@ export default function PaginaCadastroAluno() {
               <label htmlFor="aluno-senha">
                 Senha
               </label>
-              <IconeCampo tipo="senha" />
-              <div className="acesso-senha">
-                <input
-                  id="aluno-senha"
-                  name="password"
-                  type={tipoSenha}
-                  autoComplete="new-password"
-                  placeholder="Crie uma senha"
-                  value={valores.senha}
-                  onChange={(evento) => alterar('senha', evento.target.value)}
-                  onBlur={() => sairDoCampo('senha')}
-                  readOnly={enviando}
-                  aria-invalid={erros.senha ? true : undefined}
-                  aria-describedby={descrever('ajuda-senha', erros.senha && 'erro-senha')}
-                />
-                <button
-                  type="button"
-                  onClick={() => definirMostrarSenha(!mostrarSenha)}
-                  aria-controls="aluno-senha aluno-confirmar-senha"
-                  aria-pressed={mostrarSenha}
-                  aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
-                  title={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
-                >
-                  <Icone nome={mostrarSenha ? 'ocultar' : 'mostrar'} />
-                </button>
+              <div className="acesso-entrada">
+                <IconeCampo tipo="senha" />
+                <div className="acesso-senha">
+                  <input
+                    id="aluno-senha"
+                    name="password"
+                    type={tipoSenha}
+                    autoComplete="new-password"
+                    placeholder="Crie uma senha"
+                    value={valores.senha}
+                    onChange={(evento) => alterar('senha', evento.target.value)}
+                    onBlur={() => sairDoCampo('senha')}
+                    readOnly={enviando}
+                    aria-invalid={erros.senha ? true : undefined}
+                    aria-describedby={descrever('ajuda-senha', erros.senha && 'erro-senha')}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => definirMostrarSenha(!mostrarSenha)}
+                    aria-controls="aluno-senha aluno-confirmar-senha"
+                    aria-pressed={mostrarSenha}
+                    aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                    title={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                  >
+                    <Icone nome={mostrarSenha ? 'ocultar' : 'mostrar'} />
+                  </button>
+                </div>
               </div>
               <p id="ajuda-senha" className="acesso-ajuda-campo cadastro-aluno__dica">
                 Use pelo menos {TAMANHO_MINIMO_SENHA} caracteres.
@@ -347,19 +355,21 @@ export default function PaginaCadastroAluno() {
               <label htmlFor="aluno-confirmar-senha">
                 Confirmar senha
               </label>
-              <IconeCampo tipo="senha" />
-              <input
-                id="aluno-confirmar-senha"
-                type={tipoSenha}
-                autoComplete="new-password"
-                placeholder="Confirmar senha"
-                value={valores.confirmarSenha}
-                onChange={(evento) => alterar('confirmarSenha', evento.target.value)}
-                onBlur={() => sairDoCampo('confirmarSenha')}
-                readOnly={enviando}
-                aria-invalid={erros.confirmarSenha ? true : undefined}
-                aria-describedby={descrever(erros.confirmarSenha && 'erro-confirmarSenha')}
-              />
+              <div className="acesso-entrada">
+                <IconeCampo tipo="senha" />
+                <input
+                  id="aluno-confirmar-senha"
+                  type={tipoSenha}
+                  autoComplete="new-password"
+                  placeholder="Confirmar senha"
+                  value={valores.confirmarSenha}
+                  onChange={(evento) => alterar('confirmarSenha', evento.target.value)}
+                  onBlur={() => sairDoCampo('confirmarSenha')}
+                  readOnly={enviando}
+                  aria-invalid={erros.confirmarSenha ? true : undefined}
+                  aria-describedby={descrever(erros.confirmarSenha && 'erro-confirmarSenha')}
+                />
+              </div>
               <MensagemErro id="erro-confirmarSenha" texto={erros.confirmarSenha} />
             </div>
 
@@ -369,7 +379,6 @@ export default function PaginaCadastroAluno() {
               disabled={enviando}
             >
               {enviando ? 'Criando conta…' : 'Criar conta'}
-              <Icone nome="seta" classe="cadastro-aluno__seta" />
             </button>
 
             <span className="somente-leitores" role="status">

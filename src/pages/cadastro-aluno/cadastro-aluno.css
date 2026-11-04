@@ -217,21 +217,44 @@
 }
 
 .cadastro-aluno__campo {
-  position: relative;
   display: grid;
-  gap: 4px;
+  gap: var(--esp-2);
   min-width: 0;
 }
 
+.cadastro-aluno__campo label {
+  display: block;
+  color: var(--titulo);
+  font-size: var(--texto-s);
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+
+.cadastro-aluno__campo .acesso-entrada {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.cadastro-aluno__campo .acesso-entrada__icone,
 .cadastro-aluno__icone-campo {
   position: absolute;
-  z-index: 1;
-  top: 15px;
+  z-index: 2;
+  top: 50%;
   left: 16px;
+  transform: translateY(-50%);
   width: 18px;
   height: 18px;
   color: var(--texto-suave);
   pointer-events: none;
+}
+
+.cadastro-aluno__campo input,
+.cadastro-aluno__campo .acesso-senha,
+.cadastro-aluno__campo .acesso-select {
+  width: 100%;
 }
 
 .cadastro-aluno__campo input,
@@ -240,14 +263,15 @@
   width: 100%;
   height: 48px;
   min-width: 0;
-  padding: 0 16px 0 48px;
-  border: 1px solid var(--borda-suave);
-  border-radius: 15px;
-  background: var(--branco);
-  color: var(--marinho);
+  padding: 0 16px 0 46px;
+  border: 1px solid var(--borda-campo);
+  border-radius: var(--raio-m);
+  background: var(--superficie);
+  color: var(--titulo);
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   box-shadow: none;
+  transition: border-color var(--transicao);
 }
 
 .cadastro-aluno__campo input::placeholder,
