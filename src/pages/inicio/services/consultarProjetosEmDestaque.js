@@ -2,7 +2,9 @@ import { consultarProjetosPublicados } from '@/pages/projetos/services/consultar
 
 export async function consultarProjetosEmDestaque(sinal) {
   const publicados = await consultarProjetosPublicados(sinal)
-  return publicados.slice(0, 2)
+  // Retorna os mais recentes primeiro (ordenados por id decrescente)
+  const ordenados = [...publicados].sort((a, b) => Number(b.id || 0) - Number(a.id || 0))
+  return ordenados.slice(0, 6)
 }
 
 export default consultarProjetosEmDestaque

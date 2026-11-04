@@ -43,8 +43,8 @@ export default function TabelaSubmissoes({ itens = [], baseDetalhes }) {
                     item.titulo
                   )}
                   <span>
-                    {item.autor} · {item.tipo}
-                    {item.orientador ? ` · Orientação: ${item.orientador}` : ''}
+                    {item.autor}, {item.tipo}
+                    {item.orientador ? `, Orientação: ${item.orientador}` : ''}
                   </span>
                 </th>
                 <td>{item.curso || item.cursoCompleto || '—'}</td>
@@ -58,7 +58,7 @@ export default function TabelaSubmissoes({ itens = [], baseDetalhes }) {
                       className="tabela-submissoes__abrir"
                       href={`${baseDetalhes}/${encodeURIComponent(item.identificador)}`}
                     >
-                      Avaliar <span aria-hidden="true">→</span>
+                      Avaliar
                     </a>
                   </td>
                 )}

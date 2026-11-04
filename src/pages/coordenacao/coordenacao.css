@@ -6,20 +6,20 @@
 
 .coordenacao-boas-vindas {
   min-height: 102px;
-  padding: 18px 20px;
-  border: 1px solid var(--borda);
-  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-g);
   background: var(--superficie);
 }
 
 .coordenacao-boas-vindas__rotulo {
   display: block;
-  margin-bottom: 5px;
-  color: var(--azul);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: var(--texto-suave);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .coordenacao-boas-vindas h1 {

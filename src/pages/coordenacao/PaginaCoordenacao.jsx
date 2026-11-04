@@ -110,7 +110,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
           </div>
           <div className="coordenacao-boas-vindas__acoes">
             <a className="botao-primario" href={`${basePortal}#submeter`}>
-              + Submeter projeto
+              + Enviar projeto
             </a>
           </div>
         </header>
@@ -146,7 +146,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             Editar curso
           </a>
           <a className="botao-primario" href={`${basePortal}#submeter`}>
-            + Submeter projeto
+            + Enviar projeto
           </a>
         </div>
       </header>
@@ -212,7 +212,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             </p>
           </div>
           <a href={enderecoPrivado('coordenacao/submissoes')}>
-            Ver todas <span aria-hidden="true">→</span>
+            Ver todas
           </a>
         </header>
         <TabelaSubmissoes
