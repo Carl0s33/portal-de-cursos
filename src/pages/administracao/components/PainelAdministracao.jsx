@@ -158,7 +158,7 @@ export default function PainelAdministracao({ token }) {
                 <p>Dados acadêmicos disponíveis no portal.</p>
               </div>
               <a href={enderecoPrivado('administracao/cursos')}>
-                Ver todos os cursos <span aria-hidden="true">→</span>
+                Ver todos os cursos
               </a>
             </header>
             {resumo.cursos.length ? (
@@ -224,11 +224,11 @@ export default function PainelAdministracao({ token }) {
                 [
                   'Formações e matérias',
                   [
-                    ['cursos', 'Formações', `${resumo.cursos.length} no portal · ver e organizar`],
+                    ['cursos', 'Formações', `${resumo.cursos.length} no portal, ver e organizar`],
                     [
                       'disciplinas',
                       'Matérias',
-                      `${resumo.disciplinas.length} no portal · ver e organizar`,
+                      `${resumo.disciplinas.length} no portal, ver e organizar`,
                     ],
                     ['projetos', 'Trabalhos acadêmicos', 'Consulte os trabalhos cadastrados'],
                   ],

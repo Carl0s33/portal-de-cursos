@@ -11,7 +11,7 @@ export default function InformacoesAcademicas({ curso }) {
             <article key={item.identificador || item.codigo || indice}>
               <h3>{item.nome}</h3>
               <p>
-                {item.codigo} · {item.cargaHoraria} horas · {item.semestre}º semestre · {item.tipo}
+                {item.codigo}, {item.cargaHoraria} horas, {item.semestre}º semestre, {item.tipo}
               </p>
               <p>{item.descricao}</p>
             </article>

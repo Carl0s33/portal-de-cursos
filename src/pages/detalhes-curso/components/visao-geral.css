@@ -14,11 +14,10 @@
   margin: 12px 0;
 }
 .visao-curso .visao-curso__rotulo {
-  color: var(--azul);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 10px;
-  font-family: monospace;
+  color: var(--texto-suave);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
   margin: 0;
 }
 .visao-curso__numeros {

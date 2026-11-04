@@ -25,7 +25,7 @@
   margin: 0;
 }
 .filtros-cursos__titulo > span {
-  font-family: monospace;
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
   white-space: nowrap;
   background: var(--suave);

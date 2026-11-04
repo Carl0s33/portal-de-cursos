@@ -22,9 +22,9 @@
   max-width: 730px;
 }
 .resumo-curso__identidade .etiqueta {
-  font-size: 11px;
-  text-transform: uppercase;
-  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--raio-pilula);
 }
 .resumo-curso__selo {
   display: flex;
@@ -49,7 +49,7 @@
   font-size: 14px;
 }
 .resumo-curso__selo span {
-  font-family: monospace;
+  font-variant-numeric: tabular-nums;
   font-size: 10px;
 }
 .resumo-curso__indicadores {
@@ -81,7 +81,7 @@
 }
 .resumo-curso__indicadores small {
   display: block;
-  font-family: monospace;
+  font-variant-numeric: tabular-nums;
   font-size: 10px;
   line-height: 16px;
 }

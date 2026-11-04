@@ -147,10 +147,6 @@ export default function PaginaCursos() {
       </nav>
       <div className="pagina-cursos__introducao">
         <div>
-          <p className="pagina-cursos__rotulo">
-            <span />
-            Catálogo acadêmico
-          </p>
           <h1>Conheça nossos cursos</h1>
           <p>Explore a formação, as disciplinas, os professores e as produções de cada curso.</p>
         </div>

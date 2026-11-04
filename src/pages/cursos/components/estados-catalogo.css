@@ -156,7 +156,7 @@
   margin-bottom: 12px;
   background: var(--superficie);
   color: var(--erro);
-  font-family: monospace;
+  font-variant-numeric: tabular-nums;
   font-size: 11px;
   border-radius: 4px;
 }

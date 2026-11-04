@@ -521,17 +521,13 @@
   padding: clamp(28px, 3.8vw, 44px);
   overflow: hidden;
   border-radius: var(--login-raio-painel);
-  background:
-    radial-gradient(ellipse at 100% 0%, rgb(49 116 255 / 42%), transparent 54%),
-    radial-gradient(ellipse at 0% 100%, rgb(91 45 184 / 28%), transparent 56%),
-    linear-gradient(155deg, var(--marinho) 0%, var(--azul-escuro) 64%, #082a6b 100%);
+  background: var(--marinho);
   color: var(--branco);
 }
 
 :root[data-tema='escuro'] .acesso-login__vitrine {
-  background:
-    radial-gradient(ellipse at 100% 0%, rgb(49 116 255 / 26%), transparent 55%),
-    linear-gradient(155deg, #071324 0%, #0d2142 65%, #112a54 100%);
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
 }
 
 .acesso-login__vitrine-cabecalho {

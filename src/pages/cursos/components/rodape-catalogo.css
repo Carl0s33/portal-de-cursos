@@ -34,7 +34,7 @@
   border-top: 1px solid var(--borda);
 }
 .rodape-catalogo__base small {
-  font-family: monospace;
+  font-variant-numeric: tabular-nums;
   font-size: 11px;
 }
 @media (max-width: 760px) {

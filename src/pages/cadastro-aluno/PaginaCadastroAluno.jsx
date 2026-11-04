@@ -281,7 +281,7 @@ export default function PaginaCadastroAluno() {
                   {cursos.map((curso) => (
                     <option key={curso.id} value={String(curso.id)}>
                       {curso.nome}
-                      {curso.sigla ? ` · ${curso.sigla}` : ''}
+                      {curso.sigla ? ` (${curso.sigla})` : ''}
                     </option>
                   ))}
                 </select>

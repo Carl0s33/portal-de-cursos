@@ -10,11 +10,10 @@
   gap: 12px;
   min-width: 0;
   padding: 20px;
-  border: 1px solid color-mix(in srgb, var(--cor-curso) 20%, var(--borda));
-  border-top: 4px solid var(--cor-curso);
-  border-radius: 14px;
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-g);
   background: var(--superficie);
-  box-shadow: var(--sombra);
+  box-shadow: none;
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
