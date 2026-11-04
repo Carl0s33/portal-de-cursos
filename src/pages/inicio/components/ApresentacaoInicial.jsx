@@ -24,42 +24,81 @@ export default function ApresentacaoInicial() {
     <section id="inicio" className="hero-inicial" aria-labelledby="titulo-inicial">
       <div className="hero-inicial__texto">
         <h1 id="titulo-inicial">
-          Da formação
-          <br />à criação.
+          Encontre seu curso e veja o que os estudantes produzem.
         </h1>
         <p className="hero-inicial__descricao">
-          Conheça as formações oferecidas, consulte as matérias e acompanhe os trabalhos acadêmicos
-          desenvolvidos pelos estudantes.
+          Consulte matrizes curriculares, projetos integradores e trabalhos de conclusão desenvolvidos no portal acadêmico.
         </p>
         <div className="hero-inicial__acoes">
           <a className="botao-primario" href="#cursos">
-            Explorar cursos
+            Explorar catálogo de cursos
           </a>
           <a className="hero-inicial__acao-secundaria" href="#projetos">
-            Conhecer os projetos
+            Ver produções acadêmicas
           </a>
         </div>
         <dl className="hero-inicial__numeros">
           <div>
             <dd>{estado === 'pronto' ? cursos.length : '—'}</dd>
             <dt>
-              {estado === 'indisponivel' ? 'cursos indisponíveis agora' : 'cursos cadastrados'}
+              {estado === 'indisponivel' ? 'cursos indisponíveis no momento' : 'cursos cadastrados'}
             </dt>
           </div>
         </dl>
       </div>
-      <aside className="hero-carrossel hero-carrossel--informativo" aria-label="Sobre o portal">
-        <div className="hero-destaque__conteudo">
-          <p className="hero-inicial__rotulo">Portal de Cursos</p>
-          <h2>Conhecimento que começa no curso e ganha forma em cada projeto.</h2>
-          <p className="hero-destaque__resumo">
-            Consulte informações acadêmicas mantidas pelos serviços do portal e encontre o caminho
-            para a sua formação.
-          </p>
-          <a className="hero-destaque__acao" href="#cursos">
-            Ver formações disponíveis
-          </a>
+
+      <aside className="hero-catalogo" aria-label="Cursos cadastrados">
+        <div className="hero-catalogo__cabecalho">
+          <span className="hero-catalogo__rotulo">Cursos</span>
+          <p className="hero-catalogo__subtitulo">Formações ofertadas no portal</p>
         </div>
+
+        {estado === 'carregando' && (
+          <div className="hero-catalogo__estado" role="status">
+            <p>Carregando cursos…</p>
+          </div>
+        )}
+
+        {estado === 'indisponivel' && (
+          <div className="hero-catalogo__estado hero-catalogo__estado--aviso" role="status">
+            <p>Não foi possível carregar os cursos agora.</p>
+            <a href="#cursos" className="hero-catalogo__link-catalogo">Consultar catálogo completo</a>
+          </div>
+        )}
+
+        {estado === 'pronto' && (
+          cursos.length > 0 ? (
+            <ul className="hero-catalogo__lista">
+              {cursos.slice(0, 4).map((curso) => (
+                <li key={curso.identificador} className="hero-catalogo__item">
+                  <a href={`#curso/${curso.identificador}`} className="hero-catalogo__link">
+                    <div className="hero-catalogo__info">
+                      <strong className="hero-catalogo__nome">{curso.nome}</strong>
+                      <span className="hero-catalogo__detalhes">
+                        {[curso.grau, curso.turno].filter(Boolean).join(', ')}
+                      </span>
+                    </div>
+                    {curso.sigla && (
+                      <span className="etiqueta hero-catalogo__sigla">{curso.sigla}</span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="hero-catalogo__estado" role="status">
+              <p>Nenhum curso cadastrado no momento.</p>
+            </div>
+          )
+        )}
+
+        {estado === 'pronto' && cursos.length > 4 && (
+          <div className="hero-catalogo__rodape">
+            <a href="#cursos" className="hero-catalogo__ver-todos">
+              Ver todos os {cursos.length} cursos
+            </a>
+          </div>
+        )}
       </aside>
     </section>
   )
