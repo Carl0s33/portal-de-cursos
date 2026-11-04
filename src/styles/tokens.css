@@ -1,7 +1,7 @@
 :root {
   /* Cores básicas */
   --fundo: #f7f8fc;
-  --superficie: #fff;
+  --superficie: #ffffff;
   --suave: #e8edf8;
   --etiqueta: #d8e2fb;
   --titulo: #00050e;
@@ -17,7 +17,7 @@
   --cabecalho: #fffffff2;
   --cabecalho-altura: 64px;
   --brilho: #c7d7ff;
-  --sombra: 0 1px 2px #0000000d;
+  --sombra: none;
   --marinho: #0b1f36;
   --superficie-escura: #141518;
   --branco: #ffffff;
@@ -45,9 +45,9 @@
   --esp-7: 48px;
 
   /* Escala de raios de borda */
-  --raio-p: 6px;
+  --raio-p: 4px;
   --raio-m: 8px;
-  --raio-g: 14px;
+  --raio-g: 12px;
   --raio-pilula: 999px;
 
   /* Escala tipográfica */
@@ -59,16 +59,18 @@
   --titulo-2: 28px;
   --titulo-1: clamp(40px, 5vw, 64px);
 
-  /* Interação e elevação */
+  /* Interação e elevação (plano e institucional) */
   --texto-sobre-azul: var(--branco);
   --azul-hover: color-mix(in srgb, var(--azul) 82%, var(--preto));
   --anel-foco: 0 0 0 3px color-mix(in srgb, var(--azul) 35%, transparent);
-  --sombra-elevada: 0 8px 24px color-mix(in srgb, var(--azul) 12%, transparent);
+  --sombra-card: none;
+  --sombra-hover: none;
+  --sombra-elevada: 0 0 0 1px var(--borda);
   --transicao: 180ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Aliases para compatibilidade */
+  /* Aliases para compatibilidade e contraste */
   --azul-marca: var(--azul);
-  --borda-campo: var(--borda);
+  --borda-campo: #7c8aa0;
   --texto-secundario: var(--texto-suave);
   --texto-mutado: var(--texto-suave);
   --acesso-fundo-aluno: var(--fundo);
@@ -93,7 +95,7 @@
   --borda-suave: #26282d;
   --cabecalho: #000000;
   --brilho: transparent;
-  --sombra: 0 0 0 1px var(--borda);
+  --sombra: none;
 
   --erro: #f87171;
   --erro-suave: #2a1210;
@@ -107,7 +109,10 @@
 
   --azul-hover: color-mix(in srgb, var(--azul) 82%, var(--branco));
   --texto-sobre-azul: var(--preto);
+  --sombra-card: none;
+  --sombra-hover: none;
   --sombra-elevada: 0 0 0 1px var(--azul);
+  --borda-campo: #646c78;
 
   color-scheme: dark;
 }
