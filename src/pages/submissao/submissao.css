@@ -152,7 +152,7 @@
 /* Linha azul superior removida */
 
 .formulario-submissao__secao {
-  padding: clamp(28px, 4vw, 48px);
+  padding: clamp(28px, 4vw, 44px) clamp(28px, 4vw, 48px) var(--esp-6);
   background: var(--superficie);
 }
 
@@ -476,11 +476,10 @@
 .formulario-submissao__rodape {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 20px clamp(28px, 4vw, 48px);
-  border-top: 1px solid var(--borda-suave);
-  background: var(--suave);
+  justify-content: flex-end;
+  padding: 0 clamp(28px, 4vw, 48px) clamp(28px, 4vw, 48px);
+  border-top: none;
+  background: transparent;
 }
 
 .formulario-submissao__rodape small {
