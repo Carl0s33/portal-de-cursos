@@ -64,7 +64,7 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
           </p>
         </div>
         <a id="btn-submeter-projeto" className="botao-primario" href={`${basePortal}#submeter`}>
-          + Submeter projeto
+          + Enviar projeto
         </a>
       </header>
 
@@ -137,7 +137,7 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
               className="botao-primario"
               href={`${basePortal}#submeter`}
             >
-              Submeter meu primeiro projeto
+              Enviar meu primeiro projeto
             </a>
           </div>
         ) : (
@@ -166,7 +166,7 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
                       {item.titulo}
                       <span>
                         {item.tipo}
-                        {item.orientador && ` · ${item.orientador}`}
+                        {item.orientador && `, ${item.orientador}`}
                       </span>
                     </th>
                     <td>{item.cursoCompleto || item.curso || '—'}</td>

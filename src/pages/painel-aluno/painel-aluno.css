@@ -16,24 +16,7 @@
   gap: 24px;
 }
 
-.painel-aluno-rotulo {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 12px;
-  color: var(--azul);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.painel-aluno-rotulo::before {
-  width: 24px;
-  height: 2px;
-  background: currentColor;
-  content: '';
-}
+/* Rotulo em caixa alta removido */
 
 .pagina-painel-aluno h1 {
   margin: 0 0 8px;

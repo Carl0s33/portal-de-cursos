@@ -429,7 +429,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           <div className="submissao-confirmacao__resumo">
             <strong>{formulario.titulo}</strong>
             <span>
-              {nomesTiposProjeto[formulario.tipo]} · {formulario.nome}
+              {nomesTiposProjeto[formulario.tipo]}, {formulario.nome}
             </span>
           </div>
           <div className="submissao-confirmacao__acoes">
@@ -519,7 +519,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                 className="botao-primario"
                 href={`${enderecoPrivado('login')}?retorno=${encodeURIComponent('submeter')}`}
               >
-                Entrar no portal <span aria-hidden="true">→</span>
+                Entrar no portal
               </a>
               <a
                 className="botao-secundario"
@@ -533,7 +533,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           <aside className="submissao-acesso__guia" aria-label="Como funciona a submissão">
             <header className="submissao-acesso__guia-cabecalho">
               <span className="submissao-acesso__guia-etiqueta">Roteiro de submissão</span>
-              <strong>03 etapas</strong>
+              <strong>3 etapas</strong>
             </header>
             <div className="submissao-acesso__guia-introducao">
               <h2>Do rascunho à avaliação.</h2>
@@ -541,21 +541,21 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
             </div>
             <ol>
               <li>
-                <span>01</span>
+                <span>1</span>
                 <p>
                   <strong>Identifique o projeto</strong>
                   <small>Informe curso, autores e orientador.</small>
                 </p>
               </li>
               <li>
-                <span>02</span>
+                <span>2</span>
                 <p>
                   <strong>Envie a documentação</strong>
                   <small>Adicione descrição e arquivos necessários.</small>
                 </p>
               </li>
               <li>
-                <span>03</span>
+                <span>3</span>
                 <p>
                   <strong>Acompanhe a avaliação</strong>
                   <small>Receba as decisões no painel da sua conta.</small>
