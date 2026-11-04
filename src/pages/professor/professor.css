@@ -239,14 +239,10 @@
 .submissao-feed {
   --cor-card: var(--azul);
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--cor-card) 22%, var(--borda));
-  border-left: 4px solid var(--cor-card);
-  border-radius: 12px;
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-g);
   background: var(--superficie);
-  transition:
-    border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 180ms ease;
+  transition: border-color var(--transicao);
 }
 
 .submissao-feed--pendente {
@@ -266,9 +262,7 @@
 }
 
 .submissao-feed:hover {
-  transform: translateY(-1px);
-  border-color: var(--cor-card);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--cor-card) 12%, transparent);
+  border-color: var(--borda);
 }
 
 .submissao-feed__gatilho {
@@ -293,15 +287,14 @@
   flex-shrink: 0;
   display: inline-grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--cor-card);
-  color: var(--branco);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  box-shadow: 0 3px 8px color-mix(in srgb, var(--cor-card) 26%, transparent);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--raio-m);
+  background: color-mix(in srgb, var(--cor-card) 12%, var(--superficie));
+  color: var(--cor-card);
+  font-size: var(--texto-s);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 :root[data-tema='escuro'] .submissao-feed__avatar {
@@ -732,7 +725,7 @@
   min-width: 220px;
   gap: 6px !important;
   padding: 16px 0 0 20px;
-  border-left: 2px solid var(--azul);
+  border-left: 1px solid var(--borda-suave);
 }
 
 .pagina-detalhes-submissao__marco span {
@@ -881,27 +874,40 @@
 }
 
 .pagina-detalhes-submissao__lateral .pagina-detalhes-submissao__aviso {
-  padding: 16px 18px;
-  border: 1px solid var(--borda);
-  border-left: 3px solid var(--azul);
-  border-radius: 10px;
+  --cor-aviso: var(--azul);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-g);
   color: var(--titulo);
-  background: var(--fundo);
-  font-size: 14px;
-  line-height: 1.55;
+  background: var(--superficie);
+  font-size: var(--texto-s);
+  line-height: 1.6;
+}
+
+.pagina-detalhes-submissao__lateral .pagina-detalhes-submissao__aviso::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border-radius: var(--raio-pilula);
+  background: var(--cor-aviso);
 }
 
 .pagina-detalhes-submissao__lateral .pagina-detalhes-submissao__aviso--aprovado {
-  border-left-color: var(--verde);
+  --cor-aviso: var(--sucesso);
 }
 
 .pagina-detalhes-submissao__lateral .pagina-detalhes-submissao__aviso--recusado {
-  border-left-color: var(--erro-escuro);
+  --cor-aviso: var(--erro);
 }
 
 .pagina-detalhes-submissao__lateral .pagina-detalhes-submissao__aviso--em-análise,
 .pagina-detalhes-submissao__lateral .pagina-detalhes-submissao__aviso--aguardando-orientador {
-  border-left-color: var(--aviso);
+  --cor-aviso: var(--aviso);
 }
 
 /* ==========================================================================
