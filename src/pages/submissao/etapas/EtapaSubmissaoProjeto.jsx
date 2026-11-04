@@ -4,7 +4,7 @@ export default function EtapaSubmissaoProjeto({ formulario, erros, alterar, erro
   return (
     <section className="formulario-submissao__secao" aria-labelledby="dados-projeto">
       <div className="formulario-submissao__cabecalho">
-        <span>02</span>
+        <span>2</span>
         <div>
           <h2 id="dados-projeto">Projeto</h2>
           <p>Descreva a produção, seu objetivo e o resultado esperado.</p>

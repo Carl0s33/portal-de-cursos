@@ -10,7 +10,7 @@ export default function EtapaSubmissaoIdentificacao({
   return (
     <section className="formulario-submissao__secao" aria-labelledby="dados-identificacao">
       <div className="formulario-submissao__cabecalho">
-        <span>01</span>
+        <span>1</span>
         <div>
           <h2 id="dados-identificacao">Identificação</h2>
           <p>Diga quem você é e a qual curso o projeto pertence.</p>
@@ -71,7 +71,7 @@ export default function EtapaSubmissaoIdentificacao({
             {cursos.map((curso) => (
               <option key={curso.id} value={String(curso.id)}>
                 {curso.nome}
-                {curso.sigla ? ` · ${curso.sigla}` : ''}
+                {curso.sigla ? ` (${curso.sigla})` : ''}
               </option>
             ))}
           </select>

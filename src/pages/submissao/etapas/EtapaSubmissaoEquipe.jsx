@@ -14,7 +14,7 @@ export default function EtapaSubmissaoEquipe({
   return (
     <section className="formulario-submissao__secao" aria-labelledby="dados-equipe">
       <div className="formulario-submissao__cabecalho">
-        <span>03</span>
+        <span>3</span>
         <div>
           <h2 id="dados-equipe">Equipe e orientação</h2>
           <p>Associe o orientador e os demais autores da produção.</p>

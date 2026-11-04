@@ -10,7 +10,7 @@ export default function EtapaSubmissaoDocumentos({
   return (
     <section className="formulario-submissao__secao" aria-labelledby="dados-documentos">
       <div className="formulario-submissao__cabecalho">
-        <span>04</span>
+        <span>4</span>
         <div>
           <h2 id="dados-documentos">Documentos e revisão</h2>
           <p>

@@ -149,15 +149,7 @@
   }
 }
 
-.formulario-submissao::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--azul);
-  content: '';
-}
+/* Linha azul superior removida */
 
 .formulario-submissao__secao {
   padding: clamp(28px, 4vw, 48px);
@@ -166,24 +158,28 @@
 
 .formulario-submissao__cabecalho {
   display: flex;
-  gap: 16px;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--borda);
+  align-items: flex-start;
+  gap: var(--esp-4);
+  margin-bottom: var(--esp-6);
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .formulario-submissao__cabecalho > span {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--raio-m);
   color: var(--azul);
-  background: var(--suave);
-  font-size: 13px;
-  font-weight: 800;
+  background: color-mix(in srgb, var(--azul) 12%, var(--superficie));
+  border: 1px solid color-mix(in srgb, var(--azul) 25%, transparent);
+  font-size: 14px;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: normal;
+  font-variant-numeric: tabular-nums;
 }
 
 .formulario-submissao__cabecalho h2 {
@@ -228,18 +224,26 @@
 .formulario-submissao select,
 .formulario-submissao textarea {
   width: 100%;
-  border: 1px solid var(--borda);
-  border-radius: 9px;
-  padding: 14px 15px;
+  border: 1px solid var(--borda-campo);
+  border-radius: var(--raio-m);
+  padding: 12px 14px;
   color: var(--titulo);
-  background: var(--fundo);
+  background: var(--superficie);
   font-size: 14px;
   font-weight: 500;
-  box-shadow: inset 0 1px 2px color-mix(in srgb, var(--marinho) 2%, transparent);
+  line-height: 1.5;
+  box-shadow: none;
   transition:
-    border-color 180ms ease-out,
-    background-color 180ms ease-out,
-    box-shadow 180ms ease-out;
+    border-color var(--transicao),
+    background-color var(--transicao),
+    box-shadow var(--transicao);
+}
+
+:root[data-tema='escuro'] .formulario-submissao input:not([type='file']),
+:root[data-tema='escuro'] .formulario-submissao select,
+:root[data-tema='escuro'] .formulario-submissao textarea {
+  background: var(--fundo);
+  border-color: var(--borda);
 }
 
 .formulario-submissao textarea {
@@ -474,9 +478,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 24px clamp(28px, 4vw, 48px);
-  border-top: 1px solid var(--borda);
-  background: var(--superficie);
+  padding: 20px clamp(28px, 4vw, 48px);
+  border-top: 1px solid var(--borda-suave);
+  background: var(--suave);
 }
 
 .formulario-submissao__rodape small {
