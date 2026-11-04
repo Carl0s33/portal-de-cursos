@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 380px;
   transition: border-color var(--transicao);
 }
 
@@ -25,6 +26,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--esp-2);
 }
 
 .cartao-curso__topo strong {
@@ -37,8 +39,13 @@
   font-size: var(--titulo-3);
   line-height: 1.3;
   letter-spacing: -0.02em;
-  margin: var(--esp-3) 0;
+  margin: var(--esp-3) 0 var(--esp-2);
   color: var(--titulo);
+  min-height: 58px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .cartao-curso p {
@@ -46,15 +53,22 @@
   line-height: 1.6;
   margin: 0;
   color: var(--texto);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 72px;
 }
 
 .cartao-curso__informacoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--esp-4);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--esp-2);
   list-style: none;
-  padding: 0;
-  margin: var(--esp-5) 0 var(--esp-6);
+  padding: var(--esp-3) 0;
+  margin: auto 0 var(--esp-4);
+  border-top: 1px solid var(--borda-suave);
+  border-bottom: 1px solid var(--borda-suave);
 }
 
 .cartao-curso__informacoes li {
@@ -64,9 +78,17 @@
   font-size: var(--texto-xs);
   font-weight: 600;
   color: var(--texto-suave);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cartao-curso__informacoes li .icone {
+  color: var(--azul);
+  flex-shrink: 0;
 }
 
 .cartao-curso > .ligacao {
-  margin-top: auto;
+  margin-top: 0;
   align-self: flex-start;
 }
