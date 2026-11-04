@@ -8,7 +8,7 @@ import './projetos.css'
 export default function PaginaProjetos() {
   const [publicados, definirPublicados] = useState([])
   const [filtrosAbertos, definirFiltrosAbertos] = useState(false)
-  const [ordem, definirOrdem] = useState('nome')
+  const [ordem, definirOrdem] = useState('recentes')
   const [busca, definirBusca] = useState('')
   const [tipo, definirTipo] = useState('')
   const [curso, definirCurso] = useState('')
@@ -41,12 +41,15 @@ export default function PaginaProjetos() {
           normalizar(busca.trim()),
         ),
     )
-    .sort((a, b) =>
-      (ordem === 'curso' ? a.curso : ordem === 'tipo' ? a.tipo : a.nome).localeCompare(
+    .sort((a, b) => {
+      if (ordem === 'recentes') {
+        return Number(b.id || 0) - Number(a.id || 0)
+      }
+      return (ordem === 'curso' ? a.curso : ordem === 'tipo' ? a.tipo : a.nome).localeCompare(
         ordem === 'curso' ? b.curso : ordem === 'tipo' ? b.tipo : b.nome,
         'pt-BR',
-      ),
-    )
+      )
+    })
 
   function limpar() {
     definirBusca('')
@@ -105,6 +108,7 @@ export default function PaginaProjetos() {
             <label>
               Ordenar por
               <select value={ordem} onChange={(evento) => definirOrdem(evento.target.value)}>
+                <option value="recentes">Mais recentes</option>
                 <option value="nome">Nome de A a Z</option>
                 <option value="curso">Curso</option>
                 <option value="tipo">Tipo de trabalho</option>

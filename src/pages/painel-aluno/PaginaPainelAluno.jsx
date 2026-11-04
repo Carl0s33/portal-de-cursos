@@ -16,9 +16,30 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
   const nomeAluno = sessao?.usuario?.nome?.toLowerCase() || ''
 
   // Exibe projetos onde o aluno é autor principal ou co-autor (integrante)
-  const minhasSubmissoes = useMemo(
-    () =>
-      submissoes.filter((s) => {
+  const minhasSubmissoes = useMemo(() => {
+    const prioridadeStatus = (status = '') => {
+      const normalizado = status.toLowerCase()
+      if (normalizado.includes('análise') || normalizado.includes('analise')) return 1
+      if (normalizado.includes('aguardando')) return 2
+      if (normalizado.includes('aprovado') || normalizado.includes('publicado')) return 3
+      if (normalizado.includes('recusado')) return 4
+      return 5
+    }
+
+    const compararData = (a = '', b = '') => {
+      const pA = a.split('/')
+      const pB = b.split('/')
+      if (pA.length === 3 && pB.length === 3) {
+        return (
+          new Date(Number(pB[2]), Number(pB[1]) - 1, Number(pB[0])).getTime() -
+          new Date(Number(pA[2]), Number(pA[1]) - 1, Number(pA[0])).getTime()
+        )
+      }
+      return 0
+    }
+
+    return submissoes
+      .filter((s) => {
         const eAutor =
           s.autor?.toLowerCase() === nomeAluno ||
           s.email?.toLowerCase() === emailAluno ||
@@ -36,9 +57,16 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
             return nome.toLowerCase() === nomeAluno || email.toLowerCase() === emailAluno
           })
         return eAutor || eIntegrante
-      }),
-    [submissoes, emailAluno, nomeAluno],
-  )
+      })
+      .sort((a, b) => {
+        const pA = prioridadeStatus(a.status)
+        const pB = prioridadeStatus(b.status)
+        if (pA !== pB) return pA - pB
+        const diff = compararData(a.enviadoEm, b.enviadoEm)
+        if (diff !== 0) return diff
+        return Number(b.id || b.identificador || 0) - Number(a.id || a.identificador || 0)
+      })
+  }, [submissoes, emailAluno, nomeAluno])
 
   const totais = useMemo(
     () => ({
