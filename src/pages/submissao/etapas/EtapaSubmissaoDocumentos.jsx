@@ -49,21 +49,28 @@ export default function EtapaSubmissaoDocumentos({
           {(tiposProjeto[formulario.tipo]?.documentos || []).map((documento) => {
             const arquivo = formulario.documentos[documento.id]
             return (
-              <label className="campo-arquivo" key={documento.id}>
-                <span className="campo-arquivo__icone" aria-hidden="true">
-                  ↑
-                </span>
-                <strong>
-                  {arquivo
-                    ? Array.isArray(arquivo)
-                      ? `${arquivo.length} arquivo(s)`
-                      : arquivo.name
-                    : documento.nome}
-                </strong>
-                <small>
-                  {documento.obrigatorio ? 'Obrigatório' : 'Opcional'} ·{' '}
-                  {documento.multiplo ? 'vários arquivos' : 'um PDF'}
-                </small>
+              <label
+                className={`campo-arquivo ${arquivo ? 'campo-arquivo--preenchido' : ''}`}
+                key={documento.id}
+              >
+                <div className="campo-arquivo__topo">
+                  <span className="campo-arquivo__icone" aria-hidden="true">
+                    {arquivo ? '✓' : '↑'}
+                  </span>
+                  <div className="campo-arquivo__info">
+                    <strong>
+                      {arquivo
+                        ? Array.isArray(arquivo)
+                          ? `${arquivo.length} arquivo(s)`
+                          : arquivo.name
+                        : documento.nome}
+                    </strong>
+                    <small>
+                      {documento.obrigatorio ? 'Obrigatório' : 'Opcional'},{' '}
+                      {documento.multiplo ? 'vários arquivos' : 'formato PDF'}
+                    </small>
+                  </div>
+                </div>
                 <input
                   required={documento.obrigatorio}
                   type="file"
