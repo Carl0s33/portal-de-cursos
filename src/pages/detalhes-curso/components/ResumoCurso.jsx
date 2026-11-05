@@ -3,7 +3,6 @@ import './resumo-curso.css'
 
 export default function ResumoCurso({ curso }) {
   const indicadores = [
-    ['Grau', curso.grau, null, 'grau-detalhe'],
     ['Duração', curso.duracao, curso.anos, 'duracao-detalhe'],
     ['Modalidade', curso.modalidade, curso.campus, 'modalidade-detalhe'],
     ['Turno', curso.turno, null, 'turno-detalhe'],
@@ -27,6 +26,9 @@ export default function ResumoCurso({ curso }) {
             {curso.nome} ({curso.sigla})
           </h1>
           <p>{curso.descricao}</p>
+        </div>
+        <div className="resumo-curso__selo" aria-hidden="true">
+          <span>{curso.sigla || 'Curso'}</span>
         </div>
       </div>
       <dl className="resumo-curso__indicadores">

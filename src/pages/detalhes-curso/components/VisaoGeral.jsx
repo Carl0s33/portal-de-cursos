@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
 import { listarCoordenadores } from '@/api/coordenadores.js'
+import { listarProfessores } from '@/api/professores.js'
 import './visao-geral.css'
 
 export default function VisaoGeral({ curso }) {
@@ -9,18 +10,56 @@ export default function VisaoGeral({ curso }) {
   useEffect(() => {
     let ativo = true
     const controle = new AbortController()
+    definirCoordenador(null)
 
     if (curso?.id) {
-      listarCoordenadores(null, { cursoId: curso.id }, controle.signal)
-        .then((dados) => {
+      Promise.all([
+        listarCoordenadores(null, { cursoId: curso.id }, controle.signal).catch(() => []),
+        listarProfessores(null, {}, controle.signal).catch(() => []),
+      ])
+        .then(([dadosCoordenadores, professores]) => {
           if (!ativo) return
-          if (Array.isArray(dados) && dados.length > 0) {
-            definirCoordenador(dados[0])
-          } else if (dados && dados.nome) {
-            definirCoordenador(dados)
+          const coordenadores = Array.isArray(dadosCoordenadores)
+            ? dadosCoordenadores
+            : Array.isArray(dadosCoordenadores?.coordenadores)
+              ? dadosCoordenadores.coordenadores
+              : dadosCoordenadores
+                ? [dadosCoordenadores]
+                : []
+          const registro = coordenadores[0]
+          if (!registro) return
+
+          const professorRef = registro.professor || registro.docente
+          const referenciasProfessor = [
+            registro.professorId,
+            professorRef?.id,
+            professorRef?.professorId,
+            professorRef?.usuario?.id,
+            registro.usuarioId,
+            registro.usuario?.id,
+            registro.id,
+          ].filter(Boolean)
+          const professor = professores.find((item) =>
+            [item.id, item.usuario?.id].some((id) =>
+              id && referenciasProfessor.some((referencia) => String(id) === String(referencia)),
+            ),
+          )
+          const professorId = registro.professorId || professorRef?.id || professor?.id || registro.usuarioId || registro.usuario?.id
+          const nome =
+            registro.nome ||
+            professorRef?.usuario?.nome ||
+            professorRef?.nome ||
+            registro.usuario?.nome ||
+            professor?.nome
+
+          if (nome) {
+            definirCoordenador({
+              ...registro,
+              professorId: professorId || professor?.id,
+              nome,
+            })
           }
         })
-        .catch(() => {})
     }
 
     return () => {
@@ -40,20 +79,20 @@ export default function VisaoGeral({ curso }) {
         <p>{curso.descricao}</p>
       </div>
 
-      {coordenador && (
+      {coordenador?.nome && coordenador.professorId && (
         <div className="visao-curso__coordenador-bloco">
           <h3>Coordenação do curso</h3>
           <a
             className="detalhe-projeto__perfil-item"
             href={`#professor/${coordenador.professorId || coordenador.id}`}
-            title={`Abrir perfil do coordenador ${coordenador.nome || coordenador.usuario?.nome}`}
+            title={`Abrir perfil de ${coordenador.nome}`}
           >
             <div className="detalhe-projeto__avatar">
-              {(coordenador.nome || coordenador.usuario?.nome || 'C').charAt(0).toUpperCase()}
+              {coordenador.nome.charAt(0).toUpperCase()}
             </div>
             <div className="detalhe-projeto__perfil-info">
-              <strong>{coordenador.nome || coordenador.usuario?.nome}</strong>
-              <small>Coordenador(a) do Curso · Ver perfil docente</small>
+              <strong>{coordenador.nome}</strong>
+              <small>Coordenação do curso · Ver perfil docente</small>
             </div>
             <Icone nome="seta-cursos" />
           </a>

@@ -5,12 +5,12 @@
 
 .resumo-curso__identidade {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) clamp(150px, 20vw, 220px);
   align-items: center;
-  gap: 16px;
+  gap: clamp(24px, 5vw, 64px);
   padding: clamp(28px, 5vw, 48px);
   border: 1px solid var(--borda);
-  border-radius: 14px;
+  border-radius: var(--raio-cartao);
   background: var(--superficie);
 }
 
@@ -47,7 +47,24 @@
 }
 
 .resumo-curso__selo {
-  display: none;
+  display: grid;
+  min-height: 156px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 24px 24px 24px 8px;
+  background: var(--azul);
+  color: var(--texto-sobre-azul);
+}
+
+.resumo-curso__selo span {
+  padding: 12px;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .resumo-curso__indicadores {
@@ -116,6 +133,19 @@
 }
 
 @media (max-width: 700px) {
+  .resumo-curso__identidade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .resumo-curso__selo {
+    min-height: 88px;
+    border-radius: var(--raio-botao);
+  }
+
+  .resumo-curso__selo span {
+    font-size: 36px;
+  }
+
   .resumo-curso__indicadores {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -137,7 +167,7 @@
   }
 
   .resumo-curso__identidade h1 {
-    font-size: 34px;
+    font-size: clamp(32px, 9vw, 38px);
   }
 
   .resumo-curso__indicadores {
