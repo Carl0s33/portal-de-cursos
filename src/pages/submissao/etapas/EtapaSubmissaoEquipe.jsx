@@ -1,4 +1,3 @@
-import Icone from '@/shared/components/Icone.jsx'
 
 export default function EtapaSubmissaoEquipe({
   formulario,

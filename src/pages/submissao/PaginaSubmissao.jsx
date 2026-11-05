@@ -1,4 +1,3 @@
-import EtapasSubmissao from '@/shared/components/EtapasSubmissao.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'

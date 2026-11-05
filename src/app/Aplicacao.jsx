@@ -585,10 +585,14 @@ export default function Aplicacao() {
                         // Se estiver em EM_ANALISE ou APROVADO, avanca a esteira
                         try {
                           await atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
-                        } catch {}
+                        } catch {
+                          // A próxima transição tenta avançar a submissão a partir do estado atual.
+                        }
                         try {
                           await atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
-                        } catch {}
+                        } catch {
+                          // A publicação abaixo também tenta a transição direta.
+                        }
                         await atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token)
                       }
                     } else if (status === 'Recusado') {
