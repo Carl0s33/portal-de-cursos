@@ -276,12 +276,11 @@
 
 /* Detalhes públicos no mesmo sistema de cartões da matriz curricular */
 .perfil-publico__cabecalho {
-  --perfil-acento: var(--azul);
   min-height: 0;
   padding: clamp(24px, 4vw, 36px);
-  border: 1px solid var(--borda);
-  border-radius: 14px;
-  background: var(--superficie);
+  border: 0;
+  border-radius: var(--raio-cartao);
+  background: linear-gradient(118deg, var(--azul-perfil-inicio) 0%, var(--azul-perfil-meio) 58%, var(--azul-perfil-fim) 100%);
   box-shadow: none;
 }
 
@@ -300,12 +299,12 @@
 }
 
 .perfil-publico__avatar-docente {
-  background: var(--azul);
+  background: color-mix(in srgb, var(--branco) 14%, transparent);
   color: var(--texto-sobre-azul);
 }
 
 .perfil-publico__avatar-discente {
-  background: var(--marinho);
+  background: color-mix(in srgb, var(--branco) 14%, transparent);
   color: var(--branco);
 }
 
@@ -349,7 +348,31 @@
 }
 
 .perfil-publico__cabecalho--coordenador .perfil-publico__avatar-docente {
-  background: var(--sucesso);
+  background: color-mix(in srgb, var(--sucesso) 82%, transparent);
+  color: var(--branco);
+}
+
+.perfil-publico__cabecalho--discente .perfil-publico__nome,
+.perfil-publico__cabecalho--docente .perfil-publico__nome,
+.perfil-publico__cabecalho--coordenador .perfil-publico__nome {
+  color: var(--branco);
+}
+
+.perfil-publico__cabecalho--discente .perfil-publico__email,
+.perfil-publico__cabecalho--docente .perfil-publico__email,
+.perfil-publico__cabecalho--coordenador .perfil-publico__email {
+  color: color-mix(in srgb, var(--branco) 82%, transparent);
+}
+
+.perfil-publico__cabecalho--discente .perfil-publico__badge-discente,
+.perfil-publico__cabecalho--discente .perfil-publico__badge-curso,
+.perfil-publico__cabecalho--docente .perfil-publico__badge-docente,
+.perfil-publico__cabecalho--docente .perfil-publico__badge-titulacao,
+.perfil-publico__cabecalho--coordenador .perfil-publico__badge-docente,
+.perfil-publico__cabecalho--coordenador .perfil-publico__badge-titulacao,
+.perfil-publico__cabecalho--coordenador .perfil-publico__badge-coordenador {
+  border-color: color-mix(in srgb, var(--branco) 38%, transparent);
+  background: color-mix(in srgb, var(--branco) 12%, transparent);
   color: var(--branco);
 }
 
