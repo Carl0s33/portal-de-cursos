@@ -110,3 +110,45 @@
     font-size: 30px;
   }
 }
+
+/* Refinamento institucional — leitura e acompanhamento acadêmico */
+.pagina-painel-aluno {
+  gap: clamp(24px, 3vw, 36px);
+}
+.painel-aluno-cabecalho {
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--borda-suave);
+}
+.painel-aluno-cabecalho > div > p:last-child {
+  max-width: 60ch;
+  color: var(--texto-suave);
+}
+.painel-aluno-indicadores > div {
+  border-top-width: 3px;
+  border-radius: 16px;
+}
+.pagina-painel-aluno .painel-secao {
+  border-color: var(--borda-suave);
+  border-radius: 18px;
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--marinho) 5%, transparent);
+}
+.pagina-painel-aluno .painel-secao > header {
+  padding: 28px 30px;
+}
+.pagina-painel-aluno .tabela-submissoes thead {
+  background: color-mix(in srgb, var(--azul) 7%, var(--superficie));
+}
+.pagina-painel-aluno .tabela-submissoes tbody th {
+  font-weight: 750;
+}
+.pagina-painel-aluno .tabela-submissoes tbody td {
+  color: var(--texto);
+}
+.pagina-painel-aluno .painel-aluno-aviso {
+  border-radius: 12px;
+}
+@media (max-width: 760px) {
+  .painel-aluno-cabecalho { padding-bottom: 18px; }
+  .pagina-painel-aluno .painel-secao > header { padding: 22px 20px; }
+  .painel-aluno-cabecalho > .botao-primario { width: 100%; }
+}
