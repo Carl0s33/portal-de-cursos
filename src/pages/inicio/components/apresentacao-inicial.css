@@ -1,6 +1,7 @@
 .hero-inicial {
   position: relative;
   isolation: isolate;
+  scroll-margin-top: calc(var(--cabecalho-altura) + 16px);
   display: grid;
   grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
   align-items: center;
@@ -48,7 +49,7 @@
 }
 
 .hero-inicial h1 {
-  max-width: 10ch;
+  max-width: 12ch;
   margin: 0;
   color: var(--branco);
   font-family: var(--fonte-titulo);
