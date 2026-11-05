@@ -8,9 +8,10 @@
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: 16px;
-  padding: 8px 0 0;
+  padding: clamp(28px, 5vw, 48px);
   border: 0;
-  background: transparent;
+  border-radius: var(--raio-cartao);
+  background: linear-gradient(118deg, var(--azul-perfil-inicio) 0%, var(--azul-perfil-meio) 58%, var(--azul-perfil-fim) 100%);
 }
 
 .resumo-curso__identidade > div:first-child {
@@ -19,16 +20,17 @@
 
 .resumo-curso__identidade .etiqueta {
   min-height: 28px;
-  border: 1px solid var(--borda);
+  border: 1px solid color-mix(in srgb, var(--branco) 38%, transparent);
   border-radius: var(--raio-pilula);
-  background: var(--superficie);
+  background: color-mix(in srgb, var(--branco) 12%, transparent);
+  color: var(--branco);
   font-size: var(--texto-xs);
 }
 
 .resumo-curso__identidade h1 {
   max-width: 24ch;
   margin: 16px 0 12px;
-  color: var(--titulo);
+  color: var(--branco);
   font-family: var(--fonte-titulo);
   font-size: clamp(34px, 5vw, 56px);
   font-weight: 500;
@@ -39,7 +41,7 @@
 .resumo-curso__identidade > div > p {
   max-width: 62ch;
   margin: 0;
-  color: var(--texto);
+  color: color-mix(in srgb, var(--branco) 84%, transparent);
   font-size: var(--texto-md);
   line-height: 1.7;
 }
@@ -131,7 +133,7 @@
 
 @media (max-width: 420px) {
   .resumo-curso__identidade {
-    padding-top: 0;
+    padding: 24px 20px;
   }
 
   .resumo-curso__identidade h1 {
