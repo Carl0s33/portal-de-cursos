@@ -7,29 +7,29 @@
   gap: 40px;
   padding: 40px;
   background: var(--superficie);
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
 }
 .esqueleto-detalhe__etiqueta {
   display: block;
   width: 35%;
   height: 24px;
-  border-radius: 20px;
-  background: var(--etiqueta);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
   margin-bottom: 24px;
 }
 .esqueleto-detalhe__titulo {
   width: 95%;
   height: 44px;
   margin-bottom: 12px;
-  border-radius: 8px;
-  background: var(--etiqueta);
+  border-radius: var(--raio-botao);
+  background: var(--superficie);
 }
 .esqueleto-detalhe__subtitulo {
   width: 65%;
   height: 32px;
   margin-bottom: 24px;
-  border-radius: 6px;
-  background: var(--etiqueta);
+  border-radius: var(--raio-botao);
+  background: var(--superficie);
 }
 .esqueleto-detalhe__linhas {
   display: grid;
@@ -39,7 +39,7 @@
   width: 100%;
   height: 14px;
   background: var(--suave);
-  border-radius: 4px;
+  border-radius: var(--raio-botao);
 }
 .esqueleto-detalhe__linhas span:last-child {
   width: 75%;
@@ -47,14 +47,14 @@
 .esqueleto-detalhe__acao {
   padding: 24px;
   background: var(--suave);
-  border-radius: 10px;
+  border-radius: var(--raio-botao);
   display: grid;
   gap: 24px;
 }
 .esqueleto-detalhe__acao > span {
   height: 44px;
-  background: var(--etiqueta);
-  border-radius: 8px;
+  background: var(--superficie);
+  border-radius: var(--raio-botao);
 }
 .esqueleto-detalhe__indicadores {
   display: grid;
@@ -65,7 +65,7 @@
 .esqueleto-detalhe__indicadores > div {
   padding: 20px;
   background: var(--superficie);
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
 }
 .esqueleto-detalhe__abas {
   display: flex;
@@ -75,8 +75,8 @@
 .esqueleto-detalhe__abas span {
   width: 160px;
   height: 44px;
-  border-radius: 8px;
-  background: var(--etiqueta);
+  border-radius: var(--raio-botao);
+  background: var(--superficie);
 }
 .esqueleto-detalhe__conteudo {
   display: grid;
@@ -86,23 +86,23 @@
 .esqueleto-detalhe__conteudo section {
   padding: 32px;
   background: var(--superficie);
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
   margin-bottom: 24px;
 }
 .esqueleto-detalhe__item {
   padding: 20px;
   background: var(--suave);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   margin-top: 16px;
 }
 .esqueleto-detalhe__item .esqueleto-detalhe__linhas span {
-  background: var(--etiqueta);
+  background: var(--superficie);
 }
 .esqueleto-detalhe__foto {
   margin-top: 24px;
   height: 180px;
   background: var(--suave);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
 }
 .esqueleto-detalhe > div {
   animation: pulsar-detalhe 1.5s ease-in-out infinite alternate;

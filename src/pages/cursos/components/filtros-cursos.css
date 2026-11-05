@@ -2,13 +2,11 @@
   position: static;
   align-self: start;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
   background: var(--superficie);
   border: 1px solid var(--borda);
-  box-shadow: var(--sombra);
-  transition:
-    border-color 180ms ease-out,
-    box-shadow 180ms ease-out;
+
+  transition: border-color var(--transicao);
 }
 .filtros-cursos__titulo,
 .filtros-cursos__titulo h2 {
@@ -21,16 +19,16 @@
   margin-bottom: 24px;
 }
 .filtros-cursos__titulo h2 {
-  font-size: 18px;
+  font-size: var(--texto-md);
   margin: 0;
 }
 .filtros-cursos__titulo > span {
-  font-family: monospace;
-  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--texto-xs);
   white-space: nowrap;
   background: var(--suave);
   padding: 4px 6px;
-  border-radius: 4px;
+  border-radius: var(--raio-botao);
 }
 .filtros-cursos__campos {
   border: 0;
@@ -46,7 +44,7 @@
   gap: 8px;
   margin-bottom: 20px;
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   font-weight: 600;
 }
 .filtros-cursos__selecao select {
@@ -54,9 +52,9 @@
   min-height: 44px;
   padding: 10px;
   border: 1px solid var(--borda);
-  border-radius: 8px;
-  color: var(--texto);
-  background: var(--suave);
+  border-radius: var(--raio-campo);
+  color: var(--titulo);
+  background: var(--superficie);
 }
 .filtros-cursos__grupo {
   padding: 18px 0;
@@ -68,7 +66,7 @@
   justify-content: space-between;
   cursor: pointer;
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   font-weight: 600;
   list-style: none;
 }
@@ -88,7 +86,7 @@
   gap: 6px;
   align-items: center;
   min-height: 36px;
-  font-size: 14px;
+  font-size: var(--texto-sm);
   cursor: pointer;
 }
 .filtros-cursos__opcao input {
@@ -111,16 +109,16 @@
   color: var(--azul);
   border: 0;
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--texto-sm);
 }
 .filtros-cursos__nota {
   display: flex;
   align-items: flex-start;
   gap: 6px;
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   padding: 12px;
   margin: 16px 0 0;
-  font-size: 14px;
+  font-size: var(--texto-sm);
   line-height: 22px;
   background: var(--suave);
 }
@@ -138,9 +136,6 @@
 .filtros-cursos:hover,
 .filtros-cursos:focus-within {
   border-color: var(--azul);
-  box-shadow:
-    inset 0 0 0 1px var(--azul),
-    0 10px 28px color-mix(in srgb, var(--preto) 8%, transparent);
 }
 .filtros-cursos__titulo {
   flex-wrap: wrap;
@@ -150,7 +145,7 @@
   line-height: 20px;
 }
 .filtros-cursos__opcao small {
-  font-size: 12px;
+  font-size: var(--texto-xs);
 }
 
 .filtros-cursos {
@@ -168,7 +163,7 @@
   line-height: 26px;
 }
 .filtros-cursos__titulo > span {
-  font-size: 11px;
+  font-size: var(--texto-xs);
 }
 .filtros-cursos__campos {
   display: block;
@@ -191,7 +186,7 @@
   gap: 8px;
   min-height: 40px;
   padding: 6px 4px;
-  border-radius: 5px;
+  border-radius: var(--raio-botao);
 }
 .filtros-cursos__opcao > span {
   overflow-wrap: anywhere;
@@ -205,6 +200,6 @@
   background: var(--suave);
 }
 .filtros-cursos__nota {
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 20px;
 }

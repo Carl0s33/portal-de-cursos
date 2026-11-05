@@ -9,30 +9,29 @@
   gap: 40px;
 }
 .resumo-curso__identidade h1 {
-  font-size: 40px;
+  font-size: var(--texto-xl);
   line-height: 48px;
   letter-spacing: -1px;
   margin: 16px 0 12px;
   max-width: 780px;
 }
 .resumo-curso__identidade > div > p {
-  font-size: 16px;
+  font-size: var(--texto-md);
   line-height: 26px;
   margin: 0;
   max-width: 730px;
 }
 .resumo-curso__identidade .etiqueta {
-  font-size: 11px;
-  text-transform: uppercase;
-  border-radius: 999px;
+  font-size: var(--texto-xs);
+
+  border-radius: var(--raio-pilula);
 }
 .resumo-curso__selo {
   display: flex;
   gap: 12px;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
   background: var(--superficie);
-  box-shadow: var(--sombra);
 }
 .resumo-curso__selo > .icone {
   align-self: center;
@@ -42,15 +41,15 @@
   gap: 4px;
 }
 .resumo-curso__selo small {
-  font-size: 11px;
+  font-size: var(--texto-xs);
 }
 .resumo-curso__selo strong {
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
 }
 .resumo-curso__selo span {
   font-family: monospace;
-  font-size: 10px;
+  font-size: var(--texto-xs);
 }
 .resumo-curso__indicadores {
   display: grid;
@@ -61,8 +60,8 @@
 .resumo-curso__indicadores > div {
   padding: 16px;
   background: var(--superficie);
-  border-radius: 10px;
-  box-shadow: var(--sombra);
+  border-radius: var(--raio-botao);
+
   min-width: 0;
 }
 .resumo-curso__indicadores dt {
@@ -70,19 +69,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-size: 12px;
+  font-size: var(--texto-xs);
 }
 .resumo-curso__indicadores dd {
   color: var(--titulo);
   font-weight: 700;
-  font-size: 18px;
+  font-size: var(--texto-md);
   line-height: 26px;
   margin: 8px 0 2px;
 }
 .resumo-curso__indicadores small {
   display: block;
   font-family: monospace;
-  font-size: 10px;
+  font-size: var(--texto-xs);
   line-height: 16px;
 }
 @media (max-width: 1050px) {
@@ -99,7 +98,7 @@
     grid-template-columns: 1fr;
   }
   .resumo-curso__identidade h1 {
-    font-size: 30px;
+    font-size: var(--texto-xl);
     line-height: 38px;
   }
   .resumo-curso__indicadores {
@@ -109,6 +108,6 @@
     padding: 14px;
   }
   .resumo-curso__indicadores dd {
-    font-size: 16px;
+    font-size: var(--texto-md);
   }
 }

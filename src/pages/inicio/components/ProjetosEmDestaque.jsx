@@ -16,7 +16,10 @@ export default function ProjetosEmDestaque() {
         definirEstado('pronto')
       })
       .catch(() => {
-        if (!controle.signal.aborted) definirEstado('pronto')
+        if (!controle.signal.aborted) {
+          definirProjetos([])
+          definirEstado('erro')
+        }
       })
     return () => controle.abort()
   }, [])
@@ -25,7 +28,7 @@ export default function ProjetosEmDestaque() {
     <section id="projetos" className="secao" aria-labelledby="titulo-projetos">
       <div className="secao__cabecalho">
         <div>
-          <h2 id="titulo-projetos">O conhecimento ganha forma aqui</h2>
+          <h2 id="titulo-projetos">Projetos publicados</h2>
           <p>Conheça trabalhos aprovados e desenvolvidos ao longo da formação.</p>
         </div>
         <Ligacao destino="#projetos">Explorar biblioteca de projetos</Ligacao>
@@ -34,6 +37,11 @@ export default function ProjetosEmDestaque() {
         <div className="painel-vazio painel-vazio--caixa">
           <p role="status">Carregando produções acadêmicas…</p>
         </div>
+      ) : estado === 'erro' ? (
+        <p role="alert">
+          Não foi possível carregar os projetos. Verifique se o serviço está disponível e recarregue
+          a página.
+        </p>
       ) : projetos.length > 0 ? (
         <ul className="lista-projetos">
           {projetos.map((projeto) => (

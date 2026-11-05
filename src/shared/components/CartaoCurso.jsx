@@ -1,31 +1,49 @@
 import Icone from './Icone.jsx'
-import Ligacao from './Ligacao.jsx'
 import './cartao-curso.css'
 
 export default function CartaoCurso({ curso }) {
+  const informacoes = [
+    { rotulo: 'Duração', valor: curso.duracao, icone: 'duracao-cursos' },
+    { rotulo: 'Modalidade', valor: curso.modalidade, icone: 'modalidade-cursos' },
+    {
+      rotulo: 'Turno',
+      valor: curso.turno,
+      icone: curso.turno === 'Noturno' ? 'noturno-cursos' : 'matutino-cursos',
+    },
+  ]
+
   return (
-    <article className="cartao-curso">
-      <div className="cartao-curso__topo">
-        <span className="etiqueta etiqueta--neutra">{curso.grau}</span>
-        <strong>{curso.sigla}</strong>
+    <article className="cartao curso-resumo">
+      <div className="curso-resumo__topo">
+        <span className="curso-resumo__sigla">{curso.sigla || 'CURSO'}</span>
+        {curso.grau && <span className="curso-resumo__grau">{curso.grau}</span>}
       </div>
-      <h3>{curso.nome}</h3>
-      <p>{curso.descricao}</p>
-      <ul className="cartao-curso__informacoes">
-        <li>
-          <Icone nome="duracao" />
-          {curso.duracao}
-        </li>
-        <li>
-          <Icone nome="localizacao" />
-          {curso.modalidade}
-        </li>
-        <li>
-          <Icone nome={curso.turno === 'Noturno' ? 'lua' : 'sol'} />
-          {curso.turno}
-        </li>
-      </ul>
-      <Ligacao destino={`#curso/${curso.identificador}`}>Conhecer o curso</Ligacao>
+
+      <h3 className="curso-resumo__titulo">
+        <a className="curso-resumo__link" href={`#curso/${curso.identificador}`}>
+          {curso.nome}
+        </a>
+      </h3>
+
+      <p className="curso-resumo__descricao">{curso.descricao}</p>
+
+      <dl className="curso-resumo__metadados">
+        {informacoes.map(({ rotulo, valor, icone }) => (
+          <div key={rotulo}>
+            <dt>
+              <Icone nome={icone} />
+              {rotulo}
+            </dt>
+            <dd>{valor || 'A informar'}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div className="curso-resumo__base">
+        <span className="curso-resumo__acao" aria-hidden="true">
+          Conhecer o curso
+        </span>
+      </div>
     </article>
   )
 }

@@ -25,7 +25,7 @@
   padding: 16px 20px;
   min-height: 52px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--texto-xs);
 }
 .abas-curso [role='tab'][aria-selected='true'] {
   color: var(--azul);

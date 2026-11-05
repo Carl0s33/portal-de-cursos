@@ -24,7 +24,7 @@ export default function CursosEmDestaque() {
     <section id="cursos" className="secao" aria-labelledby="titulo-cursos">
       <div className="secao__cabecalho">
         <div>
-          <h2 id="titulo-cursos">Encontre seu caminho</h2>
+          <h2 id="titulo-cursos">Cursos disponíveis</h2>
           <p>Conheça a estrutura e as possibilidades de cada formação.</p>
         </div>
         <Ligacao destino="#cursos">Ver todos os cursos</Ligacao>

@@ -21,19 +21,28 @@ export default function Rodape({ pagina = 'inicio' }) {
           </div>
           <nav aria-label="Navegação no rodapé">
             <h2>Navegação acadêmica</h2>
-            <a href="#inicio" aria-current={pagina === 'inicio' ? 'page' : undefined}>
+            <a
+              href={`${basePortal}#inicio`}
+              aria-current={pagina === 'inicio' ? 'page' : undefined}
+            >
               Página inicial
             </a>
             <a
-              href="#cursos"
+              href={`${basePortal}#cursos`}
               aria-current={['cursos', 'detalhes-curso'].includes(pagina) ? 'page' : undefined}
             >
               Catálogo de cursos
             </a>
-            <a href="#projetos" aria-current={pagina === 'projetos' ? 'page' : undefined}>
+            <a
+              href={`${basePortal}#projetos`}
+              aria-current={pagina === 'projetos' ? 'page' : undefined}
+            >
               Produções acadêmicas
             </a>
-            <a href="#submeter" aria-current={pagina === 'submissao' ? 'page' : undefined}>
+            <a
+              href={`${basePortal}#submeter`}
+              aria-current={pagina === 'submissao' ? 'page' : undefined}
+            >
               Enviar projeto
             </a>
           </nav>

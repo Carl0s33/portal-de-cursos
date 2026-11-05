@@ -197,9 +197,23 @@ export default function Cabecalho({
 
   const navegacao = areaProfessor ? (
     <>
-      <a href={`${basePortal}#inicio`}>
-        Ver portal <span aria-hidden="true">↗</span>
+      <a href={basePortal} aria-current={ativoSe(pagina === 'inicio')}>
+        Início
       </a>
+      <a href={`${basePortal}#cursos`} aria-current={ativoSe(pagina === 'cursos')}>
+        Cursos
+      </a>
+      <a href={`${basePortal}#projetos`} aria-current={ativoSe(pagina === 'projetos')}>
+        Projetos
+      </a>
+      {destinoArea && (
+        <a
+          href={enderecoPrivado(destinoArea)}
+          aria-current={ativoSe(pagina === 'professor' || pagina === 'coordenacao' || pagina === 'administracao')}
+        >
+          Minha área
+        </a>
+      )}
       <a href={enderecoPrivado(destinoPerfil)} aria-current={ativoSe(pagina === 'perfil')}>
         Meu perfil
       </a>
@@ -209,19 +223,19 @@ export default function Cabecalho({
     </>
   ) : (
     <>
-      <a href="#inicio" aria-current={ativoSe(pagina === 'inicio')}>
+      <a href={`${basePortal}#inicio`} aria-current={ativoSe(pagina === 'inicio')}>
         Início
       </a>
-      <a href="#cursos" aria-current={ativoSe(pagina === 'cursos')}>
+      <a href={`${basePortal}#cursos`} aria-current={ativoSe(pagina === 'cursos')}>
         Cursos
       </a>
-      <a href="#projetos" aria-current={ativoSe(pagina === 'projetos')}>
+      <a href={`${basePortal}#projetos`} aria-current={ativoSe(pagina === 'projetos')}>
         Projetos
       </a>
       {(!autenticado || ['ALUNO', 'COORDENADOR'].includes(tipoUsuario)) && (
         <a
           className="navegacao__submeter"
-          href="#submeter"
+          href={`${basePortal}#submeter`}
           aria-current={ativoSe(pagina === 'submeter')}
         >
           Enviar projeto
@@ -256,19 +270,12 @@ export default function Cabecalho({
     </>
   )
 
-  const acoes = modoAcesso ? (
-    <a className="cabecalho__portal" href={`${basePortal}#inicio`}>
-      Ver portal <span aria-hidden="true">↗</span>
-    </a>
-  ) : areaProfessor ? (
+  const acoes = modoAcesso ? null : areaProfessor ? (
     <>
-      <a className="cabecalho__portal" href={`${basePortal}#inicio`}>
-        Ver portal <span aria-hidden="true">↗</span>
-      </a>
+      {linkPerfil}
       <button className="cabecalho__sair" type="button" onClick={aoSair}>
         Sair
       </button>
-      {linkPerfil}
     </>
   ) : autenticado ? (
     <>

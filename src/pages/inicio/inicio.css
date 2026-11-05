@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 14px;
+  font-size: var(--texto-sm);
   font-weight: 600;
   margin: 0 0 16px;
 }
@@ -31,12 +31,12 @@
 .apresentacao__chamada span {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: var(--raio-pilula);
   background: var(--azul);
 }
 
 h1 {
-  font-size: 48px;
+  font-size: var(--texto-xl);
   line-height: 56px;
   letter-spacing: -1.2px;
   font-weight: 800;
@@ -44,7 +44,7 @@ h1 {
 }
 
 .apresentacao__descricao {
-  font-size: 18px;
+  font-size: var(--texto-md);
   line-height: 28px;
   max-width: 576px;
   margin: 16px 0;
@@ -70,14 +70,14 @@ h1 {
 }
 
 .secao__cabecalho h2 {
-  font-size: 36px;
+  font-size: var(--texto-xl);
   line-height: 44px;
   letter-spacing: -0.9px;
   margin: 0 0 4px;
 }
 
 .secao__cabecalho p {
-  font-size: 16px;
+  font-size: var(--texto-md);
   line-height: 24px;
   margin: 0;
 }
@@ -103,13 +103,13 @@ h1 {
   text-align: center;
   background: var(--superficie);
   border: 1px solid var(--borda);
-  border-radius: 14px;
+  border-radius: var(--raio-cartao);
 }
 
 .painel-vazio--caixa p {
   margin: 0;
   color: var(--texto);
-  font-size: 15px;
+  font-size: var(--texto-sm);
 }
 
 .convite {
@@ -119,9 +119,8 @@ h1 {
   gap: 40px;
   background: var(--superficie);
   border: 1px solid var(--borda);
-  border-radius: 16px;
+  border-radius: var(--raio-cartao);
   padding: 44px;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--marinho) 4%, transparent);
 }
 
 .convite > div {
@@ -135,20 +134,20 @@ h1 {
   color: var(--azul);
   font-size: 12px !important;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+
+  letter-spacing: normal;
   margin: 0 0 8px !important;
 }
 
 .convite h2 {
-  font-size: 28px;
+  font-size: var(--texto-xl);
   line-height: 36px;
   letter-spacing: -0.56px;
   margin: 0 0 6px;
 }
 
 .convite p {
-  font-size: 16px;
+  font-size: var(--texto-md);
   line-height: 24px;
   margin: 0;
 }
@@ -159,9 +158,9 @@ h1 {
   background: var(--suave);
   border: 1px solid var(--borda-suave);
   padding: 5px 12px;
-  border-radius: 6px;
+  border-radius: var(--raio-botao);
   margin-top: 12px;
-  font-size: 12px;
+  font-size: var(--texto-xs);
   font-weight: 600;
 }
 
@@ -171,12 +170,12 @@ h1 {
 
 @media (max-width: 1000px) {
   h1 {
-    font-size: 40px;
+    font-size: var(--texto-xl);
     line-height: 48px;
   }
 
   .secao__cabecalho h2 {
-    font-size: 30px;
+    font-size: var(--texto-xl);
     line-height: 38px;
   }
 
@@ -192,7 +191,7 @@ h1 {
   }
 
   .convite h2 {
-    font-size: 26px;
+    font-size: var(--texto-xl);
   }
 
   .apresentacao__texto {
@@ -214,12 +213,12 @@ h1 {
   }
 
   .apresentacao__descricao {
-    font-size: 16px;
+    font-size: var(--texto-md);
     line-height: 26px;
   }
 
   h1 {
-    font-size: 36px;
+    font-size: var(--texto-xl);
     line-height: 44px;
     letter-spacing: -0.9px;
   }
@@ -243,7 +242,7 @@ h1 {
   }
 
   .secao__cabecalho h2 {
-    font-size: 28px;
+    font-size: var(--texto-xl);
     line-height: 36px;
   }
 
@@ -254,7 +253,7 @@ h1 {
   }
 
   .convite h2 {
-    font-size: 24px;
+    font-size: var(--texto-lg);
     line-height: 32px;
   }
 
@@ -263,7 +262,7 @@ h1 {
   }
 
   .secao__cabecalho p {
-    font-size: 14px;
+    font-size: var(--texto-sm);
     line-height: 22px;
   }
 }

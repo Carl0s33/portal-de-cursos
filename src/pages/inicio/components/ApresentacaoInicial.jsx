@@ -1,3 +1,4 @@
+import laboratorio from '@/assets/imagens/laboratorio-formacao.png'
 import { useEffect, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import './apresentacao-inicial.css'
@@ -21,7 +22,7 @@ export default function ApresentacaoInicial() {
   }, [])
 
   return (
-    <section id="inicio" className="hero-inicial" aria-labelledby="titulo-inicial">
+    <section id="inicio" className="hero-inicial hero-inicial--sem-imagem" aria-labelledby="titulo-inicial">
       <div className="hero-inicial__texto">
         <h1 id="titulo-inicial">
           Da formação
@@ -33,7 +34,7 @@ export default function ApresentacaoInicial() {
         </p>
         <div className="hero-inicial__acoes">
           <a className="botao-primario" href="#cursos">
-            Explorar cursos <span aria-hidden="true">→</span>
+            Explorar cursos
           </a>
           <a className="hero-inicial__acao-secundaria" href="#projetos">
             Conhecer os projetos
@@ -48,19 +49,6 @@ export default function ApresentacaoInicial() {
           </div>
         </dl>
       </div>
-      <aside className="hero-carrossel hero-carrossel--informativo" aria-label="Sobre o portal">
-        <div className="hero-destaque__conteudo">
-          <p className="hero-inicial__rotulo">Portal de Cursos</p>
-          <h2>Conhecimento que começa no curso e ganha forma em cada projeto.</h2>
-          <p className="hero-destaque__resumo">
-            Consulte informações acadêmicas mantidas pelos serviços do portal e encontre o caminho
-            para a sua formação.
-          </p>
-          <a className="hero-destaque__acao" href="#cursos">
-            Ver formações disponíveis <span aria-hidden="true">→</span>
-          </a>
-        </div>
-      </aside>
     </section>
   )
 }

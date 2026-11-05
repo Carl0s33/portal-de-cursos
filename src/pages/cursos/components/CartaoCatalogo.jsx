@@ -9,44 +9,49 @@ export default function CartaoCatalogo({ curso }) {
   ]
 
   return (
-    <article className="cartao-catalogo">
-      <div className="cartao-catalogo__topo">
-        <span className="cartao-catalogo__simbolo">
+    <article className="cartao curso-catalogo">
+      <div className="curso-catalogo__topo">
+        <span className="curso-catalogo__simbolo" aria-hidden="true">
           <Icone nome="grau-detalhe" />
         </span>
-        <span className="cartao-catalogo__grau">
+        <span className="curso-catalogo__grau">
           {curso.grau === 'Tecnologia' ? 'Graduação tecnológica' : curso.grau}
         </span>
-        <span className="cartao-catalogo__sigla">{curso.sigla}</span>
+        <span className="curso-catalogo__sigla">{curso.sigla}</span>
       </div>
-      <h2>{curso.nome}</h2>
-      <p className="cartao-catalogo__descricao">{curso.descricao}</p>
-      <dl className="cartao-catalogo__metadados">
+
+      <h2 className="curso-catalogo__titulo">
+        <a className="curso-catalogo__link" href={`#curso/${curso.identificador}`}>
+          {curso.nome}
+        </a>
+      </h2>
+
+      <p className="curso-catalogo__descricao">{curso.descricao}</p>
+
+      <dl className="curso-catalogo__metadados">
         {informacoes.map(([rotulo, valor, icone]) => (
           <div key={rotulo}>
             <dt>
               <Icone nome={icone} />
               {rotulo}
             </dt>
-            <dd>{valor || 'A informar'}</dd>
+            <dd title={valor || 'A informar'}>{valor || 'A informar'}</dd>
           </div>
         ))}
       </dl>
-      <div className="cartao-catalogo__base">
+
+      <div className="curso-catalogo__base">
         {curso.campus && (
-          <p className="cartao-catalogo__campus">
+          <p className="curso-catalogo__campus">
             <Icone nome="localizacao" />
-            {curso.campus}
+            <span>{curso.campus}</span>
           </p>
         )}
+        <span className="curso-catalogo__acao" aria-hidden="true">
+          <span>Conhecer o curso</span>
+          <Icone nome="seta-cursos" />
+        </span>
       </div>
-      <a
-        className="cartao-catalogo__acao"
-        href={`#curso/${curso.identificador}`}
-        aria-label={`Conhecer o curso de ${curso.nome}`}
-      >
-        Conhecer o curso <Icone nome="seta-cursos" />
-      </a>
     </article>
   )
 }

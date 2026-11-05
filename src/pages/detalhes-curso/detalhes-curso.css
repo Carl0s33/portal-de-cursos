@@ -14,7 +14,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: 13px;
+  font-size: var(--texto-xs);
 }
 .detalhe-curso__caminho [aria-current] {
   font-weight: 600;
@@ -23,8 +23,8 @@
 .bloco-detalhe {
   background: var(--superficie);
   padding: 28px;
-  border-radius: 12px;
-  box-shadow: var(--sombra);
+  border-radius: var(--raio-campo);
+
   min-width: 0;
 }
 .pagina-detalhe-curso .icone {
@@ -37,11 +37,11 @@
   text-align: center;
 }
 .detalhe-curso__erro h1 {
-  font-size: 32px;
+  font-size: var(--texto-xl);
   line-height: 40px;
 }
 .detalhe-curso__erro p {
-  font-size: 16px;
+  font-size: var(--texto-md);
   line-height: 26px;
 }
 .detalhe-curso__erro > div {
@@ -54,14 +54,14 @@
 .detalhe-curso__nota {
   margin: 0;
   padding: 16px;
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   background: var(--suave);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   line-height: 20px;
 }
 .pagina-detalhe-curso .botao-primario,
 .pagina-detalhe-curso .botao-secundario {
-  font-size: 13px;
+  font-size: var(--texto-xs);
 }
 .pagina-detalhe-curso [role='tabpanel']:focus-visible {
   outline: 2px solid var(--azul);
