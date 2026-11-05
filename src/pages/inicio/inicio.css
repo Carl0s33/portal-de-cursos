@@ -1,5 +1,5 @@
 .pagina-inicial {
-  padding-top: 56px;
+  padding-top: 32px;
   padding-bottom: 72px;
   display: flex;
   flex-direction: column;
@@ -201,7 +201,7 @@ h1 {
 
 @media (max-width: 760px) {
   .pagina-inicial {
-    padding-top: 36px;
+    padding-top: 24px;
     padding-bottom: 48px;
     gap: 52px;
   }

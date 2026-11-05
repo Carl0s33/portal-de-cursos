@@ -89,9 +89,9 @@
 
 :root[data-tema='escuro'] {
   --fundo: #000000;
-  --superficie: #0c0c0c;
-  --suave: #141414;
-  --etiqueta: #182238;
+  --superficie: #050505;
+  --suave: #101010;
+  --etiqueta: #171717;
   --titulo: #f5f5f5;
   --texto: #bfbfbf;
   --texto-suave: #9aa3b0;
@@ -101,8 +101,8 @@
   --azul-suave: #182238;
   --marinho: #0b1f36;
   --verde: #7ed9aa;
-  --borda: #292929;
-  --borda-suave: #26282d;
+  --borda: #343434;
+  --borda-suave: #242424;
   --cabecalho: rgba(0, 0, 0, 0.95);
   --sombra: none;
   --sombra-elevada: none;
@@ -125,6 +125,14 @@
   --roxo-suave: #2a1d4a;
 
   --texto-sobre-azul: var(--preto);
+  --chip-tcc-texto: #d6e2ff;
+  --chip-extensao-texto: #ffd49a;
+  --chip-pesquisa-texto: #a7f0c9;
+  --chip-integrador-texto: #d8c2ff;
+  --chip-tcc-fundo: #10264d;
+  --chip-extensao-fundo: #3a2410;
+  --chip-pesquisa-fundo: #0d2d20;
+  --chip-integrador-fundo: #281847;
   --azul-hover: color-mix(in srgb, var(--azul) 82%, var(--branco));
 
   color-scheme: dark;

@@ -71,23 +71,23 @@
 }
 
 .detalhe-projeto__chip--tcc {
-  background: var(--chip-tcc, #003da8);
-  color: #ffffff;
+  background: var(--chip-tcc-fundo, var(--chip-tcc, #003da8));
+  color: var(--chip-tcc-texto, #ffffff);
 }
 
 .detalhe-projeto__chip--pesquisa {
-  background: var(--chip-pesquisa, #067647);
-  color: #ffffff;
+  background: var(--chip-pesquisa-fundo, var(--chip-pesquisa, #067647));
+  color: var(--chip-pesquisa-texto, #ffffff);
 }
 
 .detalhe-projeto__chip--extensao {
-  background: var(--chip-extensao, #a8510b);
-  color: #ffffff;
+  background: var(--chip-extensao-fundo, var(--chip-extensao, #a8510b));
+  color: var(--chip-extensao-texto, #ffffff);
 }
 
 .detalhe-projeto__chip--integrador {
-  background: var(--chip-integrador, #5b2db8);
-  color: #ffffff;
+  background: var(--chip-integrador-fundo, var(--chip-integrador, #5b2db8));
+  color: var(--chip-integrador-texto, #ffffff);
 }
 
 .detalhe-projeto__chip--publicado {
@@ -112,6 +112,23 @@
   background: color-mix(in srgb, var(--erro) 15%, transparent);
   color: var(--erro, #c92a2a);
   border: 1px solid color-mix(in srgb, var(--erro) 30%, transparent);
+}
+
+:root[data-tema='escuro'] .detalhe-projeto__chip--publicado,
+:root[data-tema='escuro'] .detalhe-projeto__chip--aprovado {
+  background: var(--suave);
+  color: var(--sucesso);
+  border-color: color-mix(in srgb, var(--sucesso) 40%, var(--borda));
+}
+
+:root[data-tema='escuro'] .detalhe-projeto__chip--analise {
+  background: color-mix(in srgb, var(--aviso) 14%, var(--fundo));
+  color: var(--aviso);
+}
+
+:root[data-tema='escuro'] .detalhe-projeto__chip--recusado {
+  background: color-mix(in srgb, var(--erro) 14%, var(--fundo));
+  color: var(--erro);
 }
 
 .detalhe-projeto__chip--revisao {

@@ -15,17 +15,17 @@
     .pagina-detalhes-submissao__lateral,
     .estado-erro
   ) {
-  border-width: 2px;
+  border-width: 1px;
   border-color: var(--borda);
 }
 :root[data-tema='escuro'] :is(.acesso-login, .cadastro-aluno) .layout-autenticacao {
-  border-width: 2px;
+  border-width: 1px;
   border-color: var(--borda);
 }
 :root[data-tema='escuro']
   main
   :is(input, select, textarea):not([type='checkbox']):not([type='radio']) {
-  border-width: 2px;
+  border-width: 1px;
 }
 :root[data-tema='escuro'] .tabela thead th {
   background: var(--suave);
