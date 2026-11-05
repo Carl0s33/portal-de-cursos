@@ -1,0 +1,98 @@
+/* ==========================================================
+   Etapas de submissão (versão compacta, horizontal)
+   Integrada com os tokens do design system
+   ========================================================== */
+
+.etapas {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: var(--espaco-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.etapas__passo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  color: var(--texto-suave);
+}
+
+/* Linha conectora entre passos */
+.etapas__passo:not(:last-child)::after {
+  content: '';
+  width: 18px;
+  height: 2px;
+  margin: 0 6px;
+  border-radius: 2px;
+  background: var(--borda);
+}
+
+.etapas__passo--concluido:not(:last-child)::after {
+  background: var(--sucesso);
+  opacity: 0.65;
+}
+
+.etapas__marcador {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--borda);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--texto-suave);
+  background: transparent;
+}
+
+.etapas__passo--concluido .etapas__marcador {
+  background: var(--sucesso);
+  border-color: var(--sucesso);
+  color: var(--branco);
+}
+
+.etapas__passo--atual .etapas__marcador {
+  background: var(--azul);
+  border-color: var(--azul);
+  color: var(--branco);
+}
+
+:root[data-tema='escuro'] .etapas__passo--concluido .etapas__marcador {
+  color: var(--preto);
+}
+
+/* Apenas o passo atual exibe rótulo em linha; os demais ficam para leitores de tela */
+.etapas__conteudo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.etapas__conteudo strong {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  color: var(--titulo);
+}
+
+.etapas__estado {
+  font-size: 11px;
+  color: var(--texto-suave);
+}
+
+.etapas__passo:not(.etapas__passo--atual) .etapas__conteudo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

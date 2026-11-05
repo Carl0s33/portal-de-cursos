@@ -1,17 +1,12 @@
+import { obterEnderecoRecurso } from './enderecos.js'
 import { ErroApi, requisitarApi } from './cliente.js'
 
 export const VERSAO = ''
 
-const enderecoCursos =
-  import.meta.env.VITE_API_CURSOS_URL ||
-  import.meta.env.VITE_API_CURSOS ||
-  `${import.meta.env.BASE_URL}api/cursos`
-const enderecoDisciplinas =
-  import.meta.env.VITE_API_DISCIPLINAS_URL ||
-  import.meta.env.VITE_API_DISCIPLINAS ||
-  `${import.meta.env.BASE_URL}api/disciplinas`
-const enderecoCampus = `${import.meta.env.BASE_URL}api/campus`
-const enderecoAreas = `${import.meta.env.BASE_URL}api/areas-conhecimento`
+const enderecoCursos = obterEnderecoRecurso('cursos')
+const enderecoDisciplinas = obterEnderecoRecurso('disciplinas')
+const enderecoCampus = obterEnderecoRecurso('campus')
+const enderecoAreas = obterEnderecoRecurso('areas-conhecimento')
 
 const rotulos = {
   grau: {
@@ -88,7 +83,7 @@ function mapearDisciplina(disciplina) {
   }
 }
 
-async function requisitarCursos(sinal) {
+async function requisitarCursos(sinal, token = null) {
   const cursos = []
   let pagina = 0
   let totalPaginas = 1
@@ -99,6 +94,7 @@ async function requisitarCursos(sinal) {
       `${enderecoCursos}${separador}page=${pagina}&size=100&sort=nome,asc`,
       {
         metodo: 'GET',
+        token,
         sinal,
       },
     )
@@ -118,8 +114,8 @@ async function requisitarCursos(sinal) {
   return cursos.map(mapearCurso)
 }
 
-export async function listarCursos(sinal) {
-  return requisitarCursos(sinal)
+export async function listarCursos(sinal, token = null) {
+  return requisitarCursos(sinal, token)
 }
 
 export async function obterCursoPorId(identificador, sinal) {

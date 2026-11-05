@@ -1,0 +1,55 @@
+.etiqueta,
+.status {
+  --cor-status: var(--texto-sobre-azul);
+  --fundo-status: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  min-height: 28px;
+  gap: var(--espaco-2);
+  width: fit-content;
+  padding: var(--espaco-1) var(--espaco-3);
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: var(--fundo-status);
+  color: var(--cor-status);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.etiqueta::before,
+.status::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--raio-pilula);
+  background: currentColor;
+}
+.status--aguardando-orientador,
+.status--aguardando-coordenador {
+  --cor-status: var(--branco);
+  --fundo-status: var(--aviso);
+}
+.status--em-análise,
+.status--em-analise {
+  --cor-status: var(--branco);
+  --fundo-status: var(--aviso);
+}
+.status--aceito,
+.status--aprovado,
+.status--publicado {
+  --cor-status: var(--branco);
+  --fundo-status: var(--sucesso);
+}
+.status--recusado {
+  --cor-status: var(--branco);
+  --fundo-status: var(--erro);
+}
+
+:root[data-tema='escuro'] .status {
+  --cor-status: var(--preto);
+}

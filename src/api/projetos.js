@@ -1,3 +1,4 @@
+import { obterEnderecoRecurso } from './enderecos.js'
 import { ErroApi, requisitarApi } from './cliente.js'
 
 export const VERSAO = ''
@@ -20,16 +21,7 @@ export const TIPO_PROJETO = {
   OUTROS: 'OUTROS',
 }
 
-function obterUrlBaseProjetos() {
-  const custom = import.meta.env.VITE_API_PROJETOS_URL
-  if (custom) {
-    return custom.replace(/\/$/, '')
-  }
-  const basePortal = import.meta.env.BASE_URL || '/'
-  const baseLimpa = basePortal.endsWith('/') ? basePortal : `${basePortal}/`
-  const segmentoVersao = VERSAO ? `${VERSAO}/` : ''
-  return `${window.location.origin}${baseLimpa}api/${segmentoVersao}projetos`
-}
+const obterUrlBaseProjetos = () => obterEnderecoRecurso('projetos')
 
 export async function listarProjetosAprovados(sinal = null) {
   const url = `${obterUrlBaseProjetos()}/aprovados`
@@ -128,16 +120,7 @@ export async function enviarDocumentoProjeto(projetoId, arquivo, token = null, s
   const formData = new FormData()
   formData.append('arquivo', arquivo)
 
-  const resposta = await fetch(url, {
-    method: 'POST',
-    body: formData,
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-    signal: sinal,
-  })
-  if (!resposta.ok) {
-    throw new ErroApi('Não foi possível enviar o documento.', { status: resposta.status })
-  }
-  return resposta.json()
+  return requisitarApi(url, { metodo: 'POST', corpo: formData, token, sinal })
 }
 
 export async function listarDocumentosProjeto(projetoId, token = null, sinal = null) {
@@ -155,21 +138,12 @@ export function obterUrlDownloadDocumento(projetoId, documentoId) {
 
 export async function baixarDocumentoBlob(projetoId, documentoId, token = null, sinal = null) {
   const url = obterUrlDownloadDocumento(projetoId, documentoId)
-  const cabecalhos = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  }
-
-  const resposta = await fetch(url, {
-    method: 'GET',
-    headers: cabecalhos,
-    signal: sinal,
+  const blob = await requisitarApi(url, {
+    token,
+    sinal,
+    formatoResposta: 'blob',
+    headers: { Accept: 'application/octet-stream' },
   })
-
-  if (!resposta.ok) {
-    throw new ErroApi('Não foi possível obter o documento.', { status: resposta.status })
-  }
-
-  const blob = await resposta.blob()
   return window.URL.createObjectURL(blob)
 }
 
