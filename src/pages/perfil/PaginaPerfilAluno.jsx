@@ -33,12 +33,21 @@ export default function PaginaPerfilAluno({ idAluno }) {
         })
 
         const projReferencia = projetosDoAluno[0] || projetos[0]
-        const nomeDiscente = projReferencia?.autores || projReferencia?.autor || (String(idAluno) === '1' ? 'Carlos Eduardo Santos Vitor' : 'Lucas Ribeiro Mendes')
+        const autoresReferencia = projReferencia?.autores
+        const primeiroAutor = Array.isArray(autoresReferencia)
+          ? autoresReferencia[0]
+          : autoresReferencia || projReferencia?.autor
+        const nomeDiscente = typeof primeiroAutor === 'string'
+          ? primeiroAutor
+          : primeiroAutor?.nome || (String(idAluno) === '1' ? 'Carlos Eduardo Santos Vitor' : 'Lucas Ribeiro Mendes')
+        const emailDiscente = typeof primeiroAutor === 'object' && primeiroAutor?.email
+          ? primeiroAutor.email
+          : `${nomeDiscente.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '.').replace(/^\.|\.$/g, '')}@escolar.ifrn.edu.br`
 
         definirAluno({
           id: idAluno,
           nome: nomeDiscente,
-          email: `${nomeDiscente.toLowerCase().replace(/[^a-z0-9]/g, '.')}@escolar.ifrn.edu.br`,
+          email: emailDiscente,
           curso: projReferencia?.curso || 'TADS',
         })
 
@@ -86,13 +95,13 @@ export default function PaginaPerfilAluno({ idAluno }) {
       </nav>
 
       {/* Cartão de Identidade Discente */}
-      <header className="perfil-publico__cabecalho">
+      <header className="perfil-publico__cabecalho perfil-publico__cabecalho--discente">
         <div className="perfil-publico__avatar-discente">
           {inicial}
         </div>
         <div className="perfil-publico__identidade">
           <div className="perfil-publico__tags">
-            <span className="perfil-publico__badge-discente">Discente / Autor</span>
+            <span className="perfil-publico__badge-discente">Discente / autor</span>
             {cursoInfo && (
               <span className="perfil-publico__badge-curso">{cursoInfo.sigla || cursoInfo.acronimo || 'TADS'}</span>
             )}
@@ -107,7 +116,7 @@ export default function PaginaPerfilAluno({ idAluno }) {
         {/* Coluna Lateral: Curso de Formação */}
         <aside className="perfil-publico__sidebar">
           <div className="perfil-publico__bloco">
-            <h2>Formação Acadêmica</h2>
+            <h2>Formação acadêmica</h2>
             {cursoInfo ? (
               <div className="perfil-publico__curso-card">
                 <strong>{cursoInfo.nome}</strong>
@@ -128,7 +137,7 @@ export default function PaginaPerfilAluno({ idAluno }) {
         <section className="perfil-publico__conteudo">
           <div className="perfil-publico__cabecalho-secao">
             <div>
-              <h2>Trabalhos e Produções Publicadas ({projetosAutor.length})</h2>
+              <h2>Trabalhos e produções publicadas ({projetosAutor.length})</h2>
               <p>Produções científicas, projetos integradores e pesquisas desenvolvidas pelo estudante.</p>
             </div>
           </div>

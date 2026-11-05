@@ -3,6 +3,7 @@ import Icone from '@/shared/components/Icone.jsx'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import { listarProfessores } from '@/api/professores.js'
 import { listarCursos } from '@/api/cursos.js'
+import { listarCoordenadores } from '@/api/coordenadores.js'
 import { consultarProjetosPublicados } from '@/pages/projetos/services/consultarProjetosPublicados.js'
 import './perfil-publico.css'
 
@@ -11,6 +12,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
   const [cursosAtuacao, definirCursosAtuacao] = useState([])
   const [projetosOrientados, definirProjetosOrientados] = useState([])
   const [carregando, definirCarregando] = useState(true)
+  const [ehCoordenador, definirEhCoordenador] = useState(false)
 
   useEffect(() => {
     let ativo = true
@@ -19,10 +21,11 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
     async function carregar() {
       definirCarregando(true)
       try {
-        const [professores, cursos, projetos] = await Promise.all([
+        const [professores, cursos, projetos, coordenadores] = await Promise.all([
           listarProfessores(null, {}, controle.signal).catch(() => []),
           listarCursos(controle.signal).catch(() => []),
           consultarProjetosPublicados(controle.signal).catch(() => []),
+          listarCoordenadores(null, {}, controle.signal).catch(() => []),
         ])
 
         if (!ativo) return
@@ -34,6 +37,22 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
         definirProfessor(profEncontrado || null)
 
         if (profEncontrado) {
+          const listaCoordenadores = Array.isArray(coordenadores)
+            ? coordenadores
+            : Array.isArray(coordenadores?.coordenadores)
+              ? coordenadores.coordenadores
+              : []
+          const idsProfessor = [profEncontrado.id, profEncontrado.usuario?.id]
+            .filter((id) => id !== undefined && id !== null)
+            .map(String)
+          definirEhCoordenador(
+            listaCoordenadores.some((item) =>
+              [item.professorId, item.professor?.id, item.usuarioId, item.usuario?.id, item.id]
+                .filter((id) => id !== undefined && id !== null)
+                .some((id) => idsProfessor.includes(String(id))),
+            ),
+          )
+
           // Identifica cursos em que atua
           const cursosFiltrados = cursos.filter(
             (c) => String(c.id) === String(profEncontrado.cursoId)
@@ -98,13 +117,14 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
       </nav>
 
       {/* Cartão de Identidade Docente */}
-      <header className="perfil-publico__cabecalho">
+      <header className={`perfil-publico__cabecalho ${ehCoordenador ? 'perfil-publico__cabecalho--coordenador' : 'perfil-publico__cabecalho--docente'}`}>
         <div className="perfil-publico__avatar-docente">
           {inicial}
         </div>
         <div className="perfil-publico__identidade">
           <div className="perfil-publico__tags">
-            <span className="perfil-publico__badge-docente">Corpo Docente IFRN</span>
+            <span className="perfil-publico__badge-docente">Corpo docente IFRN</span>
+            {ehCoordenador && <span className="perfil-publico__badge-coordenador">Coordenação de curso</span>}
             {professor.titulacao && (
               <span className="perfil-publico__badge-titulacao">{professor.titulacao}</span>
             )}
@@ -119,14 +139,14 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
         {/* Coluna Lateral: Biografia e Cursos */}
         <aside className="perfil-publico__sidebar">
           <div className="perfil-publico__bloco">
-            <h2>Biografia e Áreas de Atuação</h2>
+            <h2>Biografia e áreas de atuação</h2>
             <p className="perfil-publico__descricao-bio">
               {professor.descricao || 'Docente atuante no ensino, pesquisa aplicada e orientação de trabalhos de conclusão de curso no IFRN.'}
             </p>
           </div>
 
           <div className="perfil-publico__bloco">
-            <h2>Cursos Vinculados</h2>
+            <h2>Cursos vinculados</h2>
             <ul className="perfil-publico__cursos-lista">
               {cursosAtuacao.map((curso) => (
                 <li key={curso.id}>
@@ -147,7 +167,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
         <section className="perfil-publico__conteudo">
           <div className="perfil-publico__cabecalho-secao">
             <div>
-              <h2>Produções Orientadas ({projetosOrientados.length})</h2>
+              <h2>Produções orientadas ({projetosOrientados.length})</h2>
               <p>Trabalhos de conclusão, pesquisas e projetos de extensão sob esta orientação docente.</p>
             </div>
           </div>

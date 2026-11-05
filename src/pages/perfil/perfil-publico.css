@@ -273,3 +273,232 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Detalhes públicos no mesmo sistema de cartões da matriz curricular */
+.perfil-publico__cabecalho {
+  --perfil-acento: var(--azul);
+  min-height: 0;
+  padding: 24px;
+  border: 1px solid var(--borda);
+  border-top: 3px solid var(--perfil-acento);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+  box-shadow: none;
+}
+
+.perfil-publico__cabecalho::before {
+  display: none;
+}
+
+.perfil-publico__avatar-docente,
+.perfil-publico__avatar-discente {
+  width: 72px;
+  height: 72px;
+  border: 0;
+  border-radius: 18px;
+  font-size: 26px;
+}
+
+.perfil-publico__avatar-docente {
+  background: var(--azul);
+  color: var(--texto-sobre-azul);
+}
+
+.perfil-publico__avatar-discente {
+  background: var(--marinho);
+  color: var(--branco);
+}
+
+.perfil-publico__cabecalho--discente {
+  border: 0;
+  border-top: 0;
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.perfil-publico__cabecalho--docente,
+.perfil-publico__cabecalho--coordenador {
+  border: 0;
+  background: var(--azul);
+  color: var(--branco);
+}
+
+.perfil-publico__cabecalho--docente .perfil-publico__nome,
+.perfil-publico__cabecalho--coordenador .perfil-publico__nome {
+  color: var(--branco);
+}
+
+.perfil-publico__cabecalho--docente .perfil-publico__email,
+.perfil-publico__cabecalho--coordenador .perfil-publico__email {
+  color: color-mix(in srgb, var(--branco) 82%, transparent);
+}
+
+.perfil-publico__cabecalho--docente .perfil-publico__badge-docente,
+.perfil-publico__cabecalho--docente .perfil-publico__badge-titulacao,
+.perfil-publico__cabecalho--coordenador .perfil-publico__badge-docente,
+.perfil-publico__cabecalho--coordenador .perfil-publico__badge-titulacao,
+.perfil-publico__cabecalho--coordenador .perfil-publico__badge-coordenador {
+  border-color: color-mix(in srgb, var(--branco) 40%, transparent);
+  color: var(--branco);
+}
+
+.perfil-publico__cabecalho--coordenador {
+  --perfil-acento: var(--sucesso);
+}
+
+.perfil-publico__identidade {
+  gap: 8px;
+}
+
+.perfil-publico__badge-docente,
+.perfil-publico__badge-discente,
+.perfil-publico__badge-titulacao,
+.perfil-publico__badge-curso {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 10px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-pilula);
+  background: transparent;
+  color: var(--azul);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.perfil-publico__badge-titulacao {
+  color: var(--sucesso);
+}
+
+.perfil-publico__badge-coordenador {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 10px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-pilula);
+  color: var(--sucesso);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.perfil-publico__nome {
+  max-width: 32ch;
+  color: var(--titulo);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.perfil-publico__email {
+  color: var(--texto-suave);
+  font-size: var(--texto-md);
+  overflow-wrap: anywhere;
+}
+
+.perfil-publico__grid {
+  grid-template-columns: minmax(250px, 0.75fr) minmax(0, 1.75fr);
+  gap: 20px;
+}
+
+.perfil-publico__sidebar,
+.perfil-publico__conteudo {
+  gap: 16px;
+}
+
+.perfil-publico__bloco,
+.perfil-publico__bloco-vazio,
+.perfil-publico__status-box {
+  padding: 24px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+  box-shadow: none;
+}
+
+.perfil-publico__bloco h2,
+.perfil-publico__cabecalho-secao h2 {
+  font-size: var(--texto-lg);
+  font-weight: 500;
+}
+
+.perfil-publico__descricao-bio,
+.perfil-publico__curso-card p {
+  color: var(--texto);
+  font-size: var(--texto-md);
+  line-height: 1.7;
+}
+
+.perfil-publico__cursos-lista li a {
+  padding: 12px;
+  border-color: var(--borda);
+  border-radius: var(--raio-campo);
+  background: var(--superficie);
+}
+
+.perfil-publico__cursos-lista li a:hover {
+  border-color: var(--azul);
+  box-shadow: none;
+}
+
+.perfil-publico__cabecalho-secao {
+  padding: 4px 0 14px;
+  border-bottom: 1px solid var(--borda);
+}
+
+.perfil-publico__cabecalho-secao p {
+  max-width: 68ch;
+  line-height: 1.6;
+}
+
+.perfil-publico__conteudo .lista-projetos {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: 16px;
+}
+
+.perfil-publico__conteudo .item-projeto {
+  border-radius: var(--raio-cartao);
+  box-shadow: none;
+}
+
+.perfil-publico__conteudo .item-projeto:hover {
+  border-color: var(--azul);
+  box-shadow: none;
+  transform: none;
+}
+
+.perfil-publico__conteudo .item-projeto__metadados dt {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.perfil-publico__curso-card .botao-secundario {
+  border-radius: var(--raio-botao);
+}
+
+@media (max-width: 900px) {
+  .perfil-publico__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .perfil-publico__cabecalho {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .perfil-publico__avatar-docente,
+  .perfil-publico__avatar-discente {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+
+  .perfil-publico__identidade {
+    min-width: 0;
+  }
+}

@@ -569,3 +569,285 @@
     justify-content: center;
   }
 }
+
+/* Detalhes da produção no mesmo sistema de cartões da matriz curricular */
+.pagina-detalhe-projeto {
+  gap: 24px;
+}
+
+.detalhe-projeto__hero,
+.detalhe-projeto__secao-bloco,
+.detalhe-projeto__card-sidebar,
+.detalhe-projeto__carregando,
+.detalhe-projeto__painel-erro {
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+  box-shadow: none;
+}
+
+.detalhe-projeto__hero {
+  padding: 28px 0;
+  border: 0;
+  border-bottom: 1px solid var(--borda);
+  border-radius: 0;
+  background: transparent;
+}
+
+.detalhe-projeto__topo-chips {
+  gap: 16px;
+}
+
+.detalhe-projeto__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--raio-pilula);
+  background: transparent;
+  color: var(--azul);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.detalhe-projeto__chip::before {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: var(--raio-pilula);
+  background: currentColor;
+  content: '';
+}
+
+.detalhe-projeto__chip--publicado {
+  color: var(--sucesso);
+}
+
+.detalhe-projeto__chip--analise {
+  color: var(--aviso);
+}
+
+.detalhe-projeto__chip--recusado {
+  color: var(--erro);
+}
+
+.detalhe-projeto__chip--revisao {
+  color: var(--texto-suave);
+}
+
+.detalhe-projeto__chip-curso {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-color: var(--borda);
+  border-radius: var(--raio-campo);
+  background: transparent;
+  color: var(--azul);
+}
+
+.detalhe-projeto__chip-curso:hover {
+  border-color: var(--azul);
+  background: transparent;
+}
+
+.detalhe-projeto__titulo-principal {
+  max-width: 32ch;
+  font-size: clamp(30px, 3.3vw, 42px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.detalhe-projeto__meta-hero {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--borda);
+}
+
+.detalhe-projeto__meta-item {
+  min-height: 0;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 4px 16px;
+  border: 0;
+  border-left: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+
+.detalhe-projeto__meta-item:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.detalhe-projeto__meta-rotulo {
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.detalhe-projeto__meta-dado {
+  font-size: var(--texto-sm);
+  line-height: 1.6;
+}
+
+.detalhe-projeto__grid {
+  grid-template-columns: minmax(0, 1.8fr) minmax(260px, 0.82fr);
+  gap: 16px;
+}
+
+.detalhe-projeto__coluna-principal,
+.detalhe-projeto__coluna-lateral {
+  gap: 16px;
+}
+
+.detalhe-projeto__secao-bloco,
+.detalhe-projeto__card-sidebar {
+  padding: 22px 0;
+  border: 0;
+  border-top: 1px solid var(--borda);
+  border-radius: 0;
+  background: transparent;
+}
+
+.detalhe-projeto__bloco-header .icone,
+.detalhe-projeto__bloco-header svg {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: transparent;
+  color: var(--azul);
+}
+
+.detalhe-projeto__bloco-header h2 {
+  font-size: var(--texto-lg);
+  font-weight: 500;
+}
+
+.detalhe-projeto__paragrafo {
+  max-width: 68ch;
+  font-size: var(--texto-md);
+  line-height: 1.7;
+  text-align: left;
+}
+
+.detalhe-projeto__disciplina-card,
+.detalhe-projeto__documento-item,
+.detalhe-projeto__membro-card {
+  border: 0;
+  border-top: 1px solid var(--borda);
+  border-radius: 0;
+  background: transparent;
+}
+
+.detalhe-projeto__disciplina-card {
+  padding: 14px;
+}
+
+.detalhe-projeto__documento-item {
+  padding: 14px 16px;
+}
+
+.detalhe-projeto__doc-icone-box {
+  border: 0;
+  border-radius: 8px;
+  background: var(--suave);
+  color: var(--azul);
+}
+
+.detalhe-projeto__doc-link-botao {
+  border-radius: var(--raio-botao);
+  color: var(--texto-sobre-azul);
+}
+
+.detalhe-projeto__caixa-citacao {
+  border: 0;
+  border-left: 2px solid var(--azul);
+  border-radius: 0;
+  background: transparent;
+  padding-left: 16px;
+}
+
+.detalhe-projeto__caixa-citacao code {
+  font-size: var(--texto-sm);
+  line-height: 1.6;
+}
+
+.detalhe-projeto__sidebar-titulo {
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--titulo);
+}
+
+.detalhe-projeto__membro-card:hover,
+.detalhe-projeto__documento-item:hover {
+  border-color: var(--azul);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+:root[data-tema='escuro'] .detalhe-projeto__membro-avatar--prof {
+  color: var(--preto);
+}
+
+:root[data-tema='escuro'] .detalhe-projeto__doc-icone-box {
+  color: var(--azul);
+}
+
+@media (max-width: 980px) {
+  .detalhe-projeto__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .detalhe-projeto__meta-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .detalhe-projeto__meta-item,
+  .detalhe-projeto__meta-item:first-child {
+    padding: 0;
+    border-left: 0;
+  }
+
+  .detalhe-projeto__documento-item {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .detalhe-projeto__doc-link-botao {
+    margin-left: 50px;
+  }
+}
+
+@media (max-width: 640px) {
+  .detalhe-projeto__hero {
+    padding: 22px 0;
+  }
+
+  .detalhe-projeto__secao-bloco,
+  .detalhe-projeto__card-sidebar {
+    padding: 18px 0;
+  }
+
+  .detalhe-projeto__titulo-principal {
+    font-size: clamp(28px, 8vw, 36px);
+  }
+
+  .detalhe-projeto__chip-curso {
+    width: auto;
+    margin-left: 0;
+  }
+}

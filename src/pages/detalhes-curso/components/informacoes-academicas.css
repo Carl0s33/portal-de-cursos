@@ -113,7 +113,7 @@
 
 .informacoes-academicas__secao-titulo h3 {
   font-size: var(--texto-md, 16px);
-  font-weight: 750;
+  font-weight: 500;
   color: var(--titulo);
   margin: 0;
   display: flex;
@@ -124,28 +124,39 @@
 .informacoes-academicas__secao-tag-obrigatoria {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
+  gap: 7px;
+  padding: 4px 10px;
   border-radius: var(--raio-pilula, 9999px);
   font-size: var(--texto-xs, 12px);
   font-weight: 700;
-  background: color-mix(in srgb, var(--azul) 12%, transparent);
+  background: var(--suave);
   color: var(--azul);
 }
 
 .informacoes-academicas__secao-tag-optativa {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
+  gap: 7px;
+  padding: 4px 10px;
   border-radius: var(--raio-pilula, 9999px);
   font-size: var(--texto-xs, 12px);
   font-weight: 700;
-  background: color-mix(in srgb, var(--aviso, #a8510b) 12%, transparent);
+  background: var(--suave);
   color: var(--aviso, #a8510b);
+}
+
+.informacoes-academicas__secao-tag-obrigatoria::before,
+.informacoes-academicas__secao-tag-optativa::before {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--raio-pilula);
+  background: currentColor;
+  content: '';
 }
 
 .informacoes-academicas__grade-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: var(--espaco-4, 16px);
 }
 
@@ -165,8 +176,8 @@
 
 .cartao-disciplina:hover {
   border-color: var(--azul);
-  outline: 2px solid var(--azul);
-  transform: translateY(-2px);
+  outline: 0;
+  transform: none;
 }
 
 .cartao-disciplina__topo {
@@ -184,7 +195,7 @@
   color: var(--azul);
   background: var(--suave);
   padding: 2px 8px;
-  border-radius: var(--raio-p, 6px);
+  border-radius: var(--raio-botao);
 }
 
 .cartao-disciplina__semestre {
@@ -289,4 +300,12 @@
 
 :root[data-tema='escuro'] .cartao-disciplina__rodape {
   border-color: var(--borda);
+}
+
+:root[data-tema='escuro'] .informacoes-academicas__secao-tag-obrigatoria {
+  color: var(--azul);
+}
+
+:root[data-tema='escuro'] .informacoes-academicas__secao-tag-optativa {
+  color: var(--aviso);
 }

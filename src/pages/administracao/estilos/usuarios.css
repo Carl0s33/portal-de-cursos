@@ -1,63 +1,38 @@
 .usuario-papel {
-  --cor-papel: var(--azul);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: var(--raio-pilula);
-  border: 1px solid var(--cor-papel);
-  background: var(--cor-papel);
-  color: var(--branco);
+  vertical-align: middle;
+}
+
+.tabela tbody th .usuario-identificacao__nome,
+.tabela tbody th .usuario-identificacao__email {
+  display: block;
+}
+
+.tabela tbody th .usuario-identificacao__email {
+  margin-top: 3px;
+  color: var(--texto-suave);
   font-size: var(--texto-xs);
-  font-weight: 700;
-  letter-spacing: normal;
-  line-height: 1.2;
-  white-space: nowrap;
+  font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
-.usuario-papel::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: var(--raio-pilula);
-  background: currentColor;
-  opacity: 0.85;
+.status.usuario-papel--admin {
+  --cor-status: var(--marinho);
 }
 
-.usuario-papel--admin {
-  --cor-papel: var(--marinho);
+.status.usuario-papel--coordenador {
+  --cor-status: var(--aviso);
 }
 
-.usuario-papel--coordenador {
-  --cor-papel: var(--aviso);
+.status.usuario-papel--professor {
+  --cor-status: var(--roxo);
 }
 
-.usuario-papel--professor {
-  --cor-papel: var(--roxo);
+.status.usuario-papel--aluno {
+  --cor-status: var(--sucesso);
 }
 
-.usuario-papel--aluno {
-  --cor-papel: var(--azul);
-}
-
-:root[data-tema='escuro'] .usuario-papel {
-  color: var(--preto);
-}
-
-:root[data-tema='escuro'] .usuario-papel--admin {
-  --cor-papel: var(--papel-inativo);
-}
-
-:root[data-tema='escuro'] .usuario-papel--coordenador {
-  --cor-papel: var(--aviso);
-}
-
-:root[data-tema='escuro'] .usuario-papel--professor {
-  --cor-papel: var(--roxo);
-}
-
-:root[data-tema='escuro'] .usuario-papel--aluno {
-  --cor-papel: var(--azul);
+:root[data-tema='escuro'] .status.usuario-papel--admin {
+  --cor-status: var(--papel-inativo);
 }
 
 .usuario-acesso {

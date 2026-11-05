@@ -146,7 +146,7 @@ export default function PaginaAcesso({
             <div className="acesso-login__topo">
               <div className="acesso-login__marca">
                 <span className="acesso-login__logo">
-                  <Icone nome="formacao-cursos" />
+                  <img src={logoPortal} alt="" width="30" height="30" />
                 </span>
                 <div className="acesso-login__marca-textos">
                   <strong>Portal de Cursos</strong>

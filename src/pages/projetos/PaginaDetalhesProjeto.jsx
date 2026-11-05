@@ -7,21 +7,21 @@ import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'
 import './detalhes-projeto.css'
 
 const ROTULOS_TIPO = {
-  TCC: 'Trabalho de Conclusão de Curso (TCC)',
-  PROJETO_INTEGRADOR: 'Projeto Integrador',
-  PROJETO_PESQUISA: 'Iniciação Científica e Pesquisa',
-  PROJETO_EXTENSAO: 'Extensão Comunitária',
-  OUTROS: 'Produção Acadêmica',
+  TCC: 'Trabalho de conclusão de curso (TCC)',
+  PROJETO_INTEGRADOR: 'Projeto integrador',
+  PROJETO_PESQUISA: 'Iniciação científica e pesquisa',
+  PROJETO_EXTENSAO: 'Extensão comunitária',
+  OUTROS: 'Produção acadêmica',
 }
 
 const ROTULOS_STATUS = {
-  PUBLICADO: 'Produção Publicada',
-  APROVADO: 'Aprovado para Publicação',
-  EM_ANALISE: 'Em Análise Inicial',
-  ANALISE_PUBLICACAO: 'Em Análise da Coordenação',
-  REVISAO: 'Em Revisão',
-  RECUSADO: 'Submissão Recusada',
-  RECUSADO_PUBLICACAO: 'Publicação Recusada',
+  PUBLICADO: 'Produção publicada',
+  APROVADO: 'Aprovado para publicação',
+  EM_ANALISE: 'Em análise inicial',
+  ANALISE_PUBLICACAO: 'Em análise da coordenação',
+  REVISAO: 'Em revisão',
+  RECUSADO: 'Submissão recusada',
+  RECUSADO_PUBLICACAO: 'Publicação recusada',
 }
 
 const MODIFICADOR_STATUS = {
@@ -231,7 +231,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
         <div className="detalhe-projeto__meta-hero">
           {projeto.dataInicio && (
             <div className="detalhe-projeto__meta-item">
-              <span className="detalhe-projeto__meta-rotulo">Período de Realização</span>
+              <span className="detalhe-projeto__meta-rotulo">Período de realização</span>
               <span className="detalhe-projeto__meta-dado">
                 {formatarData(projeto.dataInicio)}
                 {projeto.dataFim ? ` até ${formatarData(projeto.dataFim)}` : ''}
@@ -239,7 +239,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
             </div>
           )}
           <div className="detalhe-projeto__meta-item">
-            <span className="detalhe-projeto__meta-rotulo">Área / Curso</span>
+            <span className="detalhe-projeto__meta-rotulo">Área / curso</span>
             <span className="detalhe-projeto__meta-dado">
               <a
                 className="detalhe-projeto__meta-dado-link"
@@ -266,7 +266,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
             <section className="detalhe-projeto__secao-bloco" aria-labelledby="rotulo-resumo">
               <div className="detalhe-projeto__bloco-header">
                 <Icone nome="grau-detalhe" />
-                <h2 id="rotulo-resumo">Resumo da Produção</h2>
+              <h2 id="rotulo-resumo">Resumo da produção</h2>
               </div>
               <p className="detalhe-projeto__paragrafo">{resumo}</p>
             </section>
@@ -277,7 +277,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
             <section className="detalhe-projeto__secao-bloco" aria-labelledby="rotulo-detalhes">
               <div className="detalhe-projeto__bloco-header">
                 <Icone nome="laboratorio" />
-                <h2 id="rotulo-detalhes">Detalhamento e Aplicação Prática</h2>
+              <h2 id="rotulo-detalhes">Detalhamento e aplicação prática</h2>
               </div>
               <p className="detalhe-projeto__paragrafo">{descricao}</p>
             </section>
@@ -288,7 +288,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
             <section className="detalhe-projeto__secao-bloco" aria-labelledby="rotulo-disciplinas">
               <div className="detalhe-projeto__bloco-header">
                 <Icone nome="matriz-detalhe" />
-                <h2 id="rotulo-disciplinas">Componentes Curriculares Vinculados</h2>
+                <h2 id="rotulo-disciplinas">Componentes curriculares vinculados</h2>
               </div>
               <p className="detalhe-projeto__subtexto-secao">
                 Conhecimentos acadêmicos articulados durante o desenvolvimento deste trabalho:
@@ -308,7 +308,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
           <section className="detalhe-projeto__secao-bloco" aria-labelledby="rotulo-documentos">
             <div className="detalhe-projeto__bloco-header">
               <Icone nome="biblioteca-detalhe" />
-              <h2 id="rotulo-documentos">Acervo e Documentação Técnica</h2>
+              <h2 id="rotulo-documentos">Acervo e documentação técnica</h2>
             </div>
             {documentos.length > 0 ? (
               <ul className="detalhe-projeto__documentos-lista">
@@ -337,7 +337,6 @@ export default function PaginaDetalhesProjeto({ identificador }) {
                         rel="noopener noreferrer"
                       >
                         <span>{ehLinkExterno ? 'Acessar no Repositório' : 'Visualizar PDF'}</span>
-                        <Icone nome="seta-cursos" />
                       </a>
                     </li>
                   )
@@ -354,7 +353,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
           <section className="detalhe-projeto__secao-bloco detalhe-projeto__secao-citacao">
             <div className="detalhe-projeto__bloco-header">
               <Icone nome="docentes-detalhe" />
-              <h2>Como Citar Esta Produção (ABNT)</h2>
+              <h2>Como citar esta produção (ABNT)</h2>
             </div>
             <div className="detalhe-projeto__caixa-citacao">
               <code>{citacaoABNT}</code>
@@ -374,7 +373,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
         <aside className="detalhe-projeto__coluna-lateral" aria-label="Equipe e Informações do Projeto">
           {/* Card: Orientação Docente */}
           <div className="detalhe-projeto__card-sidebar">
-            <h3 className="detalhe-projeto__sidebar-titulo">Orientação Docente</h3>
+            <h3 className="detalhe-projeto__sidebar-titulo">Orientação docente</h3>
             {orientadorInfo ? (
               <a
                 className="detalhe-projeto__membro-card"
@@ -406,7 +405,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
           {/* Card: Autores Discentes */}
           <div className="detalhe-projeto__card-sidebar">
             <h3 className="detalhe-projeto__sidebar-titulo">
-              Equipe Discente ({autores.length})
+              Equipe discente ({autores.length})
             </h3>
             <div className="detalhe-projeto__autores-lista">
               {autores.map((autor, idx) => {

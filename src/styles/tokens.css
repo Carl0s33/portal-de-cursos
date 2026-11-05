@@ -3,6 +3,8 @@
   --raio-botao: 10px;
   --raio-campo: 12px;
   --raio-cartao: 16px;
+  --raio-pilula: 9999px;
+  --raio-destaque: 16px;
   --espaco-1: 4px;
   --espaco-2: 8px;
   --espaco-3: 12px;
@@ -39,11 +41,11 @@
   --azul: #003da8;
   --azul-vivo: #1559ff;
   --azul-escuro: #003b8f;
-  --azul-suave: #eaf0ff;
+  --azul-suave: #dce7ff;
   --marinho: #0b1f36;
   --verde: #18704a;
   --roxo: #5b2db8;
-  --roxo-suave: #efe7ff;
+  --roxo-suave: #e6ddff;
 
   /* Chips de tipos de projetos */
   --chip-tcc: #003da8;
@@ -54,19 +56,19 @@
   --selo-coordenador-texto: #003da8;
 
   /* Superfícies e neutros */
-  --fundo: #f7f8fc;
+  --fundo: #f2f4f7;
   --superficie: #ffffff;
-  --suave: #e8edf8;
-  --etiqueta: #d8e2fb;
-  --titulo: #00050e;
-  --texto: #334155;
-  --texto-suave: #5f6b7d;
-  --borda: #c6cfdd;
-  --borda-suave: #dfe5ef;
+  --suave: #e4e8ee;
+  --etiqueta: #d8dee8;
+  --titulo: #101722;
+  --texto: #263241;
+  --texto-suave: #4b596a;
+  --borda: #aeb8c7;
+  --borda-suave: #d2d9e3;
   --cabecalho: rgba(255, 255, 255, 0.95);
   --cabecalho-altura: 64px;
-  --sombra: 0 1px 2px #0000000d;
-  --sombra-elevada: 0 8px 24px color-mix(in srgb, var(--azul) 12%, transparent);
+  --sombra: none;
+  --sombra-elevada: none;
 
   /* Estados e feedback */
   --erro: #b42318;
@@ -102,8 +104,8 @@
   --borda: #292929;
   --borda-suave: #26282d;
   --cabecalho: rgba(0, 0, 0, 0.95);
-  --sombra: 0 0 0 1px var(--borda);
-  --sombra-elevada: 0 0 0 1px var(--azul);
+  --sombra: none;
+  --sombra-elevada: none;
 
   --chip-tcc: #8fb1ff;
   --chip-extensao: #ffc14d;

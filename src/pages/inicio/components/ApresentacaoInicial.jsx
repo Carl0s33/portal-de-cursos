@@ -1,4 +1,3 @@
-import laboratorio from '@/assets/imagens/laboratorio-formacao.png'
 import { useEffect, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import './apresentacao-inicial.css'
@@ -40,15 +39,15 @@ export default function ApresentacaoInicial() {
             Conhecer os projetos
           </a>
         </div>
-        <dl className="hero-inicial__numeros">
-          <div>
-            <dd>{estado === 'pronto' ? cursos.length : '—'}</dd>
-            <dt>
-              {estado === 'indisponivel' ? 'cursos indisponíveis agora' : 'cursos cadastrados'}
-            </dt>
-          </div>
-        </dl>
       </div>
+      <dl className="hero-inicial__numeros" aria-live="polite">
+        <div>
+          <dd>{estado === 'pronto' ? cursos.length : '—'}</dd>
+          <dt>
+            {estado === 'indisponivel' ? 'cursos indisponíveis agora' : 'cursos cadastrados'}
+          </dt>
+        </div>
+      </dl>
     </section>
   )
 }

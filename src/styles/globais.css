@@ -262,17 +262,22 @@ a:hover {
 }
 
 .etiqueta {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
   background: var(--superficie);
   color: var(--azul);
-  border-radius: 4px;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 600;
-  padding: 3px 10px;
+  border: 1px solid var(--azul);
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-xs);
+  line-height: 1.2;
+  font-weight: 700;
+  padding: 5px 12px;
 }
 
 .etiqueta--neutra {
+  background: var(--suave);
+  border-color: var(--borda);
   color: var(--texto);
   font-weight: 500;
 }
@@ -287,7 +292,7 @@ a:hover {
   background: var(--superficie);
   padding: 12px;
   border: 2px solid var(--azul);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
 }
 
 .pular-conteudo:focus {  top: 12px;  opacity: 1;  pointer-events: auto;

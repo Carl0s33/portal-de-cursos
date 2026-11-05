@@ -130,3 +130,131 @@
   background: #11141a;
   border-color: var(--borda);
 }
+
+.visao-curso {
+  gap: 16px;
+}
+
+.visao-curso__apresentacao > div:first-child {
+  max-width: 68ch;
+}
+
+.visao-curso__apresentacao h2 {
+  margin: 8px 0 10px;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.visao-curso .visao-curso__rotulo {
+  display: block;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto-suave);
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  letter-spacing: normal;
+}
+
+.visao-curso__apresentacao p:not(.visao-curso__rotulo) {
+  max-width: 68ch;
+  margin: 0;
+  font-size: var(--texto-md);
+  line-height: 1.7;
+}
+
+.visao-curso__numeros {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 8px 0 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--borda);
+  border-bottom: 1px solid var(--borda);
+  background: transparent;
+}
+
+.visao-curso__numeros > div {
+  min-width: 0;
+  min-height: 88px;
+  flex-direction: column-reverse;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 0;
+  border-left: 1px solid var(--borda);
+  border-radius: 0;
+  background: transparent;
+}
+
+.visao-curso__numeros > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.visao-curso__numeros dt {
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.visao-curso__numeros dd {
+  overflow-wrap: anywhere;
+  font-size: var(--texto-md);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.visao-curso__coordenador-bloco .detalhe-projeto__perfil-item {
+  min-height: 72px;
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+  box-shadow: none;
+}
+
+.visao-curso__coordenador-bloco .detalhe-projeto__perfil-item:hover {
+  border-color: var(--azul);
+  outline: 0;
+  background: var(--superficie);
+  box-shadow: none;
+}
+
+:root[data-tema='escuro'] .visao-curso__numeros > div {
+  background: var(--superficie);
+}
+
+@media (max-width: 760px) {
+  .visao-curso__numeros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .visao-curso__numeros > div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .visao-curso__numeros > div:nth-child(even) {
+    border-left: 1px solid var(--borda);
+  }
+}
+
+@media (max-width: 420px) {
+  .visao-curso__numeros {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .visao-curso__numeros > div,
+  .visao-curso__numeros > div:first-child,
+  .visao-curso__numeros > div:nth-child(odd),
+  .visao-curso__numeros > div:nth-child(even) {
+    padding: 12px 0;
+    border-left: 0;
+    border-top: 1px solid var(--borda);
+  }
+
+  .visao-curso__numeros > div:first-child {
+    border-top: 0;
+  }
+}

@@ -23,8 +23,9 @@
 .bloco-detalhe {
   background: var(--superficie);
   padding: 28px;
-  border-radius: var(--raio-campo);
-
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  box-shadow: none;
   min-width: 0;
 }
 .pagina-detalhe-curso .icone {
