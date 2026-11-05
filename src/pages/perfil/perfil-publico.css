@@ -278,9 +278,9 @@
 .perfil-publico__cabecalho {
   min-height: 0;
   padding: clamp(24px, 4vw, 36px);
-  border: 0;
-  border-radius: var(--raio-cartao);
-  background: linear-gradient(118deg, var(--azul-perfil-inicio) 0%, var(--azul-perfil-meio) 58%, var(--azul-perfil-fim) 100%);
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  background: var(--superficie);
   box-shadow: none;
 }
 
@@ -299,12 +299,12 @@
 }
 
 .perfil-publico__avatar-docente {
-  background: color-mix(in srgb, var(--branco) 14%, transparent);
-  color: var(--texto-sobre-azul);
+  background: var(--roxo);
+  color: var(--branco);
 }
 
 .perfil-publico__avatar-discente {
-  background: color-mix(in srgb, var(--branco) 14%, transparent);
+  background: var(--sucesso);
   color: var(--branco);
 }
 
@@ -348,20 +348,37 @@
 }
 
 .perfil-publico__cabecalho--coordenador .perfil-publico__avatar-docente {
-  background: color-mix(in srgb, var(--sucesso) 82%, transparent);
+  background: var(--aviso);
   color: var(--branco);
 }
 
-.perfil-publico__cabecalho--discente .perfil-publico__nome,
-.perfil-publico__cabecalho--docente .perfil-publico__nome,
-.perfil-publico__cabecalho--coordenador .perfil-publico__nome {
+:root[data-tema='escuro'] .perfil-publico__avatar-docente,
+:root[data-tema='escuro'] .perfil-publico__avatar-discente {
+  color: var(--preto);
+}
+
+.perfil-publico__cabecalho--discente .perfil-publico__badge-discente {
+  border-color: var(--sucesso);
+  background: var(--sucesso);
   color: var(--branco);
 }
 
-.perfil-publico__cabecalho--discente .perfil-publico__email,
-.perfil-publico__cabecalho--docente .perfil-publico__email,
-.perfil-publico__cabecalho--coordenador .perfil-publico__email {
-  color: color-mix(in srgb, var(--branco) 82%, transparent);
+.perfil-publico__cabecalho--docente .perfil-publico__badge-docente {
+  border-color: var(--roxo);
+  background: var(--roxo);
+  color: var(--branco);
+}
+
+.perfil-publico__cabecalho--coordenador .perfil-publico__badge-coordenador {
+  border-color: var(--aviso);
+  background: var(--aviso);
+  color: var(--branco);
+}
+
+:root[data-tema='escuro'] .perfil-publico__cabecalho--discente .perfil-publico__badge-discente,
+:root[data-tema='escuro'] .perfil-publico__cabecalho--docente .perfil-publico__badge-docente,
+:root[data-tema='escuro'] .perfil-publico__cabecalho--coordenador .perfil-publico__badge-coordenador {
+  color: var(--preto);
 }
 
 .perfil-publico__cabecalho--discente .perfil-publico__badge-discente,
@@ -371,9 +388,9 @@
 .perfil-publico__cabecalho--coordenador .perfil-publico__badge-docente,
 .perfil-publico__cabecalho--coordenador .perfil-publico__badge-titulacao,
 .perfil-publico__cabecalho--coordenador .perfil-publico__badge-coordenador {
-  border-color: color-mix(in srgb, var(--branco) 38%, transparent);
-  background: color-mix(in srgb, var(--branco) 12%, transparent);
-  color: var(--branco);
+  border-color: var(--borda);
+  background: var(--suave);
+  color: var(--azul);
 }
 
 .perfil-publico__badge-coordenador {

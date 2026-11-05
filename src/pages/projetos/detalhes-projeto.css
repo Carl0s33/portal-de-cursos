@@ -587,11 +587,10 @@
 }
 
 .detalhe-projeto__hero {
-  padding: 28px 0;
-  border: 0;
-  border-bottom: 1px solid var(--borda);
-  border-radius: 0;
-  background: transparent;
+  padding: clamp(24px, 4vw, 36px);
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  background: var(--superficie);
 }
 
 .detalhe-projeto__topo-chips {
@@ -834,7 +833,7 @@
 
 @media (max-width: 640px) {
   .detalhe-projeto__hero {
-    padding: 22px 0;
+    padding: 22px;
   }
 
   .detalhe-projeto__secao-bloco,

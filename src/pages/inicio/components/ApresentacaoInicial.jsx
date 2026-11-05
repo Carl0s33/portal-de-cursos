@@ -1,25 +1,7 @@
-import { useEffect, useState } from 'react'
-import { listarCursos } from '@/api/cursos.js'
+import Icone from '@/shared/components/Icone.jsx'
 import './apresentacao-inicial.css'
 
 export default function ApresentacaoInicial() {
-  const [cursos, definirCursos] = useState([])
-  const [estado, definirEstado] = useState('carregando')
-
-  useEffect(() => {
-    const controller = new AbortController()
-    listarCursos(controller.signal)
-      .then((registros) => {
-        if (controller.signal.aborted) return
-        definirCursos(registros)
-        definirEstado('pronto')
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) definirEstado('indisponivel')
-      })
-    return () => controller.abort()
-  }, [])
-
   return (
     <section id="inicio" className="hero-inicial hero-inicial--sem-imagem" aria-labelledby="titulo-inicial">
       <div className="hero-inicial__texto">
@@ -28,8 +10,7 @@ export default function ApresentacaoInicial() {
           <br />à criação.
         </h1>
         <p className="hero-inicial__descricao">
-          Conheça as formações oferecidas, consulte as matérias e acompanhe os trabalhos acadêmicos
-          desenvolvidos pelos estudantes.
+          Da escolha do curso ao projeto publicado, conheça as formações e o que a comunidade acadêmica produz.
         </p>
         <div className="hero-inicial__acoes">
           <a className="botao-primario" href="#cursos">
@@ -40,14 +21,37 @@ export default function ApresentacaoInicial() {
           </a>
         </div>
       </div>
-      <dl className="hero-inicial__numeros" aria-live="polite">
-        <div>
-          <dd>{estado === 'pronto' ? cursos.length : '—'}</dd>
-          <dt>
-            {estado === 'indisponivel' ? 'cursos indisponíveis agora' : 'cursos cadastrados'}
-          </dt>
-        </div>
-      </dl>
+      <nav className="hero-inicial__navegacao" aria-label="Explore o portal">
+        <ul>
+          <li>
+            <a href="#cursos">
+              <Icone nome="catalogo-cursos" />
+              <span>
+                <strong>Formações</strong>
+                <small>Cursos, duração e modalidade</small>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#cursos">
+              <Icone nome="grade-detalhe" />
+              <span>
+                <strong>Matrizes curriculares</strong>
+                <small>Disciplinas e percurso formativo</small>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#projetos">
+              <Icone nome="laboratorio" />
+              <span>
+                <strong>Projetos acadêmicos</strong>
+                <small>Pesquisas e trabalhos publicados</small>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </section>
   )
 }

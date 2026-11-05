@@ -179,7 +179,7 @@ export default function Cabecalho({
 
   const linkPerfil = (
     <a
-      className="cabecalho__perfil"
+      className={`cabecalho__perfil${tipoUsuario ? ` cabecalho__perfil--${tipoUsuario.toLowerCase()}` : ''}`}
       href={enderecoPrivado(destinoPerfil)}
       aria-label="Meu perfil"
       title={

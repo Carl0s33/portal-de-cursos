@@ -9,9 +9,9 @@
   align-items: center;
   gap: 16px;
   padding: clamp(28px, 5vw, 48px);
-  border: 0;
-  border-radius: var(--raio-cartao);
-  background: linear-gradient(118deg, var(--azul-perfil-inicio) 0%, var(--azul-perfil-meio) 58%, var(--azul-perfil-fim) 100%);
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  background: var(--superficie);
 }
 
 .resumo-curso__identidade > div:first-child {
@@ -20,17 +20,17 @@
 
 .resumo-curso__identidade .etiqueta {
   min-height: 28px;
-  border: 1px solid color-mix(in srgb, var(--branco) 38%, transparent);
+  border: 1px solid var(--borda);
   border-radius: var(--raio-pilula);
-  background: color-mix(in srgb, var(--branco) 12%, transparent);
-  color: var(--branco);
+  background: var(--suave);
+  color: var(--azul);
   font-size: var(--texto-xs);
 }
 
 .resumo-curso__identidade h1 {
   max-width: 24ch;
   margin: 16px 0 12px;
-  color: var(--branco);
+  color: var(--titulo);
   font-family: var(--fonte-titulo);
   font-size: clamp(34px, 5vw, 56px);
   font-weight: 500;
@@ -41,7 +41,7 @@
 .resumo-curso__identidade > div > p {
   max-width: 62ch;
   margin: 0;
-  color: color-mix(in srgb, var(--branco) 84%, transparent);
+  color: var(--texto);
   font-size: var(--texto-md);
   line-height: 1.7;
 }
