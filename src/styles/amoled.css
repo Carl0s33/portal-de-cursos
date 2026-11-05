@@ -1,0 +1,40 @@
+/* Bordas reforçadas apenas no conteúdo: o header mantém o desenho existente. */
+:root[data-tema='escuro']
+  main
+  :is(
+    .cartao,
+    .painel,
+    .painel-secao,
+    .campo,
+    .gestao-formulario,
+    .perfil-formulario,
+    .formulario-submissao,
+    .pagina-professor__filtro-painel,
+    .submissao-feed,
+    .pagina-detalhes-submissao__principal,
+    .pagina-detalhes-submissao__lateral,
+    .estado-erro
+  ) {
+  border-width: 2px;
+  border-color: var(--borda);
+}
+:root[data-tema='escuro'] :is(.acesso-login, .cadastro-aluno) .layout-autenticacao {
+  border-width: 2px;
+  border-color: var(--borda);
+}
+:root[data-tema='escuro']
+  main
+  :is(input, select, textarea):not([type='checkbox']):not([type='radio']) {
+  border-width: 2px;
+}
+:root[data-tema='escuro'] .tabela thead th {
+  background: var(--suave);
+  border-bottom-width: 2px;
+}
+:root[data-tema='escuro'] .tabela tbody :is(th, td) {
+  border-color: var(--borda);
+}
+.tabela td:has(> .status) {
+  text-align: center;
+  vertical-align: middle;
+}
