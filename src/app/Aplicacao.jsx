@@ -674,14 +674,18 @@ export default function Aplicacao() {
             ? 'administracao/painel'
             : sessao?.tipoUsuario === 'COORDENADOR'
               ? 'coordenacao/painel'
-              : 'professor/feed'
+              : sessao?.tipoUsuario === 'ALUNO'
+                ? 'aluno/painel'
+                : 'professor/feed'
         }
         destinoPerfil={
           sessao?.tipoUsuario === 'ADMIN'
             ? 'administracao/perfil'
             : sessao?.tipoUsuario === 'COORDENADOR'
               ? 'coordenacao/perfil'
-              : 'professor/perfil'
+              : sessao?.tipoUsuario === 'ALUNO'
+                ? `aluno/${sessao.usuario.alunoId || sessao.usuario.id}`
+                : 'professor/perfil'
         }
         tipoUsuario={sessao?.tipoUsuario}
         usuario={sessao?.usuario}

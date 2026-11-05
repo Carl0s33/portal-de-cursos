@@ -2,138 +2,6 @@
   display: grid;
   gap: 24px;
 }
-.visao-curso__apresentacao h2 {
-  font-size: var(--texto-xl);
-  line-height: 38px;
-  letter-spacing: -0.6px;
-  margin: 14px 0;
-}
-.visao-curso__apresentacao p:not(.visao-curso__rotulo) {
-  font-size: var(--texto-sm);
-  line-height: 24px;
-  margin: 12px 0;
-}
-.visao-curso .visao-curso__rotulo {
-  color: var(--azul);
-
-  letter-spacing: 1px;
-  font-size: var(--texto-xs);
-  font-family: monospace;
-  margin: 0;
-}
-.visao-curso__numeros {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  padding: 16px;
-  margin: 24px 0 0;
-  border-radius: var(--raio-botao);
-  background: var(--suave);
-}
-.visao-curso__numeros > div {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 4px;
-}
-.visao-curso__numeros dt {
-  font-size: var(--texto-xs);
-}
-.visao-curso__numeros dd {
-  margin: 0;
-  font-size: var(--texto-lg);
-  color: var(--titulo);
-  font-weight: 700;
-}
-@media (max-width: 760px) {
-  .visao-curso__apresentacao h2 {
-    font-size: var(--texto-lg);
-    line-height: 32px;
-  }
-  .visao-curso__numeros {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding: 12px;
-  }
-  .visao-curso__numeros dd {
-    font-size: var(--texto-md);
-  }
-}
-
-.visao-curso__coordenador-bloco {
-  margin-top: var(--espaco-5, 24px);
-  display: flex;
-  flex-direction: column;
-  gap: var(--espaco-3, 12px);
-}
-
-.visao-curso__coordenador-bloco h3 {
-  font-size: var(--texto-md, 16px);
-  font-weight: 700;
-  color: var(--titulo);
-  margin: 0;
-}
-
-.visao-curso__coordenador-bloco .detalhe-projeto__perfil-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--raio-botao, 10px);
-  background: var(--fundo);
-  border: 1px solid var(--borda);
-  text-decoration: none;
-  color: inherit;
-  transition:
-    border-color var(--transicao, 150ms ease),
-    background-color var(--transicao, 150ms ease),
-    outline var(--transicao, 150ms ease);
-}
-
-.visao-curso__coordenador-bloco .detalhe-projeto__perfil-item:hover {
-  border-color: var(--azul);
-  outline: 2px solid var(--azul);
-  background: var(--suave);
-}
-
-.visao-curso__coordenador-bloco .detalhe-projeto__avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: var(--raio-pilula, 9999px);
-  background: var(--suave);
-  color: var(--azul);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: var(--texto-sm, 14px);
-  flex-shrink: 0;
-}
-
-.visao-curso__coordenador-bloco .detalhe-projeto__perfil-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-}
-
-.visao-curso__coordenador-bloco .detalhe-projeto__perfil-info strong {
-  font-size: var(--texto-sm, 14px);
-  color: var(--titulo);
-}
-
-.visao-curso__coordenador-bloco .detalhe-projeto__perfil-info small {
-  font-size: var(--texto-xs, 12px);
-  color: var(--texto-suave);
-}
-
-:root[data-tema='escuro'] .visao-curso__coordenador-bloco .detalhe-projeto__perfil-item {
-  background: #11141a;
-  border-color: var(--borda);
-}
-
-.visao-curso {
-  gap: 16px;
-}
 
 .visao-curso__apresentacao > div:first-child {
   max-width: 68ch;
@@ -141,120 +9,93 @@
 
 .visao-curso__apresentacao h2 {
   margin: 8px 0 10px;
+  color: var(--titulo);
+  font-family: var(--fonte-titulo);
   font-size: clamp(26px, 3vw, 34px);
   font-weight: 500;
   line-height: 1.2;
 }
 
 .visao-curso .visao-curso__rotulo {
-  display: block;
-  min-height: 0;
   margin: 0;
-  padding: 0;
-  border-radius: 0;
-  background: transparent;
   color: var(--texto-suave);
-  font-family: var(--fonte-corpo);
   font-size: var(--texto-sm);
   font-weight: 600;
-  letter-spacing: normal;
 }
 
 .visao-curso__apresentacao p:not(.visao-curso__rotulo) {
   max-width: 68ch;
   margin: 0;
+  color: var(--texto);
   font-size: var(--texto-md);
   line-height: 1.7;
 }
 
-.visao-curso__numeros {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-  margin: 8px 0 0;
-  padding: 16px 0;
-  border-top: 1px solid var(--borda);
-  border-bottom: 1px solid var(--borda);
-  background: transparent;
+.visao-curso__coordenador-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
 }
 
-.visao-curso__numeros > div {
-  min-width: 0;
-  min-height: 88px;
-  flex-direction: column-reverse;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border: 0;
-  border-left: 1px solid var(--borda);
-  border-radius: 0;
-  background: transparent;
-}
-
-.visao-curso__numeros > div:first-child {
-  padding-left: 0;
-  border-left: 0;
-}
-
-.visao-curso__numeros dt {
-  color: var(--texto-suave);
-  font-weight: 600;
-}
-
-.visao-curso__numeros dd {
-  overflow-wrap: anywhere;
+.visao-curso__coordenador-bloco h3 {
+  margin: 0;
+  color: var(--titulo);
   font-size: var(--texto-md);
-  font-weight: 600;
-  line-height: 1.4;
+  font-weight: 650;
 }
 
 .visao-curso__coordenador-bloco .detalhe-projeto__perfil-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   min-height: 72px;
+  padding: 12px 16px;
+  border: 1px solid var(--borda);
   border-radius: var(--raio-cartao);
   background: var(--superficie);
-  box-shadow: none;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 150ms ease;
 }
 
 .visao-curso__coordenador-bloco .detalhe-projeto__perfil-item:hover {
   border-color: var(--azul);
-  outline: 0;
-  background: var(--superficie);
-  box-shadow: none;
 }
 
-:root[data-tema='escuro'] .visao-curso__numeros > div {
-  background: var(--superficie);
+.visao-curso__coordenador-bloco .detalhe-projeto__avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--suave);
+  color: var(--azul);
+  font-size: var(--texto-sm);
+  font-weight: 700;
 }
 
-@media (max-width: 760px) {
-  .visao-curso__numeros {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .visao-curso__numeros > div:nth-child(odd) {
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .visao-curso__numeros > div:nth-child(even) {
-    border-left: 1px solid var(--borda);
-  }
+.visao-curso__coordenador-bloco .detalhe-projeto__perfil-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
 }
 
-@media (max-width: 420px) {
-  .visao-curso__numeros {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.visao-curso__coordenador-bloco .detalhe-projeto__perfil-info strong {
+  color: var(--titulo);
+  font-size: var(--texto-sm);
+}
 
-  .visao-curso__numeros > div,
-  .visao-curso__numeros > div:first-child,
-  .visao-curso__numeros > div:nth-child(odd),
-  .visao-curso__numeros > div:nth-child(even) {
-    padding: 12px 0;
-    border-left: 0;
-    border-top: 1px solid var(--borda);
-  }
+.visao-curso__coordenador-bloco .detalhe-projeto__perfil-info small {
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+}
 
-  .visao-curso__numeros > div:first-child {
-    border-top: 0;
+@media (prefers-reduced-motion: reduce) {
+  .visao-curso__coordenador-bloco .detalhe-projeto__perfil-item {
+    transition: none;
   }
 }

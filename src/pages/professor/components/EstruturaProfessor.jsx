@@ -28,7 +28,7 @@ export default function EstruturaProfessor({
     : coordenador
       ? 'coordenacao/perfil'
       : aluno
-        ? 'aluno/painel'
+        ? `aluno/${usuario?.alunoId || usuario?.id || ''}`
         : 'professor/perfil'
   return (
     <div
@@ -38,7 +38,20 @@ export default function EstruturaProfessor({
         <Cabecalho
           areaProfessor
           autenticado
-          pagina={perfilAtivo ? 'perfil' : 'professor'}
+          pagina={
+            perfilAtivo
+              ? 'perfil'
+              : administrador
+                ? 'administracao'
+                : coordenador
+                  ? 'coordenacao'
+                  : aluno
+                    ? 'aluno-painel'
+                    : 'professor'
+          }
+          tipoUsuario={
+            administrador ? 'ADMIN' : coordenador ? 'COORDENADOR' : aluno ? 'ALUNO' : 'PROFESSOR'
+          }
           usuario={usuario}
           tema={tema}
           alternarTema={alternarTema}

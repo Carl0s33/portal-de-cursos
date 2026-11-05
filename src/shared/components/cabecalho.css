@@ -374,6 +374,10 @@
     display: none;
   }
 
+  .cabecalho--acesso .cabecalho__portal {
+    display: inline-flex;
+  }
+
   /* Menu aberto: painel abaixo da barra */
   .cabecalho .navegacao {
     position: absolute;

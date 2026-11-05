@@ -40,25 +40,6 @@ export default function VisaoGeral({ curso }) {
         <p>{curso.descricao}</p>
       </div>
 
-      <dl className="visao-curso__numeros">
-        <div>
-          <dt>Campus</dt>
-          <dd>{curso.campus || 'A informar'}</dd>
-        </div>
-        <div>
-          <dt>Área de conhecimento</dt>
-          <dd>{curso.area || 'A informar'}</dd>
-        </div>
-        <div>
-          <dt>Carga horária</dt>
-          <dd>{curso.cargaHoraria || 'A informar'}</dd>
-        </div>
-        <div>
-          <dt>Disciplinas na matriz</dt>
-          <dd>{curso.componentes || 'A informar'}</dd>
-        </div>
-      </dl>
-
       {coordenador && (
         <div className="visao-curso__coordenador-bloco">
           <h3>Coordenação do curso</h3>

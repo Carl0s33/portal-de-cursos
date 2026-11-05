@@ -708,11 +708,10 @@
 
 .detalhe-projeto__secao-bloco,
 .detalhe-projeto__card-sidebar {
-  padding: 22px 0;
-  border: 0;
-  border-top: 1px solid var(--borda);
-  border-radius: 0;
-  background: transparent;
+  padding: 22px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
 }
 
 .detalhe-projeto__bloco-header .icone,
@@ -740,10 +739,9 @@
 .detalhe-projeto__disciplina-card,
 .detalhe-projeto__documento-item,
 .detalhe-projeto__membro-card {
-  border: 0;
-  border-top: 1px solid var(--borda);
-  border-radius: 0;
-  background: transparent;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--suave);
 }
 
 .detalhe-projeto__disciplina-card {
@@ -755,9 +753,9 @@
 }
 
 .detalhe-projeto__doc-icone-box {
-  border: 0;
-  border-radius: 8px;
-  background: var(--suave);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-botao);
+  background: var(--superficie);
   color: var(--azul);
 }
 
@@ -767,11 +765,9 @@
 }
 
 .detalhe-projeto__caixa-citacao {
-  border: 0;
-  border-left: 2px solid var(--azul);
-  border-radius: 0;
-  background: transparent;
-  padding-left: 16px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--suave);
 }
 
 .detalhe-projeto__caixa-citacao code {
@@ -790,9 +786,7 @@
 .detalhe-projeto__membro-card:hover,
 .detalhe-projeto__documento-item:hover {
   border-color: var(--azul);
-  background: transparent;
-  box-shadow: none;
-  transform: none;
+  background: var(--suave);
 }
 
 :root[data-tema='escuro'] .detalhe-projeto__membro-avatar--prof {
@@ -838,7 +832,7 @@
 
   .detalhe-projeto__secao-bloco,
   .detalhe-projeto__card-sidebar {
-    padding: 18px 0;
+    padding: 18px;
   }
 
   .detalhe-projeto__titulo-principal {
