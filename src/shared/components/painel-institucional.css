@@ -1,0 +1,61 @@
+.painel-institucional {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  gap: var(--espaco-5);
+  min-width: 0;
+  padding: var(--espaco-7) var(--espaco-6);
+  border-radius: var(--raio-cartao);
+  background: var(--marinho);
+  color: var(--branco);
+}
+main .painel-institucional h2 {
+  margin: 0;
+  color: var(--branco);
+  font-size: var(--texto-xl);
+}
+.painel-institucional p {
+  margin: 0;
+  color: var(--branco);
+  font-size: var(--texto-md);
+  line-height: 1.6;
+}
+.painel-institucional ol {
+  display: grid;
+  gap: var(--espaco-5);
+  padding-left: 0;
+  list-style: none;
+  margin: 0;
+}
+.painel-institucional li {
+  padding-left: var(--espaco-4);
+  border-left: 2px solid var(--branco);
+  font-size: var(--texto-sm);
+  line-height: 1.6;
+}
+.painel-institucional strong,
+.painel-institucional span {
+  display: block;
+}
+.painel-institucional span {
+  margin-top: var(--espaco-1);
+}
+@media (max-width: 760px) {
+  .painel-institucional {
+    padding: var(--espaco-5);
+  }
+}
+
+.ilustracao-percurso {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  margin-inline: auto;
+}
+@media (max-width: 480px) {
+  .ilustracao-percurso {
+    max-width: 320px;
+  }
+}
