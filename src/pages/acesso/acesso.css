@@ -18,7 +18,7 @@
   width: 100%;
   max-width: none;
   min-height: calc(100dvh - var(--cabecalho-altura, 64px));
-  padding: var(--esp-6) var(--esp-5) var(--esp-7);
+  padding: var(--espaco-6) var(--espaco-5) var(--espaco-7);
   background: var(--fundo);
 }
 
@@ -43,7 +43,7 @@
   align-items: stretch;
   width: 100%;
   min-height: 640px;
-  padding: var(--esp-3);
+  padding: var(--espaco-3);
   border: 1px solid var(--borda-suave);
   border-radius: var(--login-raio-cartao);
   background: var(--superficie);
@@ -68,14 +68,14 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--esp-3);
-  margin-bottom: var(--esp-6);
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-6);
 }
 
 .acesso-login__marca {
   display: inline-flex;
   align-items: center;
-  gap: var(--esp-3);
+  gap: var(--espaco-3);
   color: var(--titulo);
 }
 
@@ -83,16 +83,24 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: 46px;
-  height: 46px;
-  border: 1px solid var(--borda-suave);
-  border-radius: var(--raio-cartao);
-  background: var(--branco);
+  width: 44px;
+  height: 44px;
+  border: 1px solid color-mix(in srgb, var(--azul) 20%, var(--borda));
+  border-radius: 12px;
+  background: var(--suave);
+  color: var(--azul);
 }
 
 :root[data-tema='escuro'] .acesso-login__logo {
   border-color: var(--borda);
   background: var(--superficie-escura);
+  color: var(--azul-vivo);
+}
+
+.acesso-login__logo .icone,
+.acesso-login__logo svg {
+  width: 24px;
+  height: 24px;
 }
 
 .acesso-login__logo img {
@@ -144,7 +152,7 @@
 /* ---------- Cabeçalho do Formulário ---------- */
 
 .acesso-login__cabecalho {
-  margin-bottom: var(--esp-5);
+  margin-bottom: var(--espaco-5);
 }
 
 .acesso-login__cabecalho h1 {
@@ -157,7 +165,7 @@
 }
 
 .acesso-login__subtitulo {
-  margin: var(--esp-2) 0 0;
+  margin: var(--espaco-2) 0 0;
   color: var(--texto-suave);
   font-size: var(--texto-sm);
   line-height: 1.55;
@@ -169,7 +177,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin: 0 0 var(--esp-4);
+  margin: 0 0 var(--espaco-4);
   padding: 13px 16px;
   border: 1px solid var(--borda);
   border-radius: var(--login-raio-campo);
@@ -212,7 +220,7 @@
 .acesso-login__conteudo .acesso-campo {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--esp-2);
+  gap: var(--espaco-2);
   min-width: 0;
 }
 
@@ -382,12 +390,12 @@
   gap: 10px;
   width: 100%;
   min-height: 54px;
-  margin-top: var(--esp-1);
+  margin-top: var(--espaco-1);
   border: 0;
   border-radius: var(--login-raio-campo);
   background: var(--login-acao);
   color: var(--login-sobre-acao);
-  font-size: var(--texto-m);
+  font-size: var(--texto-md);
   font-weight: 700;
 
   cursor: pointer;
@@ -428,8 +436,8 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--esp-3);
-  margin-top: var(--esp-5);
+  gap: var(--espaco-3);
+  margin-top: var(--espaco-5);
   padding: 14px 16px;
   border: 1px solid var(--borda-suave);
   border-radius: var(--raio-cartao);
@@ -507,7 +515,7 @@
 /* ---------- Rodapé de Ajuda Institucional ---------- */
 
 .acesso-login__ajuda {
-  margin: var(--esp-4) 0 0;
+  margin: var(--espaco-4) 0 0;
   color: var(--texto-suave);
   font-size: var(--texto-xs);
   line-height: 1.6;

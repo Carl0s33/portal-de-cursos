@@ -11,6 +11,21 @@
   --espaco-6: 32px;
   --espaco-7: 48px;
   --espaco-8: 64px;
+
+  /* Aliases curtos de espaçamento */
+  --esp-1: var(--espaco-1);
+  --esp-2: var(--espaco-2);
+  --esp-3: var(--espaco-3);
+  --esp-4: var(--espaco-4);
+  --esp-5: var(--espaco-5);
+  --esp-6: var(--espaco-6);
+  --esp-7: var(--espaco-7);
+  --esp-8: var(--espaco-8);
+
+  /* Aliases de texto */
+  --texto-s: var(--texto-xs);
+  --texto-m: var(--texto-md);
+  --texto-l: var(--texto-lg);
   --texto-xs: 12px;
   --texto-sm: 14px;
   --texto-md: 16px;
