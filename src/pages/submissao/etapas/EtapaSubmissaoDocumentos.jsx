@@ -48,37 +48,45 @@ export default function EtapaSubmissaoDocumentos({
         <div className="documentos-submissao">
           {(tiposProjeto[formulario.tipo]?.documentos || []).map((documento) => {
             const arquivo = formulario.documentos[documento.id]
+            const temErro = Boolean(erros[documento.id])
             return (
-              <label className="campo-arquivo" key={documento.id}>
-                <span className="campo-arquivo__icone" aria-hidden="true">
-                  ↑
-                </span>
-                <strong>
-                  {arquivo
-                    ? Array.isArray(arquivo)
-                      ? `${arquivo.length} arquivo(s)`
-                      : arquivo.name
-                    : documento.nome}
-                </strong>
-                <small>
-                  {documento.obrigatorio ? 'Obrigatório' : 'Opcional'} ·{' '}
-                  {documento.multiplo ? 'vários arquivos' : 'um PDF'}
-                </small>
-                <input
-                  required={documento.obrigatorio}
-                  type="file"
-                  multiple={documento.multiplo}
-                  accept="application/pdf,.pdf"
-                  aria-invalid={Boolean(erros[documento.id])}
-                  aria-describedby={erroDoCampo(documento.id)}
-                  onChange={(e) => alterarDocumentos(documento, e.target.files)}
-                />
+              <div
+                className={`campo-arquivo-wrapper ${temErro ? 'campo-arquivo-wrapper--erro' : ''}`}
+                key={documento.id}
+              >
+                <label className="campo-arquivo">
+                  <span className="campo-arquivo__icone" aria-hidden="true">
+                    ↑
+                  </span>
+                  <div className="campo-arquivo__conteudo">
+                    <strong>
+                      {arquivo
+                        ? Array.isArray(arquivo)
+                          ? `${arquivo.length} arquivo(s) selecionado(s)`
+                          : arquivo.name
+                        : documento.nome}
+                    </strong>
+                    <small>
+                      {documento.obrigatorio ? 'Obrigatório' : 'Opcional'} ·{' '}
+                      {documento.multiplo ? 'vários arquivos' : 'um PDF'}
+                    </small>
+                  </div>
+                  <input
+                    required={documento.obrigatorio}
+                    type="file"
+                    multiple={documento.multiplo}
+                    accept="application/pdf,.pdf"
+                    aria-invalid={temErro}
+                    aria-describedby={erroDoCampo(documento.id)}
+                    onChange={(e) => alterarDocumentos(documento, e.target.files)}
+                  />
+                </label>
                 {erros[documento.id] && (
-                  <small id={`erro-${documento.id}`} className="formulario-submissao__erro-campo">
+                  <span id={`erro-${documento.id}`} className="formulario-submissao__erro-campo">
                     {erros[documento.id]}
-                  </small>
+                  </span>
                 )}
-              </label>
+              </div>
             )
           })}
         </div>

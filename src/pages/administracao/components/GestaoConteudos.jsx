@@ -32,6 +32,7 @@ export default function GestaoConteudos({
   itens,
   aoAlterar,
   cursoId,
+  restritoAoCurso = false,
   curso,
   cursos = [],
   disciplinas = [],
@@ -59,6 +60,16 @@ export default function GestaoConteudos({
   const carregarPersistidos = useCallback(
     async (sinal) => {
       definirCarregando(true)
+      if (restritoAoCurso && !cursoId) {
+        definirRegistrosApi([])
+        definirCursosApi([])
+        definirDisciplinasApi([])
+        definirMensagem(
+          'Não foi possível identificar seu curso. Entre novamente para carregar seu vínculo.',
+        )
+        definirCarregando(false)
+        return
+      }
       try {
         if (dominio === 'cursos') {
           const [lista, listaCampus, listaAreas] = await Promise.all([
@@ -71,7 +82,9 @@ export default function GestaoConteudos({
           definirCampus(listaCampus)
           definirAreas(listaAreas)
         } else if (dominio === 'disciplinas') {
-          const listaCursos = await listarCursos(sinal)
+          const listaCursos = (await listarCursos(sinal, token)).filter(
+            (item) => !cursoId || String(item.id) === String(cursoId),
+          )
           const listas = await Promise.all(
             listaCursos.map((item) => listarDisciplinasPorCurso(item.id, token, sinal)),
           )
@@ -91,7 +104,11 @@ export default function GestaoConteudos({
         } else if (dominio === 'projetos') {
           const [listaProjetos, listaCursos] = await Promise.all([
             listarProjetos(token, sinal),
-            listarCursos(sinal).catch(() => []),
+            listarCursos(sinal, token)
+              .then((lista) =>
+                lista.filter((item) => !cursoId || String(item.id) === String(cursoId)),
+              )
+              .catch(() => []),
           ])
           const listasDisciplinas = await Promise.all(
             listaCursos.map((item) =>
@@ -99,13 +116,21 @@ export default function GestaoConteudos({
             ),
           )
           const mapaCursos = new Map(listaCursos.map((c) => [String(c.id), c]))
+          const ROTULOS_TIPO_GESTAO = {
+            TCC: 'TCC',
+            PROJETO_INTEGRADOR: 'Projeto Integrador',
+            PROJETO_PESQUISA: 'Pesquisa',
+            PROJETO_EXTENSAO: 'Extensão',
+            OUTROS: 'Outros',
+          }
           const mapeados = (Array.isArray(listaProjetos) ? listaProjetos : []).map((p) => {
             const infoCurso = mapaCursos.get(String(p.cursoId))
+            const tipoBruto = p.tipoProjeto || p.tipo || ''
             return {
               ...p,
               identificador: String(p.id),
-              curso: infoCurso?.sigla || infoCurso?.acronimo || infoCurso?.nome || '',
-              tipo: p.tipoProjeto || p.tipo || '',
+              curso: infoCurso?.sigla || infoCurso?.acronimo || infoCurso?.nome || (p.cursoId ? `Curso ${p.cursoId}` : ''),
+              tipo: ROTULOS_TIPO_GESTAO[tipoBruto] || tipoBruto,
               status: p.statusProjeto || p.status || '',
             }
           })
@@ -120,7 +145,7 @@ export default function GestaoConteudos({
         if (!sinal?.aborted) definirCarregando(false)
       }
     },
-    [dominio, token],
+    [dominio, token, cursoId, restritoAoCurso],
   )
   useEffect(() => {
     if (!persistido) return
@@ -129,7 +154,9 @@ export default function GestaoConteudos({
     return () => controller.abort()
   }, [carregarPersistidos, persistido])
   const itensAtuais = persistido ? registrosApi : itens
-  const cursosDisponiveis = persistido || dominio === 'projetos' ? cursosApi : cursos
+  const cursosDisponiveis = (persistido || dominio === 'projetos' ? cursosApi : cursos).filter(
+    (item) => !cursoId || String(item.id) === String(cursoId),
+  )
   const disciplinasDisponiveis = persistido || dominio === 'projetos' ? disciplinasApi : disciplinas
   useEffect(() => {
     if (!['cursos', 'disciplinas', 'projetos'].includes(dominio) || !token) return
@@ -156,7 +183,7 @@ export default function GestaoConteudos({
     return () => controller.abort()
   }, [dominio, token])
   const doCurso = (item) => {
-    if (!cursoId) return true
+    if (!cursoId) return !restritoAoCurso
     if (dominio === 'cursos')
       return [item.id, item.identificador].some(
         (referencia) => String(referencia) === String(cursoId),
@@ -213,7 +240,7 @@ export default function GestaoConteudos({
           else await cadastrarCurso(token, payload)
         } else if (dominio === 'disciplinas') {
           const payload = {
-            cursoId: Number(dados.cursoId),
+            cursoId: Number(cursoId || dados.cursoId),
             nome: dados.nome,
             codigo: dados.codigo,
             cargaHoraria: Number(dados.cargaHoraria),
@@ -232,7 +259,7 @@ export default function GestaoConteudos({
             resumo: dados.resumo || dados.descricao || '',
             descricao: dados.descricao || dados.resumo || '',
             tipoProjeto: dados.tipoProjeto || dados.tipo || 'TCC',
-            cursoId: Number(dados.cursoId || cursoId || cursoSelecionado?.id || 1),
+            cursoId: Number(cursoId || dados.cursoId || cursoSelecionado?.id),
             campusId: Number(cursoSelecionado?.campusId || 1),
           }
           if (dados.id) await atualizarProjeto(dados.id, payload, token)
@@ -445,20 +472,20 @@ export default function GestaoConteudos({
             )
 
             return (
-              <article className="gestao-curso-cartao" key={curso.identificador || curso.id}>
-                <header>
-                  <span>{curso.sigla || curso.acronimo || 'CURSO'}</span>
-                  {curso.grau && <small>{curso.grau}</small>}
+              <article className="cartao curso-gestao" key={curso.identificador || curso.id}>
+                <header className="curso-gestao__topo">
+                  <span className="curso-gestao__sigla">{curso.sigla || curso.acronimo || 'CURSO'}</span>
+                  {curso.grau && <span className="curso-gestao__grau">{curso.grau}</span>}
                 </header>
-                <h2>{curso.nome}</h2>
+                <h3 className="curso-gestao__titulo">{curso.nome}</h3>
                 {(curso.grau || curso.turno || curso.modalidade || curso.campus) && (
-                  <p>
-                    {[curso.grau, curso.turno, curso.modalidade, curso.campus]
+                  <p className="curso-gestao__meta">
+                    {[curso.turno, curso.modalidade, curso.campus]
                       .filter(Boolean)
                       .join(' · ')}
                   </p>
                 )}
-                <dl>
+                <dl className="curso-gestao__metricas">
                   {curso.cargaHoraria && (
                     <div>
                       <dt>Carga horária</dt>
@@ -473,7 +500,7 @@ export default function GestaoConteudos({
                   )}
                   {Number.isFinite(totalMaterias) && totalMaterias > 0 && (
                     <div>
-                      <dt>Matérias no curso</dt>
+                      <dt>Matérias</dt>
                       <dd>{totalMaterias}</dd>
                     </div>
                   )}
@@ -494,7 +521,7 @@ export default function GestaoConteudos({
               onChange={(e) => definirBusca(e.target.value)}
             />
           </label>
-          {dominio === 'disciplinas' && (
+          {dominio === 'disciplinas' && !restritoAoCurso && !cursoId && (
             <div
               className="gestao-filtro-cursos"
               role="group"

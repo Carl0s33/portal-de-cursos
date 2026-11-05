@@ -24,7 +24,7 @@ export default function EditorConteudo({
       configuracao.campos.map(([chave, , opcoes]) => {
         if (item?.[chave] !== undefined && item?.[chave] !== null) return [chave, item[chave]]
         if (['alunos', 'disciplinas', 'professores'].includes(opcoes)) return [chave, []]
-        if (chave === 'cursoId') return [chave, String(curso?.identificador || cursoId || '')]
+        if (chave === 'cursoId') return [chave, String(curso?.id || cursoId || '')]
         if (chave === 'coordenadorId') return [chave, '']
         if (chave === 'obrigatoria') return [chave, item?.[chave] === false ? 'false' : 'true']
         if (['campusId', 'areaId'].includes(chave)) return [chave, '']

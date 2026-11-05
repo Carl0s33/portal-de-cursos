@@ -1,112 +1,137 @@
 .gestao-cursos-resumo {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--espaco-4);
+  margin-bottom: var(--espaco-4);
 }
-.gestao-curso-cartao {
-  --cor-curso: var(--azul);
-  display: grid;
-  align-content: start;
-  gap: 12px;
-  min-width: 0;
-  padding: 20px;
-  border: 1px solid color-mix(in srgb, var(--cor-curso) 20%, var(--borda));
-  border-top: 4px solid var(--cor-curso);
-  border-radius: 14px;
+
+.curso-gestao {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
   background: var(--superficie);
-  box-shadow: var(--sombra);
   transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    transform 180ms ease;
+    border-color var(--transicao),
+    outline var(--transicao),
+    transform var(--transicao);
 }
-.gestao-curso-cartao:nth-child(4n + 2) {
-  --cor-curso: var(--roxo);
-}
-.gestao-curso-cartao:nth-child(4n + 3) {
-  --cor-curso: var(--sucesso);
-}
-.gestao-curso-cartao:nth-child(4n + 4) {
-  --cor-curso: var(--aviso);
-}
-.gestao-curso-cartao:hover {
+
+.curso-gestao:hover {
+  border-color: var(--azul);
+  outline: 2px solid var(--azul);
   transform: translateY(-2px);
-  border-color: var(--cor-curso);
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--cor-curso) 12%, transparent);
 }
-.gestao-curso-cartao > header {
+
+.curso-gestao__topo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--espaco-2);
 }
-.gestao-curso-cartao > header span {
+
+.curso-gestao__sigla {
   display: inline-flex;
   align-items: center;
-  min-height: 28px;
-  padding: 0 11px;
-  border-radius: 7px;
-  background: var(--cor-curso);
-  color: var(--branco);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-curso) 26%, transparent);
-}
-:root[data-tema='escuro'] .gestao-curso-cartao > header span {
-  color: var(--preto);
-  box-shadow: none;
-}
-.gestao-curso-cartao > header small {
-  color: var(--texto);
-  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: var(--raio-botao);
+  background: var(--suave);
+  color: var(--azul);
+  font-size: var(--texto-xs);
   font-weight: 700;
+  letter-spacing: normal;
 }
-.gestao-curso-cartao h2 {
+
+.curso-gestao__grau {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: var(--raio-pilula);
+  border: 1px solid var(--borda);
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.curso-gestao__titulo {
   margin: 0;
   color: var(--titulo);
-  font-size: 17px;
+  font-size: var(--texto-md);
+  font-weight: 700;
   line-height: 1.35;
+  letter-spacing: normal;
 }
-.gestao-curso-cartao > p {
+
+.curso-gestao__meta {
   margin: 0;
-  color: var(--texto);
-  font-size: 12px;
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
   line-height: 1.5;
 }
-.gestao-curso-cartao dl {
+
+.curso-gestao__metricas {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin: 4px 0 0;
+  gap: var(--espaco-2);
+  margin: 0;
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
 }
-.gestao-curso-cartao dl > div {
-  display: grid;
-  gap: 4px;
+
+.curso-gestao__metricas > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   min-width: 0;
-  padding: 10px 11px;
-  border: 1px solid var(--borda-suave);
-  border-radius: 10px;
-  background: var(--fundo);
+  padding-left: var(--espaco-2);
+  border-left: 2px solid var(--suave);
 }
-.gestao-curso-cartao dt {
-  color: var(--texto);
+
+.curso-gestao__metricas dt {
+  color: var(--texto-suave);
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.gestao-curso-cartao dd {
+
+.curso-gestao__metricas dd {
   margin: 0;
   color: var(--titulo);
-  font-size: 14px;
-  font-weight: 800;
+  font-size: var(--texto-sm);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-:root[data-tema='escuro'] .gestao-curso-cartao dl > div {
+
+:root[data-tema='escuro'] .curso-gestao {
   background: var(--superficie);
+  border-color: var(--borda);
+}
+
+:root[data-tema='escuro'] .curso-gestao__grau {
+  color: #ededed;
+  border-color: var(--borda);
+}
+
+:root[data-tema='escuro'] .curso-gestao__meta {
+  color: #b8c0cc;
+}
+
+:root[data-tema='escuro'] .curso-gestao__metricas dt {
+  color: #b8c0cc;
+}
+
+:root[data-tema='escuro'] .curso-gestao__metricas dd {
+  color: #ffffff;
+}
+
+:root[data-tema='escuro'] .curso-gestao__metricas > div {
+  border-left-color: var(--borda);
 }
 @media (max-width: 900px) {
   .gestao-cursos-resumo {
@@ -123,7 +148,7 @@
   gap: 8px;
   padding: 20px 24px;
   max-width: 520px;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   font-weight: 700;
   color: var(--titulo);
 }
@@ -136,11 +161,11 @@
   min-width: 0;
   min-height: 44px;
   padding: 10px 13px;
-  border: 1px solid color-mix(in srgb, var(--borda) 82%, transparent);
-  border-radius: 9px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-botao);
   background: var(--fundo);
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   transition:
     border-color 140ms,
     box-shadow 140ms,
@@ -155,7 +180,7 @@
 .gestao-campos textarea:hover,
 .gestao-busca input:hover,
 .gestao-busca select:hover {
-  border-color: color-mix(in srgb, var(--azul) 48%, var(--borda));
+  border-color: var(--azul);
 }
 .gestao-campos input:disabled,
 .gestao-campos select:disabled,
@@ -169,7 +194,7 @@
 .gestao-busca input:focus-visible,
 .gestao-busca select:focus-visible {
   border-color: var(--azul);
-  outline: 3px solid color-mix(in srgb, var(--azul) 25%, transparent);
+  outline: 2px solid var(--azul);
   outline-offset: 1px;
   background: var(--superficie);
 }
@@ -198,15 +223,15 @@
 }
 .gestao-campos select[multiple] option {
   padding: 8px 10px;
-  border-radius: 5px;
+  border-radius: var(--raio-botao);
 }
 .gestao-campos select[multiple] option:checked {
-  color: var(--titulo);
-  background: color-mix(in srgb, var(--azul) 16%, var(--superficie));
+  color: var(--texto-sobre-azul);
+  background: var(--azul);
 }
 .gestao-campo-ajuda {
   color: var(--texto);
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 1.5;
 }
 .gestao-campo {
@@ -217,15 +242,15 @@
 }
 .gestao-campo > label {
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   font-weight: 600;
   line-height: 1.45;
 }
 .gestao-formulario,
 .gestao-confirmacao {
   padding: clamp(20px, 3vw, 32px);
-  border: 1px solid color-mix(in srgb, var(--borda) 78%, transparent);
-  border-radius: 12px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-campo);
   background: var(--superficie);
   display: grid;
   gap: 24px;
@@ -237,7 +262,7 @@
 .gestao-expansao--novo {
   padding: 20px;
   border: 1px solid var(--borda);
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
   background: var(--superficie);
 }
 .gestao-linha-expandida > td {
@@ -247,7 +272,6 @@
 .gestao-linha-expandida .gestao-formulario,
 .gestao-linha-expandida .gestao-confirmacao {
   max-width: 100%;
-  box-shadow: 0 2px 12px rgb(17 24 39 / 8%);
 }
 .gestao-confirmacao:focus {
   outline: 3px solid var(--superficie-escura);
@@ -256,25 +280,25 @@
 .gestao-formulario > h2 {
   margin: 0;
   color: var(--titulo);
-  font-size: 22px;
+  font-size: var(--texto-lg);
   line-height: 1.25;
 }
 .gestao-formulario__grupo {
   display: grid;
   gap: 16px;
   padding-top: 20px;
-  border-top: 1px solid color-mix(in srgb, var(--borda) 58%, transparent);
+  border-top: 1px solid var(--borda);
 }
 .gestao-formulario__grupo > header h3 {
   margin: 0;
   color: var(--titulo);
-  font-size: 17px;
+  font-size: var(--texto-md);
   font-weight: 700;
 }
 .gestao-formulario__grupo > header p {
   margin: 5px 0 0;
   color: var(--texto);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   line-height: 1.5;
 }
 .gestao-formulario__grupo > header {
@@ -294,12 +318,12 @@
   border-left: 3px solid var(--azul);
   background: var(--suave);
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   font-weight: 600;
 }
 .gestao-relacao [aria-hidden='true'] {
   color: var(--azul);
-  font-size: 18px;
+  font-size: var(--texto-md);
 }
 .gestao-relacao__resumo {
   display: flex;
@@ -311,17 +335,17 @@
 }
 .gestao-relacao__resumo span {
   padding: 5px 9px;
-  border-radius: 6px;
+  border-radius: var(--raio-botao);
   background: var(--superficie);
   color: var(--titulo);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   line-height: 1.4;
 }
 .gestao-campos label {
   display: grid;
   gap: 8px;
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   min-width: 0;
 }
 .gestao-campo-largo {
@@ -341,11 +365,11 @@
   min-height: 38px;
   cursor: pointer;
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   padding: 8px 12px;
   background: var(--superficie);
   color: var(--titulo);
-  font-size: 13px;
+  font-size: var(--texto-xs);
   font-weight: 600;
   transition:
     background-color 140ms,
@@ -375,7 +399,7 @@
 }
 .gestao-acoes .gestao-excluir,
 .tabela-submissoes .gestao-excluir {
-  border: 1px solid color-mix(in srgb, var(--erro) 25%, var(--borda));
+  border: 1px solid var(--erro);
   color: var(--erro-escuro);
   background: var(--erro-suave);
   font-weight: 600;
@@ -395,15 +419,15 @@
 .gestao-aviso {
   padding: 20px;
   margin: 0;
-  border-radius: 10px;
+  border-radius: var(--raio-botao);
   background: var(--suave);
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   line-height: 1.7;
 }
 .gestao-nota {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 1.7;
   color: var(--texto);
 }
@@ -462,7 +486,7 @@
   min-width: 0;
   padding: 6px;
   border: 1px solid var(--borda);
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
   background: var(--fundo);
 }
 .gestao-filtro-cursos button,
@@ -471,28 +495,26 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 38px;
-  padding: 7px 13px;
+  min-height: 44px;
+  padding: var(--espaco-2) var(--espaco-3);
   border: 1px solid var(--borda-suave);
-  border-radius: 9px;
+  border-radius: var(--raio-botao);
   background: var(--superficie);
   color: var(--titulo);
-  font-size: 13px;
+  font-size: var(--texto-xs);
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
   transition:
     background-color 150ms ease,
     color 150ms ease,
-    border-color 150ms ease,
-    box-shadow 150ms ease,
-    transform 150ms ease;
+    border-color 150ms ease;
 }
 .gestao-papeis button::before {
   content: '';
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: var(--raio-pilula);
   background: var(--cor-papel);
   flex: none;
 }
@@ -516,17 +538,15 @@
   border-color: var(--cor-papel);
   color: var(--cor-papel);
   background: var(--superficie);
-  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-papel) 14%, transparent);
 }
 .gestao-filtro-cursos button[aria-pressed='true'],
 .gestao-papeis button[aria-pressed='true'] {
   border-color: var(--cor-papel);
   background: var(--cor-papel);
   color: var(--branco);
-  box-shadow: 0 3px 10px color-mix(in srgb, var(--cor-papel) 28%, transparent);
 }
 .gestao-papeis button[aria-pressed='true']::before {
-  background: var(--branco);
+  background: var(--superficie);
 }
 .gestao-filtro-cursos button span,
 .gestao-papeis button span {
@@ -535,17 +555,17 @@
   height: 22px;
   padding-inline: 6px;
   place-items: center;
-  border-radius: 999px;
+  border-radius: var(--raio-pilula);
   background: var(--cor-papel);
   color: var(--branco);
-  font-size: 11px;
+  font-size: var(--texto-xs);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
 .gestao-filtro-cursos button[aria-pressed='true'] span,
 .gestao-papeis button[aria-pressed='true'] span {
-  background: rgb(255 255 255 / 22%);
-  color: var(--branco);
+  background: var(--superficie);
+  color: var(--titulo);
 }
 .gestao-filtro-cursos button:focus-visible,
 .gestao-papeis button:focus-visible {
@@ -557,7 +577,7 @@
   width: fit-content;
   margin: 0 8px 0 0 !important;
   padding: 4px 8px;
-  border-radius: 6px;
+  border-radius: var(--raio-botao);
   background: var(--azul);
   color: var(--branco) !important;
   font-size: 11px !important;
@@ -567,10 +587,10 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: var(--raio-pilula);
   background: var(--roxo);
   color: var(--branco);
-  font-size: 11px;
+  font-size: var(--texto-xs);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -579,7 +599,7 @@
   color: var(--branco);
 }
 :root[data-tema='escuro'] .gestao-papeis button[data-papel='admin'] {
-  --cor-papel: #94a3b8;
+  --cor-papel: var(--papel-inativo);
 }
 :root[data-tema='escuro'] .gestao-filtro-cursos,
 :root[data-tema='escuro'] .gestao-papeis {
@@ -600,15 +620,14 @@
 :root[data-tema='escuro'] .gestao-papeis button[aria-pressed='true'] {
   background: var(--cor-papel);
   color: var(--preto);
-  box-shadow: none;
 }
 :root[data-tema='escuro'] .gestao-papeis button[aria-pressed='true']::before {
   background: var(--preto);
 }
 :root[data-tema='escuro'] .gestao-filtro-cursos button[aria-pressed='true'] span,
 :root[data-tema='escuro'] .gestao-papeis button[aria-pressed='true'] span {
-  background: rgb(0 0 0 / 20%);
-  color: var(--preto);
+  background: var(--superficie);
+  color: var(--titulo);
 }
 :root[data-tema='escuro'] .gestao-codigo,
 :root[data-tema='escuro'] .gestao-tipo-disciplina {
@@ -636,9 +655,8 @@
 .gestao-confirmacao {
   gap: 22px;
   border-color: var(--borda-suave);
-  border-radius: 14px;
-  background: var(--branco);
-  box-shadow: 0 8px 24px rgb(25 45 82 / 6%);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
 }
 .gestao-formulario__grupo {
   gap: 18px;
@@ -646,13 +664,13 @@
   border-top-color: var(--suave);
 }
 .gestao-formulario__grupo > header h3 {
-  font-size: 15px;
+  font-size: var(--texto-sm);
   letter-spacing: -0.01em;
 }
 .gestao-formulario__grupo > header p,
 .gestao-formulario__orientacao {
   color: var(--texto-suave);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   line-height: 1.55;
 }
 .gestao-formulario__orientacao {
@@ -661,12 +679,12 @@
 .gestao-campo > label,
 .gestao-campos label {
   color: var(--texto);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   font-weight: 650;
 }
 .gestao-campo-ajuda {
   color: var(--texto-suave);
-  font-size: 11px;
+  font-size: var(--texto-xs);
 }
 .gestao-campos input,
 .gestao-campos select,
@@ -674,10 +692,9 @@
 .gestao-busca input,
 .gestao-busca select {
   border-color: var(--borda);
-  border-radius: 8px;
-  background: var(--branco);
-  color: var(--marinho);
-  box-shadow: 0 1px 2px rgb(16 24 40 / 4%);
+  border-radius: var(--raio-campo);
+  background: var(--superficie);
+  color: var(--titulo);
 }
 .gestao-campos input:hover,
 .gestao-campos select:hover,
@@ -692,14 +709,13 @@
 .gestao-busca input:focus-visible,
 .gestao-busca select:focus-visible {
   border-color: var(--azul-vivo);
-  outline: 3px solid rgb(36 91 214 / 17%);
+  outline: 2px solid var(--azul);
   outline-offset: 1px;
-  box-shadow: 0 0 0 1px var(--azul-vivo);
 }
 .gestao-relacao {
   border: 1px solid var(--etiqueta);
-  border-left: 3px solid var(--azul-vivo);
-  border-radius: 8px;
+  border-left: 1px solid var(--borda);
+  border-radius: var(--raio-botao);
   background: var(--fundo);
   color: var(--texto);
 }
@@ -709,22 +725,20 @@
 }
 .gestao-relacao__resumo span {
   border: 1px solid var(--etiqueta);
-  background: var(--branco);
+  background: var(--superficie);
   color: var(--texto) !important;
 }
 .gestao-acoes .botao-primario,
 .gestao-formulario .gestao-acoes .botao-primario {
   border: 1px solid var(--azul);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   background: var(--azul-vivo);
   color: var(--branco);
-  box-shadow: 0 2px 5px rgb(36 91 214 / 18%);
 }
 :root[data-tema='escuro'] .gestao-formulario,
 :root[data-tema='escuro'] .gestao-confirmacao {
   border-color: var(--borda-suave);
   background: var(--superficie);
-  box-shadow: none;
 }
 :root[data-tema='escuro'] .gestao-formulario__grupo {
   border-top-color: var(--borda-suave);
@@ -746,7 +760,6 @@
   border-color: var(--borda-suave);
   background: var(--suave);
   color: var(--titulo);
-  box-shadow: none;
 }
 :root[data-tema='escuro'] .gestao-relacao,
 :root[data-tema='escuro'] .gestao-relacao__resumo {
@@ -758,4 +771,13 @@
   border-color: var(--roxo-suave);
   background: var(--superficie-escura);
   color: var(--azul-escuro) !important;
+}
+
+.gestao-professores__busca {
+  padding: var(--espaco-5);
+  margin: 0;
+}
+.gestao-professores__busca .gestao-busca {
+  flex: 1 1 240px;
+  padding: 0;
 }

@@ -10,6 +10,8 @@ export const formularioInicial = {
   informacoesEspecificas: '',
   disciplinas: [],
   autores: [],
+  professoresParticipantes: [],
+  projetoSemAlunos: false,
   documentos: {},
   linkMemoria: '',
   arquivosComplementares: [],

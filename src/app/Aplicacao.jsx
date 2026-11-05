@@ -6,6 +6,9 @@ import Rodape from '@/shared/components/Rodape.jsx'
 import PaginaInicial from '@/pages/inicio/PaginaInicial.jsx'
 import PaginaCursos from '@/pages/cursos/PaginaCursos.jsx'
 import PaginaDetalhesCurso from '@/pages/detalhes-curso/PaginaDetalhesCurso.jsx'
+import PaginaDetalhesProjeto from '@/pages/projetos/PaginaDetalhesProjeto.jsx'
+import PaginaPerfilProfessor from '@/pages/perfil/PaginaPerfilProfessor.jsx'
+import PaginaPerfilAluno from '@/pages/perfil/PaginaPerfilAluno.jsx'
 import PaginaProjetos from '@/pages/projetos/PaginaProjetos.jsx'
 import PaginaSubmissao from '@/pages/submissao/PaginaSubmissao.jsx'
 import PaginaAcesso from '../pages/acesso/PaginaAcesso.jsx'
@@ -26,7 +29,16 @@ import { listarSubmissoes } from '@/api/submissoes.js'
 import { limparDadosLocais } from './limparDadosLocais.js'
 
 function identificarPagina(rota) {
-  if (['projetos', 'biblioteca'].includes(rota) || rota.startsWith('projeto/')) return 'projetos'
+  if (rota.startsWith('projeto/')) return 'detalhes-projeto'
+  if (rota.startsWith('professor/perfil-publico/') || rota.startsWith('professor/')) {
+    if (!['professor', 'professor/painel', 'professor/perfil'].includes(rota) && !rota.startsWith('professor/submissao/')) {
+      return 'perfil-professor'
+    }
+  }
+  if (rota.startsWith('aluno/')) {
+    if (rota !== 'aluno/cadastro' && rota !== 'aluno/painel') return 'perfil-aluno'
+  }
+  if (['projetos', 'biblioteca'].includes(rota)) return 'projetos'
   if (['acesso', 'acesso-professor', 'acesso-administracao'].includes(rota)) return 'acesso'
   if (rota === 'aluno/cadastro') return 'aluno-cadastro'
   if (rota === 'aluno/painel') return 'aluno-painel'
@@ -221,6 +233,7 @@ export default function Aplicacao() {
 
           const mapeadas = dados.map((p) => {
             const orientadorObj = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')
+            const participantesObjs = p.professores?.filter((prof) => prof.papel !== 'ORIENTADOR') || []
             const primeiroAutor =
               Array.isArray(p.autores) && p.autores.length > 0 ? p.autores[0] : null
             const nomeAutor =
@@ -236,6 +249,11 @@ export default function Aplicacao() {
                 orientadorObj?.nome ||
                 `Professor ${orientadorObj.professorId}`
               : ''
+            const nomesParticipantes = participantesObjs.map((part) =>
+              part.professorId
+                ? mapaProfessores.get(String(part.professorId)) || part?.nome || `Professor ${part.professorId}`
+                : part?.nome || ''
+            ).filter(Boolean)
 
             return {
               identificador: String(p.id),
@@ -258,12 +276,15 @@ export default function Aplicacao() {
                         : p.tipoProjeto || '',
               orientador: nomeProfessorReal,
               orientadorId: orientadorObj?.professorId || null,
+              professoresParticipantes: nomesParticipantes,
+              professores: Array.isArray(p.professores) ? p.professores : [],
               autor: nomeAutor,
               autores: Array.isArray(p.autores) ? p.autores : [],
               enviadoEm: dataFormatada,
               dataInicio: p.dataInicio,
               dataFim: p.dataFim,
               documentos: Array.isArray(p.documentos) ? p.documentos : [],
+              disciplinas: Array.isArray(p.disciplinas) ? p.disciplinas.map((d) => d.nome || d) : [],
               statusBackend: p.statusProjeto,
               status:
                 p.statusProjeto === 'EM_ANALISE'
@@ -537,7 +558,7 @@ export default function Aplicacao() {
             token={sessao.token}
             cursoId={sessao.usuario.cursoId}
             decisao={decisoes[identificadorSubmissao]}
-            aoDecidir={(status, justificativa) => {
+            aoDecidir={async (status, justificativa) => {
               const submissao = listaSubmissoes.find(
                 (item) => item.identificador === identificadorSubmissao,
               )
@@ -545,76 +566,44 @@ export default function Aplicacao() {
               // Sincroniza com o backend via PATCH /api/projetos/{id}/status
               let proximoStatusBackend = submissao?.statusBackend
               if (submissao?.id && sessao?.token) {
-                if (sessao.tipoUsuario === 'PROFESSOR') {
-                  if (status === 'Em análise' || status === 'Aceito') {
-                    proximoStatusBackend = 'ANALISE_PUBLICACAO'
-                    atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
-                      .then(() =>
-                        atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token),
-                      )
-                      .catch(() => {})
-                  } else if (status === 'Recusado') {
-                    proximoStatusBackend = 'RECUSADO'
-                    atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token).catch(() => {})
+                try {
+                  if (sessao.tipoUsuario === 'PROFESSOR') {
+                    if (status === 'Em análise' || status === 'Aceito') {
+                      proximoStatusBackend = 'ANALISE_PUBLICACAO'
+                      await atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
+                      await atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                    } else if (status === 'Recusado') {
+                      proximoStatusBackend = 'RECUSADO'
+                      await atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token)
+                    }
+                  } else if (sessao.tipoUsuario === 'COORDENADOR') {
+                    if (status === 'Aprovado') {
+                      proximoStatusBackend = 'PUBLICADO'
+                      try {
+                        await atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token)
+                      } catch {
+                        // Se estiver em EM_ANALISE ou APROVADO, avanca a esteira
+                        try {
+                          await atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
+                        } catch {}
+                        try {
+                          await atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                        } catch {}
+                        await atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token)
+                      }
+                    } else if (status === 'Recusado') {
+                      proximoStatusBackend = 'RECUSADO_PUBLICACAO'
+                      try {
+                        await atualizarStatusProjeto(submissao.id, 'RECUSADO_PUBLICACAO', sessao.token)
+                      } catch {
+                        await atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token)
+                      }
+                    }
                   }
-                } else if (sessao.tipoUsuario === 'COORDENADOR') {
-                  if (status === 'Aprovado') {
-                    proximoStatusBackend = 'PUBLICADO'
-                    atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token).catch(() =>
-                      atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
-                        .then(() => atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token))
-                        .catch(() => {}),
-                    )
-                  } else if (status === 'Recusado') {
-                    proximoStatusBackend = 'RECUSADO_PUBLICACAO'
-                    atualizarStatusProjeto(submissao.id, 'RECUSADO_PUBLICACAO', sessao.token).catch(
-                      () =>
-                        atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
-                          .then(() =>
-                            atualizarStatusProjeto(
-                              submissao.id,
-                              'RECUSADO_PUBLICACAO',
-                              sessao.token,
-                            ),
-                          )
-                          .catch(() => {}),
-                    )
-                  }
+                } catch (err) {
+                  console.error('Erro ao atualizar status do projeto no backend:', err)
                 }
               }
-
-              definirListaSubmissoes((atuais) => {
-                const atualizadas = atuais.map((item) =>
-                  item.identificador === identificadorSubmissao
-                    ? { ...item, status, statusBackend: proximoStatusBackend }
-                    : item,
-                )
-                try {
-                  const publicadosCache = atualizadas
-                    .filter(
-                      (item) => item.statusBackend === 'PUBLICADO' || item.status === 'Aprovado',
-                    )
-                    .map((item) => ({
-                      id: item.id,
-                      nome: item.titulo,
-                      descricao: item.objetivo || item.resumo || '',
-                      resumo: item.resumo || '',
-                      tipoProjeto: item.tipo,
-                      cursoId: item.cursoId,
-                      curso: item.curso,
-                      orientador: item.orientador,
-                      autores: item.autores,
-                      statusProjeto: 'PUBLICADO',
-                    }))
-                  localStorage.setItem(
-                    'portal-cursos-publicados-cache',
-                    JSON.stringify(publicadosCache),
-                  )
-                } catch {
-                  /* Cache público opcional. */
-                }
-                return atualizadas
-              })
 
               definirDecisoes((atuais) => ({
                 ...atuais,
@@ -627,6 +616,15 @@ export default function Aplicacao() {
                   registradoEm: new Date().toISOString(),
                 },
               }))
+
+              definirListaSubmissoes((atuais) => {
+                const atualizadas = atuais.map((item) =>
+                  item.identificador === identificadorSubmissao
+                    ? { ...item, status, statusBackend: proximoStatusBackend }
+                    : item,
+                )
+                return atualizadas
+              })
             }}
             aoEditar={(alteracoes) => {
               definirListaSubmissoes((itens) =>
@@ -695,6 +693,15 @@ export default function Aplicacao() {
       />
       {pagina === 'cursos' && <PaginaCursos />}
       {pagina === 'projetos' && <PaginaProjetos />}
+      {pagina === 'detalhes-projeto' && (
+        <PaginaDetalhesProjeto key={rota.split('/')[1]} identificador={rota.split('/')[1]} />
+      )}
+      {pagina === 'perfil-professor' && (
+        <PaginaPerfilProfessor key={rota.split('/')[1]} idProfessor={rota.split('/')[1]} />
+      )}
+      {pagina === 'perfil-aluno' && (
+        <PaginaPerfilAluno key={rota.split('/')[1]} idAluno={rota.split('/')[1]} />
+      )}
       {pagina === 'detalhes-curso' && (
         <PaginaDetalhesCurso key={identificador} identificador={identificador} aba={aba} />
       )}

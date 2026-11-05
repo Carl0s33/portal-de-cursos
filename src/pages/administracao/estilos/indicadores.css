@@ -12,44 +12,6 @@
 .administracao-visao > * {
   min-width: 0;
 }
-
-.administracao-indicadores {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin: 0 0 18px;
-}
-
-.administracao-indicador {
-  --cor: var(--azul);
-
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  min-height: 150px;
-  padding: 1.35rem 1.4rem 1.2rem;
-  border: 1px solid var(--borda);
-  border-top: 3px solid var(--cor);
-  border-radius: 14px;
-  background: var(--superficie);
-  text-decoration: none;
-  box-shadow: var(--sombra);
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
-}
-
-.administracao-indicador:hover {
-  transform: translateY(-2px);
-  border-color: var(--cor);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--marinho) 8%, transparent);
-}
-
-.administracao-indicador:focus-visible,
 .administracao-categoria a:focus-visible,
 .administracao-registros a:focus-visible,
 .administracao-registros button:focus-visible {
@@ -57,138 +19,7 @@
   outline-offset: 3px;
 }
 
-.administracao-indicador--cursos {
-  --cor: var(--azul);
-}
-
-.administracao-indicador--disciplinas {
-  --cor: var(--roxo);
-}
-
-.administracao-indicador--campus {
-  --cor: var(--aviso);
-}
-
-.administracao-indicador--areas {
-  --cor: var(--sucesso);
-}
-
-.administracao-indicador__topo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding-right: 1.75rem;
-}
-
-.administracao-indicador__icone {
-  flex: 0 0 2.35rem;
-  display: inline-grid;
-  place-items: center;
-  width: 2.35rem;
-  height: 2.35rem;
-  border: 0;
-  border-radius: 10px;
-  background: var(--cor);
-  color: var(--branco);
-}
-
-.administracao-indicador__icone .icone,
-.administracao-indicador__icone svg {
-  width: 19px;
-  height: 19px;
-}
-
-.administracao-indicador .administracao-indicador__rotulo {
-  min-width: 0;
-  color: var(--titulo);
-  font-size: 0.875rem;
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.administracao-indicador .administracao-indicador__valor {
-  margin: 0.9rem 0 0;
-  color: var(--titulo);
-  font-size: 2.4rem;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  font-variant-numeric: tabular-nums;
-}
-
-.administracao-indicador .administracao-indicador__detalhe {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: auto 0 0;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--borda-suave);
-  color: var(--texto);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.administracao-indicador .administracao-indicador__detalhe::before {
-  content: '';
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--cor);
-}
-
-.administracao-indicador__seta {
-  position: absolute;
-  top: 1.35rem;
-  right: 1.25rem;
-  display: inline-grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--suave);
-  color: var(--titulo);
-  transition:
-    background-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease;
-}
-
-.administracao-indicador__seta .icone {
-  width: 15px;
-  height: 15px;
-}
-
-.administracao-indicador:hover .administracao-indicador__seta {
-  background: var(--cor);
-  color: var(--branco);
-  transform: translateX(2px);
-}
-
-:root[data-tema='escuro'] .administracao-indicador {
-  border-color: var(--borda);
-  border-top-color: var(--cor);
-  background: var(--superficie);
-  box-shadow: none;
-}
-
-:root[data-tema='escuro'] .administracao-indicador__icone,
-:root[data-tema='escuro'] .administracao-indicador:hover .administracao-indicador__seta {
-  color: var(--preto);
-}
-
-:root[data-tema='escuro'] .administracao-indicador:hover {
-  border-color: var(--cor);
-  box-shadow: 0 5px 16px rgb(0 0 0 / 45%);
-}
-
 @media (max-width: 1100px) {
-  .administracao-indicadores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .administracao-visao {
     grid-template-columns: 1fr;
   }
@@ -209,19 +40,6 @@
 }
 
 @media (max-width: 760px) {
-  .administracao-indicadores {
-    gap: 10px;
-  }
-
-  .administracao-indicador {
-    min-height: 136px;
-    padding: 1.15rem 1.2rem 1rem;
-  }
-
-  .administracao-indicador .administracao-indicador__valor {
-    font-size: 2rem;
-  }
-
   .administracao-registros > header {
     align-items: flex-start;
     flex-direction: column;

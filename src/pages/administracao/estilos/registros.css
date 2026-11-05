@@ -10,11 +10,11 @@
 }
 .administracao-registros > header h2 {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--texto-md);
 }
 .administracao-registros > header p {
   margin: 5px 0 0;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   color: var(--texto);
 }
 .administracao-submissoes > header,
@@ -35,13 +35,13 @@
   border-top: 1px solid color-mix(in srgb, var(--borda) 68%, transparent);
 }
 .administracao-etapas dt {
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 1.45;
 }
 .administracao-etapas dd {
   margin: 0;
   color: var(--titulo);
-  font-size: 17px;
+  font-size: var(--texto-md);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -53,7 +53,7 @@
   margin: 0;
   padding: 12px 24px 22px;
   color: var(--texto);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   line-height: 1.6;
 }
 .administracao-secao-atalhos > header {
@@ -61,7 +61,7 @@
 }
 .administracao-secao-atalhos > header h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--texto-md);
   letter-spacing: -0.02em;
 }
 .administracao-secao-atalhos > header {
@@ -69,7 +69,7 @@
 }
 .administracao-secao-atalhos > header p {
   margin: 5px 0 0;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 1.5;
 }
 .administracao-categorias {
@@ -82,7 +82,7 @@
   padding: 20px 24px;
   background: var(--superficie);
   border: 1px solid var(--borda-suave);
-  border-radius: 14px;
+  border-radius: var(--raio-cartao);
 }
 :root[data-tema='escuro'] .administracao-categoria {
   background: var(--preto);
@@ -92,11 +92,10 @@
   margin: 0;
   padding: 0 0 12px;
   border-bottom: 1px solid var(--borda-suave);
-  color: var(--azul);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--titulo);
+  font-size: var(--texto-md);
+  font-weight: 600;
+  letter-spacing: normal;
 }
 .administracao-categoria ul {
   list-style: none;
@@ -114,7 +113,7 @@
   min-height: 62px;
   padding: 10px 8px;
   margin-inline: -8px;
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   transition:
     color 140ms,
     background-color 140ms;
@@ -131,11 +130,11 @@
 }
 .administracao-categoria__texto strong {
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
 }
 .administracao-categoria__texto small {
   color: var(--texto);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   line-height: 1.4;
 }
 .administracao-categoria a svg {
@@ -152,11 +151,11 @@
 }
 .administracao-vazio strong {
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
 }
 .administracao-vazio p {
   margin: 5px 0 0;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 1.5;
 }
 .administracao-vazio .botao-primario {
@@ -166,7 +165,7 @@
   min-height: 44px;
   margin-top: 12px;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   background: var(--azul-escuro);
   color: var(--branco);
   font-weight: 700;
@@ -175,17 +174,16 @@
   min-height: 102px;
   padding: 16px 18px;
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   background: var(--superficie);
 }
 .administracao-boas-vindas__rotulo {
   display: block;
   margin-bottom: 5px;
   color: var(--azul);
-  font-size: 10px;
+  font-size: var(--texto-xs);
   font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  letter-spacing: normal;
 }
 .administracao-boas-vindas h1 {
   font-size: clamp(22px, 2.2vw, 28px);
@@ -194,7 +192,7 @@
 .administracao-boas-vindas p {
   margin: 5px 0 0;
   color: var(--texto);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   line-height: 1.5;
 }
 .administracao-boas-vindas__acoes {
@@ -206,8 +204,8 @@
 .administracao-boas-vindas__acoes button {
   min-height: 38px;
   padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: var(--raio-botao);
+  font-size: var(--texto-xs);
 }
 .administracao-registros {
   margin: 0;
@@ -216,11 +214,11 @@
   padding: 16px;
 }
 .administracao-registros > header h2 {
-  font-size: 15px;
+  font-size: var(--texto-sm);
 }
 .administracao-registros > header a {
   color: var(--azul);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   font-weight: 650;
   white-space: nowrap;
 }
@@ -228,9 +226,8 @@
   min-width: 760px;
 }
 .administracao-registros .tabela-submissoes thead {
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: var(--texto-xs);
+  letter-spacing: normal;
 }
 .administracao-registros .tabela-submissoes th,
 .administracao-registros .tabela-submissoes td {
@@ -238,7 +235,7 @@
 }
 :root[data-tema='escuro'] .administracao-boas-vindas,
 :root[data-tema='escuro'] .administracao-indicador,
-:root[data-tema='escuro'] .gestao-curso-cartao {
+:root[data-tema='escuro'] .curso-gestao {
   border-color: var(--borda-suave);
   background: var(--preto);
 }
@@ -249,30 +246,30 @@
   background: var(--suave);
 }
 .administracao-boas-vindas__rotulo {
-  font-size: 12px;
+  font-size: var(--texto-xs);
 }
 .administracao-boas-vindas h1 {
   font-size: clamp(28px, 2.5vw, 34px);
 }
 .administracao-boas-vindas p {
-  font-size: 15px;
+  font-size: var(--texto-sm);
 }
 .administracao-registros > header h2 {
-  font-size: 18px;
+  font-size: var(--texto-md);
 }
 .administracao-registros > header p {
-  font-size: 14px;
+  font-size: var(--texto-sm);
 }
 @media (max-width: 760px) {
   .administracao-boas-vindas h1 {
-    font-size: 28px;
+    font-size: var(--texto-xl);
   }
 
   .administracao-indicador__texto > span {
-    font-size: 13px;
+    font-size: var(--texto-xs);
   }
 
   .administracao-indicador__texto strong {
-    font-size: 28px;
+    font-size: var(--texto-xl);
   }
 }

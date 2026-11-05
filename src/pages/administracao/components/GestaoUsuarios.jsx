@@ -153,12 +153,12 @@ export default function GestaoUsuarios({ token }) {
             </label>
           </div>
           <div
-            className="tabela-submissoes"
+            className="tabela-container"
             role="region"
             aria-label="Contas do portal"
             tabIndex={0}
           >
-            <table>
+            <table className="tabela">
               <thead>
                 <tr>
                   <th scope="col">Pessoa</th>

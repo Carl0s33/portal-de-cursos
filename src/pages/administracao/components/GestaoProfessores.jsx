@@ -1,9 +1,11 @@
+import EstadoErro from '@/shared/components/EstadoErro.jsx'
 import { Fragment, useEffect, useState } from 'react'
 import {
   cadastrarProfessor,
   excluirProfessor,
   listarProfessores,
 } from '../services/gerenciarProfessores.js'
+import { listarCursos } from '@/api/cursos.js'
 import FormularioProfessor from './FormularioProfessor.jsx'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
 import '../estilos/gestao.css'
@@ -11,6 +13,7 @@ import '../estilos/geral.css'
 
 export default function GestaoProfessores({ token, cursoId }) {
   const [consulta, definirConsulta] = useState({ estado: 'carregando', dados: [], erro: '' })
+  const [listaCursos, definirListaCursos] = useState([])
   const [tentativa, definirTentativa] = useState(0)
   const [busca, definirBusca] = useState('')
   const [criando, definirCriando] = useState(false)
@@ -18,16 +21,31 @@ export default function GestaoProfessores({ token, cursoId }) {
   const [ocupado, definirOcupado] = useState(false)
   const [erro, definirErro] = useState('')
   const [mensagem, definirMensagem] = useState('')
+
   useEffect(() => {
     const controle = new AbortController()
-    listarProfessores(token, controle.signal)
-      .then((dados) => {
-        if (!controle.signal.aborted) definirConsulta({ estado: 'pronto', dados, erro: '' })
-      })
-      .catch((falha) => {
-        if (!controle.signal.aborted)
-          definirConsulta({ estado: 'erro', dados: [], erro: falha.message })
-      })
+
+    Promise.allSettled([
+      listarProfessores(token, controle.signal),
+      listarCursos(controle.signal, token),
+    ]).then(([resProfessores, resCursos]) => {
+      if (controle.signal.aborted) return
+
+      if (resCursos.status === 'fulfilled' && Array.isArray(resCursos.value)) {
+        definirListaCursos(resCursos.value)
+      }
+
+      if (resProfessores.status === 'fulfilled') {
+        definirConsulta({ estado: 'pronto', dados: resProfessores.value, erro: '' })
+      } else {
+        definirConsulta({
+          estado: 'erro',
+          dados: [],
+          erro: resProfessores.reason?.message || 'Erro ao carregar professores',
+        })
+      }
+    })
+
     return () => controle.abort()
   }, [token, tentativa])
   async function salvar(dados) {
@@ -65,6 +83,8 @@ export default function GestaoProfessores({ token, cursoId }) {
       definirOcupado(false)
     }
   }
+  const mapaCursos = new Map(listaCursos.map((c) => [String(c.id), c]))
+
   const itens = consulta.dados
     .filter((item) => !cursoId || String(item.cursoId) === String(cursoId))
     .filter((item) =>
@@ -72,13 +92,16 @@ export default function GestaoProfessores({ token, cursoId }) {
         .toLocaleLowerCase('pt-BR')
         .includes(busca.trim().toLocaleLowerCase('pt-BR')),
     )
-  const cursosVinculados = [
-    ...new Map(
-      consulta.dados
-        .filter((item) => item.cursoId)
-        .map((item) => [String(item.cursoId), { id: item.cursoId }]),
-    ).values(),
-  ]
+  const cursosVinculados =
+    listaCursos.length > 0
+      ? listaCursos
+      : [
+          ...new Map(
+            consulta.dados
+              .filter((item) => item.cursoId)
+              .map((item) => [String(item.cursoId), { id: item.cursoId, nome: `Curso ${item.cursoId}` }]),
+          ).values(),
+        ]
   return (
     <>
       <header className="painel-titulo">
@@ -126,37 +149,39 @@ export default function GestaoProfessores({ token, cursoId }) {
       )}
       {consulta.estado === 'carregando' && <p role="status">Carregando professores…</p>}
       {consulta.estado === 'erro' && (
-        <div className="gestao-aviso" role="alert">
-          <p>{consulta.erro}</p>
-          <button
-            className="botao-secundario"
-            onClick={() => {
-              definirConsulta({ estado: 'carregando', dados: [], erro: '' })
-              definirTentativa((valor) => valor + 1)
-            }}
-          >
-            Tentar novamente
-          </button>
-        </div>
+        <EstadoErro
+          titulo="A lista de professores não foi carregada"
+          mensagem={consulta.erro}
+          aoTentarNovamente={() => {
+            definirConsulta({ estado: 'carregando', dados: [], erro: '' })
+            definirTentativa((valor) => valor + 1)
+          }}
+        />
       )}
       {consulta.estado === 'pronto' && (
         <section className="painel-secao">
-          <label className="gestao-busca">
-            Buscar professor
-            <input
-              type="search"
-              value={busca}
-              onChange={(e) => definirBusca(e.target.value)}
-              placeholder="Nome ou e-mail"
-            />
-          </label>
+          <div className="painel__cabecalho gestao-professores__busca">
+            <label className="gestao-busca">
+              Buscar professor
+              <input
+                className="campo"
+                type="search"
+                value={busca}
+                onChange={(e) => definirBusca(e.target.value)}
+                placeholder="Nome ou e-mail"
+              />
+            </label>
+            <span className="painel-contagem">
+              {itens.length} {itens.length === 1 ? 'professor' : 'professores'}
+            </span>
+          </div>
           <div
-            className="tabela-submissoes"
+            className="tabela-container"
             role="region"
             aria-label="Professores cadastrados"
             tabIndex={0}
           >
-            <table>
+            <table className="tabela">
               <thead>
                 <tr>
                   <th scope="col">Professor</th>
@@ -170,11 +195,23 @@ export default function GestaoProfessores({ token, cursoId }) {
                   <Fragment key={item.id}>
                     <tr>
                       <th scope="row">
-                        {item.nome}
-                        <span>{item.email}</span>
+                        <span className="tabela__titulo">{item.nome}</span>
+                        <span className="tabela__descricao">{item.email}</span>
                       </th>
-                      <td>{item.titulacao}</td>
-                      <td>{item.cursoId}</td>
+                      <td>
+                        {{
+                          MESTRADO: 'Mestrado',
+                          DOUTORADO: 'Doutorado',
+                          ESPECIALIZACAO: 'Especialização',
+                          GRADUACAO: 'Graduação',
+                        }[item.titulacao] || item.titulacao}
+                      </td>
+                      <td>
+                        {(() => {
+                          const c = mapaCursos.get(String(item.cursoId))
+                          return c ? (c.sigla || c.acronimo || c.nome) : (item.cursoId ? `Curso ${item.cursoId}` : '—')
+                        })()}
+                      </td>
                       <td>
                         <button
                           className="gestao-excluir"

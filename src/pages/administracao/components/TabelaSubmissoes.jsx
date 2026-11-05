@@ -12,8 +12,8 @@ export default function TabelaSubmissoes({ itens = [], baseDetalhes }) {
   }
 
   return (
-    <div className="tabela-submissoes" role="region" aria-label="Lista de submissões" tabIndex={0}>
-      <table>
+    <div className="tabela-container" role="region" aria-label="Lista de submissões" tabIndex={0}>
+      <table className="tabela">
         <caption className="somente-leitores">Acompanhamento de submissões acadêmicas</caption>
         <thead>
           <tr>
@@ -21,11 +21,7 @@ export default function TabelaSubmissoes({ itens = [], baseDetalhes }) {
             <th scope="col">Curso</th>
             <th scope="col">Envio</th>
             <th scope="col">Situação</th>
-            {baseDetalhes && (
-              <th scope="col" className="somente-leitores">
-                Ação
-              </th>
-            )}
+            {baseDetalhes && <th scope="col">Ação</th>}
           </tr>
         </thead>
         <tbody>
@@ -35,30 +31,32 @@ export default function TabelaSubmissoes({ itens = [], baseDetalhes }) {
             return (
               <tr key={item.identificador}>
                 <th scope="row">
-                  {baseDetalhes ? (
-                    <a href={`${baseDetalhes}/${encodeURIComponent(item.identificador)}`}>
-                      {item.titulo}
-                    </a>
-                  ) : (
-                    item.titulo
-                  )}
-                  <span>
+                  <span className="tabela__titulo">
+                    {baseDetalhes ? (
+                      <a href={`${baseDetalhes}/${encodeURIComponent(item.identificador)}`}>
+                        {item.titulo}
+                      </a>
+                    ) : (
+                      item.titulo
+                    )}
+                  </span>
+                  <span className="tabela__descricao">
                     {item.autor} · {item.tipo}
                     {item.orientador ? ` · Orientação: ${item.orientador}` : ''}
                   </span>
                 </th>
-                <td>{item.curso || item.cursoCompleto || '—'}</td>
-                <td>{item.enviadoEm || '—'}</td>
-                <td>
+                <td data-label="Curso">{item.curso || item.cursoCompleto || '—'}</td>
+                <td data-label="Envio">{item.enviadoEm || '—'}</td>
+                <td data-label="Situação">
                   <span className={classeStatus}>{status}</span>
                 </td>
                 {baseDetalhes && (
-                  <td>
+                  <td data-label="Ação">
                     <a
                       className="tabela-submissoes__abrir"
                       href={`${baseDetalhes}/${encodeURIComponent(item.identificador)}`}
                     >
-                      Avaliar <span aria-hidden="true">→</span>
+                      Avaliar submissão
                     </a>
                   </td>
                 )}

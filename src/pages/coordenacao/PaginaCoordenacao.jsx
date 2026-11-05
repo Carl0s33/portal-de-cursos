@@ -1,3 +1,5 @@
+import { ordenarSubmissoes } from '@/shared/utils/ordenarSubmissoes.js'
+import Indicadores from '@/shared/components/Indicadores.jsx'
 import { useEffect, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import { basePortal, enderecoPrivado } from '../../app/rotas.js'
@@ -8,13 +10,6 @@ import GestaoProfessores from '@/pages/administracao/components/GestaoProfessore
 import { filtrarContextoCoordenacao } from './services/filtrarContextoCoordenacao.js'
 import '@/shared/styles/painel.css'
 import './coordenacao.css'
-
-const iconesIndicadores = {
-  total: 'projetos-detalhe',
-  analise: 'relogio-cursos',
-  curso: 'docentes-detalhe',
-  aprovado: 'confirmacao-cursos',
-}
 
 export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar, submissoes }) {
   const [cursos, definirCursos] = useState([])
@@ -42,6 +37,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
       <main id="conteudo" className="pagina-painel pagina-painel--administracao">
         {cursosDaCoordenacao.length ? (
           <GestaoConteudos
+            restritoAoCurso
             dominio="cursos"
             itens={cursos}
             aoAlterar={(itens) => aoAlterar('cursos', itens)}
@@ -71,13 +67,14 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
         className="pagina-painel pagina-painel--administracao pagina-painel--disciplinas"
       >
         <GestaoConteudos
+          restritoAoCurso
           dominio="disciplinas"
           itens={rascunhos.disciplinas}
           cursos={cursosDaCoordenacao}
           disciplinas={rascunhos.disciplinas}
           token={sessao.token}
           aoAlterar={(itens) => aoAlterar('disciplinas', itens)}
-          cursoId={curso?.identificador || cursoId}
+          cursoId={curso?.id || cursoId}
           curso={curso}
         />
       </main>
@@ -87,13 +84,14 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
     return (
       <main id="conteudo" className="pagina-painel pagina-painel--administracao">
         <GestaoConteudos
+          restritoAoCurso
           dominio="projetos"
           itens={rascunhos.projetos}
           cursos={cursosDaCoordenacao}
           disciplinas={rascunhos.disciplinas}
           token={sessao.token}
           aoAlterar={(itens) => aoAlterar('projetos', itens)}
-          cursoId={curso?.identificador || cursoId}
+          cursoId={curso?.id || cursoId}
           curso={curso}
         />
       </main>
@@ -104,13 +102,12 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
       <main id="conteudo" className="pagina-painel pagina-painel--administracao">
         <header className="painel-titulo coordenacao-boas-vindas">
           <div>
-            <span className="coordenacao-boas-vindas__rotulo">Avaliação acadêmica</span>
             <h1>Submissões do curso</h1>
             <p>Avalie as submissões aceitas pelos orientadores e decida sobre a publicação.</p>
           </div>
           <div className="coordenacao-boas-vindas__acoes">
             <a className="botao-primario" href={`${basePortal}#submeter`}>
-              + Submeter projeto
+              Enviar projeto
             </a>
           </div>
         </header>
@@ -122,7 +119,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             </div>
           </header>
           <TabelaSubmissoes
-            itens={submissoesDoCurso}
+            itens={ordenarSubmissoes(submissoesDoCurso)}
             baseDetalhes={enderecoPrivado('coordenacao/submissao')}
           />
         </section>
@@ -133,7 +130,6 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
     <main id="conteudo" className="pagina-painel pagina-painel--administracao coordenacao-painel">
       <header className="painel-titulo coordenacao-boas-vindas">
         <div>
-          <span className="coordenacao-boas-vindas__rotulo">Coordenação de curso</span>
           <h1>{curso?.sigla ? `${curso.sigla} — ${curso.nome}` : 'Coordenação do curso'}</h1>
           <p>
             {curso?.nome
@@ -146,66 +142,40 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             Editar curso
           </a>
           <a className="botao-primario" href={`${basePortal}#submeter`}>
-            + Submeter projeto
+            Enviar projeto
           </a>
         </div>
       </header>
 
-      <section className="coordenacao-indicadores" aria-label="Resumo do curso">
-        {[
-          [
-            'Total de submissões',
-            indicadores.total,
-            'total',
-            'coordenacao/submissoes',
-            'registradas no curso',
-          ],
-          [
-            'Aguardando coordenação',
-            indicadores.emAnaliseCoord,
-            'analise',
-            'coordenacao/submissoes',
-            'prontas para decisão final',
-          ],
-          [
-            'Com o orientador',
-            indicadores.aguardandoOrientador,
-            'curso',
-            'coordenacao/submissoes',
-            'em avaliação inicial',
-          ],
-          [
-            'Publicados no portal',
-            indicadores.publicados,
-            'aprovado',
-            'coordenacao/projetos',
-            'disponíveis no acervo público',
-          ],
-        ].map(([rotulo, total, tipo, destino, detalhe]) => (
-          <a
-            className={`coordenacao-indicador coordenacao-indicador--${tipo}`}
-            href={enderecoPrivado(destino)}
-            key={rotulo}
-          >
-            <span className="coordenacao-indicador__topo">
-              <span className="coordenacao-indicador__icone" aria-hidden="true">
-                <Icone nome={iconesIndicadores[tipo]} />
-              </span>
-              <span className="coordenacao-indicador__rotulo">{rotulo}</span>
-            </span>
-            <strong className="coordenacao-indicador__valor">{total}</strong>
-            <span className="coordenacao-indicador__detalhe">{detalhe}</span>
-            <span className="coordenacao-indicador__seta" aria-hidden="true">
-              <Icone nome="seta" />
-            </span>
-          </a>
-        ))}
-      </section>
+      <Indicadores
+        itens={[
+          {
+            titulo: 'Total de submissões',
+            valor: indicadores.total,
+            icone: 'projetos-detalhe',
+          },
+          {
+            titulo: 'Aguardando coordenação',
+            valor: indicadores.emAnaliseCoord,
+            icone: 'relogio-cursos',
+          },
+          {
+            titulo: 'Com o orientador',
+            valor: indicadores.aguardandoOrientador,
+            icone: 'docentes-detalhe',
+          },
+          {
+            titulo: 'Publicados no portal',
+            valor: indicadores.publicados,
+            icone: 'confirmacao-cursos',
+          },
+        ]}
+      />
 
       <section className="painel-secao coordenacao-registros">
         <header>
           <div>
-            <h2>Submissões recentes do curso</h2>
+            <h2>Submissões por prioridade</h2>
             <p>
               Trabalhos submetidos pelos estudantes que aguardam aceite do orientador ou aprovação
               final da coordenação.
@@ -216,7 +186,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
           </a>
         </header>
         <TabelaSubmissoes
-          itens={submissoesDoCurso.slice(0, 8)}
+          itens={ordenarSubmissoes(submissoesDoCurso).slice(0, 8)}
           baseDetalhes={enderecoPrivado('coordenacao/submissao')}
         />
       </section>
