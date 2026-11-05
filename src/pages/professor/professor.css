@@ -1005,3 +1005,45 @@
     transition: none;
   }
 }
+
+/* Refinamento institucional — fluxo de orientação */
+.pagina-professor__topo {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--borda-suave);
+}
+.pagina-professor__topo p:not(.pagina-professor__rotulo) {
+  color: var(--texto-suave);
+}
+.pagina-professor__filtro-painel {
+  border-color: var(--borda-suave);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--marinho) 4%, transparent);
+}
+.submissao-feed {
+  border-left-width: 3px;
+  border-color: var(--borda-suave);
+  border-left-color: var(--cor-card);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--marinho) 3%, transparent);
+}
+.submissao-feed:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--cor-card) 44%, var(--borda));
+  border-left-color: var(--cor-card);
+}
+.submissao-feed__titulo {
+  font-size: clamp(17px, 1.6vw, 20px);
+  letter-spacing: -0.025em;
+}
+.submissao-feed__expandir {
+  border-color: color-mix(in srgb, var(--azul) 25%, var(--borda));
+  border-radius: 10px;
+}
+@media (max-width: 760px) {
+  .pagina-professor__topo { padding-bottom: 18px; }
+  .submissao-feed__gatilho { flex-wrap: wrap; padding: 18px; }
+  .submissao-feed__expandir { margin-left: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .submissao-feed:hover { transform: none; }
+}
