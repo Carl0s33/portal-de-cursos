@@ -166,3 +166,37 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Refinamento institucional — acervo público */
+.pagina-projetos__titulo {
+  padding-block: 16px 26px;
+  border-bottom: 1px solid var(--borda-suave);
+}
+.pagina-projetos__titulo h1 {
+  margin: 0 0 10px;
+  font-size: clamp(30px, 3.4vw, 44px);
+  line-height: 1.14;
+  letter-spacing: -0.045em;
+}
+.pagina-projetos__titulo p:not(.pagina-projetos__rotulo) {
+  margin: 0;
+  max-width: 65ch;
+  color: var(--texto-suave);
+}
+.pagina-projetos__vazio {
+  min-height: 300px;
+  align-content: center;
+  padding: clamp(32px, 5vw, 64px);
+  border-color: var(--borda-suave);
+  border-radius: 18px;
+  box-shadow: 0 12px 36px color-mix(in srgb, var(--marinho) 4%, transparent);
+}
+.pagina-projetos__vazio h2 {
+  letter-spacing: -0.035em;
+}
+.pagina-projetos__vazio p { max-width: 47ch; }
+@media (max-width: 760px) {
+  .pagina-projetos__titulo { padding-top: 8px; }
+  .pagina-projetos__titulo > a { width: 100%; }
+  .pagina-projetos__vazio { min-height: 260px; }
+}
