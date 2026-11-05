@@ -278,10 +278,9 @@
 .perfil-publico__cabecalho {
   --perfil-acento: var(--azul);
   min-height: 0;
-  padding: 24px;
+  padding: clamp(24px, 4vw, 36px);
   border: 1px solid var(--borda);
-  border-top: 3px solid var(--perfil-acento);
-  border-radius: var(--raio-cartao);
+  border-radius: 14px;
   background: var(--superficie);
   box-shadow: none;
 }
@@ -295,8 +294,9 @@
   width: 72px;
   height: 72px;
   border: 0;
-  border-radius: 18px;
-  font-size: 26px;
+  border-radius: 50%;
+  font-size: 28px;
+  font-weight: 800;
 }
 
 .perfil-publico__avatar-docente {
@@ -310,37 +310,12 @@
 }
 
 .perfil-publico__cabecalho--discente {
-  border: 0;
-  border-top: 0;
-  background: transparent;
-  padding-left: 0;
-  padding-right: 0;
+  --perfil-acento: var(--marinho);
 }
 
 .perfil-publico__cabecalho--docente,
 .perfil-publico__cabecalho--coordenador {
-  border: 0;
-  background: var(--azul);
-  color: var(--branco);
-}
-
-.perfil-publico__cabecalho--docente .perfil-publico__nome,
-.perfil-publico__cabecalho--coordenador .perfil-publico__nome {
-  color: var(--branco);
-}
-
-.perfil-publico__cabecalho--docente .perfil-publico__email,
-.perfil-publico__cabecalho--coordenador .perfil-publico__email {
-  color: color-mix(in srgb, var(--branco) 82%, transparent);
-}
-
-.perfil-publico__cabecalho--docente .perfil-publico__badge-docente,
-.perfil-publico__cabecalho--docente .perfil-publico__badge-titulacao,
-.perfil-publico__cabecalho--coordenador .perfil-publico__badge-docente,
-.perfil-publico__cabecalho--coordenador .perfil-publico__badge-titulacao,
-.perfil-publico__cabecalho--coordenador .perfil-publico__badge-coordenador {
-  border-color: color-mix(in srgb, var(--branco) 40%, transparent);
-  color: var(--branco);
+  --perfil-acento: var(--azul);
 }
 
 .perfil-publico__cabecalho--coordenador {
@@ -361,7 +336,7 @@
   padding: 4px 10px;
   border: 1px solid var(--borda);
   border-radius: var(--raio-pilula);
-  background: transparent;
+  background: var(--suave);
   color: var(--azul);
   font-size: var(--texto-xs);
   font-weight: 600;
@@ -371,6 +346,11 @@
 
 .perfil-publico__badge-titulacao {
   color: var(--sucesso);
+}
+
+.perfil-publico__cabecalho--coordenador .perfil-publico__avatar-docente {
+  background: var(--sucesso);
+  color: var(--branco);
 }
 
 .perfil-publico__badge-coordenador {
@@ -488,6 +468,7 @@
 @media (max-width: 600px) {
   .perfil-publico__cabecalho {
     align-items: flex-start;
+    padding: 24px;
     gap: 16px;
   }
 
