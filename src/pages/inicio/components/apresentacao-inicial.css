@@ -107,8 +107,8 @@
   padding: 8px 18px;
   border: 1px solid var(--borda);
   border-radius: var(--raio-cartao);
-  background: var(--branco);
-  color: var(--marinho);
+  background: var(--superficie);
+  color: var(--titulo);
 }
 
 .hero-inicial__navegacao ul {
@@ -140,7 +140,7 @@
 
 .hero-inicial__navegacao a:focus-visible,
 .hero-inicial__acoes a:focus-visible {
-  outline: 2px solid var(--branco);
+  outline: 2px solid var(--azul-vivo);
   outline-offset: 4px;
 }
 
@@ -160,7 +160,7 @@
 }
 
 .hero-inicial__navegacao strong {
-  color: var(--marinho);
+  color: var(--titulo);
   font-size: var(--texto-md);
   font-weight: 650;
 }
