@@ -84,8 +84,19 @@
   font-weight: 700;
 }
 
+:root[data-tema='escuro'] .hero-inicial__acoes .botao-primario {
+  border-color: var(--azul-vivo);
+  background: var(--azul-vivo);
+  color: var(--preto);
+}
+
 .hero-inicial__acoes .botao-primario:hover {
   background: color-mix(in srgb, var(--branco) 90%, var(--azul-vivo));
+}
+
+:root[data-tema='escuro'] .hero-inicial__acoes .botao-primario:hover {
+  border-color: var(--azul);
+  background: var(--azul);
 }
 
 .hero-inicial__acao-secundaria {
