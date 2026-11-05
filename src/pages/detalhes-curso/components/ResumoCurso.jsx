@@ -27,9 +27,6 @@ export default function ResumoCurso({ curso }) {
           </h1>
           <p>{curso.descricao}</p>
         </div>
-        <div className="resumo-curso__selo" aria-hidden="true">
-          <span>{curso.sigla || 'Curso'}</span>
-        </div>
       </div>
       <dl className="resumo-curso__indicadores">
         {indicadores.map(([titulo, valor, apoio, icone]) => (

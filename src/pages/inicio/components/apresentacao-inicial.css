@@ -104,9 +104,10 @@
 .hero-inicial__navegacao {
   min-width: 0;
   padding: 8px 18px;
-  border: 1px solid color-mix(in srgb, var(--branco) 20%, transparent);
+  border: 1px solid var(--borda);
   border-radius: var(--raio-cartao);
-  background: color-mix(in srgb, var(--branco) 9%, transparent);
+  background: var(--branco);
+  color: var(--marinho);
 }
 
 .hero-inicial__navegacao ul {
@@ -116,7 +117,7 @@
 }
 
 .hero-inicial__navegacao li + li {
-  border-top: 1px solid color-mix(in srgb, var(--branco) 18%, transparent);
+  border-top: 1px solid var(--borda-suave);
 }
 
 .hero-inicial__navegacao a {
@@ -133,7 +134,7 @@
 }
 
 .hero-inicial__navegacao a:hover {
-  background: color-mix(in srgb, var(--branco) 9%, transparent);
+  background: var(--suave);
 }
 
 .hero-inicial__navegacao a:focus-visible,
@@ -147,9 +148,9 @@
   width: 20px;
   height: 20px;
   padding: 10px;
-  border: 1px solid color-mix(in srgb, var(--branco) 24%, transparent);
+  border: 1px solid var(--borda-suave);
   border-radius: 12px;
-  color: var(--branco);
+  color: var(--azul);
 }
 
 .hero-inicial__navegacao span {
@@ -158,13 +159,13 @@
 }
 
 .hero-inicial__navegacao strong {
-  color: var(--branco);
+  color: var(--marinho);
   font-size: var(--texto-md);
   font-weight: 650;
 }
 
 .hero-inicial__navegacao small {
-  color: color-mix(in srgb, var(--branco) 72%, transparent);
+  color: var(--texto-suave);
   font-size: var(--texto-sm);
   line-height: 1.45;
 }
@@ -187,7 +188,7 @@
 
   .hero-inicial__navegacao li + li {
     border-top: 0;
-    border-left: 1px solid color-mix(in srgb, var(--branco) 18%, transparent);
+    border-left: 1px solid var(--borda-suave);
   }
 
   .hero-inicial__navegacao a {
@@ -234,7 +235,7 @@
   }
 
   .hero-inicial__navegacao li + li {
-    border-top: 1px solid color-mix(in srgb, var(--branco) 18%, transparent);
+    border-top: 1px solid var(--borda-suave);
     border-left: 0;
   }
 

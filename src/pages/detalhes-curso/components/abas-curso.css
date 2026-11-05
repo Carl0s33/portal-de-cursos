@@ -7,10 +7,10 @@
 
 .abas-curso [role='tablist'] {
   display: flex;
+  flex-wrap: wrap;
   min-width: 0;
   max-width: 100%;
-  overflow-x: auto;
-  scrollbar-width: thin;
+  overflow: visible;
 }
 
 .abas-curso [role='tab'] {
@@ -25,7 +25,7 @@
   background: transparent;
   color: var(--texto-suave);
   font: 600 var(--texto-sm) / 1.4 var(--fonte-corpo);
-  white-space: nowrap;
+  white-space: normal;
   cursor: pointer;
 }
 

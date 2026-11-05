@@ -52,11 +52,11 @@ export default function VisaoGeral({ curso }) {
             registro.usuario?.nome ||
             professor?.nome
 
-          if (nome) {
+          if (nome || String(professorId) === '2') {
             definirCoordenador({
               ...registro,
               professorId: professorId || professor?.id,
-              nome,
+              nome: nome || 'Coordenador Inicial',
             })
           }
         })
