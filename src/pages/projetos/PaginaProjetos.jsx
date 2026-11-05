@@ -6,6 +6,7 @@ import { consultarProjetosPublicados } from './services/consultarProjetosPublica
 import './projetos.css'
 
 export default function PaginaProjetos() {
+  const [erroCarregamento, definirErroCarregamento] = useState(false)
   const [publicados, definirPublicados] = useState([])
   const [filtrosAbertos, definirFiltrosAbertos] = useState(false)
   const [ordem, definirOrdem] = useState('nome')
@@ -20,7 +21,10 @@ export default function PaginaProjetos() {
         if (!controle.signal.aborted) definirPublicados(registros)
       })
       .catch(() => {
-        if (!controle.signal.aborted) definirPublicados([])
+        if (!controle.signal.aborted) {
+          definirPublicados([])
+          definirErroCarregamento(true)
+        }
       })
 
     return () => controle.abort()
@@ -56,6 +60,12 @@ export default function PaginaProjetos() {
 
   return (
     <main id="conteudo" className="limite pagina-projetos">
+      {erroCarregamento && (
+        <p role="alert">
+          Não foi possível carregar os projetos. Verifique se o serviço está disponível e recarregue
+          a página.
+        </p>
+      )}
       <nav aria-label="Você está aqui">
         <a href="#inicio">Início</a>
         <span aria-hidden="true"> / </span>
@@ -63,7 +73,6 @@ export default function PaginaProjetos() {
       </nav>
       <div className="pagina-projetos__titulo">
         <div>
-          <p className="pagina-projetos__rotulo">Produção acadêmica</p>
           <h1>Produções acadêmicas</h1>
           <p>Explore os trabalhos avaliados e aprovados pelos orientadores e coordenadores.</p>
         </div>
