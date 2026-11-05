@@ -35,6 +35,8 @@ desktop.ini
 /scripts/
 .husky/
 .agents/
+.gemini/
+configuracao/
 *.md
 commitlint.config.*
 /verificacoes/

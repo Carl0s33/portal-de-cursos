@@ -176,10 +176,14 @@ export default function Cabecalho({
     .join(' ')
 
   const linkPapel = autenticado ? LINKS_POR_PAPEL[tipoUsuario] : undefined
+  const mostrarVoltarPortal =
+    modoAcesso ||
+    (autenticado &&
+      (areaProfessor || ['professor', 'coordenacao', 'administracao', 'aluno-painel'].includes(pagina)))
 
   const linkPerfil = (
     <a
-      className="cabecalho__perfil"
+      className={`cabecalho__perfil${tipoUsuario ? ` cabecalho__perfil--${tipoUsuario.toLowerCase()}` : ''}`}
       href={enderecoPrivado(destinoPerfil)}
       aria-label="Meu perfil"
       title={
@@ -189,7 +193,9 @@ export default function Cabecalho({
             ? 'Painel administrativo'
             : 'Meu perfil'
       }
-      aria-current={ativoSe(pagina === 'perfil')}
+      aria-current={ativoSe(
+        pagina === 'perfil' || pagina === 'perfil-aluno' || pagina === 'perfil-professor',
+      )}
     >
       <Avatar usuario={usuario} />
     </a>
@@ -197,11 +203,23 @@ export default function Cabecalho({
 
   const navegacao = areaProfessor ? (
     <>
-      <a href={`${basePortal}#inicio`}>
-        Ver portal <span aria-hidden="true">↗</span>
-      </a>
-      <a href={enderecoPrivado(destinoPerfil)} aria-current={ativoSe(pagina === 'perfil')}>
-        Meu perfil
+      {destinoArea && (
+        <a
+          href={enderecoPrivado(destinoArea)}
+          aria-current={ativoSe(
+            ['professor', 'coordenacao', 'administracao', 'aluno-painel'].includes(pagina),
+          )}
+        >
+          Minha área
+        </a>
+      )}
+      {destinoPerfil && (
+        <a href={enderecoPrivado(destinoPerfil)} aria-current={ativoSe(pagina === 'perfil')}>
+          Meu perfil
+        </a>
+      )}
+      <a className="navegacao__portal" href={`${basePortal}#inicio`}>
+        Voltar ao portal
       </a>
       <button className="navegacao__sair" type="button" onClick={aoSair}>
         Sair da conta
@@ -209,19 +227,19 @@ export default function Cabecalho({
     </>
   ) : (
     <>
-      <a href="#inicio" aria-current={ativoSe(pagina === 'inicio')}>
+      <a href={`${basePortal}#inicio`} aria-current={ativoSe(pagina === 'inicio')}>
         Início
       </a>
-      <a href="#cursos" aria-current={ativoSe(pagina === 'cursos')}>
+      <a href={`${basePortal}#cursos`} aria-current={ativoSe(pagina === 'cursos')}>
         Cursos
       </a>
-      <a href="#projetos" aria-current={ativoSe(pagina === 'projetos')}>
+      <a href={`${basePortal}#projetos`} aria-current={ativoSe(pagina === 'projetos')}>
         Projetos
       </a>
       {(!autenticado || ['ALUNO', 'COORDENADOR'].includes(tipoUsuario)) && (
         <a
           className="navegacao__submeter"
-          href="#submeter"
+          href={`${basePortal}#submeter`}
           aria-current={ativoSe(pagina === 'submeter')}
         >
           Enviar projeto
@@ -238,6 +256,12 @@ export default function Cabecalho({
         </a>
       )}
 
+      {mostrarVoltarPortal && !areaProfessor && (
+        <a className="navegacao__portal" href={`${basePortal}#inicio`}>
+          Voltar ao portal
+        </a>
+      )}
+
       {!autenticado && (
         <a
           className="navegacao__entrar-mobile"
@@ -248,27 +272,22 @@ export default function Cabecalho({
         </a>
       )}
 
-      {autenticado && (
-        <button className="navegacao__sair" type="button" onClick={aoSair}>
-          Sair da conta
-        </button>
-      )}
     </>
   )
 
   const acoes = modoAcesso ? (
     <a className="cabecalho__portal" href={`${basePortal}#inicio`}>
-      Ver portal <span aria-hidden="true">↗</span>
+      Voltar ao portal
     </a>
   ) : areaProfessor ? (
     <>
       <a className="cabecalho__portal" href={`${basePortal}#inicio`}>
-        Ver portal <span aria-hidden="true">↗</span>
+        Voltar ao portal
       </a>
+      {linkPerfil}
       <button className="cabecalho__sair" type="button" onClick={aoSair}>
         Sair
       </button>
-      {linkPerfil}
     </>
   ) : autenticado ? (
     <>

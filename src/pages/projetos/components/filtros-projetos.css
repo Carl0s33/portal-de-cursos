@@ -4,18 +4,17 @@
   padding: 22px 20px;
   background: var(--superficie);
   border: 1px solid var(--borda);
-  border-radius: 16px;
-  box-shadow: var(--sombra);
+  border-radius: var(--raio-cartao);
 }
 .pagina-projetos__filtros h2 {
-  font-size: 17px;
+  font-size: var(--texto-md);
   font-weight: 800;
   margin: 0;
 }
 .pagina-projetos__filtros label {
   display: grid;
   gap: 8px;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   font-weight: 700;
   color: var(--titulo);
 }
@@ -26,10 +25,10 @@
   min-width: 0;
   padding: 10px 12px;
   border: 1px solid var(--borda);
-  border-radius: 10px;
+  border-radius: var(--raio-botao);
   background: var(--fundo);
   color: var(--titulo);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;

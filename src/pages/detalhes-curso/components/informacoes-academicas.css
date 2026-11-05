@@ -1,27 +1,311 @@
-.informacoes-academicas > h2 {
-  font-size: 24px;
-  line-height: 32px;
-  margin: 0 0 24px;
+.informacoes-academicas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-6, 32px);
+  animation: surgimento-suave 200ms ease-out;
 }
+
+.informacoes-academicas__cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--espaco-4, 16px);
+  padding-bottom: var(--espaco-4, 16px);
+  border-bottom: 1px solid var(--borda);
+}
+
+.informacoes-academicas__cabecalho h2 {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  color: var(--titulo);
+  margin: 0 0 6px;
+  letter-spacing: normal;
+}
+
+.informacoes-academicas__cabecalho p {
+  color: var(--texto);
+  font-size: var(--texto-sm, 14px);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.informacoes-academicas__resumo-metricas {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2, 8px);
+  flex-wrap: wrap;
+}
+
+.informacoes-academicas__filtro-abas {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2, 8px);
+  border-bottom: 2px solid var(--borda-suave, var(--borda));
+  margin-top: -8px;
+}
+
+.informacoes-academicas__botao-filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm, 14px);
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  transition: color var(--transicao, 150ms ease);
+}
+
+.informacoes-academicas__botao-filtro::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background-color var(--transicao, 150ms ease);
+}
+
+.informacoes-academicas__botao-filtro:hover {
+  color: var(--titulo);
+}
+
+.informacoes-academicas__botao-filtro--ativo {
+  color: var(--azul);
+}
+
+.informacoes-academicas__botao-filtro--ativo::after {
+  background: var(--azul);
+}
+
+.informacoes-academicas__contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: var(--raio-pilula, 9999px);
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--suave);
+  color: var(--azul);
+}
+
+.informacoes-academicas__secao-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4, 16px);
+}
+
+.informacoes-academicas__secao-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3, 12px);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--borda-suave, var(--borda));
+}
+
+.informacoes-academicas__secao-titulo h3 {
+  font-size: var(--texto-md, 16px);
+  font-weight: 500;
+  color: var(--titulo);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.informacoes-academicas__secao-tag-obrigatoria {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border-radius: var(--raio-pilula, 9999px);
+  font-size: var(--texto-xs, 12px);
+  font-weight: 700;
+  background: var(--suave);
+  color: var(--azul);
+}
+
+.informacoes-academicas__secao-tag-optativa {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border-radius: var(--raio-pilula, 9999px);
+  font-size: var(--texto-xs, 12px);
+  font-weight: 700;
+  background: var(--suave);
+  color: var(--aviso, #a8510b);
+}
+
+.informacoes-academicas__secao-tag-obrigatoria::before,
+.informacoes-academicas__secao-tag-optativa::before {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--raio-pilula);
+  background: currentColor;
+  content: '';
+}
+
+.informacoes-academicas__grade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--espaco-4, 16px);
+}
+
+.cartao-disciplina {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--espaco-4, 16px);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao, 12px);
+  background: var(--superficie);
+  transition:
+    border-color var(--transicao, 150ms ease),
+    outline var(--transicao, 150ms ease),
+    transform var(--transicao, 150ms ease);
+}
+
+.cartao-disciplina:hover {
+  border-color: var(--azul);
+  outline: 0;
+  transform: none;
+}
+
+.cartao-disciplina__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2, 8px);
+  margin-bottom: var(--espaco-2, 8px);
+}
+
+.cartao-disciplina__codigo {
+  font-family: monospace;
+  font-size: var(--texto-xs, 12px);
+  font-weight: 700;
+  color: var(--azul);
+  background: var(--suave);
+  padding: 2px 8px;
+  border-radius: var(--raio-botao);
+}
+
+.cartao-disciplina__semestre {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cartao-disciplina__nome {
+  font-size: var(--texto-md, 16px);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--titulo);
+  margin: 0 0 var(--espaco-2, 8px);
+}
+
+.cartao-disciplina__descricao {
+  font-size: var(--texto-xs, 12px);
+  line-height: 1.5;
+  color: var(--texto);
+  margin: 0 0 var(--espaco-3, 12px);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cartao-disciplina__rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2, 8px);
+  padding-top: var(--espaco-2, 8px);
+  margin-top: auto;
+  border-top: 1px solid var(--borda-suave, var(--borda));
+  font-size: var(--texto-xs, 12px);
+}
+
+.cartao-disciplina__carga {
+  font-weight: 700;
+  color: var(--titulo);
+}
+
+.cartao-disciplina__badge {
+  font-weight: 600;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--raio-pilula, 9999px);
+  border: 1px solid var(--borda);
+  color: var(--texto-suave);
+}
+
+.cartao-disciplina--obrigatoria .cartao-disciplina__badge {
+  border-color: color-mix(in srgb, var(--azul) 40%, transparent);
+  color: var(--azul);
+}
+
+.cartao-disciplina--optativa .cartao-disciplina__badge {
+  border-color: color-mix(in srgb, var(--aviso, #a8510b) 40%, transparent);
+  color: var(--aviso, #a8510b);
+}
+
 .informacoes-academicas__vazio {
   text-align: center;
-  max-width: 620px;
+  max-width: 520px;
   margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-3, 12px);
 }
-.informacoes-academicas h3 {
-  font-size: 18px;
-  line-height: 26px;
+
+.informacoes-academicas__vazio h3 {
+  font-size: var(--texto-lg, 18px);
+  font-weight: 750;
+  color: var(--titulo);
+  margin: 0;
 }
-.informacoes-academicas p {
-  font-size: 14px;
-  line-height: 24px;
+
+.informacoes-academicas__vazio p {
+  color: var(--texto);
+  font-size: var(--texto-sm, 14px);
+  line-height: 1.6;
+  margin: 0;
 }
-.informacoes-academicas__lista {
-  display: grid;
-  gap: 16px;
+
+:root[data-tema='escuro'] .cartao-disciplina {
+  background: #11141a;
+  border-color: var(--borda);
 }
-.informacoes-academicas__lista article {
+
+:root[data-tema='escuro'] .cartao-disciplina__codigo {
   background: var(--suave);
-  border-radius: 8px;
-  padding: 20px;
+  color: var(--azul);
+}
+
+:root[data-tema='escuro'] .cartao-disciplina__semestre {
+  color: #b8c0cc;
+}
+
+:root[data-tema='escuro'] .cartao-disciplina__rodape {
+  border-color: var(--borda);
+}
+
+:root[data-tema='escuro'] .informacoes-academicas__secao-tag-obrigatoria {
+  color: var(--azul);
+}
+
+:root[data-tema='escuro'] .informacoes-academicas__secao-tag-optativa {
+  color: var(--aviso);
 }

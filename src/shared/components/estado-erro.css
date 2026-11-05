@@ -1,0 +1,31 @@
+.estado-erro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espaco-5);
+  padding: var(--espaco-5);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+}
+.estado-erro > div {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.estado-erro h2 {
+  margin: 0;
+  color: var(--titulo);
+  font-size: var(--texto-lg);
+}
+.estado-erro p {
+  margin: var(--espaco-2) 0 0;
+  color: var(--texto);
+  font-size: var(--texto-sm);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.estado-erro button {
+  max-width: 100%;
+  white-space: normal;
+}

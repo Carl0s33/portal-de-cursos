@@ -199,21 +199,19 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--esp-2);
-  min-height: 48px;
-  padding: var(--esp-3) var(--esp-5);
+  gap: var(--espaco-2);
+  min-height: 44px;
+  padding: var(--espaco-3) var(--espaco-5);
   border: 1px solid transparent;
-  border-radius: var(--raio-m);
+  border-radius: var(--raio-botao);
   font-size: var(--texto-s);
   font-weight: 600;
-  line-height: 20px;
+  line-height: 1.6;
   cursor: pointer;
   transition:
     background-color var(--transicao),
     border-color var(--transicao),
-    color var(--transicao),
-    box-shadow var(--transicao),
-    transform var(--transicao);
+    color var(--transicao);
 }
 
 .botao-primario {
@@ -242,13 +240,8 @@ a:hover {
 
 .botao-primario:focus-visible,
 .botao-secundario:focus-visible {
-  outline: none;
-  box-shadow: var(--anel-foco);
-}
-
-.botao-primario:active,
-.botao-secundario:active {
-  transform: translateY(1px);
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
 }
 
 .botao-primario:disabled,
@@ -264,22 +257,27 @@ a:hover {
 }
 
 .botao--pequeno {
-  min-height: 40px;
+  min-height: 44px;
   padding: var(--esp-2) var(--esp-4);
 }
 
 .etiqueta {
-  display: inline-block;
-  background: var(--etiqueta);
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  background: var(--superficie);
   color: var(--azul);
-  border-radius: 4px;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 600;
-  padding: 3px 10px;
+  border: 1px solid var(--azul);
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-xs);
+  line-height: 1.2;
+  font-weight: 700;
+  padding: 5px 12px;
 }
 
 .etiqueta--neutra {
+  background: var(--suave);
+  border-color: var(--borda);
   color: var(--texto);
   font-weight: 500;
 }
@@ -287,16 +285,17 @@ a:hover {
 .pular-conteudo {
   position: fixed;
   left: 16px;
-  top: -80px;
+  top: -120px;
+  opacity: 0;
+  pointer-events: none;
   z-index: 100;
   background: var(--superficie);
   padding: 12px;
   border: 2px solid var(--azul);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
 }
 
-.pular-conteudo:focus {
-  top: 12px;
+.pular-conteudo:focus {  top: 12px;  opacity: 1;  pointer-events: auto;
 }
 
 :root[data-tema='escuro'] .icone:not(.icone--usuario):not(.icone--adicionar) {

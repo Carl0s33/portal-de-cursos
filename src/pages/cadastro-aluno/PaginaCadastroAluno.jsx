@@ -1,3 +1,4 @@
+import PainelInstitucional from '@/shared/components/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { basePortal } from '@/app/rotas.js'
 import logoPortal from '@/assets/marca/logo-portal.png'
@@ -184,7 +185,7 @@ export default function PaginaCadastroAluno() {
 
   return (
     <main id="conteudo" className="limite pagina-acesso cadastro-aluno">
-      <div className="cadastro-aluno__cartao">
+      <div className="cadastro-aluno__cartao layout-autenticacao">
         <section className="cadastro-aluno__conteudo" aria-labelledby="titulo-cadastro">
           <div className="cadastro-aluno__marca">
             <span className="cadastro-aluno__logo">
@@ -385,60 +386,7 @@ export default function PaginaCadastroAluno() {
             </span>
           </p>
         </section>
-        <aside className="cadastro-aluno__vitrine" aria-label="Conheça os projetos acadêmicos">
-          <article className="cadastro-aluno__projetos">
-            <header>
-              <div>
-                <strong>Tipos de projeto</strong>
-                <span>Publicados após aprovação do orientador</span>
-              </div>
-              <b>4 tipos</b>
-            </header>
-            <div className="cadastro-aluno__projeto">
-              <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--tcc">
-                <Icone nome="formacao-cursos" />
-              </span>
-              <div>
-                <strong>TCC</strong>
-                <small>Trabalho de conclusão de curso</small>
-              </div>
-            </div>
-            <div className="cadastro-aluno__projeto">
-              <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--integrador">
-                <Icone nome="projetos-cursos" />
-              </span>
-              <div>
-                <strong>Projeto Integrador</strong>
-                <small>Une conteúdos de várias disciplinas</small>
-              </div>
-            </div>
-            <div className="cadastro-aluno__projeto">
-              <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--pesquisa">
-                <Icone nome="laboratorio" />
-              </span>
-              <div>
-                <strong>Projeto de Pesquisa</strong>
-                <small>Investigação científica orientada</small>
-              </div>
-            </div>
-            <div className="cadastro-aluno__projeto">
-              <span className="cadastro-aluno__projeto-icone cadastro-aluno__projeto-icone--extensao">
-                <Icone nome="docentes-detalhe" />
-              </span>
-              <div>
-                <strong>Projeto de Extensão</strong>
-                <small>Ações junto à comunidade</small>
-              </div>
-            </div>
-          </article>
-          <div className="cadastro-aluno__mensagem">
-            <h2>Crie sua conta e publique seus projetos.</h2>
-            <p>
-              Envie seu TCC, Projeto Integrador, de Pesquisa ou de Extensão para avaliação do
-              orientador.
-            </p>
-          </div>
-        </aside>
+        <PainelInstitucional />
       </div>
     </main>
   )

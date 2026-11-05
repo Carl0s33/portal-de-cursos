@@ -1,0 +1,208 @@
+/* ---------- Lista ---------- */
+
+.pagina-professor__resultados {
+  min-width: 0;
+}
+
+.pagina-professor__feed-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 14px;
+  border-bottom: 1px solid var(--borda);
+}
+
+.pagina-professor__feed-cabecalho strong,
+.pagina-professor__feed-cabecalho span {
+  font-size: var(--texto-xs);
+}
+
+.pagina-professor__feed-cabecalho span {
+  color: var(--texto);
+}
+
+.lista-submissoes {
+  display: grid;
+  gap: 12px;
+  padding-top: 16px;
+}
+
+/* ---------- Card ---------- */
+
+.submissao-feed {
+  --cor-status-card: var(--azul);
+  overflow: hidden;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao),
+    transform var(--transicao);
+}
+
+.submissao-feed--pendente {
+  --cor-status-card: var(--azul);
+}
+
+.submissao-feed--analise {
+  --cor-status-card: var(--aviso);
+}
+
+.submissao-feed--aprovado,
+.submissao-feed--publicado {
+  --cor-status-card: var(--sucesso);
+}
+
+.submissao-feed--recusado {
+  --cor-status-card: var(--erro);
+}
+
+.submissao-feed:hover {
+  border-color: var(--cor-status-card);
+  outline: 2px solid var(--cor-status-card);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--cor-status-card) 12%, transparent);
+}
+
+.submissao-feed__gatilho {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding: 20px 22px;
+  color: var(--texto);
+  background: transparent;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+
+.submissao-feed__gatilho:hover {
+  background-color: var(--suave);
+}
+
+.submissao-feed__avatar {
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--raio-cartao);
+  background: var(--suave);
+  color: var(--texto);
+  font-size: var(--texto-sm);
+  font-weight: 800;
+  letter-spacing: normal;
+}
+
+:root[data-tema='escuro'] .submissao-feed__avatar {
+  color: var(--texto);
+}
+
+.submissao-feed__conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.submissao-feed__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--texto);
+  font-size: var(--texto-xs);
+}
+
+.submissao-feed__autor-nome {
+  color: var(--titulo);
+  font-weight: 700;
+}
+
+.submissao-feed__coautores-badge {
+  padding: 2px 8px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  color: var(--azul);
+  background: var(--suave);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+
+.submissao-feed__separador {
+  color: var(--texto);
+  opacity: 0.5;
+}
+
+.submissao-feed__titulo {
+  margin: 0;
+  color: var(--titulo);
+  font-size: var(--texto-md);
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.submissao-feed__rodape {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.submissao-feed__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  color: var(--texto);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.submissao-feed__expandir {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 16px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  color: var(--texto-suave);
+  background: var(--suave);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    border-color 150ms ease-out;
+}
+
+.submissao-feed:hover .submissao-feed__expandir {
+  border-color: var(--cor-status-card);
+  color: var(--cor-status-card);
+  background: color-mix(in srgb, var(--cor-status-card) 10%, var(--superficie));
+}
+
+.submissao-feed__gatilho:focus-visible .submissao-feed__expandir {
+  border-color: var(--cor-status-card);
+  color: var(--branco);
+  background: var(--cor-status-card);
+}
+
+.pagina-professor__vazio {
+  padding: 48px 32px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+}
+
+.pagina-professor__vazio h2 {
+  margin-top: 0;
+}

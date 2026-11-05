@@ -218,10 +218,36 @@
 }
 
 .cabecalho__iniciais {
-  color: var(--titulo);
+  color: inherit;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
+}
+
+.cabecalho__perfil--admin {
+  background: var(--marinho);
+  color: var(--branco);
+}
+
+.cabecalho__perfil--coordenador {
+  background: var(--aviso);
+  color: var(--branco);
+}
+
+.cabecalho__perfil--professor {
+  background: var(--roxo);
+  color: var(--branco);
+}
+
+.cabecalho__perfil--aluno {
+  background: var(--sucesso);
+  color: var(--branco);
+}
+
+:root[data-tema='escuro'] .cabecalho__perfil--coordenador,
+:root[data-tema='escuro'] .cabecalho__perfil--professor,
+:root[data-tema='escuro'] .cabecalho__perfil--aluno {
+  color: var(--preto);
 }
 
 .cabecalho__perfil:hover {
@@ -346,6 +372,10 @@
   .cabecalho__portal,
   .cabecalho__entrar {
     display: none;
+  }
+
+  .cabecalho--acesso .cabecalho__portal {
+    display: inline-flex;
   }
 
   /* Menu aberto: painel abaixo da barra */

@@ -1,17 +1,9 @@
+import { obterEnderecoRecurso } from './enderecos.js'
 import { ErroApi, requisitarApi } from './cliente.js'
 
 export const VERSAO = ''
 
-function obterUrlBaseProjetos() {
-  const custom = import.meta.env.VITE_API_PROJETOS_URL
-  if (custom) {
-    return custom.replace(/\/$/, '')
-  }
-  const basePortal = import.meta.env.BASE_URL || '/'
-  const baseLimpa = basePortal.endsWith('/') ? basePortal : `${basePortal}/`
-  const segmentoVersao = VERSAO ? `${VERSAO}/` : ''
-  return `${window.location.origin}${baseLimpa}api/${segmentoVersao}projetos`
-}
+const obterUrlBaseProjetos = () => obterEnderecoRecurso('projetos')
 
 export async function listarSubmissoes(token = null, sinal = null) {
   const endpoint = obterUrlBaseProjetos()

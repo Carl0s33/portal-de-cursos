@@ -1,3 +1,5 @@
+import EstadoErro from '@/shared/components/EstadoErro.jsx'
+import Indicadores from '@/shared/components/Indicadores.jsx'
 import { useCallback, useEffect, useState } from 'react'
 import { enderecoPrivado } from '@/app/rotas.js'
 import Icone from '@/shared/components/Icone.jsx'
@@ -5,13 +7,6 @@ import { consultarResumoAdministracao } from '../services/consultarResumoAdminis
 import '../estilos/indicadores.css'
 import '../estilos/registros.css'
 import '../estilos/painel.css'
-
-const iconesIndicadores = {
-  cursos: 'formacao-cursos',
-  disciplinas: 'matriz-detalhe',
-  campus: 'localizacao',
-  areas: 'areas-detalhe',
-}
 
 export default function PainelAdministracao({ token }) {
   const [resumo, definirResumo] = useState(null)
@@ -45,7 +40,6 @@ export default function PainelAdministracao({ token }) {
     <>
       <header className="painel-titulo administracao-boas-vindas">
         <div>
-          <span className="administracao-boas-vindas__rotulo">Visão acadêmica</span>
           <h1>Gestão do portal</h1>
           <p>
             {resumo
@@ -63,15 +57,12 @@ export default function PainelAdministracao({ token }) {
         </div>
       </header>
       {erro && (
-        <div className="gestao-aviso" role="alert">
-          <p>
-            Não foi possível carregar as informações agora. Confira se o sistema está disponível e
-            tente de novo.
-          </p>
-          <button className="botao-secundario" onClick={() => carregar()} disabled={carregando}>
-            Tentar novamente
-          </button>
-        </div>
+        <EstadoErro
+          titulo="As informações do portal não foram carregadas"
+          mensagem="Confira se os serviços estão disponíveis e tente novamente."
+          aoTentarNovamente={() => carregar()}
+          carregando={carregando}
+        />
       )}
       {carregando && !resumo ? (
         <p className="gestao-aviso" role="status">
@@ -79,75 +70,39 @@ export default function PainelAdministracao({ token }) {
         </p>
       ) : resumo ? (
         <>
-          <section className="administracao-indicadores" aria-label="Resumo da instituição">
-            {[
-              [
-                'Cursos',
-                resumo.cursos.length,
-                'cursos',
-                'administracao/cursos',
-                'formações cadastradas',
-              ],
-              [
-                'Disciplinas',
-                resumo.disciplinas.length,
-                'disciplinas',
-                'administracao/disciplinas',
-                'componentes curriculares',
-              ],
-              [
-                'Campus',
-                resumo.campus.length,
-                'campus',
-                'administracao/campus',
-                'unidades acadêmicas',
-              ],
-              [
-                'Áreas de conhecimento',
-                resumo.areas.length,
-                'areas',
-                'administracao/areas',
-                'eixos temáticos',
-              ],
-            ].map(([rotulo, total, tipo, destino, detalhe]) => {
-              const conteudo = (
-                <>
-                  <span className="administracao-indicador__topo">
-                    <span
-                      className={`administracao-indicador__icone administracao-indicador__icone--${tipo}`}
-                      aria-hidden="true"
-                    >
-                      <Icone nome={iconesIndicadores[tipo]} />
-                    </span>
-                    <span className="administracao-indicador__rotulo">{rotulo}</span>
-                  </span>
-                  <strong className="administracao-indicador__valor">{total}</strong>
-                  <span className="administracao-indicador__detalhe">{detalhe}</span>
-                  {destino && (
-                    <span className="administracao-indicador__seta" aria-hidden="true">
-                      <Icone nome="seta" />
-                    </span>
-                  )}
-                </>
-              )
-              return destino ? (
-                <a
-                  className={`administracao-indicador administracao-indicador--${tipo}`}
-                  href={enderecoPrivado(destino)}
-                  key={rotulo}
-                >
-                  {conteudo}
-                </a>
-              ) : (
-                <div
-                  className={`administracao-indicador administracao-indicador--${tipo}`}
-                  key={rotulo}
-                >
-                  {conteudo}
-                </div>
-              )
-            })}
-          </section>
+          <Indicadores
+            rotulo="Resumo da instituição"
+            itens={[
+              {
+                titulo: 'Cursos',
+                valor: resumo.cursos.length,
+                destino: enderecoPrivado('administracao/cursos'),
+                detalhe: 'Formações cadastradas',
+                icone: 'cursos-inicio',
+              },
+              {
+                titulo: 'Disciplinas',
+                valor: resumo.disciplinas.length,
+                destino: enderecoPrivado('administracao/disciplinas'),
+                detalhe: 'Componentes curriculares',
+                icone: 'disciplinas',
+              },
+              {
+                titulo: 'Campus',
+                valor: resumo.campus.length,
+                destino: enderecoPrivado('administracao/campus'),
+                detalhe: 'Unidades acadêmicas',
+                icone: 'campus-detalhe',
+              },
+              {
+                titulo: 'Áreas de conhecimento',
+                valor: resumo.areas.length,
+                destino: enderecoPrivado('administracao/areas'),
+                detalhe: 'Eixos temáticos',
+                icone: 'projetos-detalhe',
+              },
+            ]}
+          />
           <section
             className="painel-secao administracao-registros"
             aria-labelledby="cursos-recentes"
@@ -163,12 +118,12 @@ export default function PainelAdministracao({ token }) {
             </header>
             {resumo.cursos.length ? (
               <div
-                className="tabela-submissoes"
+                className="tabela-container"
                 role="region"
                 aria-label="Formações cadastradas"
                 tabIndex={0}
               >
-                <table>
+                <table className="tabela">
                   <caption className="somente-leitores">Cursos disponíveis no portal</caption>
                   <thead>
                     <tr>
@@ -183,8 +138,8 @@ export default function PainelAdministracao({ token }) {
                     {resumo.cursos.slice(0, 8).map((curso) => (
                       <tr key={curso.id}>
                         <th scope="row">
-                          {curso.nome}
-                          <span>{curso.sigla || curso.acronimo}</span>
+                          <span className="tabela__titulo">{curso.nome}</span>
+                          <span className="tabela__descricao">{curso.sigla || curso.acronimo}</span>
                         </th>
                         <td>{curso.grau}</td>
                         <td>{curso.turno || '—'}</td>

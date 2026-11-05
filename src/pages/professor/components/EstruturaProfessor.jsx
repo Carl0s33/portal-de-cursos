@@ -1,3 +1,4 @@
+import Rodape from '@/shared/components/Rodape.jsx'
 import './estrutura-professor.css'
 import Cabecalho from '@/shared/components/Cabecalho.jsx'
 import NavegacaoAdministracao from '@/pages/administracao/components/NavegacaoAdministracao.jsx'
@@ -15,14 +16,6 @@ export default function EstruturaProfessor({
   coordenador = false,
   aluno = false,
 }) {
-  const rotuloAcesso =
-    usuario?.tipoUsuario === 'ADMIN'
-      ? 'Acesso Administrativo'
-      : usuario?.tipoUsuario === 'COORDENADOR'
-        ? 'Acesso da Coordenação'
-        : aluno
-          ? 'Área do Aluno'
-          : 'Acesso unificado'
   const destinoArea = administrador
     ? 'administracao/painel'
     : coordenador
@@ -35,7 +28,7 @@ export default function EstruturaProfessor({
     : coordenador
       ? 'coordenacao/perfil'
       : aluno
-        ? 'aluno/painel'
+        ? `aluno/${usuario?.alunoId || usuario?.id || ''}`
         : 'professor/perfil'
   return (
     <div
@@ -45,7 +38,20 @@ export default function EstruturaProfessor({
         <Cabecalho
           areaProfessor
           autenticado
-          pagina={perfilAtivo ? 'perfil' : 'professor'}
+          pagina={
+            perfilAtivo
+              ? 'perfil'
+              : administrador
+                ? 'administracao'
+                : coordenador
+                  ? 'coordenacao'
+                  : aluno
+                    ? 'aluno-painel'
+                    : 'professor'
+          }
+          tipoUsuario={
+            administrador ? 'ADMIN' : coordenador ? 'COORDENADOR' : aluno ? 'ALUNO' : 'PROFESSOR'
+          }
           usuario={usuario}
           tema={tema}
           alternarTema={alternarTema}
@@ -68,7 +74,7 @@ export default function EstruturaProfessor({
       ) : (
         children
       )}
-      {!usuario && <footer className="acesso-rodape">Portal de Cursos · {rotuloAcesso}</footer>}
+      {!usuario && <Rodape pagina="acesso" />}
     </div>
   )
 }

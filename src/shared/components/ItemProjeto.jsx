@@ -31,7 +31,8 @@ function obterIconeTipo(modificador) {
 export default function ItemProjeto({ projeto }) {
   const modificador = obterModificadorTipo(projeto.tipo)
   const orientador = projeto.orientador || 'Não informado'
-  const curso = (projeto.curso || '').replace(/^Curso\s+/i, '').trim()
+  const cursoBruto = (projeto.curso || '').replace(/^Curso\s*#?/i, '').trim()
+  const curso = /^#?\d+$/.test(cursoBruto) ? '' : cursoBruto
   const iconeTipo = obterIconeTipo(modificador)
 
   const informacoes = [
@@ -40,13 +41,15 @@ export default function ItemProjeto({ projeto }) {
     ['Orientador', orientador, 'usuario'],
   ]
 
+  const classeChip = `item-projeto__tipo-rotulo item-projeto__tipo-rotulo--${modificador}`
+
   return (
     <article className="item-projeto">
       <div className="item-projeto__topo">
-        <span className="item-projeto__simbolo">
+        <span className="item-projeto__simbolo" aria-hidden="true">
           <Icone nome={iconeTipo} />
         </span>
-        <span className="item-projeto__tipo-rotulo">{projeto.tipo || 'TCC'}</span>
+        <span className={classeChip}>{projeto.tipo || 'TCC'}</span>
         {curso && <span className="item-projeto__sigla">{curso}</span>}
       </div>
 
@@ -72,7 +75,8 @@ export default function ItemProjeto({ projeto }) {
 
       <div className="item-projeto__base">
         <span className="item-projeto__acao" aria-hidden="true">
-          Ver projeto <Icone nome="seta-cursos" />
+          <span>Ver projeto</span>
+          <Icone nome="seta-cursos" />
         </span>
       </div>
     </article>

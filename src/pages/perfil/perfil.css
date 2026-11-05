@@ -7,28 +7,28 @@
   align-items: center;
   min-height: 44px;
   color: var(--azul);
-  font-size: 16px;
+  font-size: var(--texto-md);
 }
 .perfil-titulo {
   margin: 20px 0 32px;
 }
 .perfil-titulo h1 {
   margin: 0 0 12px;
-  font-size: 36px;
+  font-size: var(--texto-xl);
   line-height: 1.2;
   letter-spacing: -1px;
 }
 .perfil-titulo p {
   margin: 0;
   color: var(--texto);
-  font-size: 17px;
+  font-size: var(--texto-md);
 }
 .perfil-formulario {
   display: grid;
   gap: 28px;
   padding: 32px;
   border: 1px solid var(--borda);
-  border-radius: 14px;
+  border-radius: var(--raio-cartao);
   background: var(--superficie);
 }
 .perfil-foto {
@@ -46,7 +46,7 @@
   height: 96px;
   flex-shrink: 0;
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: var(--raio-pilula);
   background: var(--suave);
 }
 .perfil-foto__imagem > img:not(.icone) {
@@ -64,12 +64,12 @@
 }
 .perfil-foto h2 {
   margin: 0 0 8px;
-  font-size: 20px;
+  font-size: var(--texto-lg);
 }
 .perfil-foto p {
   margin: 0 0 8px;
   color: var(--texto);
-  font-size: 14px;
+  font-size: var(--texto-sm);
 }
 .perfil-foto__acoes,
 .perfil-acoes {
@@ -81,10 +81,10 @@
   min-height: 44px;
   padding: 10px 16px;
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   background: var(--suave);
   color: var(--azul);
-  font-size: 15px;
+  font-size: var(--texto-sm);
   font-weight: 600;
   cursor: pointer;
 }
@@ -107,7 +107,7 @@
   gap: 8px;
   min-width: 0;
   color: var(--titulo);
-  font-size: 16px;
+  font-size: var(--texto-md);
   font-weight: 600;
 }
 .perfil-campos label:last-child {
@@ -120,10 +120,10 @@
   min-height: 52px;
   padding: 12px 14px;
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   color: var(--titulo);
   background: var(--fundo);
-  font-size: 16px;
+  font-size: var(--texto-md);
   font-weight: 400;
 }
 .perfil-campos textarea {
@@ -137,7 +137,7 @@
 .perfil-campos small,
 .perfil-nota {
   color: var(--texto);
-  font-size: 14px;
+  font-size: var(--texto-sm);
   line-height: 1.6;
   font-weight: 400;
 }
@@ -148,7 +148,7 @@
   margin: 0;
   padding: 16px;
   background: var(--suave);
-  border-radius: 8px;
+  border-radius: var(--raio-botao);
   color: var(--titulo);
   line-height: 1.6;
 }
@@ -160,6 +160,6 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .perfil-titulo h1 {
-    font-size: 30px;
+    font-size: var(--texto-xl);
   }
 }

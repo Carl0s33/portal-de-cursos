@@ -1,10 +1,8 @@
+import { obterEnderecoRecurso } from './enderecos.js'
 import { requisitarApi } from './cliente.js'
 
 export const VERSAO = ''
-const enderecoDisciplinas =
-  import.meta.env.VITE_API_DISCIPLINAS_URL ||
-  import.meta.env.VITE_API_DISCIPLINAS ||
-  `${import.meta.env.BASE_URL}api/disciplinas`
+const enderecoDisciplinas = obterEnderecoRecurso('disciplinas')
 
 export async function listarDisciplinasPorCurso(cursoId, token, sinal) {
   const query = new URLSearchParams({ cursoId: String(cursoId) })

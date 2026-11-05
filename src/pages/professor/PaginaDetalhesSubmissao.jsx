@@ -1,3 +1,4 @@
+import EtapasSubmissao from '@/shared/components/EtapasSubmissao.jsx'
 import { useState } from 'react'
 import '@/shared/styles/painel-informativo.css'
 import './professor.css'
@@ -170,6 +171,7 @@ export default function PaginaDetalhesSubmissao({
             <span>{item.tipo}</span>
           </div>
           <h1>{item.titulo}</h1>
+          <EtapasSubmissao status={item.status} />
           <p>
             {item.cursoCompleto} · enviado por {item.autor} em {item.enviadoEm}
           </p>
@@ -191,6 +193,7 @@ export default function PaginaDetalhesSubmissao({
               <label>
                 Título
                 <input
+                  className="campo"
                   required
                   maxLength={200}
                   value={edicao.titulo}
@@ -200,6 +203,7 @@ export default function PaginaDetalhesSubmissao({
               <label>
                 Tipo de projeto
                 <select
+                  className="campo"
                   value={edicao.tipo}
                   onChange={(evento) => atualizar('tipo', evento.target.value)}
                 >
@@ -211,6 +215,7 @@ export default function PaginaDetalhesSubmissao({
               <label>
                 Resumo
                 <textarea
+                  className="campo"
                   required
                   rows="4"
                   value={edicao.resumo}
@@ -220,6 +225,7 @@ export default function PaginaDetalhesSubmissao({
               <label>
                 Descrição
                 <textarea
+                  className="campo"
                   required
                   rows="4"
                   value={edicao.objetivo}
@@ -229,6 +235,7 @@ export default function PaginaDetalhesSubmissao({
               <label>
                 Professor orientador
                 <input
+                  className="campo"
                   required
                   maxLength={200}
                   value={edicao.orientador}
@@ -236,10 +243,12 @@ export default function PaginaDetalhesSubmissao({
                 />
               </label>
               <label>
-                Integrantes <small>um por linha, no formato Nome &lt;email&gt;</small>
+                Integrantes da equipe
                 <textarea
+                  className="campo"
                   required
                   rows="3"
+                  placeholder="Nome completo <email@instituicao.edu.br> (um por linha)"
                   defaultValue={edicao.autores
                     .map((autor) => `${autor.nome || ''}${autor.email ? ` <${autor.email}>` : ''}`)
                     .join('\n')}
@@ -249,25 +258,31 @@ export default function PaginaDetalhesSubmissao({
                 />
               </label>
               <label>
-                Disciplinas relacionadas <small>uma por linha</small>
+                Disciplinas relacionadas
                 <textarea
+                  className="campo"
                   rows="3"
+                  placeholder="Nome da disciplina (uma por linha)"
                   defaultValue={(edicao.disciplinas || []).join('\n')}
                   onChange={(evento) =>
                     atualizar('disciplinas', linhasParaLista(evento.target.value))
                   }
                 />
               </label>
-              <label>
-                Documentos <small>um por linha</small>
-                <textarea
-                  rows="3"
-                  defaultValue={(edicao.documentos || []).join('\n')}
-                  onChange={(evento) =>
-                    atualizar('documentos', linhasParaLista(evento.target.value))
-                  }
-                />
-              </label>
+              <div className="formulario-submissao__documentos-edicao">
+                <label className="campo-rotulo">Documentos anexados (somente PDF)</label>
+                <ul className="documentos-submissao-professor">
+                  {(edicao.documentos || []).map((doc, idx) => {
+                    const nome = typeof doc === 'string' ? doc : doc?.nomeArquivo || doc?.nome || `Documento ${idx + 1}`
+                    return (
+                      <li key={idx} className="item-documento-estatico">
+                        <span className="documento-tipo" aria-hidden="true">PDF</span>
+                        <span className="item-documento-nome">{nome}</span>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
               <div className="avaliacao-submissao__acoes">
                 <button className="botao-primario" type="submit">
                   Salvar edição
@@ -370,10 +385,22 @@ export default function PaginaDetalhesSubmissao({
               <h2>Equipe</h2>
               <p>{textoAutores(item.autores)}</p>
             </div>
+            {Array.isArray(item.professoresParticipantes) && item.professoresParticipantes.length > 0 && (
+              <div>
+                <h2>Docentes colaboradores</h2>
+                <p>{item.professoresParticipantes.join(', ')}</p>
+              </div>
+            )}
             <div>
               <h2>Curso</h2>
               <p>{item.cursoCompleto}</p>
             </div>
+            {Array.isArray(item.disciplinas) && item.disciplinas.length > 0 && (
+              <div>
+                <h2>Disciplinas associadas</h2>
+                <p>{item.disciplinas.join(', ')}</p>
+              </div>
+            )}
           </div>
 
           {avaliacaoOrientador || avaliacaoCoordenador ? (
@@ -390,6 +417,7 @@ export default function PaginaDetalhesSubmissao({
               <label htmlFor={`justificativa-${item.identificador}`}>
                 Motivo da decisão <small>necessário em caso de recusa</small>
                 <textarea
+                  className="campo"
                   id={`justificativa-${item.identificador}`}
                   rows="4"
                   value={justificativa}

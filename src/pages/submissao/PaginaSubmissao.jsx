@@ -29,8 +29,12 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     nome: sessao?.usuario?.nome || '',
     email: sessao?.usuario?.email || '',
     curso:
-      sessao?.tipoUsuario === 'ALUNO'
+      sessao?.tipoUsuario === 'ALUNO' || sessao?.tipoUsuario === 'COORDENADOR'
         ? sessao?.usuario?.cursoId || sessao?.usuario?.curso?.id || sessao?.usuario?.curso || ''
+        : '',
+    orientador:
+      sessao?.tipoUsuario === 'PROFESSOR' || sessao?.tipoUsuario === 'COORDENADOR'
+        ? sessao?.usuario?.nome || ''
         : '',
   }))
   const [etapa, definirEtapa] = useState(0)
@@ -126,6 +130,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
 
   function validarEtapa() {
     const ehTCC = formulario.tipo === 'TCC'
+    const ehDocente = sessao?.tipoUsuario === 'PROFESSOR' || sessao?.tipoUsuario === 'COORDENADOR'
     const camposEtapa1 = ehTCC
       ? ['tipo', 'titulo', 'resumo', 'objetivos']
       : ['tipo', 'titulo', 'resumo', 'objetivos', 'informacoesEspecificas']
@@ -158,12 +163,30 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       return false
     }
     if (etapa === 2) {
-      const autoresInvalidos = formulario.autores.some(
-        (autor) => !autor.nome.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(autor.email.trim()),
-      )
-      if (autoresInvalidos) {
-        registrarErros({}, 'Informe nome e e-mail válidos para cada integrante.')
-        return false
+      if (!formulario.projetoSemAlunos) {
+        if (!ehDocente && formulario.autores.length > 0) {
+          const autoresInvalidos = formulario.autores.some(
+            (autor) => !autor.nome.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(autor.email.trim()),
+          )
+          if (autoresInvalidos) {
+            registrarErros({}, 'Informe nome e e-mail válidos para cada integrante discente.')
+            return false
+          }
+        } else if (ehDocente && formulario.autores.length === 0) {
+          registrarErros(
+            {},
+            'Adicione pelo menos um estudante autor ou marque a opção "Projeto de iniciativa docente (sem alunos autores)".',
+          )
+          return false
+        } else if (ehDocente && formulario.autores.length > 0) {
+          const autoresInvalidos = formulario.autores.some(
+            (autor) => !autor.nome.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(autor.email.trim()),
+          )
+          if (autoresInvalidos) {
+            registrarErros({}, 'Informe nome e e-mail válidos para cada autor discente.')
+            return false
+          }
+        }
       }
     }
     if (etapa === 3 && ehTCC) {
@@ -292,6 +315,21 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     const orientadorObj = orientadores.find((o) => o.nome === formulario.orientador)
     const orientadorId =
       orientadorObj?.id || orientadorObj?.professorId || orientadorObj?.identificador || null
+
+    const listaProfessoresDto = []
+    if (orientadorId) {
+      listaProfessoresDto.push({ professorId: Number(orientadorId), papel: 'ORIENTADOR' })
+    }
+    if (Array.isArray(formulario.professoresParticipantes)) {
+      formulario.professoresParticipantes.forEach((nomeProf) => {
+        const pObj = orientadores.find((o) => o.nome === nomeProf)
+        const pId = pObj?.id || pObj?.professorId || pObj?.identificador || null
+        if (pId && Number(pId) !== Number(orientadorId)) {
+          listaProfessoresDto.push({ professorId: Number(pId), papel: 'PARTICIPANTE' })
+        }
+      })
+    }
+
     const disciplinaIds = formulario.disciplinas
       .map((nome) => {
         const d = disciplinasCurso.find((d) => d.nome === nome)
@@ -313,10 +351,22 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         ]
       : []
 
+    // No backend, a lista de autores não pode ser vazia (@NotEmpty).
+    // Se for projeto docente sem alunos, colocamos o professor orientador/submissor como autor responsável:
+    let autoresParaDto = autoresParaSubmissao
+    if (formulario.projetoSemAlunos || autoresParaDto.length === 0) {
+      autoresParaDto = [
+        {
+          nome: formulario.nome.trim() || formulario.orientador || 'Docente Responsável',
+          email: formulario.email.trim() || 'docente@escolar.ifrn.edu.br',
+        },
+      ]
+    }
+
     const dto = {
       cursoId: cursoProjeto?.id ? Number(cursoProjeto.id) : null,
       campusId: cursoProjeto?.campusId ? Number(cursoProjeto.campusId) : null,
-      autores: autoresParaSubmissao,
+      autores: autoresParaDto,
       disciplinaIds: disciplinaIds.length > 0 ? disciplinaIds : null,
       nome: formulario.titulo.trim(),
       descricao: formulario.objetivos.trim(),
@@ -324,7 +374,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       tipoProjeto: mapasTipoProjeto[formulario.tipo] || formulario.tipo,
       dataInicio,
       dataFim,
-      professores: orientadorId ? [{ professorId: Number(orientadorId), papel: 'ORIENTADOR' }] : [],
+      professores: listaProfessoresDto,
       documentos: documentosDto.length > 0 ? documentosDto : null,
     }
 
@@ -346,6 +396,14 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
               await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
             } catch {
               /* Continua envio de documentos */
+            }
+          } else if (sessao?.tipoUsuario === 'PROFESSOR') {
+            try {
+              // Se o próprio orientador submeteu, já avança para aprovação inicial
+              await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
+              await atualizarStatusProjeto(projetoCriado.id, 'ANALISE_PUBLICACAO', sessao.token)
+            } catch {
+              /* Continua */
             }
           }
           const arquivosReais =
@@ -369,11 +427,24 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
 
   function alterarDocumentos(documento, arquivos) {
     const listaArquivos = documento.multiplo ? [...arquivos] : [arquivos?.[0]].filter(Boolean)
-    const arquivoInvalido = listaArquivos.find(validarArquivo)
-    if (arquivoInvalido) {
-      registrarErros({ [documento.id]: validarArquivo(arquivoInvalido) })
+    if (listaArquivos.length === 0) {
+      definirFormulario((anterior) => {
+        const novosDocumentos = { ...anterior.documentos }
+        delete novosDocumentos[documento.id]
+        return { ...anterior, documentos: novosDocumentos }
+      })
       return
     }
+    const erroEncontrado = listaArquivos.map(validarArquivo).find(Boolean)
+    if (erroEncontrado) {
+      registrarErros({ [documento.id]: erroEncontrado })
+      return
+    }
+    definirErros((anteriores) => {
+      const novos = { ...anteriores }
+      delete novos[documento.id]
+      return novos
+    })
     alterar('documentos', {
       ...formulario.documentos,
       [documento.id]: documento.multiplo ? listaArquivos : listaArquivos[0] || null,
@@ -411,7 +482,9 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     const destinoPainel =
       sessao?.tipoUsuario === 'COORDENADOR'
         ? enderecoPrivado('coordenacao/submissoes')
-        : enderecoPrivado('aluno/painel')
+        : sessao?.tipoUsuario === 'PROFESSOR'
+          ? enderecoPrivado('professor/feed')
+          : enderecoPrivado('aluno/painel')
 
     return (
       <main className="limite pagina-submissao pagina-submissao--confirmacao" id="conteudo">
@@ -419,12 +492,13 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           <span className="submissao-confirmacao__selo" aria-hidden="true">
             ✓
           </span>
-          <p className="pagina-submissao__rotulo">Submissão registrada</p>
-          <h1 id="titulo-confirmacao">Seu projeto foi enviado para avaliação.</h1>
+          <h1 id="titulo-confirmacao">Seu projeto foi enviado com sucesso.</h1>
           <p>
             {sessao?.tipoUsuario === 'COORDENADOR'
-              ? 'O projeto foi encaminhado diretamente para a fila de avaliação da coordenação do curso (RN19).'
-              : 'O professor orientador indicado receberá a solicitação para aceite inicial antes da avaliação final da coordenação (RN19).'}
+              ? 'O projeto foi registrado e encaminhado diretamente para a coordenação do curso para publicação.'
+              : sessao?.tipoUsuario === 'PROFESSOR'
+                ? 'O projeto foi registrado com seu aceite docente e encaminhado para a homologação e publicação pela coordenação do curso.'
+                : 'O professor orientador indicado receberá a solicitação para aceite inicial antes da avaliação final da coordenação (RN19).'}
           </p>
           <div className="submissao-confirmacao__resumo">
             <strong>{formulario.titulo}</strong>
@@ -468,7 +542,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     return (
       <main className="limite pagina-submissao" id="conteudo">
         <section className="submissao-confirmacao" aria-labelledby="titulo-sem-envio">
-          <p className="pagina-submissao__rotulo">Acesso de consulta</p>
           <h1 id="titulo-sem-envio">A administração não submete nem avalia projetos.</h1>
           <p>Você pode acompanhar todas as submissões na área administrativa.</p>
           <a className="botao-primario" href={enderecoPrivado('administracao/submissoes')}>
@@ -479,27 +552,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     )
   }
 
-  if (sessao?.tipoUsuario === 'PROFESSOR') {
-    return (
-      <main className="limite pagina-submissao" id="conteudo">
-        <section className="submissao-confirmacao" aria-labelledby="titulo-professor-orientador">
-          <p className="pagina-submissao__rotulo">Papel de orientação</p>
-          <h1 id="titulo-professor-orientador">
-            Somente alunos e coordenadores de curso submetem projetos.
-          </h1>
-          <p>
-            Como professor orientador, você acompanha e realiza a avaliação inicial das submissões
-            em que foi indicado (RN20).
-          </p>
-          <a className="botao-primario" href={enderecoPrivado('professor/feed')}>
-            Ver submissões para orientar
-          </a>
-        </section>
-      </main>
-    )
-  }
-
-  if (!sessao || !['ALUNO', 'COORDENADOR'].includes(sessao.tipoUsuario)) {
+  if (!sessao || !['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao.tipoUsuario)) {
     return (
       <main className="limite pagina-submissao" id="conteudo">
         <section
@@ -507,7 +560,6 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           aria-labelledby="titulo-acesso-submissao"
         >
           <div className="submissao-acesso__conteudo">
-            <p className="pagina-submissao__rotulo">Área autenticada</p>
             <h1 id="titulo-acesso-submissao">Seu projeto merece um lugar para avançar.</h1>
             <p className="submissao-acesso__descricao">
               Entre no Portal de Cursos para preparar a submissão, vincular o orientador e
@@ -519,7 +571,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                 className="botao-primario"
                 href={`${enderecoPrivado('login')}?retorno=${encodeURIComponent('submeter')}`}
               >
-                Entrar no portal <span aria-hidden="true">→</span>
+                Entrar no portal
               </a>
               <a
                 className="botao-secundario"
@@ -577,20 +629,15 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     <main className="limite pagina-submissao" id="conteudo">
       <div className="pagina-submissao__introducao">
         <div>
-          <p className="pagina-submissao__rotulo">Produção acadêmica</p>
           <h1>Compartilhe seu projeto</h1>
           <p>
-            Preencha quatro etapas rápidas e envie seu projeto para avaliação do{' '}
+            Preencha as quatro etapas e envie seu trabalho para avaliação do{' '}
             {sessao?.tipoUsuario === 'PROFESSOR' || sessao?.tipoUsuario === 'COORDENADOR'
               ? 'coordenador do curso'
               : 'professor orientador'}
             .
           </p>
         </div>
-        <aside className="submissao-aviso">
-          <strong>4 etapas antes do envio</strong>
-          <span>Seus dados, projeto, equipe e documentos. Você revisa tudo antes de enviar.</span>
-        </aside>
       </div>
 
       <nav className="etapas-submissao" aria-label="Etapas da submissão">
@@ -606,6 +653,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                   : 'etapa'
             }
             onClick={() => indice < etapa && definirEtapa(indice)}
+            disabled={indice > etapa}
             aria-current={indice === etapa ? 'step' : undefined}
           >
             <span>{indice < etapa ? '✓' : indice + 1}</span>
@@ -649,6 +697,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
             adicionarDisciplina={adicionarDisciplina}
             disciplinasDisponiveis={formulario.curso ? disciplinasCurso : []}
             carregandoDisciplinas={carregandoDisciplinas}
+            sessao={sessao}
           />
         )}
 

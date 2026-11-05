@@ -2,8 +2,6 @@ import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
 import { listarProjetos, listarProjetosAprovados } from '@/api/projetos.js'
 
-const CHAVE_CACHE_PUBLICADOS = 'portal-cursos-publicados-cache'
-
 const ROTULOS_TIPO = {
   TCC: 'TCC',
   PROJETO_INTEGRADOR: 'Projeto integrador',
@@ -11,59 +9,30 @@ const ROTULOS_TIPO = {
   PROJETO_EXTENSAO: 'Extensão',
 }
 
-function obterTokenSessao() {
-  try {
-    const salva = JSON.parse(sessionStorage.getItem('portal-cursos-sessao') || 'null')
-    return salva && Date.now() < salva.expiraEm ? salva.token : null
-  } catch {
-    return null
-  }
-}
+// Funcao de validacao de projetos para exibicao publica
+function ehProjetoValido(p) {
+  const nome = (p.nome || '').trim().toLowerCase()
+  const resumo = (p.resumo || p.descricao || '').trim()
 
-function lerCachePublicados() {
-  try {
-    const bruto = JSON.parse(localStorage.getItem(CHAVE_CACHE_PUBLICADOS) || '[]')
-    return Array.isArray(bruto) ? bruto : []
-  } catch {
-    return []
-  }
-}
-
-function salvarCachePublicados(itens) {
-  try {
-    localStorage.setItem(CHAVE_CACHE_PUBLICADOS, JSON.stringify(itens))
-  } catch {
-    /* Cache público opcional. */
-  }
+  // Elimina rascunhos invalidos
+  if (['dgdg', 'teste', 'meu primeiro proeto', 'projeto teste', 'drgdrgdrg'].includes(nome)) return false
+  if (nome.length < 5) return false
+  if (resumo.length < 10) return false
+  return true
 }
 
 export async function consultarProjetosPublicados(sinal) {
-  const token = obterTokenSessao()
-  const [dadosProjetos, dadosCursos, dadosProfessores] = await Promise.all([
-    listarProjetos(token, sinal)
-      .then((lista) => {
-        const publicados = (Array.isArray(lista) ? lista : []).filter(
-          (p) => (p.statusProjeto || p.status) === 'PUBLICADO',
-        )
-        salvarCachePublicados(publicados)
-        return publicados
-      })
-      .catch(async () => {
-        const aprovadosEndpoint = await listarProjetosAprovados(sinal).catch(() => [])
-        const publicadosEndpoint = (
-          Array.isArray(aprovadosEndpoint) ? aprovadosEndpoint : []
-        ).filter((p) => (p.statusProjeto || p.status) === 'PUBLICADO')
-        if (publicadosEndpoint.length > 0) {
-          salvarCachePublicados(publicadosEndpoint)
-          return publicadosEndpoint
-        }
-        return lerCachePublicados()
-      }),
-    listarCursos(sinal).catch(() => []),
-    token ? listarProfessores(token, {}, sinal).catch(() => []) : Promise.resolve([]),
-  ])
+  try {
+    localStorage.removeItem('portal-cursos-publicados-cache')
+  } catch {
+    /* Cache limpo */
+  }
 
-  if (!Array.isArray(dadosProjetos)) return []
+  const [dadosAprovados, dadosCursos, dadosProfessores] = await Promise.all([
+    listarProjetosAprovados(sinal).catch(() => listarProjetos(null, sinal).catch(() => [])),
+    listarCursos(sinal).catch(() => []),
+    listarProfessores(null, {}, sinal).catch(() => []),
+  ])
 
   const mapaCursos = new Map(
     (Array.isArray(dadosCursos) ? dadosCursos : []).map((c) => [String(c.id), c]),
@@ -74,14 +43,27 @@ export async function consultarProjetosPublicados(sinal) {
       prof.nome || prof.usuario?.nome || '',
     ]),
   )
-  const cacheAnterior = new Map(
-    lerCachePublicados().map((item) => [String(item.id), item.orientador || '']),
-  )
 
-  return dadosProjetos
-    .filter((p) => (p.statusProjeto || p.status) === 'PUBLICADO')
+  const listaBruta = Array.isArray(dadosAprovados) ? dadosAprovados : []
+  const publicadosValidos = listaBruta
+    .filter((p) => {
+      const status = p.statusProjeto || p.status
+      return (status === 'PUBLICADO' || status === 'APROVADO') && ehProjetoValido(p)
+    })
     .map((p) => {
-      const infoCurso = mapaCursos.get(String(p.cursoId))
+      const idCurso = p.cursoId ? String(p.cursoId) : null
+      const infoCurso = idCurso ? mapaCursos.get(idCurso) : null
+
+      let nomeCurso = ''
+      if (infoCurso?.sigla) nomeCurso = infoCurso.sigla
+      else if (infoCurso?.acronimo) nomeCurso = infoCurso.acronimo
+      else if (infoCurso?.nome) nomeCurso = infoCurso.nome
+      else if (p.curso && !/^#?\d+$/.test(String(p.curso).trim())) {
+        nomeCurso = String(p.curso).replace(/^Curso\s*#?/i, '').trim()
+      } else if (idCurso) {
+        nomeCurso = `Curso ${idCurso}`
+      }
+
       const orientadorVinculo = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')
       const idProf =
         orientadorVinculo?.professorId || p.orientadorId || p.professores?.[0]?.professorId
@@ -89,7 +71,6 @@ export async function consultarProjetosPublicados(sinal) {
         p.orientador ||
         (idProf && mapaProfessores.get(String(idProf))) ||
         orientadorVinculo?.nome ||
-        cacheAnterior.get(String(p.id)) ||
         'Orientação acadêmica'
 
       return {
@@ -97,13 +78,9 @@ export async function consultarProjetosPublicados(sinal) {
         identificador: String(p.id),
         nome: p.nome,
         descricao: p.descricao || p.resumo || '',
+        resumo: p.resumo || p.descricao || '',
         tipo: ROTULOS_TIPO[p.tipoProjeto] || p.tipoProjeto || 'TCC',
-        curso:
-          infoCurso?.sigla ||
-          infoCurso?.acronimo ||
-          p.curso ||
-          infoCurso?.nome ||
-          (p.cursoId ? `Curso #${p.cursoId}` : ''),
+        curso: nomeCurso || 'Geral',
         autores:
           Array.isArray(p.autores) && p.autores.length
             ? p.autores.map((a) => (typeof a === 'string' ? a : a.nome)).join(', ')
@@ -112,4 +89,7 @@ export async function consultarProjetosPublicados(sinal) {
         status: 'PUBLICADO',
       }
     })
+
+  // Retorna diretamente da API do backend sem usar mocks ou sementes falsas
+  return publicadosValidos
 }

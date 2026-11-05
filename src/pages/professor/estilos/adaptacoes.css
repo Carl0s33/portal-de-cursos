@@ -1,0 +1,152 @@
+/* ==========================================================================
+   Responsivo
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .pagina-professor__layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .submissao-feed__gatilho {
+    flex-wrap: wrap;
+  }
+
+  .submissao-feed__conteudo {
+    flex-basis: calc(100% - 62px);
+  }
+
+  .submissao-feed__expandir {
+    margin-left: 62px;
+  }
+
+  .pagina-detalhes-submissao__grid {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 700px) {
+  .pagina-professor {
+    gap: 32px;
+    padding-top: 36px;
+    padding-bottom: 48px;
+  }
+
+  .pagina-professor__topo {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pagina-professor__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pagina-professor__filtro-painel {
+    position: static;
+  }
+
+  .submissao-feed__gatilho {
+    padding: 18px;
+  }
+
+  .documentos-submissao-professor li {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .documentos-submissao-professor .documento-link,
+  .documentos-submissao-professor .documento-indisponivel {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .pagina-detalhes-submissao {
+    gap: 28px;
+    padding-top: 36px;
+    padding-bottom: 48px;
+  }
+
+  .pagina-detalhes-submissao__cabecalho {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pagina-detalhes-submissao__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .pagina-detalhes-submissao__lateral {
+    padding: 18px;
+  }
+
+  .pagina-detalhes-submissao__marco {
+    width: 100%;
+  }
+
+  .pagina-detalhes-submissao__cabecalho h1 {
+    font-size: clamp(36px, 12vw, 48px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .submissao-feed,
+  .submissao-feed__gatilho,
+  .submissao-feed__expandir,
+  .pagina-professor__filtros button {
+    transition: none;
+  }
+}
+
+.pagina-detalhes-submissao__principal {
+  padding: var(--espaco-5);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+}
+.pagina-detalhes-submissao__documentos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pagina-detalhes-submissao__documentos li {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1000px) {
+  .pagina-detalhes-submissao__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pagina-detalhes-submissao__cabecalho {
+    flex-wrap: wrap;
+  }
+}
+
+.avaliacao-submissao--formulario {
+  display: grid;
+  gap: var(--espaco-5);
+  max-width: 640px;
+}
+.avaliacao-submissao--formulario label {
+  display: grid;
+  gap: var(--espaco-2);
+  color: var(--titulo);
+  font-size: var(--texto-sm);
+}
+.avaliacao-submissao--formulario label small {
+  color: var(--texto-suave);
+}
+.avaliacao-submissao--formulario textarea {
+  resize: vertical;
+}
+@media (max-width: 760px) {
+  .item-documento-nome {
+    flex-basis: 100%;
+    order: 1;
+  }
+  .item-documento-gatilho,
+  .documento-indisponivel {
+    white-space: normal;
+  }
+}

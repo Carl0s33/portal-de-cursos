@@ -1,3 +1,4 @@
+import './formulario-professor.css'
 import { useState } from 'react'
 
 export default function FormularioProfessor({
@@ -54,7 +55,7 @@ export default function FormularioProfessor({
   }
 
   return (
-    <form className="gestao-formulario" onSubmit={salvar} aria-busy={ocupado}>
+    <form className="gestao-formulario formulario-professor" onSubmit={salvar} aria-busy={ocupado}>
       <h2>Novo professor</h2>
 
       <section className="gestao-formulario__grupo">
@@ -66,6 +67,7 @@ export default function FormularioProfessor({
           <label>
             Nome completo
             <input
+              className="campo"
               type="text"
               required
               maxLength={100}
@@ -78,6 +80,7 @@ export default function FormularioProfessor({
           <label>
             E-mail
             <input
+              className="campo"
               type="email"
               required
               maxLength={150}
@@ -90,6 +93,7 @@ export default function FormularioProfessor({
           <label>
             Nome de usuário
             <input
+              className="campo"
               type="text"
               required
               minLength={3}
@@ -103,6 +107,7 @@ export default function FormularioProfessor({
           <label>
             Senha inicial
             <input
+              className="campo"
               type="password"
               required
               minLength={8}
@@ -124,12 +129,20 @@ export default function FormularioProfessor({
           {cursoIdInicial ? (
             <label>
               Curso vinculado
-              <input value={`Curso ${cursoIdInicial}`} readOnly />
+              <input
+                className="campo"
+                value={(() => {
+                  const encontrado = cursosVinculados.find((c) => String(c.id) === String(cursoIdInicial))
+                  return encontrado ? (encontrado.nome || encontrado.sigla) : `Curso ${cursoIdInicial}`
+                })()}
+                readOnly
+              />
             </label>
           ) : cursosVinculados.length ? (
             <label className="gestao-campo-largo">
               Cursos de atuação
               <select
+                className="campo"
                 multiple
                 size={Math.min(Math.max(cursosVinculados.length, 3), 6)}
                 value={dados.cursoIds}
@@ -144,7 +157,7 @@ export default function FormularioProfessor({
               >
                 {cursosVinculados.map((curso) => (
                   <option key={curso.id} value={String(curso.id)}>
-                    Curso {curso.id}
+                    {curso.nome || curso.sigla || `Curso ${curso.id}`}
                   </option>
                 ))}
               </select>
@@ -156,6 +169,7 @@ export default function FormularioProfessor({
             <label>
               ID numérico do curso
               <input
+                className="campo"
                 type="number"
                 required
                 min={1}
@@ -176,6 +190,7 @@ export default function FormularioProfessor({
           <label>
             Papel no curso
             <select
+              className="campo"
               value={dados.tipoUsuario}
               onChange={(e) => alterar('tipoUsuario', e.target.value)}
               disabled={ocupado || Boolean(cursoIdInicial)}
@@ -196,13 +211,24 @@ export default function FormularioProfessor({
           <label>
             Titulação
             <select
+              className="campo"
               value={dados.titulacao}
               onChange={(e) => alterar('titulacao', e.target.value)}
               disabled={ocupado}
             >
               {['GRADUACAO', 'ESPECIALIZACAO', 'MESTRADO', 'DOUTORADO', 'POS_DOUTORADO'].map(
                 (valor) => (
-                  <option key={valor}>{valor}</option>
+                  <option key={valor} value={valor}>
+                    {
+                      {
+                        GRADUACAO: 'Graduação',
+                        ESPECIALIZACAO: 'Especialização',
+                        MESTRADO: 'Mestrado',
+                        DOUTORADO: 'Doutorado',
+                        POS_DOUTORADO: 'Pós-doutorado',
+                      }[valor]
+                    }
+                  </option>
                 ),
               )}
             </select>
@@ -210,6 +236,7 @@ export default function FormularioProfessor({
           <label className="gestao-campo-largo">
             Apresentação
             <textarea
+              className="campo"
               required
               maxLength={500}
               rows={3}

@@ -1,3 +1,4 @@
+import PainelInstitucional from '@/shared/components/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { autenticarConta } from './services/autenticarConta.js'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
@@ -8,33 +9,6 @@ import './acesso.css'
 const TEMPO_LIMITE_MS = 15000
 const MOTIVO_TEMPO_ESGOTADO = 'tempo-esgotado'
 const MOTIVO_DESMONTADO = 'desmontado'
-
-const TIPOS_PROJETO = [
-  {
-    id: 'tcc',
-    icone: 'formacao-cursos',
-    titulo: 'TCC',
-    descricao: 'Trabalho de conclusão de curso',
-  },
-  {
-    id: 'integrador',
-    icone: 'projetos-cursos',
-    titulo: 'Projeto Integrador',
-    descricao: 'Soluções aplicadas ao curso',
-  },
-  {
-    id: 'pesquisa',
-    icone: 'laboratorio',
-    titulo: 'Pesquisa',
-    descricao: 'Conhecimento em construção',
-  },
-  {
-    id: 'extensao',
-    icone: 'docentes-detalhe',
-    titulo: 'Extensão',
-    descricao: 'Projetos conectados à comunidade',
-  },
-]
 
 function validarFormulario(identificacao, senha) {
   const erros = {}
@@ -164,22 +138,21 @@ export default function PaginaAcesso({
   return (
     <main id="conteudo" className={`limite pagina-acesso acesso-login acesso-login--${perfil}`}>
       <div className="acesso-login__coluna">
-        <section className="acesso-login__cartao" aria-labelledby="titulo-entrar">
+        <section
+          className="acesso-login__cartao layout-autenticacao"
+          aria-labelledby="titulo-entrar"
+        >
           <div className="acesso-login__conteudo">
             <div className="acesso-login__topo">
               <div className="acesso-login__marca">
                 <span className="acesso-login__logo">
-                  <img src={logoPortal} alt="" width="28" height="28" />
+                  <img src={logoPortal} alt="" width="30" height="30" />
                 </span>
                 <div className="acesso-login__marca-textos">
                   <strong>Portal de Cursos</strong>
                   <span>{rotuloPerfil}</span>
                 </div>
               </div>
-              <span className="acesso-login__etiqueta">
-                <Icone nome="seguranca-detalhe" />
-                <span>Ambiente seguro</span>
-              </span>
             </div>
 
             <div className="acesso-login__cabecalho">
@@ -291,8 +264,7 @@ export default function PaginaAcesso({
               )}
 
               <button className="botao-primario acesso-entrar" type="submit" disabled={enviando}>
-                <span>{enviando ? 'Entrando…' : 'Entrar na plataforma'}</span>
-                <Icone nome="seta" classe="acesso-entrar__icone" />
+                <span>{enviando ? 'Entrando…' : 'Acessar conta'}</span>
               </button>
 
               <span className="somente-leitores" role="status">
@@ -312,57 +284,7 @@ export default function PaginaAcesso({
             </div>
           </div>
 
-          <aside className="acesso-login__vitrine" aria-label="Conheça os projetos do portal">
-            <div className="acesso-login__vitrine-cabecalho">
-              <span className="acesso-login__vitrine-selo-topo">
-                <Icone nome="destaque" />
-                <span>Repositório Institucional</span>
-              </span>
-              <h2>Onde a produção acadêmica ganha visibilidade</h2>
-              <p>
-                Submeta trabalhos, receba orientação docente e publique no acervo oficial do curso.
-              </p>
-            </div>
-
-            <article className="acesso-login__projetos">
-              <header>
-                <div>
-                  <strong>Tipos de projeto</strong>
-                  <span>Publicados após aprovação do orientador e coordenação</span>
-                </div>
-                <b>
-                  <Icone nome="confirmacao-cursos" />4 modalidades
-                </b>
-              </header>
-
-              <div className="acesso-login__lista-projetos">
-                {TIPOS_PROJETO.map((tipo) => (
-                  <div
-                    key={tipo.id}
-                    className={`acesso-login__projeto acesso-login__projeto--${tipo.id}`}
-                  >
-                    <span className="acesso-login__projeto-icone" aria-hidden="true">
-                      <Icone nome={tipo.icone} />
-                    </span>
-                    <div>
-                      <strong>{tipo.titulo}</strong>
-                      <small>{tipo.descricao}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <footer>
-                <div className="acesso-login__projetos-rodape">
-                  <span>PRODUÇÃO ACADÊMICA</span>
-                  <b>Seu próximo projeto começa aqui.</b>
-                </div>
-                <span className="acesso-login__projetos-indicador" aria-hidden="true">
-                  <Icone nome="reconhecimento-detalhe" />
-                </span>
-              </footer>
-            </article>
-          </aside>
+          <PainelInstitucional />
         </section>
 
         <p className="acesso-login__ajuda">

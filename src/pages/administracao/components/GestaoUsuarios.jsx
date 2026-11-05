@@ -153,12 +153,12 @@ export default function GestaoUsuarios({ token }) {
             </label>
           </div>
           <div
-            className="tabela-submissoes"
+            className="tabela-container"
             role="region"
             aria-label="Contas do portal"
             tabIndex={0}
           >
-            <table>
+            <table className="tabela">
               <thead>
                 <tr>
                   <th scope="col">Pessoa</th>
@@ -171,12 +171,12 @@ export default function GestaoUsuarios({ token }) {
                 {filtrados.map((item) => (
                   <tr key={item.id || item.email}>
                     <th scope="row">
-                      {item.nome || 'Sem nome'}
-                      <span>{item.email}</span>
+                      <span className="usuario-identificacao__nome">{item.nome || 'Sem nome'}</span>
+                      <span className="usuario-identificacao__email">{item.email}</span>
                     </th>
                     <td>
                       <span
-                        className={`usuario-papel usuario-papel--${String(item.tipoUsuario || '').toLowerCase()}`}
+                        className={`status usuario-papel usuario-papel--${String(item.tipoUsuario || '').toLowerCase()}`}
                       >
                         {rotuloTipo(item.tipoUsuario)}
                       </span>

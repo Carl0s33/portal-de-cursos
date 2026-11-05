@@ -1,0 +1,20 @@
+.acesso-login .layout-autenticacao,
+.cadastro-aluno .layout-autenticacao {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--espaco-3);
+  width: 100%;
+  max-width: 1100px;
+  min-width: 0;
+  padding: var(--espaco-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+}
+@media (max-width: 820px) {
+  .acesso-login .layout-autenticacao,
+  .cadastro-aluno .layout-autenticacao {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+}

@@ -1,65 +1,38 @@
 .usuario-papel {
-  --cor-papel: var(--azul);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--cor-papel);
-  background: var(--cor-papel);
-  color: var(--branco);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-papel) 24%, transparent);
+  vertical-align: middle;
 }
 
-.usuario-papel::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.85;
+.tabela tbody th .usuario-identificacao__nome,
+.tabela tbody th .usuario-identificacao__email {
+  display: block;
 }
 
-.usuario-papel--admin {
-  --cor-papel: var(--marinho);
+.tabela tbody th .usuario-identificacao__email {
+  margin-top: 3px;
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
-.usuario-papel--coordenador {
-  --cor-papel: var(--aviso);
+.status.usuario-papel--admin {
+  --cor-status: var(--marinho);
 }
 
-.usuario-papel--professor {
-  --cor-papel: var(--roxo);
+.status.usuario-papel--coordenador {
+  --cor-status: var(--aviso);
 }
 
-.usuario-papel--aluno {
-  --cor-papel: var(--azul);
+.status.usuario-papel--professor {
+  --cor-status: var(--roxo);
 }
 
-:root[data-tema='escuro'] .usuario-papel {
-  color: var(--preto);
-  box-shadow: none;
+.status.usuario-papel--aluno {
+  --cor-status: var(--sucesso);
 }
 
-:root[data-tema='escuro'] .usuario-papel--admin {
-  --cor-papel: #94a3b8;
-}
-
-:root[data-tema='escuro'] .usuario-papel--coordenador {
-  --cor-papel: var(--aviso);
-}
-
-:root[data-tema='escuro'] .usuario-papel--professor {
-  --cor-papel: var(--roxo);
-}
-
-:root[data-tema='escuro'] .usuario-papel--aluno {
-  --cor-papel: var(--azul);
+:root[data-tema='escuro'] .status.usuario-papel--admin {
+  --cor-status: var(--papel-inativo);
 }
 
 .usuario-acesso {
@@ -68,8 +41,8 @@
   gap: 6px;
   padding: 5px 11px;
   border: 1px solid transparent;
-  border-radius: 999px;
-  font-size: 12px;
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-xs);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -77,7 +50,7 @@
 .usuario-acesso > span {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: var(--raio-pilula);
   background: currentColor;
 }
 

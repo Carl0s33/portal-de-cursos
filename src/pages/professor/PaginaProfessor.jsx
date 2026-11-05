@@ -1,3 +1,6 @@
+import { ordenarSubmissoes } from '@/shared/utils/ordenarSubmissoes.js'
+import EstadoVazio from '@/shared/components/EstadoVazio.jsx'
+import Indicadores from '@/shared/components/Indicadores.jsx'
 import { useMemo, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
 import '@/shared/styles/painel.css'
@@ -35,10 +38,25 @@ function orientaSubmissao(item, usuario) {
   if (item.orientadorId && idUsuario && String(item.orientadorId) === String(idUsuario)) {
     return true
   }
+  // Verifica se está na lista de professores do projeto (orientador ou participante)
+  if (Array.isArray(item.professores) && idUsuario) {
+    if (item.professores.some((p) => String(p.professorId || p.id) === String(idUsuario))) {
+      return true
+    }
+  }
   const nomeOrientador = normalizar(item.orientador)
   const nomeUsuario = normalizar(usuario?.nome)
   if (!nomeOrientador || !nomeUsuario) return true
-  return nomeOrientador.includes(nomeUsuario) || nomeUsuario.includes(nomeOrientador)
+  if (nomeOrientador.includes(nomeUsuario) || nomeUsuario.includes(nomeOrientador)) {
+    return true
+  }
+  if (Array.isArray(item.professores)) {
+    return item.professores.some((p) => {
+      const pNome = normalizar(p.nome || p.professorNome)
+      return pNome && (pNome.includes(nomeUsuario) || nomeUsuario.includes(pNome))
+    })
+  }
+  return false
 }
 
 function extrairIniciais(nome) {
@@ -76,10 +94,12 @@ export default function PaginaProfessor({ submissoes, usuario }) {
 
   const resultados = useMemo(
     () =>
-      orientacoes.filter(
-        (item) =>
-          (filtro === 'Todas' || item.status === filtro) &&
-          (tipoFiltro === 'Todos' || item.tipo === tipoFiltro),
+      ordenarSubmissoes(
+        orientacoes.filter(
+          (item) =>
+            (filtro === 'Todas' || item.status === filtro) &&
+            (tipoFiltro === 'Todos' || item.tipo === tipoFiltro),
+        ),
       ),
     [filtro, orientacoes, tipoFiltro],
   )
@@ -88,59 +108,44 @@ export default function PaginaProfessor({ submissoes, usuario }) {
 
   return (
     <main id="conteudo" className="limite pagina-professor">
-      <header className="pagina-professor__topo">
+      <header className="pagina-professor__topo" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <p className="pagina-professor__rotulo">Área do Professor</p>
           <h1>Submissões para acompanhar</h1>
           <p>
-            Veja somente as submissões em que você consta como orientador e faça a avaliação
-            inicial.
+            Veja as produções em que você consta como orientador ou colaborador e realize avaliações ou submeta novos projetos.
           </p>
+        </div>
+        <div>
+          <a className="botao-primario" href="#submeter">
+            + Submeter novo projeto
+          </a>
         </div>
       </header>
 
-      <dl className="painel-indicadores">
-        <div className="painel-indicadores__card painel-indicadores__card--total">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="projetos-detalhe" />
-            </span>
-            <span>Total de orientações</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.total}</dd>
-          <dd className="painel-indicadores__detalhe">vinculadas ao seu perfil</dd>
-        </div>
-        <div className="painel-indicadores__card painel-indicadores__card--aguardando">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="relogio-cursos" />
-            </span>
-            <span>Aguardando aceite</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.pendentes}</dd>
-          <dd className="painel-indicadores__detalhe">pendentes da sua decisão</dd>
-        </div>
-        <div className="painel-indicadores__card painel-indicadores__card--coordenacao">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="criterios-detalhe" />
-            </span>
-            <span>Na coordenação</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.analise}</dd>
-          <dd className="painel-indicadores__detalhe">aceitas e em análise final</dd>
-        </div>
-        <div className="painel-indicadores__card painel-indicadores__card--publicadas">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="confirmacao-cursos" />
-            </span>
-            <span>Publicadas</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.aprovados}</dd>
-          <dd className="painel-indicadores__detalhe">no acervo público do portal</dd>
-        </div>
-      </dl>
+      <Indicadores
+        itens={[
+          {
+            titulo: 'Total de orientações',
+            valor: totais.total,
+            icone: 'projetos-detalhe',
+          },
+          {
+            titulo: 'Aguardando aceite',
+            valor: totais.pendentes,
+            icone: 'relogio-cursos',
+          },
+          {
+            titulo: 'Na coordenação',
+            valor: totais.analise,
+            icone: 'criterios-detalhe',
+          },
+          {
+            titulo: 'Publicadas',
+            valor: totais.aprovados,
+            icone: 'confirmacao-cursos',
+          },
+        ]}
+      />
 
       <div className="pagina-professor__layout">
         <aside className="pagina-professor__filtro-painel" aria-label="Filtros de submissões">
@@ -190,7 +195,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             <strong>
               {resultados.length} {resultados.length === 1 ? 'submissão' : 'submissões'}
             </strong>
-            <span>mais recentes</span>
+            <span>Prioridade e ordem de chegada</span>
           </div>
 
           <div className="lista-submissoes">
@@ -211,7 +216,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                     href={enderecoPrivado(`professor/submissao/${item.identificador}`)}
                     className="submissao-feed__gatilho"
                   >
-                    <span className="cabecalho__iniciais submissao-feed__avatar" aria-hidden="true">
+                    <span className="submissao-feed__avatar" aria-hidden="true">
                       {extrairIniciais(nomeAutor)}
                     </span>
 
@@ -249,7 +254,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                       </span>
                     </span>
 
-                    <span className="submissao-feed__expandir">Avaliar projeto →</span>
+                    <span className="submissao-feed__expandir">Avaliar submissão</span>
                   </a>
                 </article>
               )
@@ -257,10 +262,23 @@ export default function PaginaProfessor({ submissoes, usuario }) {
           </div>
 
           {!resultados.length && (
-            <div className="pagina-professor__vazio">
-              <h2>Nenhuma submissão neste filtro</h2>
-              <p>Escolha outro status para continuar a revisão.</p>
-            </div>
+            <EstadoVazio
+              titulo={
+                orientacoes.length
+                  ? 'Nenhuma submissão neste filtro'
+                  : 'Nenhuma orientação disponível'
+              }
+              descricao={
+                orientacoes.length
+                  ? 'Limpe os filtros para consultar todas as submissões vinculadas a você.'
+                  : 'As submissões em que você for indicado como professor orientador aparecerão aqui.'
+              }
+              acao={orientacoes.length ? 'Limpar filtros' : undefined}
+              aoAcionar={() => {
+                definirFiltro('Todas')
+                definirTipoFiltro('Todos')
+              }}
+            />
           )}
         </section>
       </div>

@@ -20,5 +20,4 @@
 }
 .tabela-submissoes button:active,
 .gestao-acoes button:active {
-  transform: translateY(1px);
 }

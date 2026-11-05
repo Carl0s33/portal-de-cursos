@@ -1,6 +1,9 @@
+import { ordenarSubmissoes } from '@/shared/utils/ordenarSubmissoes.js'
+import Indicadores from '@/shared/components/Indicadores.jsx'
+import EtapasSubmissao from '@/shared/components/EtapasSubmissao.jsx'
 import { useMemo } from 'react'
 import '@/shared/styles/painel-informativo.css'
-import Icone from '@/shared/components/Icone.jsx'
+import EstadoVazio from '@/shared/components/EstadoVazio.jsx'
 import { basePortal } from '../../app/rotas.js'
 import './painel-aluno.css'
 
@@ -18,25 +21,27 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
   // Exibe projetos onde o aluno é autor principal ou co-autor (integrante)
   const minhasSubmissoes = useMemo(
     () =>
-      submissoes.filter((s) => {
-        const eAutor =
-          s.autor?.toLowerCase() === nomeAluno ||
-          s.email?.toLowerCase() === emailAluno ||
-          s.autores?.some(
-            (autor) =>
-              typeof autor !== 'string' &&
-              autor?.nome?.toLowerCase() === nomeAluno &&
-              autor?.email?.toLowerCase() === emailAluno,
-          )
-        const eIntegrante =
-          Array.isArray(s.autores) &&
-          s.autores.some((a) => {
-            const nome = typeof a === 'string' ? a : a?.nome || ''
-            const email = typeof a === 'string' ? '' : a?.email || ''
-            return nome.toLowerCase() === nomeAluno || email.toLowerCase() === emailAluno
-          })
-        return eAutor || eIntegrante
-      }),
+      ordenarSubmissoes(
+        submissoes.filter((s) => {
+          const eAutor =
+            s.autor?.toLowerCase() === nomeAluno ||
+            s.email?.toLowerCase() === emailAluno ||
+            s.autores?.some(
+              (autor) =>
+                typeof autor !== 'string' &&
+                autor?.nome?.toLowerCase() === nomeAluno &&
+                autor?.email?.toLowerCase() === emailAluno,
+            )
+          const eIntegrante =
+            Array.isArray(s.autores) &&
+            s.autores.some((a) => {
+              const nome = typeof a === 'string' ? a : a?.nome || ''
+              const email = typeof a === 'string' ? '' : a?.email || ''
+              return nome.toLowerCase() === nomeAluno || email.toLowerCase() === emailAluno
+            })
+          return eAutor || eIntegrante
+        }),
+      ),
     [submissoes, emailAluno, nomeAluno],
   )
 
@@ -56,7 +61,6 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
     <main className="limite pagina-painel-aluno" id="conteudo">
       <header className="painel-aluno-cabecalho">
         <div>
-          <p className="painel-aluno-rotulo">Área do Aluno</p>
           <h1>Meus projetos</h1>
           <p>
             Acompanhe os projetos que você submeteu ou em que consta como integrante, e o status de
@@ -64,90 +68,62 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
           </p>
         </div>
         <a id="btn-submeter-projeto" className="botao-primario" href={`${basePortal}#submeter`}>
-          + Submeter projeto
+          Enviar projeto
         </a>
       </header>
 
-      {/* Indicadores */}
-      <dl className="painel-indicadores painel-aluno-indicadores">
-        <div className="painel-indicadores__card painel-indicadores__card--total">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="projetos-detalhe" />
-            </span>
-            <span>Total</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.total}</dd>
-          <dd className="painel-indicadores__detalhe">submissões no portal</dd>
-        </div>
-        <div className="painel-indicadores__card painel-indicadores__card--aguardando">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="relogio-cursos" />
-            </span>
-            <span>Em análise</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.analise}</dd>
-          <dd className="painel-indicadores__detalhe">aguardando avaliação</dd>
-        </div>
-        <div className="painel-indicadores__card painel-indicadores__card--publicadas">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="confirmacao-cursos" />
-            </span>
-            <span>Aprovados</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.aprovados}</dd>
-          <dd className="painel-indicadores__detalhe">publicados no portal</dd>
-        </div>
-        <div className="painel-indicadores__card painel-indicadores__card--recusadas">
-          <dt className="painel-indicadores__rotulo">
-            <span className="painel-indicadores__icone" aria-hidden="true">
-              <Icone nome="erro-cursos" />
-            </span>
-            <span>Recusados</span>
-          </dt>
-          <dd className="painel-indicadores__valor">{totais.recusados}</dd>
-          <dd className="painel-indicadores__detalhe">não publicados</dd>
-        </div>
-      </dl>
+      <Indicadores
+        itens={[
+          {
+            titulo: 'Total de submissões',
+            valor: totais.total,
+            icone: 'projetos-detalhe',
+          },
+          {
+            titulo: 'Em análise',
+            valor: totais.analise,
+            icone: 'relogio-cursos',
+          },
+          {
+            titulo: 'Aprovados',
+            valor: totais.aprovados,
+            icone: 'confirmacao-cursos',
+          },
+          {
+            titulo: 'Recusados',
+            valor: totais.recusados,
+            icone: 'erro',
+          },
+        ]}
+      />
 
       {/* Tabela de submissões */}
-      <section className="painel-secao" aria-labelledby="titulo-minhas-submissoes">
-        <header>
+      <section className="painel" aria-labelledby="titulo-minhas-submissoes">
+        <header className="painel__cabecalho">
           <div>
             <h2 id="titulo-minhas-submissoes">Submissões</h2>
-            <p>Projetos em que você figura como autor principal ou co-autor.</p>
+            <p>Acompanhe o parecer e as decisões registradas em cada projeto.</p>
           </div>
           <span className="painel-contagem">
-            {totais.total} resultado{totais.total !== 1 ? 's' : ''}
+            {totais.total} {totais.total === 1 ? 'resultado' : 'resultados'}
           </span>
         </header>
         {minhasSubmissoes.length === 0 ? (
-          <div className="painel-vazio" role="status">
-            <span className="painel-aluno-vazio-icone" aria-hidden="true">
-              <Icone nome="vazio-projetos-detalhe" />
-            </span>
-            <p>
-              Você ainda não tem nenhum projeto submetido. Use o botão acima para enviar o seu
-              primeiro projeto.
-            </p>
-            <a
-              id="btn-submeter-primeiro"
-              className="botao-primario"
-              href={`${basePortal}#submeter`}
-            >
-              Submeter meu primeiro projeto
-            </a>
-          </div>
+          <EstadoVazio
+            titulo="Nenhum projeto enviado"
+            descricao="Envie seu primeiro projeto para avaliação do professor orientador. Você poderá acompanhar cada etapa neste painel."
+            acao="Enviar primeiro projeto"
+            destino={`${basePortal}#submeter`}
+            idAcao="btn-submeter-primeiro"
+          />
         ) : (
           <div
-            className="tabela-submissoes"
+            className="tabela-container"
             role="region"
             aria-label="Lista de submissões"
             tabIndex={0}
           >
-            <table>
+            <table className="tabela">
               <caption className="somente-leitores">
                 Acompanhamento das suas submissões acadêmicas
               </caption>
@@ -163,15 +139,16 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
                 {minhasSubmissoes.map((item) => (
                   <tr key={item.identificador}>
                     <th scope="row">
-                      {item.titulo}
-                      <span>
+                      <span className="tabela__titulo">{item.titulo}</span>
+                      <EtapasSubmissao status={item.status} compact />
+                      <span className="tabela__descricao">
                         {item.tipo}
                         {item.orientador && ` · ${item.orientador}`}
                       </span>
                     </th>
-                    <td>{item.cursoCompleto || item.curso || '—'}</td>
-                    <td>{item.enviadoEm}</td>
-                    <td>
+                    <td data-label="Curso">{item.cursoCompleto || item.curso || '—'}</td>
+                    <td data-label="Enviado em">{item.enviadoEm}</td>
+                    <td data-label="Situação">
                       <span
                         className={`status ${classeStatus[item.status] || 'status--em-análise'}`}
                       >
@@ -184,18 +161,12 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
             </table>
           </div>
         )}
-      </section>
 
-      {/* Aviso somente-leitura */}
-      <aside
-        className="painel-aluno-aviso painel-informativo painel-informativo--observacao"
-        aria-label="Informação sobre permissões"
-      >
-        <span>
-          <strong>Somente visualização.</strong> Projetos submetidos não podem ser editados ou
-          avaliados pelo aluno. Para correções, entre em contato com o professor orientador.
-        </span>
-      </aside>
+        <footer className="painel-aluno__rodape-aviso">
+          <strong>Acompanhamento de submissões.</strong> Projetos em análise aguardam o parecer
+          docente. Em caso de devolução para ajustes, você poderá editar e reenviar o projeto.
+        </footer>
+      </section>
     </main>
   )
 }
