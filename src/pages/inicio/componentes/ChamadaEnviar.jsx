@@ -1,8 +1,9 @@
 import Icone from '@/shared/componentes/Icone.jsx'
+import Botao from '@/shared/componentes/Botao.jsx'
 
 export default function ChamadaEnviar() {
   return (
-    <section className="convite" aria-labelledby="titulo-convite">
+    <section className="faixa-envio" aria-labelledby="titulo-convite">
       <div>
         <h2 id="titulo-convite">Envie seu projeto para avaliação</h2>
         <p>
@@ -11,10 +12,10 @@ export default function ChamadaEnviar() {
         </p>
         <small>Em caso de recusa, o estudante recebe o motivo da decisão.</small>
       </div>
-      <a className="botao-primario" href="#submeter">
+      <Botao as="a" href="#submeter">
         <Icone nome="adicionar" />
         Enviar projeto
-      </a>
+      </Botao>
     </section>
   )
 }

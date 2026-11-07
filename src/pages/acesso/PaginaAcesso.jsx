@@ -2,8 +2,8 @@ import PainelInstitucional from '@/shared/componentes/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { entrarNaConta } from './servicos/entrarNaConta.js'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
-import logoPortal from '@/assets/marca/logo-portal.png'
 import Icone from '@/shared/componentes/Icone.jsx'
+import logoPortal from '@/assets/marca/logo-portal.png'
 import './acesso.css'
 
 const TEMPO_LIMITE_MS = 15000
@@ -126,15 +126,6 @@ export default function PaginaAcesso({
     }
   }
 
-  const rotuloPerfil =
-    perfil === 'aluno'
-      ? 'Portal do Aluno'
-      : perfil === 'professor'
-        ? 'Portal Docente'
-        : perfil === 'administracao'
-          ? 'Gestão Institucional'
-          : 'Acesso Institucional'
-
   return (
     <main id="conteudo" className={`limite pagina-acesso acesso-login acesso-login--${perfil}`}>
       <div className="acesso-login__coluna">
@@ -143,19 +134,15 @@ export default function PaginaAcesso({
           aria-labelledby="titulo-entrar"
         >
           <div className="acesso-login__conteudo">
-            <div className="acesso-login__topo">
-              <div className="acesso-login__marca">
+            <div className="acesso-login__cabecalho">
+              <div className="acesso-login__marca" aria-label="Portal de Cursos">
                 <span className="acesso-login__logo">
                   <img src={logoPortal} alt="" width="30" height="30" />
                 </span>
-                <div className="acesso-login__marca-textos">
+                <span className="acesso-login__marca-textos">
                   <strong>Portal de Cursos</strong>
-                  <span>{rotuloPerfil}</span>
-                </div>
+                </span>
               </div>
-            </div>
-
-            <div className="acesso-login__cabecalho">
               <h1 id="titulo-entrar">
                 {perfil === 'aluno'
                   ? 'Acesse sua conta de aluno'
@@ -194,9 +181,6 @@ export default function PaginaAcesso({
               <div className="acesso-campo">
                 <label htmlFor="identificacao">E-mail institucional</label>
                 <div className="acesso-entrada">
-                  <span className="acesso-entrada__icone" aria-hidden="true">
-                    <Icone nome="email" />
-                  </span>
                   <input
                     ref={campoIdentificacao}
                     id="identificacao"
@@ -221,9 +205,6 @@ export default function PaginaAcesso({
               <div className="acesso-campo">
                 <label htmlFor="senha">Senha</label>
                 <div className="acesso-senha">
-                  <span className="acesso-entrada__icone" aria-hidden="true">
-                    <Icone nome="senha" />
-                  </span>
                   <input
                     ref={campoSenha}
                     id="senha"
@@ -278,19 +259,18 @@ export default function PaginaAcesso({
                 <span>Exclusivo para estudantes matriculados</span>
               </div>
               <a href={enderecoPrivado('aluno/cadastro')}>
-                <Icone nome="cadastro-aluno" />
                 <span>Crie sua conta de aluno</span>
               </a>
             </div>
+
+            <p className="acesso-login__ajuda">
+              Professores, coordenadores e administradores acessam com as credenciais fornecidas
+              pela coordenação. <a href={basePortal}>Voltar ao portal</a>
+            </p>
           </div>
 
           <PainelInstitucional />
         </section>
-
-        <p className="acesso-login__ajuda">
-          Professores, coordenadores e administradores acessam com as credenciais fornecidas pela
-          coordenação. <a href={basePortal}>Voltar ao portal</a>
-        </p>
       </div>
     </main>
   )

@@ -127,14 +127,14 @@
   width: fit-content;
   padding: 5px 12px;
   border-radius: 999px;
-  border: 1px solid var(--cor-status);
-  background: var(--cor-status);
-  color: var(--branco);
+  border: 1px solid color-mix(in srgb, var(--cor-status) 35%, transparent);
+  background: transparent;
+  color: var(--cor-status);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-status) 24%, transparent);
+  box-shadow: none;
 }
 .tabela-submissoes .status::before,
 .status::before {
@@ -152,7 +152,9 @@
   --cor-status: var(--azul);
 }
 .tabela-submissoes .status--aguardando-orientador,
-.status--aguardando-orientador {
+.tabela-submissoes .status--aguardando-coordenador,
+.status--aguardando-orientador,
+.status--aguardando-coordenador {
   --cor-status: var(--aviso);
 }
 .tabela-submissoes .status--aceito,
@@ -169,10 +171,10 @@
 }
 :root[data-tema='escuro'] .tabela-submissoes .status,
 :root[data-tema='escuro'] .status {
-  color: var(--branco);
-  background: var(--cor-status);
-  border-color: var(--cor-status);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  color: var(--cor-status);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--cor-status) 40%, var(--borda));
+  box-shadow: none;
 }
 .tabela-submissoes a:hover {
   color: var(--azul);
@@ -281,6 +283,10 @@
 }
 .painel-vazio p {
   margin: 12px 0 24px;
+}
+.tabela td:has(> .status) {
+  text-align: center;
+  vertical-align: middle;
 }
 .painel-integracao {
   margin: 0;

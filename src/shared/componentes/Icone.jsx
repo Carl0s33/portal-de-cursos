@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  ArrowUpRight,
   Award,
   BadgeCheck,
   BookMarked,
@@ -136,6 +137,7 @@ const mapaLucide = {
   'seta-cursos': ArrowRight,
   'seta-introducao': ArrowRight,
   seta: ArrowRight,
+  'seta-diagonal': ArrowUpRight,
   sol: Sun,
   'submeter-detalhe': Upload,
   'tentar-cursos': RefreshCw,

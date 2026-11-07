@@ -4,7 +4,7 @@ export default function Link({ destino, children, classe = '', icone = 'seta' })
   return (
     <a className={`ligacao ${classe}`} href={destino}>
       {children}
-      <Icone nome={icone} />
+      {icone && <Icone nome={icone} />}
     </a>
   )
 }

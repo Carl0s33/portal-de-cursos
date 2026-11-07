@@ -68,7 +68,6 @@ export default function PaginaCursos() {
   const [tentativa, mudarTentativa] = useState(0)
   const [filtros, mudarFiltros] = useState(lerFiltros)
   const [ordem, mudarOrdem] = useState('relevancia')
-  const [filtrosAbertos, mudarFiltrosAbertos] = useState(false)
 
   useEffect(() => {
     const controle = new AbortController()
@@ -164,29 +163,14 @@ export default function PaginaCursos() {
       />
       <FiltrosAtivos filtros={filtros} alterar={alterar} limpar={limpar} />
       <div className="pagina-cursos__grade">
-        <div
-          className={`pagina-cursos__lateral ${filtrosAbertos ? 'pagina-cursos__lateral--aberta' : ''}`}
-        >
-          <button
-            className="pagina-cursos__abrir-filtros"
-            aria-expanded={filtrosAbertos}
-            aria-controls="painel-filtros"
-            onClick={() => mudarFiltrosAbertos(!filtrosAbertos)}
-          >
-            <Icone nome="filtrar-cursos" />
-            {filtrosAbertos ? 'Recolher filtros' : 'Filtrar cursos'}
-          </button>
-          <div id="painel-filtros">
-            <FiltrosCursos
-              filtros={filtros}
-              alterar={alterar}
-              limpar={limpar}
-              bloqueado={bloqueado}
-              cursos={consulta.cursos}
-            />
-          </div>
-        </div>
         <div className="pagina-cursos__resultados" aria-busy={consulta.estado === 'carregando'}>
+          <FiltrosCursos
+            filtros={filtros}
+            alterar={alterar}
+            limpar={limpar}
+            bloqueado={bloqueado}
+            cursos={consulta.cursos}
+          />
           <div className="pagina-cursos__resumo">
             <p role="status" aria-live="polite">
               {consulta.estado === 'pronto' ? (

@@ -78,21 +78,25 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
             titulo: 'Total de submissões',
             valor: totais.total,
             icone: 'projetos-detalhe',
+            tom: 'primario',
           },
           {
             titulo: 'Em análise',
             valor: totais.analise,
             icone: 'relogio-cursos',
+            tom: 'andamento',
           },
           {
             titulo: 'Aprovados',
             valor: totais.aprovados,
             icone: 'confirmacao-cursos',
+            tom: 'sucesso',
           },
           {
             titulo: 'Recusados',
             valor: totais.recusados,
             icone: 'erro',
+            tom: 'erro',
           },
         ]}
       />

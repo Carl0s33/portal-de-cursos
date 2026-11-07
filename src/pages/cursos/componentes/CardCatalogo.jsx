@@ -1,19 +1,15 @@
-import Icone from '@/shared/componentes/Icone.jsx'
 import './cartao-catalogo.css'
 
 export default function CardCatalogo({ curso }) {
   const informacoes = [
-    ['Duração', curso.duracao, 'duracao-cursos'],
-    ['Modalidade', curso.modalidade, 'modalidade-cursos'],
-    ['Turno', curso.turno, curso.turno === 'Noturno' ? 'noturno-cursos' : 'matutino-cursos'],
-  ]
+    ['Duração', curso.duracao],
+    ['Modalidade', curso.modalidade],
+    ['Turno', curso.turno],
+  ].filter(([, valor]) => valor)
 
   return (
-    <article className="cartao curso-catalogo">
+    <article className="cartao cartao--clicavel curso-catalogo">
       <div className="curso-catalogo__topo">
-        <span className="curso-catalogo__simbolo" aria-hidden="true">
-          <Icone nome="grau-detalhe" />
-        </span>
         <span className="curso-catalogo__grau">
           {curso.grau === 'Tecnologia' ? 'Graduação tecnológica' : curso.grau}
         </span>
@@ -21,7 +17,11 @@ export default function CardCatalogo({ curso }) {
       </div>
 
       <h2 className="curso-catalogo__titulo">
-        <a className="curso-catalogo__link" href={`#curso/${curso.identificador}`}>
+        <a
+          className="curso-catalogo__link"
+          href={`#curso/${curso.identificador}`}
+          aria-label={`Conhecer ${curso.nome}`}
+        >
           {curso.nome}
         </a>
       </h2>
@@ -29,27 +29,19 @@ export default function CardCatalogo({ curso }) {
       <p className="curso-catalogo__descricao">{curso.descricao}</p>
 
       <dl className="curso-catalogo__metadados">
-        {informacoes.map(([rotulo, valor, icone]) => (
+        {informacoes.map(([rotulo, valor]) => (
           <div key={rotulo}>
-            <dt>
-              <Icone nome={icone} />
-              {rotulo}
-            </dt>
+            <dt>{rotulo}</dt>
             <dd title={valor || 'A informar'}>{valor || 'A informar'}</dd>
           </div>
         ))}
       </dl>
 
       <div className="curso-catalogo__base">
-        {curso.campus && (
-          <p className="curso-catalogo__campus">
-            <Icone nome="localizacao" />
-            <span>{curso.campus}</span>
-          </p>
-        )}
+        {curso.campus && <p className="curso-catalogo__campus">{curso.campus}</p>}
         <span className="curso-catalogo__acao" aria-hidden="true">
           <span>Conhecer o curso</span>
-          <Icone nome="seta-cursos" />
+          <span aria-hidden="true">↗</span>
         </span>
       </div>
     </article>

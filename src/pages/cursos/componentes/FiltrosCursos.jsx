@@ -1,4 +1,3 @@
-import Icone from '@/shared/componentes/Icone.jsx'
 import './filtros-cursos.css'
 
 export default function FiltrosCursos({ filtros, alterar, limpar, bloqueado, cursos }) {
@@ -7,19 +6,20 @@ export default function FiltrosCursos({ filtros, alterar, limpar, bloqueado, cur
       a.localeCompare(b, 'pt-BR'),
     )
   const campos = [
-    ['grau', 'Tipo de grau', opcoesUnicas('grau')],
+    ['grau', 'Grau', opcoesUnicas('grau')],
     ['modalidade', 'Modalidade', opcoesUnicas('modalidade')],
     ['campus', 'Campus', opcoesUnicas('campus')],
   ]
   const grupos = [
     ['areas', 'Área de conhecimento', opcoesUnicas('area'), 'area'],
-    ['turnos', 'Turno de oferta', opcoesUnicas('turno'), 'turno'],
-    ['duracoes', 'Duração prevista', ['Até 2 anos', '3 a 4 anos', '4 a 5 anos'], 'duracao'],
+    ['turnos', 'Turno', opcoesUnicas('turno'), 'turno'],
+    ['duracoes', 'Duração', ['Até 2 anos', '3 a 4 anos', '4 a 5 anos'], 'duracao'],
   ].filter(([, , opcoes]) => opcoes.length)
   const quantidade = Object.values(filtros).reduce(
     (total, valor) => total + (Array.isArray(valor) ? valor.length : Number(Boolean(valor))),
     0,
   )
+
   function alternarOpcao(campo, valor) {
     alterar(
       campo,
@@ -28,17 +28,11 @@ export default function FiltrosCursos({ filtros, alterar, limpar, bloqueado, cur
         : [...filtros[campo], valor],
     )
   }
+
   return (
     <aside className="filtros-cursos" aria-label="Filtros de cursos">
-      <div className="filtros-cursos__titulo">
-        <h2>
-          <Icone nome="filtrar-cursos" />
-          Filtrar cursos
-        </h2>
-        <span>{bloqueado ? 'Bloqueado' : `${quantidade} ativos`}</span>
-      </div>
       <fieldset disabled={bloqueado} className="filtros-cursos__campos">
-        <legend className="somente-leitores">Refinar catálogo</legend>
+        <legend className="somente-leitores">Refinar catálogo de cursos</legend>
         {campos.map(([campo, titulo, opcoes]) => (
           <label className="filtros-cursos__selecao" key={campo}>
             {titulo}
@@ -53,40 +47,37 @@ export default function FiltrosCursos({ filtros, alterar, limpar, bloqueado, cur
             </select>
           </label>
         ))}
-        {grupos.map(([campo, titulo, opcoes, atributo]) => (
-          <details open className="filtros-cursos__grupo" key={campo}>
-            <summary>
-              {titulo}
-              <Icone nome="recolher-cursos" />
-            </summary>
-            <div>
-              {opcoes.map((opcao) => (
-                <label className="filtros-cursos__opcao" key={opcao}>
-                  <input
-                    type="checkbox"
-                    checked={filtros[campo].includes(opcao)}
-                    onChange={() => alternarOpcao(campo, opcao)}
-                  />
-                  <span>{opcao}</span>
-                  {atributo !== 'duracao' && (
-                    <small>{cursos.filter((curso) => curso[atributo] === opcao).length}</small>
-                  )}
-                </label>
+        {grupos.length > 0 && (
+          <details className="filtros-cursos__mais">
+            <summary>Mais filtros</summary>
+            <div className="filtros-cursos__mais-conteudo">
+              {grupos.map(([campo, titulo, opcoes, atributo]) => (
+                <fieldset className="filtros-cursos__grupo" key={campo}>
+                  <legend>{titulo}</legend>
+                  {opcoes.map((opcao) => (
+                    <label className="filtros-cursos__opcao" key={opcao}>
+                      <input
+                        type="checkbox"
+                        checked={filtros[campo].includes(opcao)}
+                        onChange={() => alternarOpcao(campo, opcao)}
+                      />
+                      <span>{opcao}</span>
+                      {atributo !== 'duracao' && (
+                        <small>{cursos.filter((curso) => curso[atributo] === opcao).length}</small>
+                      )}
+                    </label>
+                  ))}
+                </fieldset>
               ))}
             </div>
           </details>
-        ))}
-        <button className="filtros-cursos__limpar" type="button" onClick={limpar}>
-          <Icone nome="redefinir-cursos" />
-          Limpar filtros
-        </button>
+        )}
+        {quantidade > 0 && (
+          <button className="filtros-cursos__limpar" type="button" onClick={limpar}>
+            Limpar filtros
+          </button>
+        )}
       </fieldset>
-      <p className="filtros-cursos__nota">
-        <Icone nome="informacao-cursos" />
-        {bloqueado
-          ? 'Seus filtros foram preservados e serão reativados quando o catálogo estiver disponível.'
-          : 'Refine a busca usando os dados cadastrados na API de cursos.'}
-      </p>
     </aside>
   )
 }

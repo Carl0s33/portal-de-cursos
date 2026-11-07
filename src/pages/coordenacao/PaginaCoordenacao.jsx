@@ -121,6 +121,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
           <TabelaSubmissoes
             itens={ordenarSubmissoes(submissoesDoCurso)}
             baseDetalhes={enderecoPrivado('coordenacao/submissao')}
+            ocultarCurso
           />
         </section>
       </main>
@@ -153,21 +154,25 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             titulo: 'Total de submissões',
             valor: indicadores.total,
             icone: 'projetos-detalhe',
+            tom: 'primario',
           },
           {
-            titulo: 'Aguardando coordenação',
+            titulo: 'Em análise na coordenação',
             valor: indicadores.emAnaliseCoord,
             icone: 'relogio-cursos',
+            tom: 'pendente',
           },
           {
-            titulo: 'Com o orientador',
+            titulo: 'Aguardando orientador',
             valor: indicadores.aguardandoOrientador,
             icone: 'docentes-detalhe',
+            tom: 'andamento',
           },
           {
             titulo: 'Publicados no portal',
             valor: indicadores.publicados,
             icone: 'confirmacao-cursos',
+            tom: 'sucesso',
           },
         ]}
       />
@@ -175,7 +180,7 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
       <section className="painel-secao coordenacao-registros">
         <header>
           <div>
-            <h2>Submissões por prioridade</h2>
+            <h2>Aguardam avaliação</h2>
             <p>
               Trabalhos submetidos pelos estudantes que aguardam aceite do orientador ou aprovação
               final da coordenação.
@@ -186,8 +191,13 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
           </a>
         </header>
         <TabelaSubmissoes
-          itens={ordenarSubmissoes(submissoesDoCurso).slice(0, 8)}
+          itens={ordenarSubmissoes(submissoesDoCurso)
+            .filter((item) => ['Aguardando Orientador', 'Em análise'].includes(item.status))
+            .slice(0, 8)}
           baseDetalhes={enderecoPrivado('coordenacao/submissao')}
+          ocultarCurso
+          textoVazio="Nenhuma submissão aguarda avaliação da coordenação."
+          acaoVaziaHref={enderecoPrivado('coordenacao/submissoes')}
         />
       </section>
 

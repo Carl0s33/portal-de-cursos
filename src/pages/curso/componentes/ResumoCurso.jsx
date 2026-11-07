@@ -1,19 +1,18 @@
-import Icone from '@/shared/componentes/Icone.jsx'
+import Indicadores from '@/shared/componentes/Indicadores.jsx'
 import './resumo-curso.css'
 
 export default function ResumoCurso({ curso }) {
   const indicadores = [
-    ['Duração', curso.duracao, curso.anos, 'duracao-detalhe'],
-    ['Modalidade', curso.modalidade, curso.campus, 'modalidade-detalhe'],
-    ['Turno', curso.turno, null, 'turno-detalhe'],
-    ['Carga horária', curso.cargaHoraria || 'A informar', 'Total integrado', 'carga-detalhe'],
+    ['Duração', curso.duracao, curso.anos],
+    ['Modalidade', curso.modalidade, curso.campus],
+    ['Turno', curso.turno, null],
+    ['Carga horária', curso.cargaHoraria || 'A informar', 'Total integrado'],
     [
       'Matriz',
       curso.componentes ? `${curso.componentes} componentes` : 'A informar',
       curso.componentes
         ? `${curso.obrigatorias} obrig. + ${curso.optativas} opt.`
         : 'Grade curricular',
-      'matriz-detalhe',
     ],
   ]
 
@@ -21,25 +20,17 @@ export default function ResumoCurso({ curso }) {
     <section className="resumo-curso" aria-labelledby="titulo-curso">
       <div className="resumo-curso__identidade">
         <div>
-          <span className="etiqueta">{curso.grau}</span>
+          <p className="resumo-curso__grau">{curso.grau}</p>
           <h1 id="titulo-curso">
             {curso.nome} ({curso.sigla})
           </h1>
           <p>{curso.descricao}</p>
         </div>
       </div>
-      <dl className="resumo-curso__indicadores">
-        {indicadores.map(([titulo, valor, apoio, icone]) => (
-          <div key={titulo}>
-            <dt>
-              {titulo}
-              <Icone nome={icone} />
-            </dt>
-            <dd>{valor}</dd>
-            {apoio && <small>{apoio}</small>}
-          </div>
-        ))}
-      </dl>
+      <Indicadores
+        rotulo="Informações principais do curso"
+        itens={indicadores.map(([titulo, valor, detalhe]) => ({ titulo, valor, detalhe }))}
+      />
     </section>
   )
 }

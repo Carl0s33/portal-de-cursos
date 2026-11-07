@@ -1,197 +1,226 @@
-import { useState } from 'react'
-import Icone from '@/shared/componentes/Icone.jsx'
+import { useEffect, useMemo, useState } from 'react'
 import './informacoes-academicas.css'
 
+function formatarCarga(valor) {
+  const carga = Number(valor)
+  return Number.isFinite(carga) && carga > 0 ? `${carga.toLocaleString('pt-BR')} h` : 'A informar'
+}
+
+function TabelaDisciplinas({ disciplinas, rotulo }) {
+  if (!disciplinas.length) return null
+  return (
+    <div
+      className="informacoes-academicas__tabela-wrap"
+      role="region"
+      aria-label={rotulo}
+      tabIndex={0}
+    >
+      <table className="informacoes-academicas__tabela">
+        <thead>
+          <tr>
+            <th scope="col">Código</th>
+            <th scope="col">Disciplina</th>
+            <th scope="col" className="informacoes-academicas__numero">
+              Carga horária
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {disciplinas.map((disciplina, indice) => (
+            <tr key={disciplina.id || disciplina.codigo || `${disciplina.nome}-${indice}`}>
+              <td className="informacoes-academicas__codigo">{disciplina.codigo || '—'}</td>
+              <th scope="row">{disciplina.nome}</th>
+              <td className="informacoes-academicas__numero">
+                {formatarCarga(disciplina.cargaHoraria)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 export default function InformacoesAcademicas({ curso }) {
-  const itens = curso.grade || []
-  const [filtroTipo, mudarFiltroTipo] = useState('todos') // 'todos' | 'obrigatorias' | 'optativas'
-
-  const obrigatorias = itens.filter((d) => d.obrigatoria)
-  const optativas = itens.filter((d) => !d.obrigatoria)
-
-  // Agrupamento por semestre para obrigatórias
-  const semestres = [...new Set(obrigatorias.map((d) => d.semestre || 1))].sort((a, b) => a - b)
-
-  const cargaTotalObrigatoria = obrigatorias.reduce(
-    (acc, d) => acc + (Number(d.cargaHoraria) || 0),
+  const itens = useMemo(() => curso.grade || [], [curso.grade])
+  const [filtroTipo, mudarFiltroTipo] = useState('todos')
+  const [semestreAtivo, mudarSemestreAtivo] = useState('')
+  const obrigatorias = itens.filter((disciplina) => disciplina.obrigatoria)
+  const optativas = itens.filter((disciplina) => !disciplina.obrigatoria)
+  const cargaObrigatoria = obrigatorias.reduce(
+    (total, disciplina) => total + (Number(disciplina.cargaHoraria) || 0),
     0,
   )
-  const cargaTotalOptativa = optativas.reduce((acc, d) => acc + (Number(d.cargaHoraria) || 0), 0)
+  const cargaOptativa = optativas.reduce(
+    (total, disciplina) => total + (Number(disciplina.cargaHoraria) || 0),
+    0,
+  )
+  const totalCarga = cargaObrigatoria + cargaOptativa
+
+  const grupos = useMemo(() => {
+    const conjunto =
+      filtroTipo === 'obrigatorias'
+        ? itens.filter((item) => item.obrigatoria)
+        : filtroTipo === 'optativas'
+          ? itens.filter((item) => !item.obrigatoria)
+          : itens
+    return [...new Set(conjunto.map((item) => Number(item.semestre) || 0))]
+      .filter((semestre) => semestre > 0)
+      .sort((a, b) => a - b)
+      .map((semestre) => ({
+        semestre,
+        itens: conjunto.filter((item) => Number(item.semestre) === semestre),
+      }))
+  }, [filtroTipo, itens])
+
+  useEffect(() => {
+    if (!grupos.length || typeof IntersectionObserver === 'undefined') return undefined
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        const visivel = entradas
+          .filter((entrada) => entrada.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
+        if (visivel) mudarSemestreAtivo(visivel.target.id)
+      },
+      { rootMargin: '-25% 0px -65% 0px', threshold: 0 },
+    )
+    const secoes = document.querySelectorAll('[data-indice-semestre]')
+    secoes.forEach((secao) => observador.observe(secao))
+    return () => observador.disconnect()
+  }, [grupos, filtroTipo])
+
+  const obrigatoriasVisiveis = filtroTipo !== 'optativas'
+  const optativasVisiveis = filtroTipo !== 'obrigatorias'
+  const eletivas = optativas.filter((item) => !Number(item.semestre))
+  const larguraObrigatoria = totalCarga ? cargaObrigatoria / totalCarga : 0.5
+  const larguraOptativa = totalCarga ? cargaOptativa / totalCarga : 0.5
 
   return (
-    <section className="bloco-detalhe informacoes-academicas">
+    <section className="informacoes-academicas" aria-labelledby="titulo-matriz">
       <header className="informacoes-academicas__cabecalho">
         <div>
-          <h2>Matriz Curricular e Disciplinas</h2>
-          <p>
-            Estrutura curricular de {curso.nome} organizada por semestre e modalidades formativas.
-          </p>
-        </div>
-
-        <div className="informacoes-academicas__resumo-metricas">
-          <span className="informacoes-academicas__secao-tag-obrigatoria">
-            {obrigatorias.length} Obrigatórias ({cargaTotalObrigatoria}h)
-          </span>
-          <span className="informacoes-academicas__secao-tag-optativa">
-            {optativas.length} Optativas ({cargaTotalOptativa}h)
-          </span>
+          <h2 id="titulo-matriz">Matriz curricular</h2>
+          <p>Disciplinas e cargas horárias organizadas por semestre.</p>
         </div>
       </header>
 
       {itens.length > 0 ? (
         <>
-          <nav
-            className="informacoes-academicas__filtro-abas"
-            aria-label="Filtrar por natureza da disciplina"
+          <div
+            className="informacoes-academicas__proporcao"
+            role="img"
+            aria-label={`${obrigatorias.length} disciplinas obrigatórias, ${cargaObrigatoria.toLocaleString('pt-BR')} horas; ${optativas.length} optativas, ${cargaOptativa.toLocaleString('pt-BR')} horas`}
           >
-            <button
-              type="button"
-              className={`informacoes-academicas__botao-filtro ${filtroTipo === 'todos' ? 'informacoes-academicas__botao-filtro--ativo' : ''}`}
-              onClick={() => mudarFiltroTipo('todos')}
-            >
-              Todas as disciplinas
-              <span className="informacoes-academicas__contador">{itens.length}</span>
-            </button>
-            <button
-              type="button"
-              className={`informacoes-academicas__botao-filtro ${filtroTipo === 'obrigatorias' ? 'informacoes-academicas__botao-filtro--ativo' : ''}`}
-              onClick={() => mudarFiltroTipo('obrigatorias')}
-            >
-              Componentes Obrigatórios
-              <span className="informacoes-academicas__contador">{obrigatorias.length}</span>
-            </button>
-            <button
-              type="button"
-              className={`informacoes-academicas__botao-filtro ${filtroTipo === 'optativas' ? 'informacoes-academicas__botao-filtro--ativo' : ''}`}
-              onClick={() => mudarFiltroTipo('optativas')}
-            >
-              Componentes Optativos
-              <span className="informacoes-academicas__contador">{optativas.length}</span>
-            </button>
+            <span style={{ flexGrow: larguraObrigatoria }} />
+            <span style={{ flexGrow: larguraOptativa }} />
+          </div>
+          <p className="informacoes-academicas__explicacao">
+            A barra mostra como a carga horária total se divide entre disciplinas obrigatórias e
+            optativas.
+          </p>
+          <ul className="informacoes-academicas__legenda">
+            <li>
+              <span className="informacoes-academicas__marcador informacoes-academicas__marcador--obrigatoria" aria-hidden="true" />
+              <span>
+                <strong>Obrigatórias</strong>
+                {obrigatorias.length} disciplinas · {cargaObrigatoria.toLocaleString('pt-BR')} h
+              </span>
+            </li>
+            <li>
+              <span className="informacoes-academicas__marcador informacoes-academicas__marcador--optativa" aria-hidden="true" />
+              <span>
+                <strong>Optativas</strong>
+                {optativas.length} disciplinas · {cargaOptativa.toLocaleString('pt-BR')} h
+              </span>
+            </li>
+          </ul>
+
+          <nav className="informacoes-academicas__indice" aria-label="Navegar pelos semestres">
+            {grupos.map(({ semestre }) => (
+              <a
+                key={semestre}
+                href={`#matriz-semestre-${semestre}`}
+                aria-current={
+                  semestreAtivo === `matriz-semestre-${semestre}` ? 'location' : undefined
+                }
+              >
+                {semestre}º semestre
+              </a>
+            ))}
+            {optativasVisiveis && eletivas.length > 0 && <a href="#matriz-eletivas">Eletivas</a>}
           </nav>
 
-          {/* Seção Obrigatórias */}
-          {(filtroTipo === 'todos' || filtroTipo === 'obrigatorias') && (
-            <div className="informacoes-academicas__secao-grupo">
-              <div className="informacoes-academicas__secao-titulo">
-                <h3>
-                  <Icone nome="grau-detalhe" />
-                  Disciplinas Obrigatórias
+          <nav className="informacoes-academicas__filtro-abas" aria-label="Filtrar disciplinas">
+            {[
+              ['todos', 'Todas', itens.length],
+              ['obrigatorias', 'Obrigatórias', obrigatorias.length],
+              ['optativas', 'Optativas', optativas.length],
+            ].map(([valor, titulo, quantidade]) => (
+              <button
+                key={valor}
+                type="button"
+                aria-pressed={filtroTipo === valor}
+                className={filtroTipo === valor ? 'informacoes-academicas__aba--ativa' : ''}
+                onClick={() => mudarFiltroTipo(valor)}
+              >
+                {titulo} <span>{quantidade}</span>
+              </button>
+            ))}
+          </nav>
+
+          {grupos.map(({ semestre, itens: disciplinas }) => {
+            const doGrupo = disciplinas.filter(
+              (item) =>
+                filtroTipo === 'todos' ||
+                (filtroTipo === 'obrigatorias' ? item.obrigatoria : !item.obrigatoria),
+            )
+            return (
+              <section
+                className="informacoes-academicas__semestre"
+                id={`matriz-semestre-${semestre}`}
+                data-indice-semestre
+                key={semestre}
+                aria-labelledby={`titulo-semestre-${semestre}`}
+              >
+                <h3 id={`titulo-semestre-${semestre}`}>
+                  {semestre}º semestre <small>{doGrupo.length} disciplinas</small>
                 </h3>
-                <span className="informacoes-academicas__secao-tag-obrigatoria">
-                  Formação Nuclear · {obrigatorias.length} disciplinas
-                </span>
-              </div>
+                {obrigatoriasVisiveis && (
+                  <>
+                    {filtroTipo === 'todos' && <h4>Obrigatórias</h4>}
+                    <TabelaDisciplinas
+                      disciplinas={doGrupo.filter((item) => item.obrigatoria)}
+                      rotulo={`Disciplinas obrigatórias do ${semestre}º semestre`}
+                    />
+                  </>
+                )}
+                {optativasVisiveis && (
+                  <>
+                    {filtroTipo === 'todos' && doGrupo.some((item) => !item.obrigatoria) && (
+                      <h4>Optativas</h4>
+                    )}
+                    <TabelaDisciplinas
+                      disciplinas={doGrupo.filter((item) => !item.obrigatoria)}
+                      rotulo={`Disciplinas optativas do ${semestre}º semestre`}
+                    />
+                  </>
+                )}
+              </section>
+            )
+          })}
 
-              {semestres.map((semestre) => {
-                const disciplinasDoSemestre = obrigatorias.filter(
-                  (d) => (d.semestre || 1) === semestre,
-                )
-                if (disciplinasDoSemestre.length === 0) return null
-                return (
-                  <div key={semestre} className="informacoes-academicas__semestre-bloco">
-                    <h4
-                      style={{
-                        margin: '8px 0 12px',
-                        fontSize: '14px',
-                        color: 'var(--texto-suave)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
-                      }}
-                    >
-                      {semestre}º Semestre
-                    </h4>
-                    <div className="informacoes-academicas__grade-grid">
-                      {disciplinasDoSemestre.map((item, idx) => (
-                        <article
-                          key={item.id || item.codigo || idx}
-                          className="cartao-disciplina cartao-disciplina--obrigatoria"
-                        >
-                          <div className="cartao-disciplina__topo">
-                            {item.codigo && (
-                              <span className="cartao-disciplina__codigo">{item.codigo}</span>
-                            )}
-                            <span className="cartao-disciplina__semestre">
-                              {semestre}º Semestre
-                            </span>
-                          </div>
-
-                          <h5 className="cartao-disciplina__nome">{item.nome}</h5>
-
-                          {item.descricao && (
-                            <p className="cartao-disciplina__descricao">{item.descricao}</p>
-                          )}
-
-                          <div className="cartao-disciplina__rodape">
-                            <span className="cartao-disciplina__carga">
-                              {item.cargaHoraria
-                                ? `${item.cargaHoraria} horas`
-                                : 'Carga a informar'}
-                            </span>
-                            <span className="cartao-disciplina__badge">Obrigatória</span>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-
-          {/* Seção Optativas */}
-          {(filtroTipo === 'todos' || filtroTipo === 'optativas') && (
-            <div
-              className="informacoes-academicas__secao-grupo"
-              style={{ marginTop: filtroTipo === 'todos' ? '24px' : '0' }}
+          {optativasVisiveis && eletivas.length > 0 && (
+            <section
+              className="informacoes-academicas__semestre"
+              id="matriz-eletivas"
+              data-indice-semestre
+              aria-labelledby="titulo-eletivas"
             >
-              <div className="informacoes-academicas__secao-titulo">
-                <h3>
-                  <Icone nome="laboratorio" />
-                  Disciplinas Optativas e Eletivas
-                </h3>
-                <span className="informacoes-academicas__secao-tag-optativa">
-                  Formação Complementar · {optativas.length} disciplinas
-                </span>
-              </div>
-
-              {optativas.length > 0 ? (
-                <div className="informacoes-academicas__grade-grid">
-                  {optativas.map((item, idx) => (
-                    <article
-                      key={item.id || item.codigo || idx}
-                      className="cartao-disciplina cartao-disciplina--optativa"
-                    >
-                      <div className="cartao-disciplina__topo">
-                        {item.codigo && (
-                          <span className="cartao-disciplina__codigo">{item.codigo}</span>
-                        )}
-                        <span className="cartao-disciplina__semestre">
-                          {item.semestre ? `${item.semestre}º Semestre` : 'Eletiva'}
-                        </span>
-                      </div>
-
-                      <h5 className="cartao-disciplina__nome">{item.nome}</h5>
-
-                      {item.descricao && (
-                        <p className="cartao-disciplina__descricao">{item.descricao}</p>
-                      )}
-
-                      <div className="cartao-disciplina__rodape">
-                        <span className="cartao-disciplina__carga">
-                          {item.cargaHoraria ? `${item.cargaHoraria} horas` : 'Carga a informar'}
-                        </span>
-                        <span className="cartao-disciplina__badge">Optativa</span>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <div className="informacoes-academicas__vazio" style={{ margin: '20px 0' }}>
-                  <p>Nenhuma disciplina optativa cadastrada nesta matriz até o momento.</p>
-                </div>
-              )}
-            </div>
+              <h3 id="titulo-eletivas">
+                Eletivas <small>{eletivas.length} disciplinas</small>
+              </h3>
+              <TabelaDisciplinas disciplinas={eletivas} rotulo="Disciplinas eletivas" />
+            </section>
           )}
         </>
       ) : (
@@ -199,7 +228,7 @@ export default function InformacoesAcademicas({ curso }) {
           <h3>A matriz curricular ainda não está disponível</h3>
           <p>
             As disciplinas, cargas horárias e semestres serão exibidos após o cadastro da matriz
-            curricular do curso.
+            curricular.
           </p>
           <a className="botao-secundario" href={`#curso/${curso.identificador}`}>
             Voltar à visão geral

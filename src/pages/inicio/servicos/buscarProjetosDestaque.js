@@ -2,7 +2,7 @@ import { buscarProjetosPublicados } from '@/pages/projetos/servicos/buscarProjet
 
 export async function buscarProjetosDestaque(sinal) {
   const publicados = await buscarProjetosPublicados(sinal)
-  return publicados.slice(0, 2)
+  return publicados
 }
 
 export default buscarProjetosDestaque

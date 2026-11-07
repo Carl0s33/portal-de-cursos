@@ -2,20 +2,18 @@ import { ordenarSubmissoes } from '@/shared/utils/ordenarSubmissoes.js'
 import EstadoVazio from '@/shared/componentes/EstadoVazio.jsx'
 import Indicadores from '@/shared/componentes/Indicadores.jsx'
 import { useMemo, useState } from 'react'
-import Icone from '@/shared/componentes/Icone.jsx'
 import '@/shared/styles/painel.css'
 import './professor.css'
 import { enderecoPrivado } from '../../app/rotas.js'
 
-const filtros = ['Todas', 'Aguardando Orientador', 'Em análise', 'Aprovado', 'Recusado']
-
-const iconesFiltro = {
-  Todas: 'projetos-detalhe',
-  'Aguardando Orientador': 'relogio-cursos',
-  'Em análise': 'criterios-detalhe',
-  Aprovado: 'confirmacao-cursos',
-  Recusado: 'erro-cursos',
-}
+const filtros = [
+  'Precisa da sua ação',
+  'Todas',
+  'Aguardando Orientador',
+  'Em análise',
+  'Aprovado',
+  'Recusado',
+]
 
 const tonsFiltro = {
   Todas: 'todas',
@@ -35,35 +33,11 @@ function normalizar(txt) {
 
 function orientaSubmissao(item, usuario) {
   const idUsuario = usuario?.professorId || usuario?.id
-  if (item.orientadorId && idUsuario && String(item.orientadorId) === String(idUsuario)) {
-    return true
-  }
-  // Verifica se está na lista de professores do projeto (orientador ou participante)
-  if (Array.isArray(item.professores) && idUsuario) {
-    if (item.professores.some((p) => String(p.professorId || p.id) === String(idUsuario))) {
-      return true
-    }
-  }
+  if (item.orientadorId && idUsuario) return String(item.orientadorId) === String(idUsuario)
+  if (item.orientadorId || !idUsuario) return false
   const nomeOrientador = normalizar(item.orientador)
   const nomeUsuario = normalizar(usuario?.nome)
-  if (!nomeOrientador || !nomeUsuario) return true
-  if (nomeOrientador.includes(nomeUsuario) || nomeUsuario.includes(nomeOrientador)) {
-    return true
-  }
-  if (Array.isArray(item.professores)) {
-    return item.professores.some((p) => {
-      const pNome = normalizar(p.nome || p.professorNome)
-      return pNome && (pNome.includes(nomeUsuario) || nomeUsuario.includes(pNome))
-    })
-  }
-  return false
-}
-
-function extrairIniciais(nome) {
-  if (!nome) return 'AL'
-  const partes = nome.trim().split(/\s+/)
-  if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase()
-  return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase()
+  return Boolean(nomeOrientador && nomeUsuario && nomeOrientador === nomeUsuario)
 }
 
 function nomeDoAutor(item) {
@@ -73,8 +47,34 @@ function nomeDoAutor(item) {
   return primeiro?.nome || 'Aluno'
 }
 
+function iniciaisDoAutor(nome = '') {
+  return nome
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((parte) => parte[0])
+    .join('')
+    .toLocaleUpperCase('pt-BR')
+}
+
+function tipoParaData(tipo = '') {
+  const valor = normalizar(tipo)
+  if (valor.includes('tcc')) return 'tcc'
+  if (valor.includes('extens')) return 'extensao'
+  if (valor.includes('pesquis')) return 'pesquisa'
+  if (valor.includes('integrador')) return 'integrador'
+  return 'producao'
+}
+
 export default function PaginaProfessor({ submissoes, usuario }) {
-  const [filtro, mudarFiltro] = useState('Todas')
+  const [filtro, mudarFiltro] = useState(() =>
+    submissoes.some(
+      (item) => item.status === 'Aguardando Orientador' && orientaSubmissao(item, usuario),
+    )
+      ? 'Precisa da sua ação'
+      : 'Todas',
+  )
   const [tipoFiltro, mudarTipoFiltro] = useState('Todos')
 
   const orientacoes = useMemo(
@@ -97,7 +97,9 @@ export default function PaginaProfessor({ submissoes, usuario }) {
       ordenarSubmissoes(
         orientacoes.filter(
           (item) =>
-            (filtro === 'Todas' || item.status === filtro) &&
+            (filtro === 'Todas' ||
+              (filtro === 'Precisa da sua ação' && item.status === 'Aguardando Orientador') ||
+              item.status === filtro) &&
             (tipoFiltro === 'Todos' || item.tipo === tipoFiltro),
         ),
       ),
@@ -119,10 +121,9 @@ export default function PaginaProfessor({ submissoes, usuario }) {
         }}
       >
         <div>
-          <h1>Submissões para acompanhar</h1>
+          <h1>Submissões</h1>
           <p>
-            Veja as produções em que você consta como orientador ou colaborador e realize avaliações
-            ou submeta novos projetos.
+            Acompanhe as produções vinculadas à sua orientação e avalie as solicitações pendentes.
           </p>
         </div>
         <div>
@@ -138,30 +139,49 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             titulo: 'Total de orientações',
             valor: totais.total,
             icone: 'projetos-detalhe',
+            tom: 'primario',
           },
           {
             titulo: 'Aguardando aceite',
             valor: totais.pendentes,
             icone: 'relogio-cursos',
+            tom: 'pendente',
           },
           {
-            titulo: 'Na coordenação',
+            titulo: 'Em análise na coordenação',
             valor: totais.analise,
             icone: 'criterios-detalhe',
+            tom: 'andamento',
           },
           {
-            titulo: 'Publicadas',
+            titulo: 'Aprovado e publicado',
             valor: totais.aprovados,
             icone: 'confirmacao-cursos',
+            tom: 'sucesso',
           },
         ]}
       />
 
       <div className="pagina-professor__layout">
         <aside className="pagina-professor__filtro-painel" aria-label="Filtros de submissões">
-          <div>
-            <strong>Filtrar submissões</strong>
-            <p>Encontre projetos por tipo ou etapa da orientação.</p>
+          <div className="pagina-professor__filtro-cabecalho">
+            <div>
+              <strong>Filtrar submissões</strong>
+              <p>Encontre trabalhos por etapa da orientação.</p>
+            </div>
+            <label className="pagina-professor__tipo">
+              <span>Tipo de produção</span>
+              <select
+                value={tipoFiltro}
+                onChange={(evento) => mudarTipoFiltro(evento.target.value)}
+              >
+                {tipos.map((tipo) => (
+                  <option value={tipo} key={tipo}>
+                    {tipo}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
           <nav className="pagina-professor__filtros" aria-label="Filtrar por status">
             {filtros.map((opcao) => (
@@ -174,27 +194,24 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                 onClick={() => mudarFiltro(opcao)}
               >
                 <span className="pagina-professor__filtro-rotulo">
-                  <Icone nome={iconesFiltro[opcao]} />
-                  <span>{opcao}</span>
+                  {opcao === 'Aguardando Orientador'
+                    ? 'Aguardando orientador'
+                    : opcao === 'Aprovado'
+                      ? 'Aprovado e publicado'
+                      : opcao === 'Em análise'
+                        ? 'Em análise na coordenação'
+                        : opcao}
                 </span>
                 <small>
                   {opcao === 'Todas'
                     ? orientacoes.length
-                    : orientacoes.filter((item) => item.status === opcao).length}
+                    : opcao === 'Precisa da sua ação'
+                      ? orientacoes.filter((item) => item.status === 'Aguardando Orientador').length
+                      : orientacoes.filter((item) => item.status === opcao).length}
                 </small>
               </button>
             ))}
           </nav>
-          <label className="pagina-professor__tipo">
-            <span>Tipo de produção</span>
-            <select value={tipoFiltro} onChange={(evento) => mudarTipoFiltro(evento.target.value)}>
-              {tipos.map((tipo) => (
-                <option value={tipo} key={tipo}>
-                  {tipo}
-                </option>
-              ))}
-            </select>
-          </label>
         </aside>
 
         <section className="pagina-professor__resultados" aria-label="Feed de submissões">
@@ -202,12 +219,20 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             <strong>
               {resultados.length} {resultados.length === 1 ? 'submissão' : 'submissões'}
             </strong>
-            <span>Prioridade e ordem de chegada</span>
+            <span>Ordenadas por data de envio</span>
           </div>
 
           <div className="lista-submissoes">
-            {resultados.map((item) => {
+            {resultados.map((item, indice) => {
               const status = item.status || 'Aguardando Orientador'
+              const statusNormalizado = status.toLowerCase()
+              const tomStatus = statusNormalizado.includes('aprov')
+                ? 'aprovado'
+                : statusNormalizado.includes('análise') || statusNormalizado.includes('analise')
+                  ? 'analise'
+                  : statusNormalizado.includes('recus')
+                    ? 'recusado'
+                    : 'pendente'
               const nomeAutor = nomeDoAutor(item)
               const totalCoautores = Array.isArray(item.autores)
                 ? Math.max(item.autores.length - 1, 0)
@@ -216,22 +241,24 @@ export default function PaginaProfessor({ submissoes, usuario }) {
 
               return (
                 <article
-                  className={`submissao-feed submissao-feed--${tonsFiltro[status] || 'pendente'}`}
+                  className={`cartao submissao-feed submissao-feed--${tomStatus}`}
+                  style={{ '--indice-feed': indice }}
+                  data-tipo={tipoParaData(item.tipo)}
                   key={item.identificador}
                 >
                   <a
                     href={enderecoPrivado(`professor/submissao/${item.identificador}`)}
                     className="submissao-feed__gatilho"
+                    aria-label={`${status === 'Aguardando Orientador' ? 'Avaliar' : 'Ver detalhes'}: ${item.titulo}`}
                   >
                     <span className="submissao-feed__avatar" aria-hidden="true">
-                      {extrairIniciais(nomeAutor)}
+                      {iniciaisDoAutor(nomeAutor)}
                     </span>
-
                     <span className="submissao-feed__conteudo">
                       <span className="submissao-feed__meta">
                         <span className="submissao-feed__autor-nome">{nomeAutor}</span>
                         {totalCoautores > 0 && (
-                          <span className="submissao-feed__coautores-badge">
+                          <span className="submissao-feed__coautores">
                             +{totalCoautores} {totalCoautores === 1 ? 'coautor' : 'coautores'}
                           </span>
                         )}
@@ -243,25 +270,48 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                         </span>
                       </span>
 
-                      <h2 className="submissao-feed__titulo">{item.titulo}</h2>
+                      <h2 className="submissao-feed__titulo" title={item.titulo}>
+                        {item.titulo}
+                      </h2>
 
                       <span className="submissao-feed__rodape">
-                        <span
-                          className={`status status--${status.toLowerCase().replace(/\s+/g, '-')}`}
-                        >
-                          {status}
+                        {item.tipo && <span className="submissao-feed__tipo">{item.tipo}</span>}
+                        <span className={`submissao-feed__status status--${tomStatus}`}>
+                          <span className="submissao-feed__status-ponto" aria-hidden="true" />
+                          {status === 'Aguardando Orientador'
+                            ? 'Aguardando orientador'
+                            : status === 'Em análise'
+                              ? 'Em análise na coordenação'
+                              : status === 'Aprovado'
+                                ? 'Aprovado e publicado'
+                                : status}
                         </span>
-                        {item.tipo && <span className="submissao-feed__chip">{item.tipo}</span>}
-                        {item.curso && <span className="submissao-feed__chip">{item.curso}</span>}
-                        {totalAnexos > 0 && (
-                          <span className="submissao-feed__chip">
-                            {totalAnexos} {totalAnexos === 1 ? 'anexo' : 'anexos'}
+                        {[
+                          item.curso,
+                          totalAnexos > 0 &&
+                            `${totalAnexos} ${totalAnexos === 1 ? 'anexo' : 'anexos'}`,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ') && (
+                          <span className="submissao-feed__metadados">
+                            {[
+                              item.curso,
+                              totalAnexos > 0 &&
+                                `${totalAnexos} ${totalAnexos === 1 ? 'anexo' : 'anexos'}`,
+                            ]
+                              .filter(Boolean)
+                              .join(' · ')}
                           </span>
                         )}
                       </span>
                     </span>
 
-                    <span className="submissao-feed__expandir">Avaliar submissão</span>
+                    <span className="submissao-feed__expandir">
+                      {status === 'Aguardando Orientador' ? 'Avaliar' : 'Ver detalhes'}
+                      <span className="submissao-feed__seta" aria-hidden="true">
+                        ↗
+                      </span>
+                    </span>
                   </a>
                 </article>
               )

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Icone from '@/shared/componentes/Icone.jsx'
 import ItemProjeto from '@/shared/componentes/ItemProjeto.jsx'
 import { listarProfessores } from '@/api/professores.js'
 import { listarCursos } from '@/api/cursos.js'
@@ -119,31 +118,30 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
         </span>
       </nav>
 
-      {/* Cartão de Identidade Docente */}
       <header
         className={`perfil-publico__cabecalho ${ehCoordenador ? 'perfil-publico__cabecalho--coordenador' : 'perfil-publico__cabecalho--docente'}`}
       >
-        <div className="perfil-publico__avatar-docente">{inicial}</div>
+        <div className="perfil-publico__avatar-docente" aria-hidden="true">
+          {inicial}
+        </div>
         <div className="perfil-publico__identidade">
-          <div className="perfil-publico__tags">
-            <span className="perfil-publico__badge-docente">Corpo docente IFRN</span>
-            {ehCoordenador && (
-              <span className="perfil-publico__badge-coordenador">Coordenação de curso</span>
-            )}
-            {professor.titulacao && (
-              <span className="perfil-publico__badge-titulacao">{professor.titulacao}</span>
-            )}
-          </div>
           <h1 className="perfil-publico__nome">{professor.nome}</h1>
-          <p className="perfil-publico__email">{professor.email || 'Docente permanente'}</p>
+          <ul className="perfil-publico__meta">
+            <li>{ehCoordenador ? 'Coordenação de curso' : 'Corpo docente IFRN'}</li>
+            {professor.titulacao && <li>{professor.titulacao}</li>}
+          </ul>
+          {professor.email && (
+            <a className="perfil-publico__email" href={`mailto:${professor.email}`}>
+              {professor.email}
+            </a>
+          )}
         </div>
       </header>
 
       {/* Grid de Informações e Produções */}
       <div className="perfil-publico__grid">
-        {/* Coluna Lateral: Biografia e Cursos */}
         <aside className="perfil-publico__sidebar">
-          <div className="perfil-publico__bloco">
+          <div className="perfil-publico__bloco perfil-publico__bloco--cursos">
             <h2>Biografia e áreas de atuação</h2>
             <p className="perfil-publico__descricao-bio">
               {professor.descricao ||
@@ -157,11 +155,11 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
               {cursosAtuacao.map((curso) => (
                 <li key={curso.id}>
                   <a href={`#curso/${curso.identificador || curso.id}`}>
-                    <Icone nome="catalogo-cursos" />
-                    <div>
+                    <span>
                       <strong>{curso.nome}</strong>
-                      <small>{curso.sigla || curso.acronimo || 'Curso Superior'}</small>
-                    </div>
+                      <small>{curso.sigla || curso.acronimo || 'Curso superior'}</small>
+                    </span>
+                    <span aria-hidden="true">↗</span>
                   </a>
                 </li>
               ))}
@@ -169,7 +167,6 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
           </div>
         </aside>
 
-        {/* Coluna Central: Produções Acadêmicas Orientadas */}
         <section className="perfil-publico__conteudo">
           <div className="perfil-publico__cabecalho-secao">
             <div>
@@ -191,8 +188,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
             </ul>
           ) : (
             <div className="perfil-publico__bloco-vazio">
-              <Icone nome="laboratorio" />
-              <p>Nenhuma produção acadêmica orientada foi publicada publicamente ainda.</p>
+              <p>Nenhuma produção orientada foi publicada ainda.</p>
             </div>
           )}
         </section>

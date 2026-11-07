@@ -9,7 +9,7 @@
 :root {
   --cabecalho-altura: 64px;
   --cabecalho-item: 36px;
-  --cabecalho-transicao: 160ms ease;
+  --cabecalho-transicao: var(--transicao);
 }
 
 /* ---------- Barra ---------- */
@@ -30,7 +30,7 @@
 
 .cabecalho--rolado {
   border-bottom-color: var(--borda);
-  box-shadow: 0 2px 12px color-mix(in srgb, var(--preto) 5%, transparent);
+  box-shadow: var(--sombra);
 }
 
 .cabecalho__conteudo {

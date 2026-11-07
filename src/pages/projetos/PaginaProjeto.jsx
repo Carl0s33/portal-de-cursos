@@ -5,6 +5,7 @@ import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
 import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'
 import './detalhes-projeto.css'
+import TextoFormatado from '@/shared/componentes/TextoFormatado.jsx'
 
 const ROTULOS_TIPO = {
   TCC: 'Trabalho de conclusão de curso (TCC)',
@@ -293,7 +294,7 @@ export default function PaginaProjeto({ identificador }) {
                 <Icone nome="grau-detalhe" />
                 <h2 id="rotulo-resumo">Resumo da produção</h2>
               </div>
-              <p className="detalhe-projeto__paragrafo">{resumo}</p>
+              <TextoFormatado texto={resumo} className="detalhe-projeto__paragrafo" />
             </section>
           )}
 
@@ -304,7 +305,7 @@ export default function PaginaProjeto({ identificador }) {
                 <Icone nome="laboratorio" />
                 <h2 id="rotulo-detalhes">Detalhamento e aplicação prática</h2>
               </div>
-              <p className="detalhe-projeto__paragrafo">{descricao}</p>
+              <TextoFormatado texto={descricao} className="detalhe-projeto__paragrafo" />
             </section>
           )}
 

@@ -31,23 +31,24 @@
 }
 .status--aguardando-orientador,
 .status--aguardando-coordenador {
-  --cor-status: var(--branco);
-  --fundo-status: var(--aviso);
+  --cor-status: var(--aviso);
+  --fundo-status: color-mix(in srgb, var(--aviso) 12%, transparent);
 }
 .status--em-análise,
 .status--em-analise {
-  --cor-status: var(--branco);
-  --fundo-status: var(--aviso);
+  --cor-status: var(--azul);
+  --fundo-status: color-mix(in srgb, var(--azul) 12%, transparent);
 }
 .status--aceito,
 .status--aprovado,
 .status--publicado {
-  --cor-status: var(--branco);
-  --fundo-status: var(--sucesso);
+  --cor-status: var(--sucesso);
+  --fundo-status: transparent;
+  border: 1px solid currentColor;
 }
 .status--recusado {
-  --cor-status: var(--branco);
-  --fundo-status: var(--erro);
+  --cor-status: var(--erro);
+  --fundo-status: color-mix(in srgb, var(--erro) 12%, transparent);
 }
 
 :root[data-tema='escuro'] .status {
@@ -71,6 +72,13 @@
   --cor-status: var(--aviso);
   --fundo-status: color-mix(in srgb, var(--aviso) 14%, var(--fundo));
   border-color: color-mix(in srgb, var(--aviso) 40%, var(--borda));
+}
+
+:root[data-tema='escuro'] .status--em-análise,
+:root[data-tema='escuro'] .status--em-analise {
+  --cor-status: var(--azul);
+  --fundo-status: color-mix(in srgb, var(--azul) 14%, var(--fundo));
+  border-color: color-mix(in srgb, var(--azul) 40%, var(--borda));
 }
 
 :root[data-tema='escuro'] .status--recusado {

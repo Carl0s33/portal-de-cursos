@@ -1,10 +1,8 @@
-import IlustracaoPercurso from './IlustracaoPercurso.jsx'
 import './painel-institucional.css'
 
 export default function PainelInstitucional() {
   return (
     <aside className="painel-institucional" aria-labelledby="titulo-acesso-institucional">
-      <IlustracaoPercurso />
       <h2 id="titulo-acesso-institucional">Seu projeto, do envio à publicação</h2>
       <p>Um espaço para apresentar seu trabalho e acompanhar cada etapa da avaliação.</p>
       <ol>

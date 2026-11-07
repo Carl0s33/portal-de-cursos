@@ -84,6 +84,8 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
               <img
                 src={foto}
                 alt="Prévia da foto de perfil"
+                loading="lazy"
+                decoding="async"
                 onError={() => {
                   mudarFoto('')
                   mudarErro('A imagem não pôde ser exibida. Escolha outra foto.')

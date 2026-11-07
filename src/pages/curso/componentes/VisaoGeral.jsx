@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Icone from '@/shared/componentes/Icone.jsx'
 import { listarCoordenadores } from '@/api/coordenadores.js'
 import { listarProfessores } from '@/api/professores.js'
 import './visao-geral.css'
@@ -74,34 +73,23 @@ export default function VisaoGeral({ curso }) {
   }, [curso?.id])
 
   return (
-    <section
-      className="bloco-detalhe visao-curso visao-curso__apresentacao"
-      aria-labelledby="titulo-visao-geral"
-    >
+    <section className="visao-curso" aria-labelledby="titulo-visao-geral">
       <div>
-        <p className="visao-curso__rotulo">Informações do curso</p>
         <h2 id="titulo-visao-geral">Sobre o curso</h2>
         <p>{curso.descricao}</p>
       </div>
 
       {coordenador?.nome && coordenador.professorId && (
-        <div className="visao-curso__coordenador-bloco">
+        <aside className="visao-curso__coordenador-bloco">
           <h3>Coordenação do curso</h3>
           <a
-            className="detalhe-projeto__perfil-item"
             href={`#professor/${coordenador.professorId || coordenador.id}`}
-            title={`Abrir perfil de ${coordenador.nome}`}
+            aria-label={`Ver perfil de ${coordenador.nome}`}
           >
-            <div className="detalhe-projeto__avatar">
-              {coordenador.nome.charAt(0).toUpperCase()}
-            </div>
-            <div className="detalhe-projeto__perfil-info">
-              <strong>{coordenador.nome}</strong>
-              <small>Coordenação do curso · Ver perfil docente</small>
-            </div>
-            <Icone nome="seta-cursos" />
+            <strong>{coordenador.nome}</strong>
+            <span>Ver perfil docente</span>
           </a>
-        </div>
+        </aside>
       )}
     </section>
   )

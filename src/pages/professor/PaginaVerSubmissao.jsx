@@ -5,6 +5,7 @@ import './professor.css'
 import { enderecoPrivado, navegar } from '../../app/rotas.js'
 import ConfirmacaoGestao from '@/pages/administracao/componentes/ConfirmacaoGestao.jsx'
 import { baixarDocumentoBlob, pegarUrlDownload } from '@/api/projetos.js'
+import TextoFormatado from '@/shared/componentes/TextoFormatado.jsx'
 
 const tiposDeProjeto = ['TCC', 'Projeto Integrador', 'Pesquisa', 'Extensão']
 
@@ -18,13 +19,11 @@ function submissaoDoCurso(item, cursoId) {
 
 function submetidaAoOrientador(item, usuario) {
   const idUsuario = usuario?.professorId || usuario?.id
-  if (item?.orientadorId && idUsuario) {
-    return String(item.orientadorId) === String(idUsuario)
-  }
-  const nomeOrientador = item?.orientador?.toLocaleLowerCase('pt-BR') || ''
-  const nomeUsuario = usuario?.nome?.toLocaleLowerCase('pt-BR') || ''
-  if (!nomeOrientador || !nomeUsuario) return true
-  return Boolean(nomeOrientador.includes(nomeUsuario) || nomeUsuario.includes(nomeOrientador))
+  if (item?.orientadorId && idUsuario) return String(item.orientadorId) === String(idUsuario)
+  if (item?.orientadorId || !idUsuario) return false
+  const nomeOrientador = item?.orientador?.toLocaleLowerCase('pt-BR').trim() || ''
+  const nomeUsuario = usuario?.nome?.toLocaleLowerCase('pt-BR').trim() || ''
+  return Boolean(nomeOrientador && nomeUsuario && nomeOrientador === nomeUsuario)
 }
 
 function rotuloDoTipo(tipoDocumento) {
@@ -32,6 +31,16 @@ function rotuloDoTipo(tipoDocumento) {
   const texto = String(tipoDocumento)
   if (/link/i.test(texto)) return 'Link'
   return texto.replaceAll('_', ' ').toUpperCase()
+}
+
+function rotuloDoStatus(status) {
+  return status === 'Aguardando Orientador'
+    ? 'Aguardando orientador'
+    : status === 'Em análise'
+      ? 'Em análise na coordenação'
+      : status === 'Aprovado'
+        ? 'Aprovado e publicado'
+        : status
 }
 
 function textoAutores(autores) {
@@ -166,7 +175,7 @@ export default function PaginaVerSubmissao({
         <div>
           <div className="pagina-detalhes-submissao__sinal">
             <span className={`status status--${status.toLowerCase().replaceAll(' ', '-')}`}>
-              {status}
+              {rotuloDoStatus(status)}
             </span>
             <span>{item.tipo}</span>
           </div>
@@ -304,13 +313,18 @@ export default function PaginaVerSubmissao({
           ) : (
             <>
               <div>
-                <span className="pagina-detalhes-submissao__indice">Sobre o projeto</span>
                 <h2>Resumo</h2>
-                <p>{item.resumo}</p>
+                <TextoFormatado
+                  texto={item.resumo}
+                  className="pagina-detalhes-submissao__texto-projeto"
+                />
               </div>
               <div>
                 <h2>Descrição</h2>
-                <p>{item.objetivo}</p>
+                <TextoFormatado
+                  texto={item.objetivo}
+                  className="pagina-detalhes-submissao__texto-projeto"
+                />
               </div>
               <div className="pagina-detalhes-submissao__documentos">
                 <h2>Documentos enviados</h2>
@@ -352,14 +366,14 @@ export default function PaginaVerSubmissao({
                             rel="noopener noreferrer"
                             className="item-documento-interativo"
                             onClick={manipularCliqueDocumento}
-                            title={`Abrir ${nome} em nova guia para pré-visualizar`}
+                            title={`Abrir ${nome} em nova aba para pré-visualizar`}
                           >
                             <span className="documento-tipo" aria-hidden="true">
                               {tipo}
                             </span>
                             <span className="item-documento-nome">{nome}</span>
                             <span className="item-documento-gatilho">
-                              {abrindoDocumento ? 'Abrindo…' : 'Abrir em nova guia'}{' '}
+                              {abrindoDocumento ? 'Abrindo…' : 'Abrir em nova aba'}{' '}
                               <span className="item-documento-seta" aria-hidden="true">
                                 ↗
                               </span>

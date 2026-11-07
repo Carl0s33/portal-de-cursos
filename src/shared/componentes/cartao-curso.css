@@ -1,28 +1,45 @@
 .curso-resumo {
+  --cor: var(--azul);
   position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 310px;
   padding: var(--espaco-5);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-cartao);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-superficie);
   background: var(--superficie);
+  box-shadow: var(--sombra);
   transition:
     border-color var(--transicao),
-    outline var(--transicao),
+    box-shadow var(--transicao),
     transform var(--transicao);
 }
 
+.curso-resumo::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--cor);
+  transition: height var(--transicao);
+}
+
 .curso-resumo:hover {
-  border-color: var(--azul);
-  outline: 2px solid var(--azul);
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--cor) 55%, var(--borda-suave));
+  box-shadow: var(--sombra-elevada);
+  transform: translateY(-4px);
+}
+.curso-resumo:hover::before {
+  height: 6px;
+}
+.curso-resumo:hover .curso-resumo__titulo {
+  color: var(--cor);
 }
 
 .curso-resumo:focus-within {
-  border-color: var(--azul);
-  outline: 2px solid var(--azul);
+  outline: 2px solid var(--azul-vivo);
   outline-offset: 2px;
 }
 
@@ -36,21 +53,15 @@
 .curso-resumo__sigla {
   display: inline-flex;
   align-items: center;
-  padding: 3px 8px;
-  border-radius: var(--raio-botao);
-  background: var(--suave);
   color: var(--azul);
   font-size: var(--texto-xs);
   font-weight: 700;
-  letter-spacing: normal;
+  letter-spacing: 0.02em;
 }
 
 .curso-resumo__grau {
   display: inline-flex;
   align-items: center;
-  padding: 3px 8px;
-  border-radius: var(--raio-pilula);
-  border: 1px solid var(--borda);
   color: var(--texto-suave);
   font-size: var(--texto-xs);
   font-weight: 600;
@@ -58,13 +69,19 @@
 
 .curso-resumo__titulo {
   margin: var(--espaco-4) 0 var(--espaco-2);
-  font-size: var(--texto-lg);
-  font-weight: 700;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
   line-height: 1.35;
   letter-spacing: normal;
 }
 
 .curso-resumo__link {
+  color: var(--titulo);
+  text-decoration: none;
+}
+
+.curso-resumo__link:hover {
   color: var(--titulo);
   text-decoration: none;
 }
@@ -92,13 +109,12 @@
 }
 
 .curso-resumo__metadados {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--espaco-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
   margin: auto 0 0;
-  padding: var(--espaco-3) 0;
-  border-top: 1px solid var(--borda);
-  border-bottom: 1px solid var(--borda);
+  padding: 0;
+  border: 0;
 }
 
 .curso-resumo__metadados > div {
@@ -106,28 +122,29 @@
 }
 
 .curso-resumo__metadados dt {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 4px;
-  color: var(--texto-suave);
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.2;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
-.curso-resumo__metadados dt svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  color: var(--azul);
+.curso-resumo__metadados > div {
+  display: flex;
+}
+
+.curso-resumo__metadados > div + div::before {
+  margin-inline: 8px;
+  color: var(--texto-suave);
+  content: '·';
 }
 
 .curso-resumo__metadados dd {
   margin: 0;
   color: var(--titulo);
-  font-size: var(--texto-xs);
-  font-weight: 700;
+  font-size: var(--texto-sm);
+  font-weight: 600;
   line-height: 1.4;
   white-space: nowrap;
   overflow: hidden;
@@ -147,24 +164,12 @@
   transition: color var(--transicao);
 }
 
-.curso-resumo:hover .curso-resumo__acao {
-  color: var(--azul-vivo);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-:root[data-tema='escuro'] .curso-resumo {
-  background: var(--superficie);
-  border-color: var(--borda);
-}
-
 :root[data-tema='escuro'] .curso-resumo__grau {
-  color: #ededed;
-  border-color: var(--borda);
+  color: var(--texto);
 }
 
 :root[data-tema='escuro'] .curso-resumo__metadados dd {
-  color: #ffffff;
+  color: var(--titulo);
 }
 
 @media (prefers-reduced-motion: reduce) {

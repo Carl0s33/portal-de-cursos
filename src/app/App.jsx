@@ -1,27 +1,36 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { basePortal, enderecoPrivado, lerRota, navegar, retornoAutenticado } from './rotas.js'
 import EstruturaProfessor from '@/pages/professor/componentes/EstruturaProfessor.jsx'
 import Cabecalho from '@/shared/componentes/Cabecalho.jsx'
 import Rodape from '@/shared/componentes/Rodape.jsx'
-import PaginaInicial from '@/pages/inicio/PaginaInicial.jsx'
-import PaginaCursos from '@/pages/cursos/PaginaCursos.jsx'
-import PaginaCurso from '@/pages/curso/PaginaCurso.jsx'
-import PaginaProjeto from '@/pages/projetos/PaginaProjeto.jsx'
-import PaginaPerfilProfessor from '@/pages/perfil/PaginaPerfilProfessor.jsx'
-import PaginaPerfilAluno from '@/pages/perfil/PaginaPerfilAluno.jsx'
-import PaginaProjetos from '@/pages/projetos/PaginaProjetos.jsx'
-import PaginaSubmissao from '@/pages/submissao/PaginaSubmissao.jsx'
-import PaginaAcesso from '../pages/acesso/PaginaAcesso.jsx'
-import PaginaLoginAluno from '@/pages/acesso/PaginaLoginAluno.jsx'
-import PaginaLoginProfessor from '@/pages/acesso/PaginaLoginProfessor.jsx'
-import PaginaLoginAdministracao from '@/pages/acesso/PaginaLoginAdministracao.jsx'
-import PaginaPerfil from '../pages/perfil/PaginaPerfil.jsx'
-import PaginaProfessor from '@/pages/professor/PaginaProfessor.jsx'
-import PaginaAdministracao from '../pages/administracao/PaginaAdministracao.jsx'
-import PaginaCoordenacao from '../pages/coordenacao/PaginaCoordenacao.jsx'
-import PaginaCadastroAluno from '@/pages/cadastro-aluno/PaginaCadastroAluno.jsx'
-import PaginaPainelAluno from '@/pages/painel-aluno/PaginaPainelAluno.jsx'
-import PaginaVerSubmissao from '@/pages/professor/PaginaVerSubmissao.jsx'
+const PaginaInicial = lazy(() => import('@/pages/inicio/PaginaInicial.jsx'))
+const PaginaCursos = lazy(() => import('@/pages/cursos/PaginaCursos.jsx'))
+const PaginaCurso = lazy(() => import('@/pages/curso/PaginaCurso.jsx'))
+const PaginaProjeto = lazy(() => import('@/pages/projetos/PaginaProjeto.jsx'))
+const PaginaPerfilProfessor = lazy(() => import('@/pages/perfil/PaginaPerfilProfessor.jsx'))
+const PaginaPerfilAluno = lazy(() => import('@/pages/perfil/PaginaPerfilAluno.jsx'))
+const PaginaProjetos = lazy(() => import('@/pages/projetos/PaginaProjetos.jsx'))
+const PaginaSubmissao = lazy(() => import('@/pages/submissao/PaginaSubmissao.jsx'))
+const PaginaAcesso = lazy(() => import('../pages/acesso/PaginaAcesso.jsx'))
+const PaginaLoginAluno = lazy(() => import('@/pages/acesso/PaginaLoginAluno.jsx'))
+const PaginaLoginProfessor = lazy(() => import('@/pages/acesso/PaginaLoginProfessor.jsx'))
+const PaginaLoginAdministracao = lazy(() => import('@/pages/acesso/PaginaLoginAdministracao.jsx'))
+const PaginaPerfil = lazy(() => import('../pages/perfil/PaginaPerfil.jsx'))
+const PaginaProfessor = lazy(() => import('@/pages/professor/PaginaProfessor.jsx'))
+const PaginaAdministracao = lazy(() => import('../pages/administracao/PaginaAdministracao.jsx'))
+const PaginaCoordenacao = lazy(() => import('../pages/coordenacao/PaginaCoordenacao.jsx'))
+const PaginaCadastroAluno = lazy(() => import('@/pages/cadastro-aluno/PaginaCadastroAluno.jsx'))
+const PaginaPainelAluno = lazy(() => import('@/pages/painel-aluno/PaginaPainelAluno.jsx'))
+const PaginaVerSubmissao = lazy(() => import('@/pages/professor/PaginaVerSubmissao.jsx'))
+
+function CarregamentoPagina() {
+  return (
+    <div className="limite carregamento-pagina" aria-busy="true">
+      <span className="carregamento-pagina__spinner" aria-hidden="true" />
+      <p role="status" aria-live="polite">Carregando página…</p>
+    </div>
+  )
+}
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
 import { atualizarStatusProjeto, excluirProjeto } from '@/api/projetos.js'
@@ -90,6 +99,50 @@ export default function App() {
   const [rotaCurso, mudarRotaCurso] = useState(() =>
     window.location.hash.startsWith('#curso/') ? window.location.hash.slice(1) : '',
   )
+  useEffect(() => {
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    )
+      return
+
+    const observer = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((entrada) => {
+          if (!entrada.isIntersecting) return
+          entrada.target.classList.add('revelacao-rolagem--visivel')
+          observer.unobserve(entrada.target)
+        })
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -10% 0px' },
+    )
+
+    const seletor = 'main section, main article.cartao, main .item-projeto, main [data-revelacao]'
+    function observar(elemento) {
+      if (!(elemento instanceof Element)) return
+      const alvos = []
+      if (elemento.matches(seletor)) alvos.push(elemento)
+      alvos.push(...elemento.querySelectorAll(seletor))
+      alvos.forEach((alvo) => {
+        if (alvo.dataset.revelacaoRolagem) return
+        alvo.dataset.revelacaoRolagem = 'preparada'
+        alvo.classList.add('revelacao-rolagem')
+        observer.observe(alvo)
+      })
+    }
+
+    observar(document.getElementById('root'))
+    const mutacoes = new MutationObserver((registros) =>
+      registros.forEach((registro) => registro.addedNodes.forEach(observar)),
+    )
+    mutacoes.observe(document.getElementById('root'), { childList: true, subtree: true })
+
+    return () => {
+      mutacoes.disconnect()
+      observer.disconnect()
+    }
+  }, [])
+
   useEffect(() => {
     try {
       if (sessao) sessionStorage.setItem('portal-cursos-sessao', JSON.stringify(sessao))
@@ -461,7 +514,9 @@ export default function App() {
           Pular para o conteúdo
         </a>
         <Cabecalho modoAcesso tema={tema} alternarTema={mudarTema} pagina="acesso" />
-        <PaginaCadastroAluno />
+        <Suspense fallback={<CarregamentoPagina />}>
+          <PaginaCadastroAluno />
+        </Suspense>
         <Rodape pagina="acesso" />
       </>
     )
@@ -482,9 +537,7 @@ export default function App() {
           : 'professor'
     if (sessao && (ePaginaLogin || pagina !== areaDaSessao))
       return (
-        <main id="conteudo" className="limite pagina-painel">
-          <p role="status">Abrindo sua área…</p>
-        </main>
+        <CarregamentoPagina />
       )
     return (
       <EstruturaProfessor
@@ -503,7 +556,8 @@ export default function App() {
         <a className="pular-conteudo" href="#conteudo">
           Pular para o conteúdo
         </a>
-        {!sessao ? (
+        <Suspense fallback={<CarregamentoPagina />}>
+          {!sessao ? (
           <PaginaDeLogin aoEntrar={entrar} sessaoExpirada={sessaoExpirada} />
         ) : ['professor/perfil', 'administracao/perfil', 'coordenacao/perfil'].includes(rota) ? (
           <PaginaPerfil
@@ -681,7 +735,8 @@ export default function App() {
                 decisoes[item.identificador]?.status || decisoes[item.identificador] || item.status,
             }))}
           />
-        )}
+          )}
+        </Suspense>
       </EstruturaProfessor>
     )
   }
@@ -717,7 +772,8 @@ export default function App() {
         tema={tema}
         alternarTema={(proximoTema) => mudarTema(proximoTema)}
       />
-      {pagina === 'cursos' && <PaginaCursos />}
+      <Suspense fallback={<CarregamentoPagina />}>
+        {pagina === 'cursos' && <PaginaCursos />}
       {pagina === 'projetos' && <PaginaProjetos />}
       {pagina === 'detalhes-projeto' && (
         <PaginaProjeto key={rota.split('/')[1]} identificador={rota.split('/')[1]} />
@@ -741,6 +797,7 @@ export default function App() {
       )}
       {pagina === 'aluno-cadastro' && <PaginaCadastroAluno />}
       {pagina === 'inicio' && <PaginaInicial />}
+      </Suspense>
       <Rodape pagina={pagina} />
     </>
   )

@@ -17,6 +17,8 @@
 
 .status.usuario-papel--admin {
   --cor-status: var(--marinho);
+  --fundo-status: transparent;
+  border: 1px solid currentColor;
 }
 
 .status.usuario-papel--coordenador {

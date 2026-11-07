@@ -65,7 +65,7 @@ export default function NavegacaoCoordenacao({ rota, usuario }) {
           <span className="painel-navegacao__avatar" aria-hidden="true">
             {iniciais(usuario.nome)}
           </span>
-          <span>
+          <span className="painel-navegacao__dados">
             <strong>{usuario.nome}</strong>
             <small>Coordenação</small>
           </span>

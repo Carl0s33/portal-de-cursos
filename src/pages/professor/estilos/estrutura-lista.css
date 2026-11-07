@@ -33,9 +33,158 @@
 
 .pagina-professor__layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 32px;
   align-items: start;
+}
+.pagina-professor__filtro-painel {
+  position: static;
+  gap: var(--espaco-4);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.pagina-professor__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+.pagina-professor__filtros button {
+  width: auto;
+  min-height: 40px;
+  padding-inline: var(--espaco-3);
+  border-color: var(--borda-suave);
+  border-radius: var(--raio-pilula);
+}
+.pagina-professor__filtro-rotulo {
+  gap: 0;
+}
+.pagina-professor__filtros button[aria-pressed='true'] {
+  border-color: var(--azul);
+  color: var(--azul);
+  background: var(--azul-suave);
+}
+.pagina-professor__filtros button[aria-pressed='true'] small {
+  color: var(--titulo);
+  background: var(--superficie);
+}
+.pagina-professor__filtros button small {
+  min-width: auto;
+  padding: 0;
+  background: transparent;
+}
+.pagina-professor__tipo {
+  max-width: 280px;
+  padding-top: var(--espaco-3);
+}
+.pagina-professor__tipo select {
+  border-radius: var(--raio-controle);
+}
+
+/* Cascata final do feed: filtros e busca ocupam a faixa inteira acima dos cards. */
+.pagina-professor__layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+.pagina-professor__filtro-painel {
+  position: static;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  align-items: end;
+  gap: var(--espaco-4);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.pagina-professor__filtros {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--espaco-5);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda-suave);
+}
+.pagina-professor__filtros button {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 44px;
+  padding: var(--espaco-2) 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  white-space: nowrap;
+}
+.pagina-professor__filtros button:hover {
+  border-color: var(--borda);
+  background: transparent;
+  color: var(--titulo);
+}
+.pagina-professor__filtros button[aria-pressed='true'] {
+  border-color: transparent;
+  border-bottom-color: var(--azul);
+  background: transparent;
+  color: var(--azul);
+}
+.pagina-professor__filtros button small,
+.pagina-professor__filtros button[aria-pressed='true'] small {
+  min-width: auto;
+  padding: 0;
+  background: transparent;
+  color: var(--texto-suave);
+}
+.pagina-professor__tipo {
+  max-width: none;
+  padding: 0;
+  border: 0;
+}
+.pagina-professor__tipo select {
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .pagina-professor__filtro-painel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pagina-professor__filtro-painel {
+  grid-template-columns: minmax(0, 1fr) 200px;
+  align-items: end;
+}
+.pagina-professor__filtros {
+  gap: var(--espaco-5);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda-suave);
+}
+.pagina-professor__filtros button {
+  min-height: 44px;
+  padding: var(--espaco-2) 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  white-space: nowrap;
+}
+.pagina-professor__filtros button:hover {
+  border-color: var(--borda);
+  background: transparent;
+  color: var(--titulo);
+}
+.pagina-professor__filtros button[aria-pressed='true'] {
+  border-color: transparent;
+  border-bottom-color: var(--azul);
+  background: transparent;
+  color: var(--azul);
+}
+.pagina-professor__filtros button[aria-pressed='true'] small {
+  color: var(--azul);
+  background: transparent;
+}
+
+@media (max-width: 700px) {
+  .pagina-professor__filtro-painel {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- Painel de filtros ---------- */

@@ -5,8 +5,8 @@
    ========================================================================== */
 
 .acesso-login {
-  --login-acao: var(--azul-vivo);
-  --login-acao-hover: var(--azul);
+  --login-acao: var(--azul);
+  --login-acao-hover: var(--azul-hover);
   --login-sobre-acao: var(--branco);
   --login-raio-cartao: 24px;
   --login-raio-painel: 18px;
@@ -23,9 +23,9 @@
 }
 
 :root[data-tema='escuro'] .acesso-login {
-  --login-acao: var(--azul-vivo);
-  --login-acao-hover: var(--azul);
-  --login-sobre-acao: var(--preto);
+  --login-acao: var(--azul);
+  --login-acao-hover: var(--azul-hover);
+  --login-sobre-acao: var(--texto-sobre-azul);
   background: var(--fundo);
 }
 
@@ -533,6 +533,92 @@
   text-decoration: underline;
 }
 
+/* Formulário em duas colunas sem cartão envolvendo o painel institucional. */
+.acesso-login__coluna {
+  width: min(100%, 1080px);
+  max-width: none;
+  margin-inline: auto;
+}
+
+.acesso-login__cartao {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 714px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.acesso-login .layout-autenticacao {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.acesso-login__conteudo {
+  width: min(100%, 520px);
+  justify-self: center;
+}
+
+.painel-institucional {
+  min-height: 100%;
+  border-radius: 0;
+}
+
+.acesso-login__conteudo .acesso-campo input {
+  padding-left: var(--espaco-4);
+  border-width: 1px;
+  border-radius: var(--raio-controle);
+}
+
+.acesso-login__aluno {
+  align-items: flex-start;
+  padding: var(--espaco-4) 0 0;
+  border: 0;
+  border-top: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+
+.acesso-login__aluno a,
+:root[data-tema='escuro'] .acesso-login__aluno a {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--azul);
+}
+
+.acesso-login__aluno a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.acesso-login__ajuda {
+  max-width: 520px;
+  margin: var(--espaco-4) auto 0;
+  text-align: left;
+}
+
+@media (max-width: 920px) {
+  .acesso-login__cartao {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    margin-inline: auto;
+    padding: 0;
+  }
+
+  .acesso-login__conteudo {
+    width: min(100%, 520px);
+    padding: var(--espaco-6) var(--espaco-5);
+  }
+
+  .painel-institucional {
+    min-height: auto;
+  }
+}
+
 /* ---------- Responsividade ---------- */
 
 @media (max-width: 920px) {
@@ -580,5 +666,26 @@
   .acesso-login__conteudo .acesso-entrar:hover:not(:disabled),
   .acesso-login__aluno a:hover {
     transform: none;
+  }
+}
+
+/* A autenticação é full-bleed; .limite não deve estreitar a tela dividida. */
+.acesso-login.limite {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+@media (max-width: 920px) {
+  .acesso-login .layout-autenticacao {
+    max-width: 580px;
+  }
+
+  .acesso-login__cartao {
+    min-height: 0;
+  }
+
+  .acesso-login.limite {
+    padding-inline: 14px;
   }
 }

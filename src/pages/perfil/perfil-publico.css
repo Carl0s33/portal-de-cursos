@@ -274,6 +274,136 @@
   }
 }
 
+/* Perfil docente: identidade editorial e listas sem cartões aninhados. */
+.perfil-publico__cabecalho--docente,
+.perfil-publico__cabecalho--coordenador {
+  padding: var(--espaco-5) 0;
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.perfil-publico__avatar-docente {
+  background: var(--azul-suave);
+  color: var(--azul);
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+}
+
+.perfil-publico__identidade {
+  gap: var(--espaco-2);
+}
+
+.perfil-publico__nome {
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.perfil-publico__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-1) 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.perfil-publico__meta li + li::before {
+  margin-inline: var(--espaco-2);
+  content: '·';
+}
+
+.perfil-publico__email {
+  width: fit-content;
+  color: var(--azul);
+  font-size: var(--texto-sm);
+}
+
+.perfil-publico__email:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.perfil-publico__grid {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--espaco-7);
+}
+
+.perfil-publico__sidebar {
+  gap: var(--espaco-6);
+}
+
+.perfil-publico__bloco {
+  gap: var(--espaco-3);
+  padding: 0 0 var(--espaco-5);
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.perfil-publico__bloco h2,
+.perfil-publico__cabecalho-secao h2 {
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+}
+
+.perfil-publico__cursos-lista {
+  gap: 0;
+}
+
+.perfil-publico__cursos-lista li a {
+  justify-content: space-between;
+  min-height: 64px;
+  padding: var(--espaco-3) 0;
+  border: 0;
+  border-top: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+
+.perfil-publico__cursos-lista li a > span:first-child {
+  display: grid;
+  gap: var(--espaco-1);
+  min-width: 0;
+}
+
+.perfil-publico__cursos-lista strong {
+  font-size: var(--texto-sm);
+  white-space: normal;
+}
+
+.perfil-publico__cursos-lista small {
+  font-size: var(--texto-xs);
+}
+
+.perfil-publico__cursos-lista li a > span:last-child {
+  color: var(--azul);
+}
+
+.perfil-publico__cursos-lista li a:hover strong {
+  color: var(--azul);
+}
+
+.perfil-publico__bloco-vazio {
+  padding-block: var(--espaco-6);
+  border-top: 1px solid var(--borda-suave);
+  color: var(--texto-suave);
+}
+
+.perfil-publico__bloco-vazio p {
+  max-width: var(--largura-texto);
+  margin: 0;
+  font-size: var(--texto-sm);
+}
+
 /* Detalhes públicos no mesmo sistema de cartões da matriz curricular */
 .perfil-publico__cabecalho {
   min-height: 0;
@@ -523,5 +653,127 @@
 
   .perfil-publico__identidade {
     min-width: 0;
+  }
+}
+
+/* Perfil público sem caixas aninhadas e sem cor arbitrária por papel. */
+.perfil-publico__cabecalho {
+  min-height: 0;
+  padding: var(--espaco-5) 0;
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.perfil-publico__cabecalho::before {
+  display: none;
+}
+.perfil-publico__avatar-docente,
+.perfil-publico__avatar-discente {
+  background: var(--azul-suave);
+  color: var(--azul);
+}
+.perfil-publico__cabecalho--coordenador .perfil-publico__avatar-docente {
+  background: var(--azul-suave);
+  color: var(--azul);
+}
+.perfil-publico__cabecalho--discente {
+  --perfil-acento: var(--azul);
+}
+.perfil-publico__badge-docente,
+.perfil-publico__badge-discente,
+.perfil-publico__badge-titulacao,
+.perfil-publico__badge-curso,
+.perfil-publico__badge-coordenador {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+}
+.perfil-publico__tags {
+  gap: 0;
+}
+.perfil-publico__tags > * + *::before {
+  content: '·';
+  margin-inline: var(--espaco-2);
+  color: var(--texto-suave);
+}
+.perfil-publico__grid {
+  grid-template-columns: minmax(240px, 0.7fr) minmax(0, 1.7fr);
+  gap: var(--espaco-7);
+}
+.perfil-publico__sidebar,
+.perfil-publico__conteudo {
+  gap: var(--espaco-5);
+}
+.perfil-publico__bloco,
+.perfil-publico__bloco-vazio,
+.perfil-publico__status-box {
+  padding: 0 0 var(--espaco-5);
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.perfil-publico__bloco h2,
+.perfil-publico__cabecalho-secao h2 {
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+}
+.perfil-publico__curso-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.perfil-publico__curso-card .botao-secundario {
+  min-height: 44px;
+  border-radius: var(--raio-controle);
+}
+.perfil-publico__cursos-lista li a {
+  padding: var(--espaco-3) 0;
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+.perfil-publico__cursos-lista li a:hover {
+  border-color: var(--borda-suave);
+  box-shadow: none;
+}
+.perfil-publico__conteudo .lista-projetos {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: var(--espaco-4);
+}
+.perfil-publico__conteudo .item-projeto {
+  border-radius: var(--raio-superficie);
+  box-shadow: var(--sombra);
+}
+.perfil-publico__conteudo .item-projeto:hover {
+  border-color: color-mix(in srgb, var(--cor) 55%, var(--borda-suave));
+  box-shadow: var(--sombra-elevada);
+  transform: translateY(-4px);
+}
+.perfil-publico__conteudo .item-projeto__titulo {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
+}
+:root[data-tema='escuro'] .perfil-publico__avatar-docente,
+:root[data-tema='escuro'] .perfil-publico__avatar-discente {
+  background: var(--azul-suave);
+  color: var(--azul);
+}
+@media (max-width: 900px) {
+  .perfil-publico__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-5);
   }
 }

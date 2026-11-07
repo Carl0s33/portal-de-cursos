@@ -1,9 +1,8 @@
-import Icone from '@/shared/componentes/Icone.jsx'
 import './abas-curso.css'
 
 const abas = [
-  ['visao-geral', 'Visão geral', 'visao-detalhe'],
-  ['grade-curricular', 'Grade curricular', 'grade-detalhe'],
+  ['visao-geral', 'Visão geral'],
+  ['grade-curricular', 'Grade curricular'],
 ]
 
 export default function AbasCurso({ selecionada, selecionar }) {
@@ -22,7 +21,7 @@ export default function AbasCurso({ selecionada, selecionar }) {
   return (
     <div className="abas-curso">
       <div role="tablist" aria-label="Informações do curso">
-        {abas.map(([identificador, titulo, icone], indice) => (
+        {abas.map(([identificador, titulo], indice) => (
           <button
             key={identificador}
             type="button"
@@ -34,7 +33,6 @@ export default function AbasCurso({ selecionada, selecionar }) {
             onClick={() => selecionar(identificador)}
             onKeyDown={(evento) => navegarTeclado(evento, indice)}
           >
-            <Icone nome={icone} />
             {titulo}
           </button>
         ))}

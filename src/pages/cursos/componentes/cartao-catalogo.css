@@ -1,4 +1,5 @@
 .curso-catalogo {
+  --cor: var(--azul);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -9,7 +10,8 @@
   padding: var(--espaco-5, 20px);
   background: var(--superficie);
   border: 1px solid var(--borda);
-  border-radius: var(--raio-cartao, 14px);
+  border-radius: var(--raio-superficie);
+  box-shadow: var(--sombra);
 
   transition:
     border-color var(--transicao, 150ms ease),
@@ -19,14 +21,28 @@
 }
 
 .curso-catalogo:hover {
-  border-color: var(--azul);
-  outline: 2px solid var(--azul);
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--cor) 55%, var(--borda-suave));
+  box-shadow: var(--sombra-elevada);
+  transform: translateY(-4px);
+}
+.curso-catalogo::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--cor);
+  transition: height var(--transicao);
+}
+.curso-catalogo:hover::before {
+  height: 6px;
+}
+.curso-catalogo:hover .curso-catalogo__titulo {
+  color: var(--cor);
 }
 
 .curso-catalogo:focus-within {
   border-color: var(--azul);
-  outline: 2px solid var(--azul);
+  outline: 2px solid var(--azul-vivo);
   outline-offset: 2px;
 }
 
@@ -77,11 +93,16 @@
   font-weight: 700;
   letter-spacing: normal;
 }
+.curso-catalogo__sigla {
+  padding: 0;
+  background: transparent;
+}
 
 .curso-catalogo__titulo {
   margin: var(--espaco-3, 12px) 0 var(--espaco-2, 8px);
-  font-size: var(--texto-lg, 18px);
-  font-weight: 700;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
   line-height: 1.35;
   letter-spacing: normal;
   overflow-wrap: anywhere;
@@ -126,7 +147,7 @@
 
 .curso-catalogo__metadados {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: var(--espaco-2, 8px);
   margin: auto 0 0;
   padding: var(--espaco-3, 12px) 0;
@@ -147,7 +168,7 @@
   line-height: 1.2;
   color: var(--texto-suave, #9ba3af);
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.03em;
 }
 
@@ -184,7 +205,7 @@
   gap: 5px;
   margin: 0;
   font-size: var(--texto-xs, 12px);
-  color: var(--texto-suave, #9ba3af);
+  color: var(--texto-suave);
   line-height: 1.3;
 }
 
@@ -208,9 +229,7 @@
 }
 
 .curso-catalogo:hover .curso-catalogo__acao {
-  color: var(--azul-vivo, var(--azul));
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  color: var(--azul);
 }
 
 .curso-catalogo__acao .icone,
@@ -236,16 +255,16 @@
 }
 
 :root[data-tema='escuro'] .curso-catalogo__grau {
-  color: #ededed;
+  color: var(--texto);
   border-color: var(--borda);
 }
 
 :root[data-tema='escuro'] .curso-catalogo__metadados dd {
-  color: #ffffff;
+  color: var(--titulo);
 }
 
 :root[data-tema='escuro'] .curso-catalogo__campus {
-  color: #b8c0cc;
+  color: var(--texto-suave);
 }
 
 @media (max-width: 480px) {

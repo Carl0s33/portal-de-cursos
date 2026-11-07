@@ -1,10 +1,19 @@
 :root {
   /* Escalas compartilhadas do design system */
-  --raio-botao: 10px;
-  --raio-campo: 12px;
-  --raio-cartao: 16px;
+  --raio-controle: 10px;
+  --raio-superficie: 16px;
   --raio-pilula: 9999px;
-  --raio-destaque: 16px;
+  --raio-botao: var(--raio-controle);
+  --raio-campo: var(--raio-controle);
+  --raio-cartao: var(--raio-superficie);
+  --raio-destaque: var(--raio-superficie);
+  --limite-conteudo: 1184px;
+  --largura-conteudo: var(--limite-conteudo);
+  --largura-texto: 62ch;
+  --gutter: clamp(16px, 4vw, 32px);
+  --sidebar-largura: 248px;
+  --altura-botao-destaque: 52px;
+  --texto-numeral: 44px;
   --espaco-1: 4px;
   --espaco-2: 8px;
   --espaco-3: 12px;
@@ -34,6 +43,7 @@
   --texto-lg: 20px;
   --texto-xl: 28px;
   --texto-hero: clamp(38px, 5.2vw, 68px);
+  --texto-titulo-secao: clamp(30px, 4vw, 42px);
   --fonte-titulo: 'Source Serif 4', Georgia, serif;
   --fonte-corpo: Manrope, Arial, sans-serif;
 
@@ -52,23 +62,32 @@
   --chip-extensao: #a8510b;
   --chip-pesquisa: #067647;
   --chip-integrador: #5b2db8;
+  --chip-tcc-texto: var(--branco);
+  --chip-extensao-texto: var(--branco);
+  --chip-pesquisa-texto: var(--branco);
+  --chip-integrador-texto: var(--branco);
   --selo-coordenador-fundo: #ffc400;
   --selo-coordenador-texto: #003da8;
 
   /* Superfícies e neutros */
-  --fundo: #f2f4f7;
+  --fundo: #e9edf3;
   --superficie: #ffffff;
   --suave: #e4e8ee;
   --etiqueta: #d8dee8;
   --titulo: #101722;
   --texto: #263241;
-  --texto-suave: #4b596a;
+  --texto-suave: #3f4b5b;
   --borda: #aeb8c7;
   --borda-suave: #d2d9e3;
   --cabecalho: rgba(255, 255, 255, 0.95);
   --cabecalho-altura: 64px;
-  --sombra: none;
-  --sombra-elevada: none;
+  --sombra: 0 1px 2px rgb(11 31 54 / 6%), 0 8px 24px -10px rgb(11 31 54 / 14%);
+  --sombra-elevada:
+    0 2px 4px rgb(11 31 54 / 6%), 0 22px 40px -14px color-mix(in srgb, var(--azul) 30%, transparent);
+  --fundo-alt: color-mix(in srgb, var(--azul-suave) 45%, var(--fundo));
+  --cor: var(--azul);
+  --texto-sobre-cor: var(--branco);
+  --transicao-lenta: 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 
   /* Estados e feedback */
   --erro: #b42318;
@@ -105,7 +124,10 @@
   --borda-suave: #242424;
   --cabecalho: rgba(0, 0, 0, 0.95);
   --sombra: none;
-  --sombra-elevada: none;
+  --sombra-elevada:
+    0 0 0 1px color-mix(in srgb, var(--cor) 45%, transparent),
+    0 18px 40px -18px color-mix(in srgb, var(--cor) 45%, transparent);
+  --fundo-alt: #0a0e16;
 
   --chip-tcc: #8fb1ff;
   --chip-extensao: #ffc14d;
@@ -125,6 +147,7 @@
   --roxo-suave: #2a1d4a;
 
   --texto-sobre-azul: var(--preto);
+  --texto-sobre-cor: var(--preto);
   --chip-tcc-texto: #d6e2ff;
   --chip-extensao-texto: #ffd49a;
   --chip-pesquisa-texto: #a7f0c9;

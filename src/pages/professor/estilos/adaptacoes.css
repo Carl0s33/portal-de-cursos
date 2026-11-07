@@ -91,6 +91,69 @@
   }
 }
 
+/* Alinhamento compartilhado com a casca pública/conta. */
+.area-professor--conectada .cabecalho__conteudo {
+  max-width: var(--largura-conteudo);
+  margin-inline: auto;
+}
+.area-professor--conectada .pagina-professor__filtro-painel {
+  position: static;
+  gap: var(--espaco-4);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.area-professor--conectada .pagina-professor__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  grid-template-columns: none;
+}
+.area-professor--conectada .submissao-feed__gatilho {
+  padding-inline: 0;
+}
+.pagina-detalhes-submissao__cabecalho {
+  padding: 0 0 var(--espaco-5);
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  background: transparent;
+}
+.pagina-detalhes-submissao__principal {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.pagina-detalhes-submissao__lateral {
+  padding: 0 0 0 var(--espaco-5);
+  border: 0;
+  border-left: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+.pagina-detalhes-submissao__decisao {
+  padding: var(--espaco-4) 0 0;
+  border: 0;
+  border-top: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+.pagina-detalhes-submissao__aviso {
+  padding: var(--espaco-3) 0 0;
+  border: 0;
+  border-top: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+@media (max-width: 900px) {
+  .pagina-detalhes-submissao__lateral {
+    padding: var(--espaco-5) 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--borda-suave);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .submissao-feed,
   .submissao-feed__gatilho,
@@ -148,5 +211,1010 @@
   .item-documento-gatilho,
   .documento-indisponivel {
     white-space: normal;
+  }
+}
+
+/* Composição final da lista: filtros no fluxo e cartões de leitura rápida. */
+.area-professor--conectada .pagina-professor__layout {
+  display: grid;
+  grid-template-columns: minmax(210px, 250px) minmax(0, 1fr);
+  gap: clamp(24px, 3vw, 40px);
+  align-items: start;
+}
+.area-professor--conectada .pagina-professor__filtro-painel {
+  position: sticky;
+  top: calc(var(--altura-cabecalho, 72px) + var(--espaco-4));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espaco-4);
+  padding: var(--espaco-4);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-superficie);
+  background: var(--superficie);
+  box-shadow: var(--sombra);
+}
+.pagina-professor__filtro-cabecalho {
+  display: grid;
+  gap: var(--espaco-2);
+}
+.pagina-professor__filtro-cabecalho > div {
+  display: grid;
+  gap: 3px;
+}
+.pagina-professor__filtro-cabecalho strong {
+  color: var(--titulo);
+  font-size: var(--texto-sm);
+}
+.pagina-professor__filtro-cabecalho p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+}
+.area-professor--conectada .pagina-professor__tipo {
+  display: grid;
+  gap: var(--espaco-2);
+  padding: 0;
+  border: 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+.area-professor--conectada .pagina-professor__tipo select {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  padding: 6px 32px 6px 10px;
+  border-radius: var(--raio-controle);
+  background: var(--superficie);
+  font-size: var(--texto-xs);
+}
+.area-professor--conectada .pagina-professor__filtros {
+  display: grid;
+  gap: var(--espaco-1);
+  overflow: visible;
+  border: 0;
+}
+.area-professor--conectada .pagina-professor__filtros button {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  width: 100%;
+  min-height: 42px;
+  padding: 0 var(--espaco-2);
+  border: 0;
+  border-radius: var(--raio-controle);
+  color: var(--texto-suave);
+  background: transparent;
+  font-size: var(--texto-xs);
+}
+.area-professor--conectada .pagina-professor__filtros button:hover,
+.area-professor--conectada .pagina-professor__filtros button[aria-pressed='true'] {
+  color: var(--azul);
+  background: transparent;
+}
+.area-professor--conectada .pagina-professor__filtros button[aria-pressed='true'] {
+  box-shadow: none;
+  color: var(--azul);
+  background: var(--azul-suave);
+}
+.area-professor--conectada .pagina-professor__filtros button small,
+.area-professor--conectada .pagina-professor__filtros button[aria-pressed='true'] small {
+  min-width: 22px;
+  padding: 2px 6px;
+  border-radius: var(--raio-pilula);
+  color: var(--texto-suave);
+  background: var(--suave);
+  font-size: 11px;
+}
+.pagina-professor__feed-cabecalho {
+  padding-bottom: var(--espaco-3);
+}
+.pagina-professor__feed-cabecalho strong {
+  color: var(--titulo);
+  font-size: var(--texto-sm);
+}
+.pagina-professor__feed-cabecalho span {
+  color: var(--texto-suave);
+}
+.lista-submissoes {
+  gap: var(--espaco-3);
+  padding-top: var(--espaco-3);
+}
+.submissao-feed {
+  position: relative;
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-superficie);
+  box-shadow: var(--sombra);
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao);
+}
+.submissao-feed::before {
+  display: none;
+}
+.submissao-feed:hover {
+  border-color: var(--azul);
+  box-shadow: var(--sombra-elevada);
+  transform: none;
+}
+.submissao-feed__gatilho {
+  grid-template-columns: 136px minmax(0, 1fr) auto;
+  gap: var(--espaco-4);
+  min-height: 132px;
+  padding: var(--espaco-3);
+}
+.submissao-feed__capa {
+  min-height: 104px;
+  padding: var(--espaco-3);
+  border-radius: var(--raio-controle);
+  background: var(--marinho);
+  color: var(--branco);
+}
+.submissao-feed__capa-marca {
+  color: rgb(255 255 255 / 72%);
+  font-size: 9px;
+}
+.submissao-feed__capa strong {
+  color: var(--branco);
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+}
+.submissao-feed__capa-linha {
+  width: 24px;
+  height: 2px;
+  background: var(--azul-vivo);
+}
+.submissao-feed__conteudo {
+  gap: var(--espaco-2);
+}
+.submissao-feed__meta {
+  gap: 6px;
+  font-size: var(--texto-xs);
+}
+.submissao-feed__autor-nome {
+  color: var(--titulo);
+}
+.submissao-feed__titulo {
+  max-width: none;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(17px, 1.35vw, 20px);
+  font-weight: 600;
+  line-height: 1.28;
+}
+.submissao-feed__rodape {
+  gap: var(--espaco-2);
+}
+.submissao-feed__expandir {
+  min-height: 40px;
+  padding-inline: var(--espaco-2);
+  color: var(--azul);
+  font-size: var(--texto-xs);
+}
+.submissao-feed:hover .submissao-feed__expandir {
+  border-color: transparent;
+  color: var(--azul);
+  background: var(--azul-suave);
+}
+.submissao-feed__gatilho:focus-visible {
+  outline-offset: -3px;
+}
+
+@media (max-width: 760px) {
+  .area-professor--conectada .pagina-professor__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-4);
+  }
+  .area-professor--conectada .pagina-professor__filtro-painel {
+    position: static;
+  }
+  .area-professor--conectada .pagina-professor__filtros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .submissao-feed__gatilho {
+    grid-template-columns: 76px minmax(0, 1fr);
+    min-height: 0;
+  }
+  .submissao-feed__capa {
+    min-height: 86px;
+    padding: var(--espaco-2);
+  }
+  .submissao-feed__capa-marca {
+    font-size: 8px;
+  }
+  .submissao-feed__capa strong {
+    font-size: 11px;
+  }
+  .submissao-feed__expandir {
+    grid-column: 2;
+    justify-self: start;
+    min-height: 34px;
+    padding: 0;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1024px) {
+  .area-professor--conectada .pagina-professor__layout {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: var(--espaco-4);
+  }
+  .submissao-feed__gatilho {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+  .submissao-feed__expandir {
+    grid-column: 2;
+    justify-self: start;
+    min-height: 34px;
+    padding: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .submissao-feed,
+  .submissao-feed__gatilho,
+  .submissao-feed__expandir {
+    transition: none;
+  }
+}
+
+/* Ajuste final do feed após as regras responsivas legadas. */
+.submissao-feed.submissao-feed--pendente {
+  --cor-status-card: var(--aviso);
+}
+.submissao-feed.submissao-feed--analise {
+  --cor-status-card: var(--azul);
+}
+.submissao-feed.submissao-feed--aprovado {
+  --cor-status-card: var(--sucesso);
+}
+.submissao-feed.submissao-feed--recusado {
+  --cor-status-card: var(--erro);
+}
+.submissao-feed__gatilho {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 112px;
+  padding: var(--espaco-4) var(--espaco-5);
+}
+.submissao-feed:hover {
+  border-color: var(--cor-status-card);
+}
+.submissao-feed__tipo {
+  padding-right: var(--espaco-2);
+  border-right: 1px solid var(--borda);
+  color: var(--texto);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+.submissao-feed:focus-within {
+  outline: 2px solid var(--azul-vivo);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-4);
+  }
+  .submissao-feed__expandir {
+    grid-column: 1;
+  }
+}
+
+/* Avatar e estado em linguagem de feed: pessoa à esquerda, conteúdo no centro. */
+.submissao-feed {
+  --cor-status-card: var(--azul);
+  overflow: hidden;
+  animation: submissao-feed-entrada 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--indice-feed, 0) * 70ms);
+}
+.submissao-feed.submissao-feed--pendente {
+  --cor-status-card: var(--aviso);
+}
+.submissao-feed.submissao-feed--analise {
+  --cor-status-card: var(--azul);
+}
+.submissao-feed.submissao-feed--aprovado {
+  --cor-status-card: var(--sucesso);
+}
+.submissao-feed.submissao-feed--recusado {
+  --cor-status-card: var(--erro);
+}
+.submissao-feed::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0 auto 0 0;
+  display: block;
+  width: 3px;
+  height: auto;
+  background: var(--cor-status-card);
+  content: '';
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--transicao);
+}
+.submissao-feed__gatilho {
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  min-height: 116px;
+  padding: var(--espaco-4) var(--espaco-5);
+}
+.submissao-feed__avatar {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: var(--superficie);
+  color: var(--titulo);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  transition:
+    border-color var(--transicao),
+    transform var(--transicao);
+}
+.submissao-feed__meta {
+  gap: var(--espaco-2);
+  color: var(--texto-suave);
+}
+.submissao-feed__autor-nome {
+  color: var(--texto);
+  font-weight: 600;
+}
+.submissao-feed__coautores {
+  color: var(--texto-suave);
+}
+.submissao-feed__separador {
+  color: var(--borda);
+  opacity: 1;
+}
+.submissao-feed__titulo {
+  transition: color var(--transicao);
+}
+.submissao-feed__rodape {
+  gap: var(--espaco-2) var(--espaco-3);
+}
+.submissao-feed__status {
+  --cor-ponto-status: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.submissao-feed--pendente .submissao-feed__status {
+  --cor-ponto-status: var(--aviso);
+}
+.submissao-feed--analise .submissao-feed__status {
+  --cor-ponto-status: var(--azul);
+}
+.submissao-feed--aprovado .submissao-feed__status {
+  --cor-ponto-status: var(--sucesso);
+}
+.submissao-feed--recusado .submissao-feed__status {
+  --cor-ponto-status: var(--erro);
+}
+.submissao-feed__status-ponto {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--cor-ponto-status);
+}
+.submissao-feed--pendente .submissao-feed__status-ponto {
+  animation: submissao-status-pulso 2.2s ease-in-out infinite;
+}
+.submissao-feed__metadados {
+  color: var(--texto-suave);
+}
+.submissao-feed__expandir {
+  gap: 6px;
+  padding: 8px 0 8px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--azul);
+}
+.submissao-feed__seta {
+  display: inline-block;
+  transition: transform var(--transicao);
+}
+.submissao-feed:hover {
+  border-color: var(--cor-status-card);
+  box-shadow: var(--sombra-elevada);
+  transform: translateY(-2px);
+}
+.submissao-feed:hover::before {
+  transform: scaleY(1);
+}
+.submissao-feed:hover .submissao-feed__avatar {
+  border-color: var(--azul);
+  transform: scale(1.04);
+}
+.submissao-feed:hover .submissao-feed__titulo {
+  color: var(--azul);
+}
+.submissao-feed:hover .submissao-feed__seta {
+  transform: translateX(3px);
+}
+.submissao-feed__gatilho:focus-visible .submissao-feed__expandir {
+  color: var(--azul);
+  background: transparent;
+}
+
+@keyframes submissao-feed-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes submissao-status-pulso {
+  50% {
+    opacity: 0.55;
+    transform: scale(0.82);
+  }
+}
+
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-4);
+  }
+  .submissao-feed__avatar {
+    width: 40px;
+    height: 40px;
+    font-size: var(--texto-xs);
+  }
+  .submissao-feed__expandir {
+    grid-column: 2;
+    justify-self: start;
+    padding: 4px 0;
+  }
+  .submissao-feed__titulo {
+    -webkit-line-clamp: 3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .submissao-feed,
+  .submissao-feed__avatar,
+  .submissao-feed__titulo,
+  .submissao-feed__expandir,
+  .submissao-feed__seta {
+    animation: none;
+    transition: none;
+  }
+  .submissao-feed__status-ponto {
+    animation: none;
+  }
+  .submissao-feed:hover {
+    transform: none;
+  }
+  .submissao-feed:hover .submissao-feed__avatar {
+    transform: none;
+  }
+}
+
+/* Feed compacto: ícone tipográfico com acento da categoria e filete reto. */
+.submissao-feed::before {
+  inset: 12px auto 12px 8px;
+  width: 2px;
+  border-radius: 0;
+}
+.submissao-feed__gatilho {
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  min-height: 96px;
+  gap: var(--espaco-3);
+  padding: var(--espaco-3) var(--espaco-4);
+}
+.submissao-feed__tipo-icone {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid color-mix(in srgb, var(--cor, var(--azul)) 24%, var(--borda-suave));
+  border-radius: var(--raio-controle);
+  background: color-mix(in srgb, var(--cor, var(--azul)) 9%, var(--superficie));
+  color: var(--cor, var(--azul));
+  transition:
+    transform var(--transicao),
+    border-color var(--transicao);
+}
+.submissao-feed__tipo-icone .icone {
+  width: 17px;
+  height: 17px;
+}
+.submissao-feed__avatar {
+  display: none;
+}
+.submissao-feed__meta {
+  gap: 6px;
+  font-size: 11px;
+}
+.submissao-feed__titulo {
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.25;
+}
+.submissao-feed__rodape {
+  gap: 6px 10px;
+}
+.submissao-feed__status {
+  font-size: 11px;
+}
+.submissao-feed__status-ponto {
+  width: 7px;
+  height: 7px;
+}
+.submissao-feed__metadados {
+  font-size: 11px;
+}
+.submissao-feed__expandir {
+  min-height: 36px;
+  font-size: 11px;
+}
+.submissao-feed:hover .submissao-feed__tipo-icone {
+  transform: scale(1.04);
+}
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-3);
+  }
+  .submissao-feed__tipo-icone {
+    width: 30px;
+    height: 30px;
+  }
+  .submissao-feed__expandir {
+    grid-column: 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .submissao-feed__tipo-icone {
+    transition: none;
+  }
+  .submissao-feed:hover .submissao-feed__tipo-icone {
+    transform: none;
+  }
+}
+
+/* Cards sem bloco decorativo: o tipo vira metadado e o status colore só a borda no hover. */
+.submissao-feed.submissao-feed--pendente {
+  --cor-status-card: var(--aviso);
+}
+.submissao-feed.submissao-feed--analise {
+  --cor-status-card: var(--azul);
+}
+.submissao-feed.submissao-feed--aprovado {
+  --cor-status-card: var(--sucesso);
+}
+.submissao-feed.submissao-feed--recusado {
+  --cor-status-card: var(--erro);
+}
+.submissao-feed__gatilho {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 112px;
+  padding: var(--espaco-4) var(--espaco-5);
+}
+.submissao-feed:hover {
+  border-color: var(--cor-status-card);
+}
+.submissao-feed__tipo {
+  padding-right: var(--espaco-2);
+  border-right: 1px solid var(--borda);
+  color: var(--texto);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+.submissao-feed:focus-within {
+  outline: 2px solid var(--azul-vivo);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-4);
+  }
+  .submissao-feed__expandir {
+    grid-column: 1;
+  }
+}
+
+/* Avatar de autor restaurado e filete de status reto, em toda a lateral. */
+.submissao-feed {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.submissao-feed::before {
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: 0;
+  transform: scaleY(0);
+  transform-origin: center;
+}
+.submissao-feed__gatilho {
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  min-height: 92px;
+  gap: var(--espaco-3);
+  padding: var(--espaco-3) var(--espaco-4);
+}
+.submissao-feed__avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--borda);
+  border-radius: 50%;
+  background: var(--superficie);
+  color: var(--titulo);
+  font-size: 11px;
+  font-weight: 700;
+  transition:
+    border-color var(--transicao),
+    transform var(--transicao);
+}
+.submissao-feed__tipo-icone {
+  display: none;
+}
+.submissao-feed__tipo {
+  color: var(--cor, var(--azul));
+  font-size: 11px;
+  font-weight: 700;
+}
+.submissao-feed__meta {
+  gap: 6px;
+  font-size: 11px;
+}
+.submissao-feed__titulo {
+  font-size: clamp(16px, 1.2vw, 18px);
+}
+.submissao-feed__rodape {
+  gap: 6px 10px;
+}
+.submissao-feed__status,
+.submissao-feed__metadados {
+  font-size: 11px;
+}
+.submissao-feed:hover .submissao-feed__avatar {
+  border-color: var(--azul);
+  transform: scale(1.04);
+}
+.submissao-feed:hover .submissao-feed__tipo-icone {
+  transform: none;
+}
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-3);
+  }
+  .submissao-feed__avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 10px;
+  }
+  .submissao-feed__expandir {
+    grid-column: 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .submissao-feed__avatar {
+    transition: none;
+  }
+  .submissao-feed:hover .submissao-feed__avatar {
+    transform: none;
+  }
+}
+
+/* Acabamento: cards arredondados, faixa reta insetida e metadados em tons suaves. */
+.submissao-feed {
+  border-radius: var(--raio-superficie);
+}
+.submissao-feed::before {
+  inset: 8px auto 8px 5px;
+  width: 3px;
+  border-radius: 0;
+}
+.submissao-feed__gatilho {
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: var(--espaco-4);
+  padding: var(--espaco-4) var(--espaco-5);
+}
+.submissao-feed__tipo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 9px;
+  border: 1px solid color-mix(in srgb, var(--cor, var(--azul)) 20%, var(--borda-suave));
+  border-radius: var(--raio-pilula);
+  background: color-mix(in srgb, var(--cor, var(--azul)) 9%, var(--superficie));
+  color: var(--cor, var(--azul));
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.submissao-feed__meta {
+  gap: var(--espaco-2);
+}
+.submissao-feed__conteudo {
+  gap: var(--espaco-2);
+}
+.submissao-feed__rodape {
+  gap: var(--espaco-2) var(--espaco-3);
+}
+.submissao-feed__status,
+.submissao-feed__metadados {
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-3);
+  }
+}
+
+/* Avatar acompanha o mesmo tratamento roxo do perfil docente no cabeçalho. */
+.submissao-feed {
+  border-radius: var(--raio-superficie);
+}
+.submissao-feed::before {
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: 0;
+}
+.submissao-feed__gatilho {
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  min-height: 88px;
+  gap: var(--espaco-3);
+  padding: var(--espaco-3) var(--espaco-4);
+}
+.submissao-feed__avatar {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: var(--roxo);
+  color: var(--branco);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+:root[data-tema='escuro'] .submissao-feed__avatar {
+  color: var(--preto);
+}
+.submissao-feed__conteudo {
+  gap: 6px;
+}
+.submissao-feed__meta {
+  gap: 6px;
+}
+.submissao-feed__rodape {
+  gap: 6px 10px;
+}
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-3);
+  }
+  .submissao-feed__avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 11px;
+  }
+}
+
+/* Badges sem bloco de fundo e respiro real entre o filete e o perfil. */
+.submissao-feed__tipo {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--cor, var(--azul));
+}
+.area-professor--conectada .submissao-feed__gatilho {
+  padding-left: var(--espaco-5);
+  padding-right: var(--espaco-4);
+}
+@media (max-width: 760px) {
+  .area-professor--conectada .submissao-feed__gatilho {
+    padding-left: var(--espaco-4);
+    padding-right: var(--espaco-3);
+  }
+}
+
+/* Detalhe da submissão: leitura editorial, status sem badge e contexto lateral. */
+.area-professor--conectada .pagina-detalhes-submissao {
+  gap: var(--espaco-5);
+  padding-top: var(--espaco-5);
+  padding-bottom: var(--espaco-8);
+}
+.area-professor--conectada .pagina-detalhes-submissao__cabecalho {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+  align-items: start;
+  gap: var(--espaco-6);
+  padding: 0 0 var(--espaco-5);
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+.area-professor--conectada .pagina-detalhes-submissao__cabecalho > div:first-child {
+  gap: var(--espaco-3);
+}
+.pagina-detalhes-submissao__sinal {
+  gap: var(--espaco-3);
+}
+.pagina-detalhes-submissao__sinal .status {
+  --cor-status: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 0;
+  width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--cor-status);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+.pagina-detalhes-submissao__sinal .status::before {
+  width: 8px;
+  height: 8px;
+  background: var(--cor-status);
+}
+.pagina-detalhes-submissao__sinal .status--aprovado,
+.pagina-detalhes-submissao__sinal .status--publicado {
+  --cor-status: var(--sucesso);
+}
+.pagina-detalhes-submissao__sinal .status--aguardando-orientador,
+.pagina-detalhes-submissao__sinal .status--aguardando-coordenador {
+  --cor-status: var(--aviso);
+}
+.pagina-detalhes-submissao__sinal .status--em-análise,
+.pagina-detalhes-submissao__sinal .status--em-analise {
+  --cor-status: var(--azul);
+}
+.pagina-detalhes-submissao__sinal .status--recusado {
+  --cor-status: var(--erro);
+}
+.pagina-detalhes-submissao__sinal > span:last-child {
+  padding-left: var(--espaco-3);
+  border-left-color: var(--borda-suave);
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+.area-professor--conectada .pagina-detalhes-submissao__cabecalho h1 {
+  max-width: 30ch;
+  font-size: clamp(30px, 3.2vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+.pagina-detalhes-submissao__cabecalho p {
+  color: var(--texto-suave);
+}
+.pagina-detalhes-submissao__marco {
+  min-width: 0;
+  padding: 8px 0 8px var(--espaco-4);
+  border-left-color: var(--borda-suave);
+}
+.area-professor--conectada .pagina-detalhes-submissao__grid {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 280px);
+  gap: var(--espaco-6);
+}
+.area-professor--conectada .pagina-detalhes-submissao__principal {
+  gap: var(--espaco-5);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.pagina-detalhes-submissao__principal > div:not(.avaliacao-submissao) {
+  gap: var(--espaco-3);
+  padding-bottom: var(--espaco-5);
+  border-bottom: 1px solid var(--borda-suave);
+}
+.pagina-detalhes-submissao__principal h2,
+.pagina-detalhes-submissao__lateral h2 {
+  font-size: var(--texto-sm);
+  font-weight: 700;
+}
+.area-professor--conectada .pagina-detalhes-submissao__lateral {
+  gap: var(--espaco-4);
+  padding: 0 0 0 var(--espaco-5);
+  border: 0;
+  border-left: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.pagina-detalhes-submissao__contexto {
+  gap: var(--espaco-4) !important;
+  padding-bottom: var(--espaco-4);
+}
+.pagina-detalhes-submissao__contexto > div {
+  gap: 5px;
+}
+.pagina-detalhes-submissao__indice {
+  color: var(--azul);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+}
+.pagina-detalhes-submissao__contexto h2 {
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+.pagina-detalhes-submissao__contexto p {
+  color: var(--texto);
+  font-size: var(--texto-sm);
+  line-height: 1.55;
+}
+.pagina-detalhes-submissao__documentos {
+  padding-top: 0;
+}
+.pagina-detalhes-submissao__documentos h2 {
+  margin-bottom: var(--espaco-2);
+}
+.documentos-submissao-professor .documento-tipo {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto-suave);
+  font-size: 10px;
+}
+.pagina-detalhes-submissao__lateral .pagina-detalhes-submissao__aviso {
+  padding: var(--espaco-3) 0 0 var(--espaco-3);
+  border: 0;
+  border-left: 2px solid var(--sucesso);
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto-suave);
+}
+.pagina-detalhes-submissao__decisao {
+  padding: var(--espaco-4) 0 0;
+  border: 0;
+  border-top: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+@media (max-width: 900px) {
+  .area-professor--conectada .pagina-detalhes-submissao__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .area-professor--conectada .pagina-detalhes-submissao__lateral {
+    padding: var(--espaco-4) 0 0;
+    border: 0;
+    border-top: 1px solid var(--borda-suave);
+  }
+}
+@media (max-width: 600px) {
+  .area-professor--conectada .pagina-detalhes-submissao__cabecalho {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-4);
+  }
+  .pagina-detalhes-submissao__marco {
+    border-left: 0;
+    padding: 0;
+  }
+  .pagina-detalhes-submissao__sinal {
+    flex-wrap: wrap;
   }
 }

@@ -81,7 +81,7 @@ export async function buscarProjetosPublicados(sinal) {
         identificador: String(p.id),
         nome: p.nome,
         descricao: p.descricao || p.resumo || '',
-        resumo: p.resumo || p.descricao || '',
+        resumo: p.resumo || '',
         tipo: ROTULOS_TIPO[p.tipoProjeto] || p.tipoProjeto || 'TCC',
         curso: nomeCurso || 'Geral',
         autores:

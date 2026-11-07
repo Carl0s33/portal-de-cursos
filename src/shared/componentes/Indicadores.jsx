@@ -1,35 +1,24 @@
-import Icone from './Icone.jsx'
 import './indicadores.css'
+
+const tons = {
+  primario: 'var(--azul)',
+  andamento: 'var(--azul)',
+  pendente: 'var(--aviso)',
+  sucesso: 'var(--sucesso)',
+  erro: 'var(--erro)',
+  neutro: 'var(--borda)',
+}
 
 export default function Indicadores({ itens, rotulo = 'Resumo' }) {
   return (
-    <div className="indicadores" role="region" aria-label={rotulo}>
-      {itens.map(({ titulo, valor, detalhe, destino, icone }) => {
-        const conteudo = (
-          <>
-            <div className="indicadores__topo">
-              {icone && (
-                <span className="indicadores__icone" aria-hidden="true">
-                  <Icone nome={icone} />
-                </span>
-              )}
-              <span className="indicadores__titulo">{titulo}</span>
-              <span className="indicadores__valor">{valor}</span>
-            </div>
-            {detalhe && <span className="indicadores__detalhe">{detalhe}</span>}
-          </>
-        )
-
-        return destino ? (
-          <a key={titulo} href={destino} className="indicadores__cartao indicadores__cartao--link">
-            {conteudo}
-          </a>
-        ) : (
-          <div key={titulo} className="indicadores__cartao">
-            {conteudo}
-          </div>
-        )
-      })}
-    </div>
+    <dl className="indicadores" aria-label={rotulo}>
+      {itens.map(({ titulo, valor, detalhe, destino, tom = 'primario' }) => (
+        <div key={titulo} style={{ '--cor-indicador': tons[tom] || tons.primario }}>
+          <dt>{destino ? <a href={destino}>{titulo}</a> : titulo}</dt>
+          <dd className="indicadores__valor">{valor}</dd>
+          {detalhe && <dd className="indicadores__detalhe">{detalhe}</dd>}
+        </div>
+      ))}
+    </dl>
   )
 }

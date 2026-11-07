@@ -1,4 +1,4 @@
-import Icone from './Icone.jsx'
+import TextoFormatado from './TextoFormatado.jsx'
 import '@/shared/styles/projetos.css'
 
 function pegarModificadorTipo(tipo) {
@@ -14,60 +14,43 @@ function pegarModificadorTipo(tipo) {
   return 'tcc'
 }
 
-function pegarIconeTipo(modificador) {
-  switch (modificador) {
-    case 'integrador':
-      return 'projetos-cursos'
-    case 'pesquisa':
-      return 'laboratorio'
-    case 'extensao':
-      return 'docentes-detalhe'
-    case 'tcc':
-    default:
-      return 'grau-detalhe'
-  }
-}
-
 export default function ItemProjeto({ projeto }) {
   const modificador = pegarModificadorTipo(projeto.tipo)
   const orientador = projeto.orientador || 'Não informado'
   const cursoBruto = (projeto.curso || '').replace(/^Curso\s*#?/i, '').trim()
   const curso = /^#?\d+$/.test(cursoBruto) ? '' : cursoBruto
-  const iconeTipo = pegarIconeTipo(modificador)
-
   const informacoes = [
-    ['Tipo', projeto.tipo || 'TCC', iconeTipo],
-    ['Curso', curso || 'Geral', 'catalogo-cursos'],
-    ['Orientador', orientador, 'usuario'],
+    ['Curso', curso || 'Geral'],
+    ['Orientador', orientador],
   ]
 
   const classeChip = `item-projeto__tipo-rotulo item-projeto__tipo-rotulo--${modificador}`
 
   return (
-    <article className="item-projeto">
+    <article
+      className={`cartao cartao--clicavel item-projeto item-projeto--${modificador}`}
+      data-tipo={modificador}
+    >
       <div className="item-projeto__topo">
-        <span className="item-projeto__simbolo" aria-hidden="true">
-          <Icone nome={iconeTipo} />
-        </span>
         <span className={classeChip}>{projeto.tipo || 'TCC'}</span>
-        {curso && <span className="item-projeto__sigla">{curso}</span>}
       </div>
 
       <h3 className="item-projeto__titulo">
-        <a className="item-projeto__link" href={`#projeto/${projeto.identificador}`}>
+        <a
+          className="item-projeto__link"
+          href={`#projeto/${projeto.identificador}`}
+          title={projeto.titulo}
+        >
           {projeto.nome}
         </a>
       </h3>
 
-      <p className="item-projeto__descricao">{projeto.descricao}</p>
+      <TextoFormatado texto={projeto.resumo} className="item-projeto__descricao" />
 
       <dl className="item-projeto__metadados">
-        {informacoes.map(([rotulo, valor, icone]) => (
+        {informacoes.map(([rotulo, valor]) => (
           <div key={rotulo}>
-            <dt>
-              <Icone nome={icone} />
-              {rotulo}
-            </dt>
+            <dt>{rotulo}</dt>
             <dd title={valor}>{valor}</dd>
           </div>
         ))}
@@ -75,8 +58,7 @@ export default function ItemProjeto({ projeto }) {
 
       <div className="item-projeto__base">
         <span className="item-projeto__acao" aria-hidden="true">
-          <span>Ver projeto</span>
-          <Icone nome="seta-cursos" />
+          Ver projeto
         </span>
       </div>
     </article>
