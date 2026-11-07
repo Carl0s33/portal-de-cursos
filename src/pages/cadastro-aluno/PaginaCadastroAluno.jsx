@@ -1,11 +1,11 @@
-import PainelInstitucional from '@/shared/components/PainelInstitucional.jsx'
+import PainelInstitucional from '@/shared/componentes/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { basePortal } from '@/app/rotas.js'
 import logoPortal from '@/assets/marca/logo-portal.png'
 import { listarCursos } from '@/api/cursos.js'
 import { cadastrarAluno } from '@/api/alunos.js'
 import { ErroApi } from '@/api/cliente.js'
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import '@/pages/acesso/acesso.css'
 import './cadastro-aluno.css'
 

@@ -7,7 +7,7 @@ import {
   listarCursos,
 } from '@/api/cursos.js'
 import { enderecoPrivado } from '@/app/rotas.js'
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
 import '../estilos/campus.css'
 import '../estilos/gestao.css'

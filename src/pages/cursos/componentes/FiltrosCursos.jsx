@@ -1,4 +1,4 @@
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import './filtros-cursos.css'
 
 export default function FiltrosCursos({ filtros, alterar, limpar, bloqueado, cursos }) {

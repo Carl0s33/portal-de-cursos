@@ -1,9 +1,9 @@
-import PainelInstitucional from '@/shared/components/PainelInstitucional.jsx'
+import PainelInstitucional from '@/shared/componentes/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
-import { entrarNaConta } from './services/entrarNaConta.js'
+import { entrarNaConta } from './servicos/entrarNaConta.js'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
 import logoPortal from '@/assets/marca/logo-portal.png'
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import './acesso.css'
 
 const TEMPO_LIMITE_MS = 15000

@@ -1,9 +1,9 @@
-import EtapasSubmissao from '@/shared/components/EtapasSubmissao.jsx'
+import EtapasSubmissao from '@/shared/componentes/EtapasSubmissao.jsx'
 import { useState } from 'react'
 import '@/shared/styles/painel-informativo.css'
 import './professor.css'
 import { enderecoPrivado, navegar } from '../../app/rotas.js'
-import ConfirmacaoGestao from '@/pages/administracao/components/ConfirmacaoGestao.jsx'
+import ConfirmacaoGestao from '@/pages/administracao/componentes/ConfirmacaoGestao.jsx'
 import { baixarDocumentoBlob, pegarUrlDownload } from '@/api/projetos.js'
 
 const tiposDeProjeto = ['TCC', 'Projeto Integrador', 'Pesquisa', 'Extensão']

@@ -1,4 +1,4 @@
-import { buscarProjetosPublicados } from '@/pages/projetos/services/buscarProjetosPublicados.js'
+import { buscarProjetosPublicados } from '@/pages/projetos/servicos/buscarProjetosPublicados.js'
 
 export async function buscarProjetosDestaque(sinal) {
   const publicados = await buscarProjetosPublicados(sinal)

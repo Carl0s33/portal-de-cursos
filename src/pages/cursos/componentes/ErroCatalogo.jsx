@@ -1,4 +1,4 @@
-import EstadoErro from '@/shared/components/EstadoErro.jsx'
+import EstadoErro from '@/shared/componentes/EstadoErro.jsx'
 
 export default function ErroCatalogo({ tentarNovamente }) {
   return (

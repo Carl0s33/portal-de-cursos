@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
-import Link from '@/shared/components/Link.jsx'
-import { buscarProjetosDestaque } from '../services/buscarProjetosDestaque.js'
+import ItemProjeto from '@/shared/componentes/ItemProjeto.jsx'
+import Link from '@/shared/componentes/Link.jsx'
+import { buscarProjetosDestaque } from '../servicos/buscarProjetosDestaque.js'
 
 export default function ProjetosDestaque() {
   const [projetos, mudarProjetos] = useState([])

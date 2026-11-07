@@ -1,10 +1,10 @@
-import EstadoErro from '@/shared/components/EstadoErro.jsx'
+import EstadoErro from '@/shared/componentes/EstadoErro.jsx'
 import { Fragment, useEffect, useState } from 'react'
 import {
   cadastrarProfessor,
   excluirProfessor,
   listarProfessores,
-} from '../services/gerenciarProfessores.js'
+} from '../servicos/gerenciarProfessores.js'
 import { listarCursos } from '@/api/cursos.js'
 import FormularioProfessor from './FormularioProfessor.jsx'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listarUsuarios } from '@/api/usuarios.js'
 import { listarCursos } from '@/api/cursos.js'
-import { listarProfessores } from '../services/gerenciarProfessores.js'
+import { listarProfessores } from '../servicos/gerenciarProfessores.js'
 import '../estilos/gestao.css'
 import '../estilos/usuarios.css'
 import '../estilos/geral.css'

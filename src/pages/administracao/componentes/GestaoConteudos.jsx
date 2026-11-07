@@ -20,7 +20,7 @@ import {
   excluirProjeto,
   listarProjetos,
 } from '@/api/projetos.js'
-import { listarProfessores } from '../services/gerenciarProfessores.js'
+import { listarProfessores } from '../servicos/gerenciarProfessores.js'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
 import EditorConteudo from './conteudos/EditorConteudo.jsx'
 import { configuracoes } from './conteudos/configuracoes.js'

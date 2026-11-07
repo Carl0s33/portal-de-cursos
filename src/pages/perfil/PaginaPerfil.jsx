@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { enderecoPrivado } from '../../app/rotas.js'
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import './perfil.css'
 
 export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'professor/feed' }) {

@@ -1,4 +1,4 @@
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import './busca-cursos.css'
 
 export default function BuscaCursos({ valor, alterar, bloqueado }) {

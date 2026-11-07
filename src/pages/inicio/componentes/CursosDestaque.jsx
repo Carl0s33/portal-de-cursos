@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
-import CardCurso from '@/shared/components/CardCurso.jsx'
-import Link from '@/shared/components/Link.jsx'
+import CardCurso from '@/shared/componentes/CardCurso.jsx'
+import Link from '@/shared/componentes/Link.jsx'
 
 export default function CursosDestaque() {
   const [cursos, mudarCursos] = useState([])

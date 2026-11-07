@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import Icone from '@/shared/components/Icone.jsx'
-import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
-import FiltrosProjetos from './components/FiltrosProjetos.jsx'
-import { buscarProjetosPublicados } from './services/buscarProjetosPublicados.js'
+import Icone from '@/shared/componentes/Icone.jsx'
+import ItemProjeto from '@/shared/componentes/ItemProjeto.jsx'
+import FiltrosProjetos from './componentes/FiltrosProjetos.jsx'
+import { buscarProjetosPublicados } from './servicos/buscarProjetosPublicados.js'
 import './projetos.css'
 
 export default function PaginaProjetos() {

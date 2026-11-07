@@ -1,8 +1,8 @@
-import Rodape from '@/shared/components/Rodape.jsx'
+import Rodape from '@/shared/componentes/Rodape.jsx'
 import './estrutura-professor.css'
-import Cabecalho from '@/shared/components/Cabecalho.jsx'
-import NavegacaoAdministracao from '@/pages/administracao/components/NavegacaoAdministracao.jsx'
-import NavegacaoCoordenacao from '@/pages/coordenacao/components/NavegacaoCoordenacao.jsx'
+import Cabecalho from '@/shared/componentes/Cabecalho.jsx'
+import NavegacaoAdministracao from '@/pages/administracao/componentes/NavegacaoAdministracao.jsx'
+import NavegacaoCoordenacao from '@/pages/coordenacao/componentes/NavegacaoCoordenacao.jsx'
 
 export default function EstruturaProfessor({
   usuario,

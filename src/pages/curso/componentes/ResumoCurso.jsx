@@ -1,4 +1,4 @@
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import './resumo-curso.css'
 
 export default function ResumoCurso({ curso }) {

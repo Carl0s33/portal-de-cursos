@@ -1,4 +1,4 @@
-import EstadoVazio from '@/shared/components/EstadoVazio.jsx'
+import EstadoVazio from '@/shared/componentes/EstadoVazio.jsx'
 import CardCatalogo from './CardCatalogo.jsx'
 import './estados-catalogo.css'
 

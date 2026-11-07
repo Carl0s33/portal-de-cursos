@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import { listarCoordenadores } from '@/api/coordenadores.js'
 import { listarProfessores } from '@/api/professores.js'
 import './visao-geral.css'

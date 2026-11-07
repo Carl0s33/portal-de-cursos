@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import Icone from '@/shared/components/Icone.jsx'
-import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
+import ItemProjeto from '@/shared/componentes/ItemProjeto.jsx'
 import { listarProfessores } from '@/api/professores.js'
 import { listarCursos } from '@/api/cursos.js'
 import { listarCoordenadores } from '@/api/coordenadores.js'
-import { buscarProjetosPublicados } from '@/pages/projetos/services/buscarProjetosPublicados.js'
+import { buscarProjetosPublicados } from '@/pages/projetos/servicos/buscarProjetosPublicados.js'
 import './perfil-publico.css'
 
 export default function PaginaPerfilProfessor({ idProfessor }) {

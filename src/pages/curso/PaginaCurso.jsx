@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import Icone from '@/shared/components/Icone.jsx'
-import { buscarDetalhesCurso } from './services/buscarDetalhesCurso.js'
-import ResumoCurso from './components/ResumoCurso.jsx'
-import AbasCurso from './components/AbasCurso.jsx'
-import VisaoGeral from './components/VisaoGeral.jsx'
-import CarregamentoDetalhe from './components/CarregamentoDetalhe.jsx'
-import InformacoesAcademicas from './components/InformacoesAcademicas.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
+import { buscarDetalhesCurso } from './servicos/buscarDetalhesCurso.js'
+import ResumoCurso from './componentes/ResumoCurso.jsx'
+import AbasCurso from './componentes/AbasCurso.jsx'
+import VisaoGeral from './componentes/VisaoGeral.jsx'
+import CarregamentoDetalhe from './componentes/CarregamentoDetalhe.jsx'
+import InformacoesAcademicas from './componentes/InformacoesAcademicas.jsx'
 import './detalhes-curso.css'
 
 const abasValidas = ['visao-geral', 'grade-curricular']
