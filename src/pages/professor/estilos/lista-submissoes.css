@@ -124,11 +124,12 @@
 }
 
 .submissao-feed__coautores-badge {
+  --badge-fundo: #475569;
   padding: 2px 8px;
-  border: 1px solid var(--borda);
+  border: 1px solid var(--badge-fundo);
   border-radius: var(--raio-cartao);
-  color: var(--azul);
-  background: var(--suave);
+  color: var(--branco);
+  background: var(--badge-fundo);
   font-size: var(--texto-xs);
   font-weight: 700;
 }

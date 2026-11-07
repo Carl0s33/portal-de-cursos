@@ -296,9 +296,9 @@ a:hover {
 }
 
 .etiqueta--neutra {
-  background: var(--suave);
-  border-color: var(--borda);
-  color: var(--texto);
+  background: #475569;
+  border-color: #475569;
+  color: var(--branco);
   font-weight: 500;
 }
 

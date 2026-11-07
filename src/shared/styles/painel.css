@@ -120,15 +120,16 @@
 }
 .tabela-submissoes .status,
 .status {
-  --cor-status: var(--azul);
+  --cor-status: var(--branco);
+  --fundo-status: #003da8;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   width: fit-content;
   padding: 5px 12px;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--cor-status) 35%, transparent);
-  background: transparent;
+  border: 1px solid var(--fundo-status);
+  background: var(--fundo-status);
   color: var(--cor-status);
   font-size: 12px;
   font-weight: 700;
@@ -149,13 +150,13 @@
 .tabela-submissoes .status--em-analise,
 .status--em-análise,
 .status--em-analise {
-  --cor-status: var(--azul);
+  --fundo-status: #003da8;
 }
 .tabela-submissoes .status--aguardando-orientador,
 .tabela-submissoes .status--aguardando-coordenador,
 .status--aguardando-orientador,
 .status--aguardando-coordenador {
-  --cor-status: var(--aviso);
+  --fundo-status: #854400;
 }
 .tabela-submissoes .status--aceito,
 .tabela-submissoes .status--aprovado,
@@ -163,17 +164,17 @@
 .status--aceito,
 .status--aprovado,
 .status--publicado {
-  --cor-status: var(--sucesso);
+  --fundo-status: #08623e;
 }
 .tabela-submissoes .status--recusado,
 .status--recusado {
-  --cor-status: var(--erro);
+  --fundo-status: #a61b1b;
 }
 :root[data-tema='escuro'] .tabela-submissoes .status,
 :root[data-tema='escuro'] .status {
-  color: var(--cor-status);
-  background: transparent;
-  border-color: color-mix(in srgb, var(--cor-status) 40%, var(--borda));
+  color: var(--branco);
+  background: var(--fundo-status);
+  border-color: var(--fundo-status);
   box-shadow: none;
 }
 .tabela-submissoes a:hover {
