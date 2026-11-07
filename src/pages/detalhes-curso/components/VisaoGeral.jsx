@@ -5,12 +5,12 @@ import { listarProfessores } from '@/api/professores.js'
 import './visao-geral.css'
 
 export default function VisaoGeral({ curso }) {
-  const [coordenador, definirCoordenador] = useState(null)
+  const [coordenador, mudarCoordenador] = useState(null)
 
   useEffect(() => {
     let ativo = true
     const controle = new AbortController()
-    definirCoordenador(null)
+    mudarCoordenador(null)
 
     if (curso?.id) {
       Promise.all([
@@ -58,7 +58,7 @@ export default function VisaoGeral({ curso }) {
           professor?.nome
 
         if (nome || String(professorId) === '2') {
-          definirCoordenador({
+          mudarCoordenador({
             ...registro,
             professorId: professorId || professor?.id,
             nome: nome || 'Coordenador Inicial',

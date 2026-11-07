@@ -10,8 +10,8 @@ import '../estilos/gestao.css'
 import '../estilos/geral.css'
 
 function FormularioArea({ inicial, salvando, aoSalvar, aoCancelar }) {
-  const [nome, definirNome] = useState(inicial?.nome || '')
-  const [descricao, definirDescricao] = useState(inicial?.descricao || '')
+  const [nome, mudarNome] = useState(inicial?.nome || '')
+  const [descricao, mudarDescricao] = useState(inicial?.descricao || '')
 
   function enviar(evento) {
     evento.preventDefault()
@@ -35,7 +35,7 @@ function FormularioArea({ inicial, salvando, aoSalvar, aoCancelar }) {
             required
             maxLength={100}
             value={nome}
-            onChange={(e) => definirNome(e.target.value)}
+            onChange={(e) => mudarNome(e.target.value)}
             placeholder="Ex.: Exatas e Tecnologia"
           />
         </div>
@@ -47,7 +47,7 @@ function FormularioArea({ inicial, salvando, aoSalvar, aoCancelar }) {
             maxLength={500}
             rows={3}
             value={descricao}
-            onChange={(e) => definirDescricao(e.target.value)}
+            onChange={(e) => mudarDescricao(e.target.value)}
             placeholder="Descreva as formações contempladas nesta área do conhecimento."
           />
         </div>
@@ -65,24 +65,24 @@ function FormularioArea({ inicial, salvando, aoSalvar, aoCancelar }) {
 }
 
 export default function GestaoAreas({ token }) {
-  const [areas, definirAreas] = useState([])
-  const [busca, definirBusca] = useState('')
-  const [carregando, definirCarregando] = useState(true)
-  const [mensagem, definirMensagem] = useState('')
-  const [editor, definirEditor] = useState(null)
-  const [exclusao, definirExclusao] = useState(null)
-  const [salvando, definirSalvando] = useState(false)
+  const [areas, mudarAreas] = useState([])
+  const [busca, mudarBusca] = useState('')
+  const [carregando, mudarCarregando] = useState(true)
+  const [mensagem, mudarMensagem] = useState('')
+  const [editor, mudarEditor] = useState(null)
+  const [exclusao, mudarExclusao] = useState(null)
+  const [salvando, mudarSalvando] = useState(false)
 
   const carregar = useCallback(async (sinal) => {
-    definirCarregando(true)
+    mudarCarregando(true)
     try {
       const lista = await listarAreasConhecimento(sinal)
-      if (!sinal?.aborted) definirAreas(Array.isArray(lista) ? lista : [])
+      if (!sinal?.aborted) mudarAreas(Array.isArray(lista) ? lista : [])
     } catch (falha) {
       if (!sinal?.aborted)
-        definirMensagem(falha.message || 'Não foi possível carregar as áreas do conhecimento.')
+        mudarMensagem(falha.message || 'Não foi possível carregar as áreas do conhecimento.')
     } finally {
-      if (!sinal?.aborted) definirCarregando(false)
+      if (!sinal?.aborted) mudarCarregando(false)
     }
   }, [])
 
@@ -103,41 +103,41 @@ export default function GestaoAreas({ token }) {
   )
 
   async function salvar(dados) {
-    definirSalvando(true)
-    definirMensagem('')
+    mudarSalvando(true)
+    mudarMensagem('')
     try {
       if (editor?.id) {
         await atualizarAreaConhecimento(token, editor.id, dados)
-        definirMensagem('Área do conhecimento atualizada com sucesso.')
+        mudarMensagem('Área do conhecimento atualizada com sucesso.')
       } else {
         await cadastrarAreaConhecimento(token, dados)
-        definirMensagem('Área do conhecimento cadastrada com sucesso.')
+        mudarMensagem('Área do conhecimento cadastrada com sucesso.')
       }
-      definirEditor(null)
+      mudarEditor(null)
       await carregar()
     } catch (falha) {
-      definirMensagem(falha.message || 'Não foi possível salvar a área do conhecimento.')
+      mudarMensagem(falha.message || 'Não foi possível salvar a área do conhecimento.')
     } finally {
-      definirSalvando(false)
+      mudarSalvando(false)
     }
   }
 
   async function confirmarExclusao() {
     if (!exclusao || salvando) return
-    definirSalvando(true)
-    definirMensagem('')
+    mudarSalvando(true)
+    mudarMensagem('')
     try {
       await excluirAreaConhecimento(token, exclusao.id)
-      definirExclusao(null)
-      definirMensagem('Área do conhecimento excluída com sucesso.')
+      mudarExclusao(null)
+      mudarMensagem('Área do conhecimento excluída com sucesso.')
       await carregar()
     } catch (falha) {
-      definirMensagem(
+      mudarMensagem(
         falha.message ||
           'Não foi possível excluir a área. Verifique se não há cursos vinculados (RN38).',
       )
     } finally {
-      definirSalvando(false)
+      mudarSalvando(false)
     }
   }
 
@@ -162,9 +162,9 @@ export default function GestaoAreas({ token }) {
             className="botao-primario"
             type="button"
             onClick={() => {
-              definirEditor((atual) => (atual?.novo ? null : { novo: true }))
-              definirExclusao(null)
-              definirMensagem('')
+              mudarEditor((atual) => (atual?.novo ? null : { novo: true }))
+              mudarExclusao(null)
+              mudarMensagem('')
             }}
           >
             {editor?.novo ? 'Fechar cadastro' : 'Nova área'}
@@ -183,7 +183,7 @@ export default function GestaoAreas({ token }) {
           <FormularioArea
             salvando={salvando}
             aoSalvar={salvar}
-            aoCancelar={() => definirEditor(null)}
+            aoCancelar={() => mudarEditor(null)}
           />
         </div>
       )}
@@ -195,7 +195,7 @@ export default function GestaoAreas({ token }) {
             <input
               type="search"
               value={busca}
-              onChange={(evento) => definirBusca(evento.target.value)}
+              onChange={(evento) => mudarBusca(evento.target.value)}
               placeholder="Nome ou descrição da área"
             />
           </label>
@@ -228,9 +228,9 @@ export default function GestaoAreas({ token }) {
                           <button
                             type="button"
                             onClick={() => {
-                              definirEditor(editando ? null : item)
-                              definirExclusao(null)
-                              definirMensagem('')
+                              mudarEditor(editando ? null : item)
+                              mudarExclusao(null)
+                              mudarMensagem('')
                             }}
                           >
                             Editar
@@ -239,8 +239,8 @@ export default function GestaoAreas({ token }) {
                             type="button"
                             className="gestao-excluir"
                             onClick={() => {
-                              definirExclusao(confirmando ? null : item)
-                              definirEditor(null)
+                              mudarExclusao(confirmando ? null : item)
+                              mudarEditor(null)
                             }}
                           >
                             Excluir
@@ -255,7 +255,7 @@ export default function GestaoAreas({ token }) {
                             inicial={item}
                             salvando={salvando}
                             aoSalvar={salvar}
-                            aoCancelar={() => definirEditor(null)}
+                            aoCancelar={() => mudarEditor(null)}
                           />
                         </td>
                       </tr>
@@ -273,7 +273,7 @@ export default function GestaoAreas({ token }) {
                               <button
                                 type="button"
                                 className="botao-secundario"
-                                onClick={() => definirExclusao(null)}
+                                onClick={() => mudarExclusao(null)}
                                 disabled={salvando}
                               >
                                 Manter área

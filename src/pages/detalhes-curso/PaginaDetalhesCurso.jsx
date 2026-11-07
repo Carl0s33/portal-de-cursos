@@ -11,16 +11,16 @@ import './detalhes-curso.css'
 const abasValidas = ['visao-geral', 'grade-curricular']
 
 export default function PaginaDetalhesCurso({ identificador, aba = 'visao-geral' }) {
-  const [consulta, definirConsulta] = useState({ estado: 'carregando', curso: null, erro: null })
-  const [tentativa, definirTentativa] = useState(0)
+  const [consulta, mudarConsulta] = useState({ estado: 'carregando', curso: null, erro: null })
+  const [tentativa, mudarTentativa] = useState(0)
   const selecionada = abasValidas.includes(aba) ? aba : 'visao-geral'
 
   useEffect(() => {
     const controle = new AbortController()
     consultarDetalhesCurso(identificador, controle.signal)
-      .then((curso) => definirConsulta({ estado: 'pronto', curso, erro: null }))
+      .then((curso) => mudarConsulta({ estado: 'pronto', curso, erro: null }))
       .catch((erro) => {
-        if (erro.name !== 'AbortError') definirConsulta({ estado: 'erro', curso: null, erro })
+        if (erro.name !== 'AbortError') mudarConsulta({ estado: 'erro', curso: null, erro })
       })
     return () => controle.abort()
   }, [identificador, tentativa])
@@ -33,8 +33,8 @@ export default function PaginaDetalhesCurso({ identificador, aba = 'visao-geral'
     window.location.hash = `curso/${identificador}${destino === 'visao-geral' ? '' : `/${destino}`}`
   }
   function tentarNovamente() {
-    definirConsulta({ estado: 'carregando', curso: null, erro: null })
-    definirTentativa((valor) => valor + 1)
+    mudarConsulta({ estado: 'carregando', curso: null, erro: null })
+    mudarTentativa((valor) => valor + 1)
   }
   const { curso } = consulta
 

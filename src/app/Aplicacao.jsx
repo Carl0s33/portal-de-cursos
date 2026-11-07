@@ -72,7 +72,7 @@ function lerTema() {
 }
 
 export default function Aplicacao() {
-  const [sessao, definirSessao] = useState(() => {
+  const [sessao, mudarSessao] = useState(() => {
     try {
       const salva = JSON.parse(sessionStorage.getItem('portal-cursos-sessao') || 'null')
       return salva && Date.now() < salva.expiraEm ? salva : null
@@ -80,14 +80,14 @@ export default function Aplicacao() {
       return null
     }
   })
-  const [decisoes, definirDecisoes] = useState({})
-  const [listaSubmissoes, definirListaSubmissoes] = useState([])
-  const [rascunhos, definirRascunhos] = useState({ cursos: [], projetos: [], disciplinas: [] })
-  const [sessaoExpirada, definirSessaoExpirada] = useState(false)
-  const [tema, definirTema] = useState(lerTema)
-  const [rota, definirRota] = useState(lerRota)
-  const [pagina, definirPagina] = useState(() => identificarPagina(lerRota()) || 'inicio')
-  const [rotaCurso, definirRotaCurso] = useState(() =>
+  const [decisoes, mudarDecisoes] = useState({})
+  const [listaSubmissoes, mudarListaSubmissoes] = useState([])
+  const [rascunhos, mudarRascunhos] = useState({ cursos: [], projetos: [], disciplinas: [] })
+  const [sessaoExpirada, mudarSessaoExpirada] = useState(false)
+  const [tema, mudarTema] = useState(lerTema)
+  const [rota, mudarRota] = useState(lerRota)
+  const [pagina, mudarPagina] = useState(() => identificarPagina(lerRota()) || 'inicio')
+  const [rotaCurso, mudarRotaCurso] = useState(() =>
     window.location.hash.startsWith('#curso/') ? window.location.hash.slice(1) : '',
   )
   useEffect(() => {
@@ -109,11 +109,11 @@ export default function Aplicacao() {
   useEffect(() => {
     const acompanharRota = () => {
       const destino = lerRota()
-      definirRota(destino)
+      mudarRota(destino)
       const proximaPagina = identificarPagina(destino)
       if (proximaPagina) {
-        definirPagina(proximaPagina)
-        if (destino.startsWith('curso/')) definirRotaCurso(destino)
+        mudarPagina(proximaPagina)
+        if (destino.startsWith('curso/')) mudarRotaCurso(destino)
         if (!destino.startsWith('curso/') || destino.split('/').length === 2)
           window.scrollTo({ top: 0, behavior: 'instant' })
       }
@@ -190,8 +190,8 @@ export default function Aplicacao() {
     if (!sessao) return
     function verificarValidade() {
       if (Date.now() >= sessao.expiraEm) {
-        definirSessao(null)
-        definirSessaoExpirada(true)
+        mudarSessao(null)
+        mudarSessaoExpirada(true)
         limparDadosLocais()
       }
     }
@@ -311,7 +311,7 @@ export default function Aplicacao() {
               tipoAutor: 'ALUNO',
             }
           })
-          definirListaSubmissoes(mapeadas)
+          mudarListaSubmissoes(mapeadas)
           try {
             const publicadosCache = dados
               .filter((p) => p.statusProjeto === 'PUBLICADO')
@@ -332,7 +332,7 @@ export default function Aplicacao() {
             /* Cache público opcional. */
           }
         } else if (Array.isArray(dados)) {
-          definirListaSubmissoes([])
+          mudarListaSubmissoes([])
           try {
             localStorage.setItem('portal-cursos-publicados-cache', '[]')
           } catch {
@@ -341,8 +341,8 @@ export default function Aplicacao() {
         }
       } catch (falha) {
         if (falha?.status === 401) {
-          definirSessao(null)
-          definirSessaoExpirada(true)
+          mudarSessao(null)
+          mudarSessaoExpirada(true)
           limparDadosLocais()
         }
       }
@@ -353,8 +353,8 @@ export default function Aplicacao() {
   }, [sessao?.token])
 
   function entrar(novaSessao) {
-    definirSessao(novaSessao)
-    definirSessaoExpirada(false)
+    mudarSessao(novaSessao)
+    mudarSessaoExpirada(false)
     if (novaSessao.tipoUsuario === 'ALUNO') {
       navegar(enderecoPrivado('aluno/painel'), true)
     } else {
@@ -362,11 +362,11 @@ export default function Aplicacao() {
     }
   }
   function sair() {
-    definirSessao(null)
-    definirSessaoExpirada(false)
-    definirDecisoes({})
-    definirListaSubmissoes([])
-    definirRascunhos({ cursos: [], projetos: [], disciplinas: [] })
+    mudarSessao(null)
+    mudarSessaoExpirada(false)
+    mudarDecisoes({})
+    mudarListaSubmissoes([])
+    mudarRascunhos({ cursos: [], projetos: [], disciplinas: [] })
     limparDadosLocais()
     navegar(enderecoPrivado('login'), true)
   }
@@ -460,7 +460,7 @@ export default function Aplicacao() {
         <a className="pular-conteudo" href="#conteudo">
           Pular para o conteúdo
         </a>
-        <Cabecalho modoAcesso tema={tema} alternarTema={definirTema} pagina="acesso" />
+        <Cabecalho modoAcesso tema={tema} alternarTema={mudarTema} pagina="acesso" />
         <PaginaCadastroAluno />
         <Rodape pagina="acesso" />
       </>
@@ -498,7 +498,7 @@ export default function Aplicacao() {
         usuario={sessao?.usuario}
         aoSair={sair}
         tema={tema}
-        alternarTema={definirTema}
+        alternarTema={mudarTema}
       >
         <a className="pular-conteudo" href="#conteudo">
           Pular para o conteúdo
@@ -516,7 +516,7 @@ export default function Aplicacao() {
             }
             usuario={sessao.usuario}
             aoSalvar={(perfil) =>
-              definirSessao((atual) => ({ ...atual, usuario: { ...atual.usuario, ...perfil } }))
+              mudarSessao((atual) => ({ ...atual, usuario: { ...atual.usuario, ...perfil } }))
             }
           />
         ) : administrador ? (
@@ -526,7 +526,7 @@ export default function Aplicacao() {
             sessao={sessao}
             rascunhos={rascunhos}
             aoAlterar={(dominio, itens) =>
-              definirRascunhos((atual) => ({ ...atual, [dominio]: itens }))
+              mudarRascunhos((atual) => ({ ...atual, [dominio]: itens }))
             }
             submissoes={listaSubmissoes.map((item) => ({
               ...item,
@@ -542,7 +542,7 @@ export default function Aplicacao() {
               status: decisoes[item.identificador]?.status || item.status,
             }))}
             aoSubmeter={(novaSubmissao) =>
-              definirListaSubmissoes((atuais) => [novaSubmissao, ...atuais])
+              mudarListaSubmissoes((atuais) => [novaSubmissao, ...atuais])
             }
           />
         ) : coordenador && !identificadorSubmissao ? (
@@ -551,7 +551,7 @@ export default function Aplicacao() {
             sessao={sessao}
             rascunhos={rascunhos}
             aoAlterar={(dominio, itens) =>
-              definirRascunhos((atual) => ({ ...atual, [dominio]: itens }))
+              mudarRascunhos((atual) => ({ ...atual, [dominio]: itens }))
             }
             submissoes={listaSubmissoes.map((item) => ({
               ...item,
@@ -627,7 +627,7 @@ export default function Aplicacao() {
                 }
               }
 
-              definirDecisoes((atuais) => ({
+              mudarDecisoes((atuais) => ({
                 ...atuais,
                 [identificadorSubmissao]: {
                   status,
@@ -639,7 +639,7 @@ export default function Aplicacao() {
                 },
               }))
 
-              definirListaSubmissoes((atuais) => {
+              mudarListaSubmissoes((atuais) => {
                 const atualizadas = atuais.map((item) =>
                   item.identificador === identificadorSubmissao
                     ? { ...item, status, statusBackend: proximoStatusBackend }
@@ -649,7 +649,7 @@ export default function Aplicacao() {
               })
             }}
             aoEditar={(alteracoes) => {
-              definirListaSubmissoes((itens) =>
+              mudarListaSubmissoes((itens) =>
                 itens.map((item) =>
                   item.identificador === identificadorSubmissao ? { ...item, ...alteracoes } : item,
                 ),
@@ -662,10 +662,10 @@ export default function Aplicacao() {
               if (submissao?.id && sessao?.token) {
                 excluirProjeto(submissao.id, sessao.token).catch(() => {})
               }
-              definirListaSubmissoes((itens) =>
+              mudarListaSubmissoes((itens) =>
                 itens.filter((item) => item.identificador !== identificadorSubmissao),
               )
-              definirDecisoes((atuais) => {
+              mudarDecisoes((atuais) => {
                 const proxima = { ...atuais }
                 delete proxima[identificadorSubmissao]
                 return proxima
@@ -715,7 +715,7 @@ export default function Aplicacao() {
         pagina={secaoAtiva}
         autenticado={Boolean(sessao)}
         tema={tema}
-        alternarTema={(proximoTema) => definirTema(proximoTema)}
+        alternarTema={(proximoTema) => mudarTema(proximoTema)}
       />
       {pagina === 'cursos' && <PaginaCursos />}
       {pagina === 'projetos' && <PaginaProjetos />}
@@ -735,7 +735,7 @@ export default function Aplicacao() {
         <PaginaSubmissao
           sessao={sessao}
           aoSubmeter={(novaSubmissao) =>
-            definirListaSubmissoes((atuais) => [novaSubmissao, ...atuais])
+            mudarListaSubmissoes((atuais) => [novaSubmissao, ...atuais])
           }
         />
       )}

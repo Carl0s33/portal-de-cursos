@@ -74,8 +74,8 @@ function nomeDoAutor(item) {
 }
 
 export default function PaginaProfessor({ submissoes, usuario }) {
-  const [filtro, definirFiltro] = useState('Todas')
-  const [tipoFiltro, definirTipoFiltro] = useState('Todos')
+  const [filtro, mudarFiltro] = useState('Todas')
+  const [tipoFiltro, mudarTipoFiltro] = useState('Todos')
 
   const orientacoes = useMemo(
     () => submissoes.filter((item) => orientaSubmissao(item, usuario)),
@@ -171,7 +171,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                 type="button"
                 key={opcao}
                 aria-pressed={filtro === opcao}
-                onClick={() => definirFiltro(opcao)}
+                onClick={() => mudarFiltro(opcao)}
               >
                 <span className="pagina-professor__filtro-rotulo">
                   <Icone nome={iconesFiltro[opcao]} />
@@ -187,10 +187,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
           </nav>
           <label className="pagina-professor__tipo">
             <span>Tipo de produção</span>
-            <select
-              value={tipoFiltro}
-              onChange={(evento) => definirTipoFiltro(evento.target.value)}
-            >
+            <select value={tipoFiltro} onChange={(evento) => mudarTipoFiltro(evento.target.value)}>
               {tipos.map((tipo) => (
                 <option value={tipo} key={tipo}>
                   {tipo}
@@ -285,8 +282,8 @@ export default function PaginaProfessor({ submissoes, usuario }) {
               }
               acao={orientacoes.length ? 'Limpar filtros' : undefined}
               aoAcionar={() => {
-                definirFiltro('Todas')
-                definirTipoFiltro('Todos')
+                mudarFiltro('Todas')
+                mudarTipoFiltro('Todos')
               }}
             />
           )}

@@ -59,22 +59,22 @@ function correspondeDuracao(curso, opcoes) {
 }
 
 export default function PaginaCursos() {
-  const [consulta, definirConsulta] = useState({
+  const [consulta, mudarConsulta] = useState({
     estado: 'carregando',
     cursos: [],
     erro: null,
     ultimaTentativa: new Date(),
   })
-  const [tentativa, definirTentativa] = useState(0)
-  const [filtros, definirFiltros] = useState(lerFiltros)
-  const [ordem, definirOrdem] = useState('relevancia')
-  const [filtrosAbertos, definirFiltrosAbertos] = useState(false)
+  const [tentativa, mudarTentativa] = useState(0)
+  const [filtros, mudarFiltros] = useState(lerFiltros)
+  const [ordem, mudarOrdem] = useState('relevancia')
+  const [filtrosAbertos, mudarFiltrosAbertos] = useState(false)
 
   useEffect(() => {
     const controle = new AbortController()
     consultarCursos(controle.signal)
       .then((cursos) =>
-        definirConsulta({
+        mudarConsulta({
           estado: 'pronto',
           cursos,
           erro: null,
@@ -83,7 +83,7 @@ export default function PaginaCursos() {
       )
       .catch((erro) => {
         if (erro.name !== 'AbortError')
-          definirConsulta({
+          mudarConsulta({
             estado: 'erro',
             cursos: [],
             erro,
@@ -102,18 +102,18 @@ export default function PaginaCursos() {
   }, [filtros])
 
   function alterar(campo, valor) {
-    definirFiltros((anteriores) => ({ ...anteriores, [campo]: valor }))
+    mudarFiltros((anteriores) => ({ ...anteriores, [campo]: valor }))
   }
   function limpar() {
-    definirFiltros({ ...filtrosIniciais })
+    mudarFiltros({ ...filtrosIniciais })
   }
   function tentarNovamente() {
-    definirConsulta((anterior) => ({
+    mudarConsulta((anterior) => ({
       ...anterior,
       estado: 'carregando',
       erro: null,
     }))
-    definirTentativa((anterior) => anterior + 1)
+    mudarTentativa((anterior) => anterior + 1)
   }
 
   const resultados = consulta.cursos
@@ -171,7 +171,7 @@ export default function PaginaCursos() {
             className="pagina-cursos__abrir-filtros"
             aria-expanded={filtrosAbertos}
             aria-controls="painel-filtros"
-            onClick={() => definirFiltrosAbertos(!filtrosAbertos)}
+            onClick={() => mudarFiltrosAbertos(!filtrosAbertos)}
           >
             <Icone nome="filtrar-cursos" />
             {filtrosAbertos ? 'Recolher filtros' : 'Filtrar cursos'}
@@ -205,7 +205,7 @@ export default function PaginaCursos() {
               <select
                 value={ordem}
                 disabled={bloqueado}
-                onChange={(evento) => definirOrdem(evento.target.value)}
+                onChange={(evento) => mudarOrdem(evento.target.value)}
               >
                 <option value="relevancia">Mais relevantes</option>
                 <option value="nome">Nome de A a Z</option>

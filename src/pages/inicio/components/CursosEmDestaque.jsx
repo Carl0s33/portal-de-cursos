@@ -4,18 +4,18 @@ import CartaoCurso from '@/shared/components/CartaoCurso.jsx'
 import Ligacao from '@/shared/components/Ligacao.jsx'
 
 export default function CursosEmDestaque() {
-  const [cursos, definirCursos] = useState([])
-  const [estado, definirEstado] = useState('carregando')
+  const [cursos, mudarCursos] = useState([])
+  const [estado, mudarEstado] = useState('carregando')
 
   useEffect(() => {
     const controle = new AbortController()
     listarCursos(controle.signal)
       .then((resultado) => {
-        definirCursos(resultado.slice(0, 3))
-        definirEstado('pronto')
+        mudarCursos(resultado.slice(0, 3))
+        mudarEstado('pronto')
       })
       .catch((erro) => {
-        if (erro.name !== 'AbortError') definirEstado('erro')
+        if (erro.name !== 'AbortError') mudarEstado('erro')
       })
     return () => controle.abort()
   }, [])

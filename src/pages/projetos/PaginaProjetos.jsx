@@ -6,24 +6,24 @@ import { consultarProjetosPublicados } from './services/consultarProjetosPublica
 import './projetos.css'
 
 export default function PaginaProjetos() {
-  const [erroCarregamento, definirErroCarregamento] = useState(false)
-  const [publicados, definirPublicados] = useState([])
-  const [filtrosAbertos, definirFiltrosAbertos] = useState(false)
-  const [ordem, definirOrdem] = useState('nome')
-  const [busca, definirBusca] = useState('')
-  const [tipo, definirTipo] = useState('')
-  const [curso, definirCurso] = useState('')
+  const [erroCarregamento, mudarErroCarregamento] = useState(false)
+  const [publicados, mudarPublicados] = useState([])
+  const [filtrosAbertos, mudarFiltrosAbertos] = useState(false)
+  const [ordem, mudarOrdem] = useState('nome')
+  const [busca, mudarBusca] = useState('')
+  const [tipo, mudarTipo] = useState('')
+  const [curso, mudarCurso] = useState('')
 
   useEffect(() => {
     const controle = new AbortController()
     consultarProjetosPublicados(controle.signal)
       .then((registros) => {
-        if (!controle.signal.aborted) definirPublicados(registros)
+        if (!controle.signal.aborted) mudarPublicados(registros)
       })
       .catch(() => {
         if (!controle.signal.aborted) {
-          definirPublicados([])
-          definirErroCarregamento(true)
+          mudarPublicados([])
+          mudarErroCarregamento(true)
         }
       })
 
@@ -53,9 +53,9 @@ export default function PaginaProjetos() {
     )
 
   function limpar() {
-    definirBusca('')
-    definirTipo('')
-    definirCurso('')
+    mudarBusca('')
+    mudarTipo('')
+    mudarCurso('')
   }
 
   return (
@@ -88,18 +88,18 @@ export default function PaginaProjetos() {
             className="pagina-projetos__alternar"
             aria-expanded={filtrosAbertos}
             aria-controls="filtros-projetos"
-            onClick={() => definirFiltrosAbertos(!filtrosAbertos)}
+            onClick={() => mudarFiltrosAbertos(!filtrosAbertos)}
           >
             {filtrosAbertos ? 'Recolher filtros' : 'Filtrar projetos'}
           </button>
           <div id="filtros-projetos">
             <FiltrosProjetos
               busca={busca}
-              definirBusca={definirBusca}
+              mudarBusca={mudarBusca}
               tipo={tipo}
-              definirTipo={definirTipo}
+              mudarTipo={mudarTipo}
               curso={curso}
-              definirCurso={definirCurso}
+              mudarCurso={mudarCurso}
               publicados={publicados}
               limpar={limpar}
             />
@@ -113,7 +113,7 @@ export default function PaginaProjetos() {
             </p>
             <label>
               Ordenar por
-              <select value={ordem} onChange={(evento) => definirOrdem(evento.target.value)}>
+              <select value={ordem} onChange={(evento) => mudarOrdem(evento.target.value)}>
                 <option value="nome">Nome de A a Z</option>
                 <option value="curso">Curso</option>
                 <option value="tipo">Tipo de trabalho</option>

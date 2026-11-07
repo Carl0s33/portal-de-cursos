@@ -3,7 +3,7 @@ export {
   ErroApi,
   obterBaseApi,
   obterVersaoApi,
-  definirVersaoApi,
+  mudarVersaoApi,
   requisitarApi,
 } from './cliente.js'
 

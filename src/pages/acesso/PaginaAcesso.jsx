@@ -41,12 +41,12 @@ export default function PaginaAcesso({
   sessaoExpirada = false,
   perfil = 'institucional',
 }) {
-  const [identificacao, definirIdentificacao] = useState('')
-  const [senha, definirSenha] = useState('')
-  const [mostrarSenha, definirMostrarSenha] = useState(false)
-  const [enviando, definirEnviando] = useState(false)
-  const [erroGeral, definirErroGeral] = useState('')
-  const [erros, definirErros] = useState({})
+  const [identificacao, mudarIdentificacao] = useState('')
+  const [senha, mudarSenha] = useState('')
+  const [mostrarSenha, mudarMostrarSenha] = useState(false)
+  const [enviando, mudarEnviando] = useState(false)
+  const [erroGeral, mudarErroGeral] = useState('')
+  const [erros, mudarErros] = useState({})
   const [cadastroConcluido] = useState(
     () => new URLSearchParams(window.location.search).get('cadastro') === 'sucesso',
   )
@@ -70,12 +70,12 @@ export default function PaginaAcesso({
 
   function alterarCampo(campo, valor) {
     if (campo === 'identificacao') {
-      definirIdentificacao(valor)
+      mudarIdentificacao(valor)
     } else {
-      definirSenha(valor)
+      mudarSenha(valor)
     }
-    definirErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
-    definirErroGeral('')
+    mudarErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
+    mudarErroGeral('')
   }
 
   async function entrar(evento) {
@@ -83,8 +83,8 @@ export default function PaginaAcesso({
     if (enviandoRef.current) return
 
     const novosErros = validarFormulario(identificacao, senha)
-    definirErros(novosErros)
-    definirErroGeral('')
+    mudarErros(novosErros)
+    mudarErroGeral('')
 
     if (Object.keys(novosErros).length) {
       const campo = novosErros.identificacao ? campoIdentificacao.current : campoSenha.current
@@ -93,7 +93,7 @@ export default function PaginaAcesso({
     }
 
     enviandoRef.current = true
-    definirEnviando(true)
+    mudarEnviando(true)
 
     const controle = new AbortController()
     requisicao.current = controle
@@ -103,17 +103,17 @@ export default function PaginaAcesso({
     try {
       const sessao = await autenticarConta(identificacao.trim(), senha, controle.signal)
       concluido = true
-      definirSenha('')
+      mudarSenha('')
       aoEntrar(sessao)
     } catch (falha) {
       if (controle.signal.reason === MOTIVO_DESMONTADO) return
 
-      definirErroGeral(
+      mudarErroGeral(
         controle.signal.reason === MOTIVO_TEMPO_ESGOTADO
           ? 'O serviço demorou para responder. Tente novamente.'
           : falha.message,
       )
-      definirSenha('')
+      mudarSenha('')
       window.requestAnimationFrame(() => avisoGeral.current?.focus())
     } finally {
       window.clearTimeout(limite)
@@ -121,7 +121,7 @@ export default function PaginaAcesso({
       /* Após sucesso, o botão continua bloqueado até a navegação acontecer */
       if (!concluido) {
         enviandoRef.current = false
-        if (controle.signal.reason !== MOTIVO_DESMONTADO) definirEnviando(false)
+        if (controle.signal.reason !== MOTIVO_DESMONTADO) mudarEnviando(false)
       }
     }
   }
@@ -239,7 +239,7 @@ export default function PaginaAcesso({
                   />
                   <button
                     type="button"
-                    onClick={() => definirMostrarSenha((mostrando) => !mostrando)}
+                    onClick={() => mudarMostrarSenha((mostrando) => !mostrando)}
                     aria-controls="senha"
                     aria-pressed={mostrarSenha}
                     aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}

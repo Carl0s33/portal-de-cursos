@@ -24,10 +24,10 @@ function iniciais(valor = '') {
 }
 
 function FormularioCampus({ inicial, salvando, aoSalvar, aoCancelar }) {
-  const [nome, definirNome] = useState(inicial?.nome || '')
-  const [acronimo, definirAcronimo] = useState(inicial?.acronimo || '')
-  const [cidade, definirCidade] = useState(inicial?.cidade || '')
-  const [endereco, definirEndereco] = useState(inicial?.endereco || '')
+  const [nome, mudarNome] = useState(inicial?.nome || '')
+  const [acronimo, mudarAcronimo] = useState(inicial?.acronimo || '')
+  const [cidade, mudarCidade] = useState(inicial?.cidade || '')
+  const [endereco, mudarEndereco] = useState(inicial?.endereco || '')
 
   function enviar(evento) {
     evento.preventDefault()
@@ -53,7 +53,7 @@ function FormularioCampus({ inicial, salvando, aoSalvar, aoCancelar }) {
             required
             maxLength={100}
             value={nome}
-            onChange={(e) => definirNome(e.target.value)}
+            onChange={(e) => mudarNome(e.target.value)}
             placeholder="Ex.: Campus Nova Cruz"
           />
         </div>
@@ -64,7 +64,7 @@ function FormularioCampus({ inicial, salvando, aoSalvar, aoCancelar }) {
             required
             maxLength={10}
             value={acronimo}
-            onChange={(e) => definirAcronimo(e.target.value)}
+            onChange={(e) => mudarAcronimo(e.target.value)}
             placeholder="Ex.: NC"
           />
         </div>
@@ -75,7 +75,7 @@ function FormularioCampus({ inicial, salvando, aoSalvar, aoCancelar }) {
             required
             maxLength={100}
             value={cidade}
-            onChange={(e) => definirCidade(e.target.value)}
+            onChange={(e) => mudarCidade(e.target.value)}
             placeholder="Ex.: Nova Cruz"
           />
         </div>
@@ -86,7 +86,7 @@ function FormularioCampus({ inicial, salvando, aoSalvar, aoCancelar }) {
             required
             maxLength={200}
             value={endereco}
-            onChange={(e) => definirEndereco(e.target.value)}
+            onChange={(e) => mudarEndereco(e.target.value)}
             placeholder="Ex.: Av. José Rodrigues de Aquino Filho, 640"
           />
         </div>
@@ -104,20 +104,20 @@ function FormularioCampus({ inicial, salvando, aoSalvar, aoCancelar }) {
 }
 
 export default function GestaoCampus({ identificador, token }) {
-  const [campus, definirCampus] = useState([])
-  const [cursos, definirCursos] = useState(null)
-  const [busca, definirBusca] = useState('')
-  const [cidadeFiltro, definirCidadeFiltro] = useState('todas')
-  const [estado, definirEstado] = useState('carregando')
-  const [erro, definirErro] = useState('')
-  const [mensagem, definirMensagem] = useState('')
-  const [editor, definirEditor] = useState(null)
-  const [exclusao, definirExclusao] = useState(null)
-  const [salvando, definirSalvando] = useState(false)
+  const [campus, mudarCampus] = useState([])
+  const [cursos, mudarCursos] = useState(null)
+  const [busca, mudarBusca] = useState('')
+  const [cidadeFiltro, mudarCidadeFiltro] = useState('todas')
+  const [estado, mudarEstado] = useState('carregando')
+  const [erro, mudarErro] = useState('')
+  const [mensagem, mudarMensagem] = useState('')
+  const [editor, mudarEditor] = useState(null)
+  const [exclusao, mudarExclusao] = useState(null)
+  const [salvando, mudarSalvando] = useState(false)
 
   const carregar = useCallback(async (sinal) => {
-    definirEstado('carregando')
-    definirErro('')
+    mudarEstado('carregando')
+    mudarErro('')
     try {
       const [itensCampus, itensCursos] = await Promise.all([
         listarCampus(sinal),
@@ -125,13 +125,13 @@ export default function GestaoCampus({ identificador, token }) {
       ])
       if (sinal?.aborted) return
       if (!Array.isArray(itensCampus)) throw new Error('A lista de campus recebida é inválida.')
-      definirCampus(itensCampus)
-      definirCursos(itensCursos)
-      definirEstado('pronto')
+      mudarCampus(itensCampus)
+      mudarCursos(itensCursos)
+      mudarEstado('pronto')
     } catch (falha) {
       if (!sinal?.aborted) {
-        definirErro(falha.message || 'Não foi possível carregar os campus.')
-        definirEstado('erro')
+        mudarErro(falha.message || 'Não foi possível carregar os campus.')
+        mudarEstado('erro')
       }
     }
   }, [])
@@ -160,41 +160,41 @@ export default function GestaoCampus({ identificador, token }) {
   )
 
   async function salvar(dados) {
-    definirSalvando(true)
-    definirMensagem('')
+    mudarSalvando(true)
+    mudarMensagem('')
     try {
       if (editor?.id) {
         await atualizarCampus(token, editor.id, dados)
-        definirMensagem('Campus atualizado com sucesso.')
+        mudarMensagem('Campus atualizado com sucesso.')
       } else {
         await cadastrarCampus(token, dados)
-        definirMensagem('Campus cadastrado com sucesso.')
+        mudarMensagem('Campus cadastrado com sucesso.')
       }
-      definirEditor(null)
+      mudarEditor(null)
       await carregar()
     } catch (falha) {
-      definirMensagem(falha.message || 'Não foi possível salvar o campus.')
+      mudarMensagem(falha.message || 'Não foi possível salvar o campus.')
     } finally {
-      definirSalvando(false)
+      mudarSalvando(false)
     }
   }
 
   async function confirmarExclusao() {
     if (!exclusao || salvando) return
-    definirSalvando(true)
-    definirMensagem('')
+    mudarSalvando(true)
+    mudarMensagem('')
     try {
       await excluirCampus(token, exclusao.id)
-      definirExclusao(null)
-      definirMensagem('Campus excluído com sucesso.')
+      mudarExclusao(null)
+      mudarMensagem('Campus excluído com sucesso.')
       await carregar()
     } catch (falha) {
-      definirMensagem(
+      mudarMensagem(
         falha.message ||
           'Não foi possível excluir o campus. Verifique se não há cursos vinculados (RN38).',
       )
     } finally {
-      definirSalvando(false)
+      mudarSalvando(false)
     }
   }
 
@@ -357,9 +357,9 @@ export default function GestaoCampus({ identificador, token }) {
             className="botao-primario"
             type="button"
             onClick={() => {
-              definirEditor((atual) => (atual?.novo ? null : { novo: true }))
-              definirExclusao(null)
-              definirMensagem('')
+              mudarEditor((atual) => (atual?.novo ? null : { novo: true }))
+              mudarExclusao(null)
+              mudarMensagem('')
             }}
           >
             {editor?.novo ? 'Fechar cadastro' : 'Novo campus'}
@@ -378,7 +378,7 @@ export default function GestaoCampus({ identificador, token }) {
           <FormularioCampus
             salvando={salvando}
             aoSalvar={salvar}
-            aoCancelar={() => definirEditor(null)}
+            aoCancelar={() => mudarEditor(null)}
           />
         </div>
       )}
@@ -390,7 +390,7 @@ export default function GestaoCampus({ identificador, token }) {
             <input
               type="search"
               value={busca}
-              onChange={(evento) => definirBusca(evento.target.value)}
+              onChange={(evento) => mudarBusca(evento.target.value)}
               placeholder="Nome, acrônimo, cidade ou endereço"
             />
           </label>
@@ -399,7 +399,7 @@ export default function GestaoCampus({ identificador, token }) {
               <button
                 type="button"
                 aria-pressed={cidadeFiltro === 'todas'}
-                onClick={() => definirCidadeFiltro('todas')}
+                onClick={() => mudarCidadeFiltro('todas')}
               >
                 Todas as cidades <span>{campus.length}</span>
               </button>
@@ -408,7 +408,7 @@ export default function GestaoCampus({ identificador, token }) {
                   type="button"
                   key={cidade}
                   aria-pressed={cidadeFiltro === cidade}
-                  onClick={() => definirCidadeFiltro(cidade)}
+                  onClick={() => mudarCidadeFiltro(cidade)}
                 >
                   {cidade} <span>{campus.filter((item) => item.cidade === cidade).length}</span>
                 </button>
@@ -460,9 +460,9 @@ export default function GestaoCampus({ identificador, token }) {
                           <button
                             type="button"
                             onClick={() => {
-                              definirEditor(editando ? null : item)
-                              definirExclusao(null)
-                              definirMensagem('')
+                              mudarEditor(editando ? null : item)
+                              mudarExclusao(null)
+                              mudarMensagem('')
                             }}
                           >
                             Editar
@@ -471,8 +471,8 @@ export default function GestaoCampus({ identificador, token }) {
                             type="button"
                             className="gestao-excluir"
                             onClick={() => {
-                              definirExclusao(confirmando ? null : item)
-                              definirEditor(null)
+                              mudarExclusao(confirmando ? null : item)
+                              mudarEditor(null)
                             }}
                           >
                             Excluir
@@ -487,7 +487,7 @@ export default function GestaoCampus({ identificador, token }) {
                             inicial={item}
                             salvando={salvando}
                             aoSalvar={salvar}
-                            aoCancelar={() => definirEditor(null)}
+                            aoCancelar={() => mudarEditor(null)}
                           />
                         </td>
                       </tr>
@@ -505,7 +505,7 @@ export default function GestaoCampus({ identificador, token }) {
                               <button
                                 type="button"
                                 className="botao-secundario"
-                                onClick={() => definirExclusao(null)}
+                                onClick={() => mudarExclusao(null)}
                                 disabled={salvando}
                               >
                                 Manter campus

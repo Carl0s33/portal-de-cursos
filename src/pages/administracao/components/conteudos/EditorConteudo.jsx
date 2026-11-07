@@ -19,7 +19,7 @@ export default function EditorConteudo({
   salvando = false,
 }) {
   const formulario = useRef(null)
-  const [dados, definirDados] = useState(() =>
+  const [dados, mudarDados] = useState(() =>
     Object.fromEntries(
       configuracao.campos.map(([chave, , opcoes]) => {
         if (item?.[chave] !== undefined && item?.[chave] !== null) return [chave, item[chave]]
@@ -174,7 +174,7 @@ export default function EditorConteudo({
                         required
                         disabled={opcoes === 'campus' && Boolean(item?.id)}
                         value={dados[chave]}
-                        onChange={(e) => definirDados({ ...dados, [chave]: e.target.value })}
+                        onChange={(e) => mudarDados({ ...dados, [chave]: e.target.value })}
                       >
                         <option value="">
                           Selecione {opcoes === 'campus' ? 'um campus' : 'uma área'}
@@ -193,7 +193,7 @@ export default function EditorConteudo({
                         value={dados[chave]}
                         disabled={chave === 'cursoId' && bloquearCurso}
                         onChange={(e) =>
-                          definirDados({
+                          mudarDados({
                             ...dados,
                             [chave]: e.target.value,
                             ...(chave === 'cursoId' && dominio === 'projetos'
@@ -237,7 +237,7 @@ export default function EditorConteudo({
                           value={dados[chave]}
                           required={dominio === 'projetos' && opcoes === 'professores'}
                           onChange={(e) =>
-                            definirDados({
+                            mudarDados({
                               ...dados,
                               [chave]: Array.from(
                                 e.target.selectedOptions,
@@ -292,7 +292,7 @@ export default function EditorConteudo({
                         id={idCampo}
                         aria-describedby={idAjuda}
                         value={dados[chave]}
-                        onChange={(e) => definirDados({ ...dados, [chave]: e.target.value })}
+                        onChange={(e) => mudarDados({ ...dados, [chave]: e.target.value })}
                       >
                         <option value="">Selecione um professor</option>
                         {professores.map((professor) => (
@@ -309,7 +309,7 @@ export default function EditorConteudo({
                         value={dados[chave]}
                         disabled={bloquearCurso}
                         onChange={(e) =>
-                          definirDados({
+                          mudarDados({
                             ...dados,
                             [chave]: e.target.value,
                             professorIds: [
@@ -331,7 +331,7 @@ export default function EditorConteudo({
                         id={idCampo}
                         aria-describedby={idAjuda}
                         value={dados[chave]}
-                        onChange={(e) => definirDados({ ...dados, [chave]: e.target.value })}
+                        onChange={(e) => mudarDados({ ...dados, [chave]: e.target.value })}
                       >
                         {opcoes.map((opcao) => (
                           <option
@@ -350,7 +350,7 @@ export default function EditorConteudo({
                         required
                         maxLength={1500}
                         value={dados[chave]}
-                        onChange={(e) => definirDados({ ...dados, [chave]: e.target.value })}
+                        onChange={(e) => mudarDados({ ...dados, [chave]: e.target.value })}
                       />
                     ) : (
                       <input
@@ -378,7 +378,7 @@ export default function EditorConteudo({
                         maxLength={200}
                         value={dados[chave]}
                         readOnly={chave === 'curso' && bloquearCurso}
-                        onChange={(e) => definirDados({ ...dados, [chave]: e.target.value })}
+                        onChange={(e) => mudarDados({ ...dados, [chave]: e.target.value })}
                       />
                     )}
                     {explicacao && (

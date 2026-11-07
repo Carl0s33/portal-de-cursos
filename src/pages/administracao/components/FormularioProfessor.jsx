@@ -9,8 +9,8 @@ export default function FormularioProfessor({
   cursoIdInicial = '',
   cursosVinculados = [],
 }) {
-  const [erroVinculo, definirErroVinculo] = useState('')
-  const [dados, definirDados] = useState({
+  const [erroVinculo, mudarErroVinculo] = useState('')
+  const [dados, mudarDados] = useState({
     nome: '',
     email: '',
     username: '',
@@ -23,22 +23,22 @@ export default function FormularioProfessor({
   })
 
   function alterar(campo, valor) {
-    definirDados((atual) => ({ ...atual, [campo]: valor }))
-    definirErroVinculo('')
+    mudarDados((atual) => ({ ...atual, [campo]: valor }))
+    mudarErroVinculo('')
   }
 
   function salvar(evento) {
     evento.preventDefault()
     const cursosSelecionados = dados.cursoIds.length ? dados.cursoIds : [dados.cursoId]
     if (!cursosSelecionados.filter(Boolean).length) {
-      definirErroVinculo('Selecione ou informe pelo menos um curso.')
+      mudarErroVinculo('Selecione ou informe pelo menos um curso.')
       return
     }
     if (dados.tipoUsuario === 'COORDENADOR' && cursosSelecionados.filter(Boolean).length !== 1) {
-      definirErroVinculo('Um coordenador deve estar vinculado a apenas um curso.')
+      mudarErroVinculo('Um coordenador deve estar vinculado a apenas um curso.')
       return
     }
-    definirErroVinculo('')
+    mudarErroVinculo('')
     aoSalvar({
       usuario: {
         nome: dados.nome.trim(),
@@ -152,8 +152,8 @@ export default function FormularioProfessor({
                 value={dados.cursoIds}
                 onChange={(e) => {
                   const cursoIds = Array.from(e.target.selectedOptions, (option) => option.value)
-                  definirDados((atual) => ({ ...atual, cursoIds, cursoId: cursoIds[0] || '' }))
-                  definirErroVinculo('')
+                  mudarDados((atual) => ({ ...atual, cursoIds, cursoId: cursoIds[0] || '' }))
+                  mudarErroVinculo('')
                 }}
                 required
                 disabled={ocupado}
@@ -180,12 +180,12 @@ export default function FormularioProfessor({
                 value={dados.cursoId}
                 onChange={(e) => {
                   const valor = e.target.value
-                  definirDados((atual) => ({
+                  mudarDados((atual) => ({
                     ...atual,
                     cursoId: valor,
                     cursoIds: valor ? [valor] : [],
                   }))
-                  definirErroVinculo('')
+                  mudarErroVinculo('')
                 }}
                 disabled={ocupado}
               />

@@ -56,21 +56,21 @@ function formatarData(isoStr) {
 }
 
 export default function PaginaDetalhesProjeto({ identificador }) {
-  const [estado, definirEstado] = useState('carregando')
-  const [projeto, definirProjeto] = useState(null)
-  const [documentos, definirDocumentos] = useState([])
-  const [cursoInfo, definirCursoInfo] = useState(null)
-  const [orientadorInfo, definirOrientadorInfo] = useState(null)
-  const [disciplinasProjeto, definirDisciplinasProjeto] = useState([])
-  const [citacaoCopiada, definirCitacaoCopiada] = useState(false)
-  const [erro, definirErro] = useState('')
+  const [estado, mudarEstado] = useState('carregando')
+  const [projeto, mudarProjeto] = useState(null)
+  const [documentos, mudarDocumentos] = useState([])
+  const [cursoInfo, mudarCursoInfo] = useState(null)
+  const [orientadorInfo, mudarOrientadorInfo] = useState(null)
+  const [disciplinasProjeto, mudarDisciplinasProjeto] = useState([])
+  const [citacaoCopiada, mudarCitacaoCopiada] = useState(false)
+  const [erro, mudarErro] = useState('')
 
   useEffect(() => {
     let ativo = true
     const controle = new AbortController()
 
     async function carregar() {
-      definirEstado('carregando')
+      mudarEstado('carregando')
       try {
         const [dadosProjeto, listaCursos, listaProfessores] = await Promise.all([
           obterProjetoPorId(identificador, null, controle.signal).catch(() => null),
@@ -80,30 +80,30 @@ export default function PaginaDetalhesProjeto({ identificador }) {
 
         if (!ativo) return
         if (!dadosProjeto) {
-          definirEstado('erro')
-          definirErro('Projeto acadêmico não encontrado ou não está disponível.')
+          mudarEstado('erro')
+          mudarErro('Projeto acadêmico não encontrado ou não está disponível.')
           return
         }
 
-        definirProjeto(dadosProjeto)
+        mudarProjeto(dadosProjeto)
 
         // Busca documentos anexos
         listarDocumentosProjeto(identificador, null, controle.signal)
           .then((docs) => {
             if (ativo && Array.isArray(docs)) {
-              definirDocumentos(docs.length > 0 ? docs : dadosProjeto.documentos || [])
+              mudarDocumentos(docs.length > 0 ? docs : dadosProjeto.documentos || [])
             }
           })
           .catch(() => {
             if (ativo && dadosProjeto.documentos) {
-              definirDocumentos(dadosProjeto.documentos)
+              mudarDocumentos(dadosProjeto.documentos)
             }
           })
 
         // Vincula curso
         if (dadosProjeto.cursoId) {
           const c = listaCursos.find((item) => String(item.id) === String(dadosProjeto.cursoId))
-          if (c) definirCursoInfo(c)
+          if (c) mudarCursoInfo(c)
 
           // Carrega disciplinas associadas do projeto
           if (
@@ -116,7 +116,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
                 const selecionadas = todasDisc.filter((d) =>
                   dadosProjeto.disciplinasIds.includes(d.id),
                 )
-                definirDisciplinasProjeto(selecionadas)
+                mudarDisciplinasProjeto(selecionadas)
               })
               .catch(() => {})
           }
@@ -130,14 +130,14 @@ export default function PaginaDetalhesProjeto({ identificador }) {
           dadosProjeto.professores?.[0]?.professorId
         if (profId) {
           const prof = listaProfessores.find((item) => String(item.id) === String(profId))
-          if (prof) definirOrientadorInfo(prof)
+          if (prof) mudarOrientadorInfo(prof)
         }
 
-        definirEstado('pronto')
+        mudarEstado('pronto')
       } catch (err) {
         if (ativo && err.name !== 'AbortError') {
-          definirEstado('erro')
-          definirErro('Não foi possível carregar os detalhes do projeto.')
+          mudarEstado('erro')
+          mudarErro('Não foi possível carregar os detalhes do projeto.')
         }
       }
     }
@@ -210,8 +210,8 @@ export default function PaginaDetalhesProjeto({ identificador }) {
   const copiarCitacao = () => {
     if (navigator?.clipboard) {
       navigator.clipboard.writeText(citacaoABNT).then(() => {
-        definirCitacaoCopiada(true)
-        setTimeout(() => definirCitacaoCopiada(false), 3000)
+        mudarCitacaoCopiada(true)
+        setTimeout(() => mudarCitacaoCopiada(false), 3000)
       })
     }
   }

@@ -7,18 +7,18 @@ import '../estilos/usuarios.css'
 import '../estilos/geral.css'
 
 export default function GestaoUsuarios({ token }) {
-  const [consulta, definirConsulta] = useState({ estado: 'carregando', itens: [], erro: '' })
-  const [busca, definirBusca] = useState('')
-  const [papel, definirPapel] = useState('todos')
-  const [curso, definirCurso] = useState('todos')
-  const [tentativa, definirTentativa] = useState(0)
-  const [cursosDados, definirCursosDados] = useState([])
+  const [consulta, mudarConsulta] = useState({ estado: 'carregando', itens: [], erro: '' })
+  const [busca, mudarBusca] = useState('')
+  const [papel, mudarPapel] = useState('todos')
+  const [curso, mudarCurso] = useState('todos')
+  const [tentativa, mudarTentativa] = useState(0)
+  const [cursosDados, mudarCursosDados] = useState([])
 
   useEffect(() => {
     const controle = new AbortController()
     listarCursos(controle.signal)
-      .then(definirCursosDados)
-      .catch(() => definirCursosDados([]))
+      .then(mudarCursosDados)
+      .catch(() => mudarCursosDados([]))
     return () => controle.abort()
   }, [])
 
@@ -37,7 +37,7 @@ export default function GestaoUsuarios({ token }) {
                 cursoId: item.cursoId ?? cursosPorEmail.get(item.email?.toLowerCase()),
               }))
             : null
-          definirConsulta(
+          mudarConsulta(
             contas
               ? { estado: 'pronto', itens: contas, erro: '' }
               : { estado: 'erro', itens: [], erro: 'A lista de contas recebida é inválida.' },
@@ -46,7 +46,7 @@ export default function GestaoUsuarios({ token }) {
       })
       .catch((erro) => {
         if (!controle.signal.aborted) {
-          definirConsulta({ estado: 'erro', itens: [], erro: erro.message })
+          mudarConsulta({ estado: 'erro', itens: [], erro: erro.message })
         }
       })
     return () => controle.abort()
@@ -96,8 +96,8 @@ export default function GestaoUsuarios({ token }) {
             className="botao-secundario"
             type="button"
             onClick={() => {
-              definirConsulta({ estado: 'carregando', itens: [], erro: '' })
-              definirTentativa((valor) => valor + 1)
+              mudarConsulta({ estado: 'carregando', itens: [], erro: '' })
+              mudarTentativa((valor) => valor + 1)
             }}
           >
             Tentar novamente
@@ -112,7 +112,7 @@ export default function GestaoUsuarios({ token }) {
               <input
                 type="search"
                 value={busca}
-                onChange={(evento) => definirBusca(evento.target.value)}
+                onChange={(evento) => mudarBusca(evento.target.value)}
                 placeholder="Nome ou e-mail"
               />
             </label>
@@ -121,7 +121,7 @@ export default function GestaoUsuarios({ token }) {
                 type="button"
                 data-papel="todos"
                 aria-pressed={papel === 'todos'}
-                onClick={() => definirPapel('todos')}
+                onClick={() => mudarPapel('todos')}
               >
                 Todos <span>{consulta.itens.length}</span>
               </button>
@@ -131,7 +131,7 @@ export default function GestaoUsuarios({ token }) {
                   key={tipo}
                   data-papel={tipo.toLowerCase()}
                   aria-pressed={papel === tipo}
-                  onClick={() => definirPapel(tipo)}
+                  onClick={() => mudarPapel(tipo)}
                 >
                   {rotuloTipo(tipo)}{' '}
                   <span>{consulta.itens.filter((item) => item.tipoUsuario === tipo).length}</span>
@@ -140,7 +140,7 @@ export default function GestaoUsuarios({ token }) {
             </div>
             <label className="gestao-busca">
               Curso
-              <select value={curso} onChange={(evento) => definirCurso(evento.target.value)}>
+              <select value={curso} onChange={(evento) => mudarCurso(evento.target.value)}>
                 <option value="todos">Todos os cursos</option>
                 {cursos.map((cursoId) => (
                   <option key={cursoId} value={String(cursoId)}>

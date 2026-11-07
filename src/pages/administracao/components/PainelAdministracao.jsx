@@ -9,22 +9,22 @@ import '../estilos/registros.css'
 import '../estilos/painel.css'
 
 export default function PainelAdministracao({ token }) {
-  const [resumo, definirResumo] = useState(null)
-  const [carregando, definirCarregando] = useState(true)
-  const [erro, definirErro] = useState('')
+  const [resumo, mudarResumo] = useState(null)
+  const [carregando, mudarCarregando] = useState(true)
+  const [erro, mudarErro] = useState('')
 
   const carregar = useCallback(
     async (sinal) => {
-      definirCarregando(true)
-      definirErro('')
+      mudarCarregando(true)
+      mudarErro('')
       try {
         const dados = await consultarResumoAdministracao(token, sinal)
-        if (!sinal?.aborted) definirResumo(dados)
+        if (!sinal?.aborted) mudarResumo(dados)
       } catch (falha) {
         if (!sinal?.aborted)
-          definirErro(falha.message || 'Não foi possível carregar os dados acadêmicos.')
+          mudarErro(falha.message || 'Não foi possível carregar os dados acadêmicos.')
       } finally {
-        if (!sinal?.aborted) definirCarregando(false)
+        if (!sinal?.aborted) mudarCarregando(false)
       }
     },
     [token],

@@ -4,7 +4,7 @@ import './informacoes-academicas.css'
 
 export default function InformacoesAcademicas({ curso }) {
   const itens = curso.grade || []
-  const [filtroTipo, definirFiltroTipo] = useState('todos') // 'todos' | 'obrigatorias' | 'optativas'
+  const [filtroTipo, mudarFiltroTipo] = useState('todos') // 'todos' | 'obrigatorias' | 'optativas'
 
   const obrigatorias = itens.filter((d) => d.obrigatoria)
   const optativas = itens.filter((d) => !d.obrigatoria)
@@ -47,7 +47,7 @@ export default function InformacoesAcademicas({ curso }) {
             <button
               type="button"
               className={`informacoes-academicas__botao-filtro ${filtroTipo === 'todos' ? 'informacoes-academicas__botao-filtro--ativo' : ''}`}
-              onClick={() => definirFiltroTipo('todos')}
+              onClick={() => mudarFiltroTipo('todos')}
             >
               Todas as disciplinas
               <span className="informacoes-academicas__contador">{itens.length}</span>
@@ -55,7 +55,7 @@ export default function InformacoesAcademicas({ curso }) {
             <button
               type="button"
               className={`informacoes-academicas__botao-filtro ${filtroTipo === 'obrigatorias' ? 'informacoes-academicas__botao-filtro--ativo' : ''}`}
-              onClick={() => definirFiltroTipo('obrigatorias')}
+              onClick={() => mudarFiltroTipo('obrigatorias')}
             >
               Componentes Obrigatórios
               <span className="informacoes-academicas__contador">{obrigatorias.length}</span>
@@ -63,7 +63,7 @@ export default function InformacoesAcademicas({ curso }) {
             <button
               type="button"
               className={`informacoes-academicas__botao-filtro ${filtroTipo === 'optativas' ? 'informacoes-academicas__botao-filtro--ativo' : ''}`}
-              onClick={() => definirFiltroTipo('optativas')}
+              onClick={() => mudarFiltroTipo('optativas')}
             >
               Componentes Optativos
               <span className="informacoes-academicas__contador">{optativas.length}</span>

@@ -40,34 +40,34 @@ export default function GestaoConteudos({
   token,
 }) {
   const configuracao = configuracoes[dominio]
-  const [busca, definirBusca] = useState('')
-  const [cursoFiltro, definirCursoFiltro] = useState('todos')
-  const [editor, definirEditor] = useState(null)
-  const [exclusao, definirExclusao] = useState(null)
-  const [mensagem, definirMensagem] = useState('')
-  const [professores, definirProfessores] = useState([])
-  const [alunos, definirAlunos] = useState([])
-  const [registrosApi, definirRegistrosApi] = useState([])
-  const [cursosApi, definirCursosApi] = useState([])
-  const [disciplinasApi, definirDisciplinasApi] = useState([])
-  const [campus, definirCampus] = useState([])
-  const [areas, definirAreas] = useState([])
-  const [carregando, definirCarregando] = useState(
+  const [busca, mudarBusca] = useState('')
+  const [cursoFiltro, mudarCursoFiltro] = useState('todos')
+  const [editor, mudarEditor] = useState(null)
+  const [exclusao, mudarExclusao] = useState(null)
+  const [mensagem, mudarMensagem] = useState('')
+  const [professores, mudarProfessores] = useState([])
+  const [alunos, mudarAlunos] = useState([])
+  const [registrosApi, mudarRegistrosApi] = useState([])
+  const [cursosApi, mudarCursosApi] = useState([])
+  const [disciplinasApi, mudarDisciplinasApi] = useState([])
+  const [campus, mudarCampus] = useState([])
+  const [areas, mudarAreas] = useState([])
+  const [carregando, mudarCarregando] = useState(
     ['cursos', 'disciplinas', 'projetos'].includes(dominio),
   )
-  const [salvando, definirSalvando] = useState(false)
+  const [salvando, mudarSalvando] = useState(false)
   const persistido = ['cursos', 'disciplinas', 'projetos'].includes(dominio)
   const carregarPersistidos = useCallback(
     async (sinal) => {
-      definirCarregando(true)
+      mudarCarregando(true)
       if (restritoAoCurso && !cursoId) {
-        definirRegistrosApi([])
-        definirCursosApi([])
-        definirDisciplinasApi([])
-        definirMensagem(
+        mudarRegistrosApi([])
+        mudarCursosApi([])
+        mudarDisciplinasApi([])
+        mudarMensagem(
           'Não foi possível identificar seu curso. Entre novamente para carregar seu vínculo.',
         )
-        definirCarregando(false)
+        mudarCarregando(false)
         return
       }
       try {
@@ -77,10 +77,10 @@ export default function GestaoConteudos({
             listarCampus(sinal),
             listarAreasConhecimento(sinal),
           ])
-          definirRegistrosApi(lista)
-          definirCursosApi(lista)
-          definirCampus(listaCampus)
-          definirAreas(listaAreas)
+          mudarRegistrosApi(lista)
+          mudarCursosApi(lista)
+          mudarCampus(listaCampus)
+          mudarAreas(listaAreas)
         } else if (dominio === 'disciplinas') {
           const listaCursos = (await listarCursos(sinal, token)).filter(
             (item) => !cursoId || String(item.id) === String(cursoId),
@@ -98,9 +98,9 @@ export default function GestaoConteudos({
               cursoNome: relacionado?.nome,
             }
           })
-          definirCursosApi(listaCursos)
-          definirDisciplinasApi(listaDisciplinas)
-          definirRegistrosApi(listaDisciplinas)
+          mudarCursosApi(listaCursos)
+          mudarDisciplinasApi(listaDisciplinas)
+          mudarRegistrosApi(listaDisciplinas)
         } else if (dominio === 'projetos') {
           const [listaProjetos, listaCursos] = await Promise.all([
             listarProjetos(token, sinal),
@@ -138,15 +138,15 @@ export default function GestaoConteudos({
               status: p.statusProjeto || p.status || '',
             }
           })
-          definirCursosApi(listaCursos)
-          definirDisciplinasApi(listasDisciplinas.flat())
-          definirRegistrosApi(mapeados)
+          mudarCursosApi(listaCursos)
+          mudarDisciplinasApi(listasDisciplinas.flat())
+          mudarRegistrosApi(mapeados)
         }
       } catch (falha) {
         if (!sinal?.aborted)
-          definirMensagem(falha.message || 'Não foi possível carregar os registros da API.')
+          mudarMensagem(falha.message || 'Não foi possível carregar os registros da API.')
       } finally {
-        if (!sinal?.aborted) definirCarregando(false)
+        if (!sinal?.aborted) mudarCarregando(false)
       }
     },
     [dominio, token, cursoId, restritoAoCurso],
@@ -166,12 +166,12 @@ export default function GestaoConteudos({
     if (!['cursos', 'disciplinas', 'projetos'].includes(dominio) || !token) return
     const controller = new AbortController()
     listarProfessores(token, controller.signal)
-      .then(definirProfessores)
-      .catch(() => definirProfessores([]))
+      .then(mudarProfessores)
+      .catch(() => mudarProfessores([]))
     if (dominio === 'projetos') {
       listarAlunos(token, {}, controller.signal)
         .then((registros) =>
-          definirAlunos(
+          mudarAlunos(
             Array.isArray(registros)
               ? registros.map((aluno) => ({
                   ...aluno.usuario,
@@ -182,7 +182,7 @@ export default function GestaoConteudos({
               : [],
           ),
         )
-        .catch(() => definirAlunos([]))
+        .catch(() => mudarAlunos([]))
     }
     return () => controller.abort()
   }, [dominio, token])
@@ -207,8 +207,8 @@ export default function GestaoConteudos({
   )
   async function salvar(dados) {
     if (persistido) {
-      definirSalvando(true)
-      definirMensagem('')
+      mudarSalvando(true)
+      mudarMensagem('')
       try {
         const enums = {
           grau: {
@@ -270,14 +270,14 @@ export default function GestaoConteudos({
           else await cadastrarProjeto(payload, token)
         }
         await carregarPersistidos()
-        definirEditor(null)
-        definirMensagem(
+        mudarEditor(null)
+        mudarMensagem(
           `${configuracao.singular[0].toLocaleUpperCase('pt-BR')}${configuracao.singular.slice(1)} salvo com sucesso.`,
         )
       } catch (falha) {
-        definirMensagem(falha.message || `Não foi possível salvar ${configuracao.singular}.`)
+        mudarMensagem(falha.message || `Não foi possível salvar ${configuracao.singular}.`)
       } finally {
-        definirSalvando(false)
+        mudarSalvando(false)
       }
       return
     }
@@ -344,8 +344,8 @@ export default function GestaoConteudos({
             },
           ],
     )
-    definirEditor(null)
-    definirMensagem(
+    mudarEditor(null)
+    mudarMensagem(
       'Projeto salvo nesta sessão. Para guardar depois ou publicar, ainda falta ligar a página ao serviço de projetos.',
     )
   }
@@ -391,33 +391,33 @@ export default function GestaoConteudos({
         areas={areas}
         salvando={salvando}
         aoSalvar={salvar}
-        aoCancelar={() => definirEditor(null)}
+        aoCancelar={() => mudarEditor(null)}
       />
     )
   }
   async function confirmarExclusao() {
     if (salvando || !exclusao) return
     if (persistido) {
-      definirSalvando(true)
+      mudarSalvando(true)
       let excluido = false
       try {
         if (dominio === 'cursos') await excluirCurso(token, exclusao.id)
         else if (dominio === 'disciplinas') await excluirDisciplina(token, exclusao.id)
         else if (dominio === 'projetos') await excluirProjeto(exclusao.id, token)
         await carregarPersistidos()
-        definirMensagem('Registro excluído com sucesso.')
+        mudarMensagem('Registro excluído com sucesso.')
         excluido = true
       } catch (falha) {
-        definirMensagem(falha.message || 'Não foi possível excluir o registro.')
+        mudarMensagem(falha.message || 'Não foi possível excluir o registro.')
       } finally {
-        definirSalvando(false)
-        if (excluido) definirExclusao(null)
+        mudarSalvando(false)
+        if (excluido) mudarExclusao(null)
       }
       return
     }
     aoAlterar(itens.filter((item) => item.identificador !== exclusao.identificador))
-    definirMensagem('Item removido do rascunho.')
-    definirExclusao(null)
+    mudarMensagem('Item removido do rascunho.')
+    mudarExclusao(null)
   }
   return (
     <>
@@ -440,9 +440,9 @@ export default function GestaoConteudos({
             <button
               className="botao-primario"
               onClick={() => {
-                definirEditor((atual) => (atual?.novo ? null : { novo: true }))
-                definirExclusao(null)
-                definirMensagem('')
+                mudarEditor((atual) => (atual?.novo ? null : { novo: true }))
+                mudarExclusao(null)
+                mudarMensagem('')
               }}
               aria-expanded={Boolean(editor?.novo)}
               aria-controls="gestao-editor-novo"
@@ -522,7 +522,7 @@ export default function GestaoConteudos({
               type="search"
               placeholder={dominio === 'disciplinas' ? 'Nome ou código' : 'Nome ou curso'}
               value={busca}
-              onChange={(e) => definirBusca(e.target.value)}
+              onChange={(e) => mudarBusca(e.target.value)}
             />
           </label>
           {dominio === 'disciplinas' && !restritoAoCurso && !cursoId && (
@@ -534,7 +534,7 @@ export default function GestaoConteudos({
               <button
                 type="button"
                 aria-pressed={cursoFiltro === 'todos'}
-                onClick={() => definirCursoFiltro('todos')}
+                onClick={() => mudarCursoFiltro('todos')}
               >
                 Todas <span>{itensPermitidos.length}</span>
               </button>
@@ -547,7 +547,7 @@ export default function GestaoConteudos({
                     type="button"
                     key={cursoItem.id}
                     aria-pressed={cursoFiltro === String(cursoItem.id)}
-                    onClick={() => definirCursoFiltro(String(cursoItem.id))}
+                    onClick={() => mudarCursoFiltro(String(cursoItem.id))}
                   >
                     {cursoItem.sigla || cursoItem.acronimo || cursoItem.nome} <span>{total}</span>
                   </button>
@@ -663,9 +663,9 @@ export default function GestaoConteudos({
                             aria-expanded={Boolean(editando)}
                             aria-controls={expandidoId}
                             onClick={() => {
-                              definirEditor(editando ? null : item)
-                              definirExclusao(null)
-                              definirMensagem('')
+                              mudarEditor(editando ? null : item)
+                              mudarExclusao(null)
+                              mudarMensagem('')
                             }}
                           >
                             Editar<span className="somente-leitores"> {item.nome}</span>
@@ -676,8 +676,8 @@ export default function GestaoConteudos({
                               aria-expanded={Boolean(confirmando)}
                               aria-controls={expandidoId}
                               onClick={() => {
-                                definirExclusao(confirmando ? null : item)
-                                definirEditor(null)
+                                mudarExclusao(confirmando ? null : item)
+                                mudarEditor(null)
                               }}
                             >
                               Remover<span className="somente-leitores"> {item.nome}</span>
@@ -710,8 +710,8 @@ export default function GestaoConteudos({
                               <button
                                 className="botao-secundario"
                                 onClick={() => {
-                                  definirExclusao(null)
-                                  definirMensagem('')
+                                  mudarExclusao(null)
+                                  mudarMensagem('')
                                 }}
                                 disabled={salvando}
                               >

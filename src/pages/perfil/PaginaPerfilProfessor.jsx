@@ -8,18 +8,18 @@ import { consultarProjetosPublicados } from '@/pages/projetos/services/consultar
 import './perfil-publico.css'
 
 export default function PaginaPerfilProfessor({ idProfessor }) {
-  const [professor, definirProfessor] = useState(null)
-  const [cursosAtuacao, definirCursosAtuacao] = useState([])
-  const [projetosOrientados, definirProjetosOrientados] = useState([])
-  const [carregando, definirCarregando] = useState(true)
-  const [ehCoordenador, definirEhCoordenador] = useState(false)
+  const [professor, mudarProfessor] = useState(null)
+  const [cursosAtuacao, mudarCursosAtuacao] = useState([])
+  const [projetosOrientados, mudarProjetosOrientados] = useState([])
+  const [carregando, mudarCarregando] = useState(true)
+  const [ehCoordenador, mudarEhCoordenador] = useState(false)
 
   useEffect(() => {
     let ativo = true
     const controle = new AbortController()
 
     async function carregar() {
-      definirCarregando(true)
+      mudarCarregando(true)
       try {
         const [professores, cursos, projetos, coordenadores] = await Promise.all([
           listarProfessores(null, {}, controle.signal).catch(() => []),
@@ -35,7 +35,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
             String(p.id) === String(idProfessor) || String(p.usuario?.id) === String(idProfessor),
         )
 
-        definirProfessor(profEncontrado || null)
+        mudarProfessor(profEncontrado || null)
 
         if (profEncontrado) {
           const listaCoordenadores = Array.isArray(coordenadores)
@@ -46,7 +46,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
           const idsProfessor = [profEncontrado.id, profEncontrado.usuario?.id]
             .filter((id) => id !== undefined && id !== null)
             .map(String)
-          definirEhCoordenador(
+          mudarEhCoordenador(
             listaCoordenadores.some((item) =>
               [item.professorId, item.professor?.id, item.usuarioId, item.usuario?.id, item.id]
                 .filter((id) => id !== undefined && id !== null)
@@ -58,7 +58,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
           const cursosFiltrados = cursos.filter(
             (c) => String(c.id) === String(profEncontrado.cursoId),
           )
-          definirCursosAtuacao(cursosFiltrados.length ? cursosFiltrados : cursos.slice(0, 1))
+          mudarCursosAtuacao(cursosFiltrados.length ? cursosFiltrados : cursos.slice(0, 1))
 
           // Filtra projetos orientados por este professor
           const projetosDoProf = projetos.filter((proj) => {
@@ -66,10 +66,10 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
             const nomeProf = (profEncontrado.nome || '').toLowerCase()
             return nomeOrientador.includes(nomeProf) || nomeProf.includes(nomeOrientador)
           })
-          definirProjetosOrientados(projetosDoProf)
+          mudarProjetosOrientados(projetosDoProf)
         }
       } finally {
-        if (ativo) definirCarregando(false)
+        if (ativo) mudarCarregando(false)
       }
     }
 

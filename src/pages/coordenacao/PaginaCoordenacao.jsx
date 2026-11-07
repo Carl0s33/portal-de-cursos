@@ -12,15 +12,15 @@ import '@/shared/styles/painel.css'
 import './coordenacao.css'
 
 export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar, submissoes }) {
-  const [cursos, definirCursos] = useState([])
+  const [cursos, mudarCursos] = useState([])
   useEffect(() => {
     const controller = new AbortController()
     listarCursos(controller.signal)
       .then((registros) => {
-        if (!controller.signal.aborted) definirCursos(registros)
+        if (!controller.signal.aborted) mudarCursos(registros)
       })
       .catch(() => {
-        if (!controller.signal.aborted) definirCursos([])
+        if (!controller.signal.aborted) mudarCursos([])
       })
     return () => controller.abort()
   }, [])

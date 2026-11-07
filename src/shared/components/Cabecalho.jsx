@@ -136,14 +136,14 @@ export default function Cabecalho({
   destinoArea = 'professor/feed',
   destinoPerfil = 'professor/perfil',
 }) {
-  const [menuAberto, definirMenuAberto] = useState(false)
-  const [rolado, definirRolado] = useState(false)
+  const [menuAberto, mudarMenuAberto] = useState(false)
+  const [rolado, mudarRolado] = useState(false)
   const botaoMenu = useRef(null)
 
   /* Linha inferior aparece só quando a página é rolada */
   useEffect(() => {
     function aoRolar() {
-      definirRolado(window.scrollY > 8)
+      mudarRolado(window.scrollY > 8)
     }
 
     aoRolar()
@@ -157,7 +157,7 @@ export default function Cabecalho({
 
     function aoPressionarEscape(evento) {
       if (evento.key === 'Escape') {
-        definirMenuAberto(false)
+        mudarMenuAberto(false)
         botaoMenu.current?.focus()
       }
     }
@@ -325,7 +325,7 @@ export default function Cabecalho({
             id="navegacao-principal"
             className={`navegacao ${menuAberto ? 'navegacao--aberta' : ''}`}
             aria-label={areaProfessor ? 'Navegação da área autenticada' : 'Navegação principal'}
-            onClick={() => definirMenuAberto(false)}
+            onClick={() => mudarMenuAberto(false)}
           >
             {navegacao}
           </nav>
@@ -344,7 +344,7 @@ export default function Cabecalho({
             aria-label={menuAberto ? 'Fechar navegação' : 'Abrir navegação'}
             aria-expanded={menuAberto}
             aria-controls="navegacao-principal"
-            onClick={() => definirMenuAberto((aberto) => !aberto)}
+            onClick={() => mudarMenuAberto((aberto) => !aberto)}
           >
             <IconeMenu aberto={menuAberto} />
           </button>

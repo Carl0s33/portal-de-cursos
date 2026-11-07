@@ -2,11 +2,11 @@ import './filtros-projetos.css'
 
 export default function FiltrosProjetos({
   busca,
-  definirBusca,
+  mudarBusca,
   tipo,
-  definirTipo,
+  mudarTipo,
   curso,
-  definirCurso,
+  mudarCurso,
   publicados,
   limpar,
 }) {
@@ -18,13 +18,13 @@ export default function FiltrosProjetos({
         <input
           type="search"
           value={busca}
-          onChange={(evento) => definirBusca(evento.target.value)}
+          onChange={(evento) => mudarBusca(evento.target.value)}
           placeholder="Nome ou palavra-chave"
         />
       </label>
       <label>
         Tipo de trabalho
-        <select value={tipo} onChange={(evento) => definirTipo(evento.target.value)}>
+        <select value={tipo} onChange={(evento) => mudarTipo(evento.target.value)}>
           <option value="">Todos os tipos</option>
           {['TCC', 'Projeto integrador', 'Pesquisa', 'Extensão'].map((item) => (
             <option key={item}>{item}</option>
@@ -33,7 +33,7 @@ export default function FiltrosProjetos({
       </label>
       <label>
         Curso
-        <select value={curso} onChange={(evento) => definirCurso(evento.target.value)}>
+        <select value={curso} onChange={(evento) => mudarCurso(evento.target.value)}>
           <option value="">Todos os cursos</option>
           {[...new Set(publicados.map((item) => item.curso))].map((item) => (
             <option key={item}>{item}</option>

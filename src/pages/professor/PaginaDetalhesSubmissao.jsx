@@ -72,12 +72,12 @@ export default function PaginaDetalhesSubmissao({
   aoEditar,
   aoRemover,
 }) {
-  const [justificativa, definirJustificativa] = useState('')
-  const [erro, definirErro] = useState('')
-  const [editando, definirEditando] = useState(false)
-  const [confirmandoRemocao, definirConfirmandoRemocao] = useState(false)
-  const [abrindoDocumento, definirAbrindoDocumento] = useState(false)
-  const [edicao, definirEdicao] = useState(() => ({
+  const [justificativa, mudarJustificativa] = useState('')
+  const [erro, mudarErro] = useState('')
+  const [editando, mudarEditando] = useState(false)
+  const [confirmandoRemocao, mudarConfirmandoRemocao] = useState(false)
+  const [abrindoDocumento, mudarAbrindoDocumento] = useState(false)
+  const [edicao, mudarEdicao] = useState(() => ({
     titulo: item?.titulo || '',
     resumo: item?.resumo || '',
     objetivo: item?.objetivo || '',
@@ -116,17 +116,17 @@ export default function PaginaDetalhesSubmissao({
   const avaliacaoCoordenador = tipoUsuario === 'COORDENADOR' && status === 'Em análise'
 
   function atualizar(campo, valor) {
-    definirEdicao((atual) => ({ ...atual, [campo]: valor }))
+    mudarEdicao((atual) => ({ ...atual, [campo]: valor }))
   }
 
   function registrarDecisao(proximoStatus) {
     if (proximoStatus === 'Recusado' && !justificativa.trim()) {
-      definirErro('Explique o motivo antes de recusar o projeto.')
+      mudarErro('Explique o motivo antes de recusar o projeto.')
       return
     }
     aoDecidir(proximoStatus, justificativa.trim())
-    definirJustificativa('')
-    definirErro('')
+    mudarJustificativa('')
+    mudarErro('')
   }
 
   function salvarEdicao(evento) {
@@ -142,7 +142,7 @@ export default function PaginaDetalhesSubmissao({
       disciplinas: edicao.disciplinas.filter(Boolean),
       documentos: edicao.documentos.filter(Boolean),
     })
-    definirEditando(false)
+    mudarEditando(false)
   }
 
   const mensagemStatus =
@@ -295,7 +295,7 @@ export default function PaginaDetalhesSubmissao({
                 <button
                   className="botao-secundario"
                   type="button"
-                  onClick={() => definirEditando(false)}
+                  onClick={() => mudarEditando(false)}
                 >
                   Cancelar
                 </button>
@@ -332,14 +332,14 @@ export default function PaginaDetalhesSubmissao({
                     async function manipularCliqueDocumento(e) {
                       if (ehUrl) return
                       e.preventDefault()
-                      definirAbrindoDocumento(true)
+                      mudarAbrindoDocumento(true)
                       try {
                         const blobUrl = await baixarDocumentoBlob(item.id, documento.id, token)
                         window.open(blobUrl, '_blank', 'noopener,noreferrer')
                       } catch {
                         window.open(urlDestino, '_blank', 'noopener,noreferrer')
                       } finally {
-                        definirAbrindoDocumento(false)
+                        mudarAbrindoDocumento(false)
                       }
                     }
 
@@ -428,8 +428,8 @@ export default function PaginaDetalhesSubmissao({
                   rows="4"
                   value={justificativa}
                   onChange={(evento) => {
-                    definirJustificativa(evento.target.value)
-                    definirErro('')
+                    mudarJustificativa(evento.target.value)
+                    mudarErro('')
                   }}
                   placeholder="Explique o que precisa ser revisto..."
                 />
@@ -468,14 +468,14 @@ export default function PaginaDetalhesSubmissao({
                 <button
                   type="button"
                   className="botao-primario"
-                  onClick={() => definirEditando(true)}
+                  onClick={() => mudarEditando(true)}
                 >
                   Editar submissão
                 </button>
                 <button
                   type="button"
                   className="botao-secundario"
-                  onClick={() => definirConfirmandoRemocao(true)}
+                  onClick={() => mudarConfirmandoRemocao(true)}
                 >
                   Remover submissão
                 </button>
@@ -502,7 +502,7 @@ export default function PaginaDetalhesSubmissao({
             <button
               className="botao-secundario"
               type="button"
-              onClick={() => definirConfirmandoRemocao(false)}
+              onClick={() => mudarConfirmandoRemocao(false)}
             >
               Manter submissão
             </button>

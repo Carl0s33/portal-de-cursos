@@ -6,7 +6,7 @@ export function obterVersaoApi() {
   return versaoAtiva
 }
 
-export function definirVersaoApi(novaVersao) {
+export function mudarVersaoApi(novaVersao) {
   if (typeof novaVersao === 'string') {
     versaoAtiva = novaVersao.trim()
   }

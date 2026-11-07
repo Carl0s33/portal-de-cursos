@@ -12,15 +12,15 @@ import '../estilos/gestao.css'
 import '../estilos/geral.css'
 
 export default function GestaoProfessores({ token, cursoId }) {
-  const [consulta, definirConsulta] = useState({ estado: 'carregando', dados: [], erro: '' })
-  const [listaCursos, definirListaCursos] = useState([])
-  const [tentativa, definirTentativa] = useState(0)
-  const [busca, definirBusca] = useState('')
-  const [criando, definirCriando] = useState(false)
-  const [exclusao, definirExclusao] = useState(null)
-  const [ocupado, definirOcupado] = useState(false)
-  const [erro, definirErro] = useState('')
-  const [mensagem, definirMensagem] = useState('')
+  const [consulta, mudarConsulta] = useState({ estado: 'carregando', dados: [], erro: '' })
+  const [listaCursos, mudarListaCursos] = useState([])
+  const [tentativa, mudarTentativa] = useState(0)
+  const [busca, mudarBusca] = useState('')
+  const [criando, mudarCriando] = useState(false)
+  const [exclusao, mudarExclusao] = useState(null)
+  const [ocupado, mudarOcupado] = useState(false)
+  const [erro, mudarErro] = useState('')
+  const [mensagem, mudarMensagem] = useState('')
 
   useEffect(() => {
     const controle = new AbortController()
@@ -32,13 +32,13 @@ export default function GestaoProfessores({ token, cursoId }) {
       if (controle.signal.aborted) return
 
       if (resCursos.status === 'fulfilled' && Array.isArray(resCursos.value)) {
-        definirListaCursos(resCursos.value)
+        mudarListaCursos(resCursos.value)
       }
 
       if (resProfessores.status === 'fulfilled') {
-        definirConsulta({ estado: 'pronto', dados: resProfessores.value, erro: '' })
+        mudarConsulta({ estado: 'pronto', dados: resProfessores.value, erro: '' })
       } else {
-        definirConsulta({
+        mudarConsulta({
           estado: 'erro',
           dados: [],
           erro: resProfessores.reason?.message || 'Erro ao carregar professores',
@@ -50,37 +50,37 @@ export default function GestaoProfessores({ token, cursoId }) {
   }, [token, tentativa])
   async function salvar(dados) {
     if (ocupado) return
-    definirOcupado(true)
-    definirErro('')
-    definirMensagem('')
+    mudarOcupado(true)
+    mudarErro('')
+    mudarMensagem('')
     try {
       const professor = await cadastrarProfessor(token, dados)
-      definirConsulta((atual) => ({ ...atual, dados: [...atual.dados, professor] }))
-      definirCriando(false)
-      definirMensagem('Professor cadastrado.')
+      mudarConsulta((atual) => ({ ...atual, dados: [...atual.dados, professor] }))
+      mudarCriando(false)
+      mudarMensagem('Professor cadastrado.')
     } catch (falha) {
-      definirErro(falha.message)
+      mudarErro(falha.message)
     } finally {
-      definirOcupado(false)
+      mudarOcupado(false)
     }
   }
   async function remover() {
     if (ocupado || !exclusao) return
-    definirOcupado(true)
-    definirErro('')
-    definirMensagem('')
+    mudarOcupado(true)
+    mudarErro('')
+    mudarMensagem('')
     try {
       await excluirProfessor(token, exclusao.id)
-      definirConsulta((atual) => ({
+      mudarConsulta((atual) => ({
         ...atual,
         dados: atual.dados.filter((item) => item.id !== exclusao.id),
       }))
-      definirExclusao(null)
-      definirMensagem('Professor excluído.')
+      mudarExclusao(null)
+      mudarMensagem('Professor excluído.')
     } catch (falha) {
-      definirErro(falha.message)
+      mudarErro(falha.message)
     } finally {
-      definirOcupado(false)
+      mudarOcupado(false)
     }
   }
   const mapaCursos = new Map(listaCursos.map((c) => [String(c.id), c]))
@@ -119,9 +119,9 @@ export default function GestaoProfessores({ token, cursoId }) {
         <button
           className="botao-primario"
           onClick={() => {
-            definirCriando(true)
-            definirErro('')
-            definirExclusao(null)
+            mudarCriando(true)
+            mudarErro('')
+            mudarExclusao(null)
           }}
           disabled={ocupado || consulta.estado !== 'pronto'}
           aria-expanded={criando}
@@ -140,8 +140,8 @@ export default function GestaoProfessores({ token, cursoId }) {
           <FormularioProfessor
             aoSalvar={salvar}
             aoCancelar={() => {
-              definirCriando(false)
-              definirErro('')
+              mudarCriando(false)
+              mudarErro('')
             }}
             ocupado={ocupado}
             erro={erro}
@@ -156,8 +156,8 @@ export default function GestaoProfessores({ token, cursoId }) {
           titulo="A lista de professores não foi carregada"
           mensagem={consulta.erro}
           aoTentarNovamente={() => {
-            definirConsulta({ estado: 'carregando', dados: [], erro: '' })
-            definirTentativa((valor) => valor + 1)
+            mudarConsulta({ estado: 'carregando', dados: [], erro: '' })
+            mudarTentativa((valor) => valor + 1)
           }}
         />
       )}
@@ -170,7 +170,7 @@ export default function GestaoProfessores({ token, cursoId }) {
                 className="campo"
                 type="search"
                 value={busca}
-                onChange={(e) => definirBusca(e.target.value)}
+                onChange={(e) => mudarBusca(e.target.value)}
                 placeholder="Nome ou e-mail"
               />
             </label>
@@ -225,9 +225,9 @@ export default function GestaoProfessores({ token, cursoId }) {
                           aria-expanded={exclusao?.id === item.id}
                           aria-controls={`excluir-professor-${item.id}`}
                           onClick={() => {
-                            definirExclusao(exclusao?.id === item.id ? null : item)
-                            definirCriando(false)
-                            definirErro('')
+                            mudarExclusao(exclusao?.id === item.id ? null : item)
+                            mudarCriando(false)
+                            mudarErro('')
                           }}
                           disabled={ocupado}
                         >
@@ -246,8 +246,8 @@ export default function GestaoProfessores({ token, cursoId }) {
                               <button
                                 className="botao-secundario"
                                 onClick={() => {
-                                  definirExclusao(null)
-                                  definirErro('')
+                                  mudarExclusao(null)
+                                  mudarErro('')
                                 }}
                                 disabled={ocupado}
                               >

@@ -4,21 +4,21 @@ import Ligacao from '@/shared/components/Ligacao.jsx'
 import { consultarProjetosEmDestaque } from '../services/consultarProjetosEmDestaque.js'
 
 export default function ProjetosEmDestaque() {
-  const [projetos, definirProjetos] = useState([])
-  const [estado, definirEstado] = useState('carregando')
+  const [projetos, mudarProjetos] = useState([])
+  const [estado, mudarEstado] = useState('carregando')
 
   useEffect(() => {
     const controle = new AbortController()
     consultarProjetosEmDestaque(controle.signal)
       .then((publicados) => {
         if (controle.signal.aborted) return
-        definirProjetos(publicados)
-        definirEstado('pronto')
+        mudarProjetos(publicados)
+        mudarEstado('pronto')
       })
       .catch(() => {
         if (!controle.signal.aborted) {
-          definirProjetos([])
-          definirEstado('erro')
+          mudarProjetos([])
+          mudarEstado('erro')
         }
       })
     return () => controle.abort()

@@ -6,17 +6,17 @@ import { consultarProjetosPublicados } from '@/pages/projetos/services/consultar
 import './perfil-publico.css'
 
 export default function PaginaPerfilAluno({ idAluno }) {
-  const [aluno, definirAluno] = useState(null)
-  const [cursoInfo, definirCursoInfo] = useState(null)
-  const [projetosAutor, definirProjetosAutor] = useState([])
-  const [carregando, definirCarregando] = useState(true)
+  const [aluno, mudarAluno] = useState(null)
+  const [cursoInfo, mudarCursoInfo] = useState(null)
+  const [projetosAutor, mudarProjetosAutor] = useState([])
+  const [carregando, mudarCarregando] = useState(true)
 
   useEffect(() => {
     let ativo = true
     const controle = new AbortController()
 
     async function carregar() {
-      definirCarregando(true)
+      mudarCarregando(true)
       try {
         const [cursos, projetos] = await Promise.all([
           listarCursos(controle.signal).catch(() => []),
@@ -55,7 +55,7 @@ export default function PaginaPerfilAluno({ idAluno }) {
                 .replace(/[^a-z0-9]+/g, '.')
                 .replace(/^\.|\.$/g, '')}@escolar.ifrn.edu.br`
 
-        definirAluno({
+        mudarAluno({
           id: idAluno,
           nome: nomeDiscente,
           email: emailDiscente,
@@ -64,16 +64,16 @@ export default function PaginaPerfilAluno({ idAluno }) {
 
         if (projReferencia?.cursoId) {
           const c = cursos.find((item) => String(item.id) === String(projReferencia.cursoId))
-          if (c) definirCursoInfo(c)
+          if (c) mudarCursoInfo(c)
         } else if (cursos.length > 0) {
-          definirCursoInfo(cursos[0])
+          mudarCursoInfo(cursos[0])
         }
 
-        definirProjetosAutor(
+        mudarProjetosAutor(
           projetosDoAluno.length > 0 ? projetosDoAluno : projReferencia ? [projReferencia] : [],
         )
       } finally {
-        if (ativo) definirCarregando(false)
+        if (ativo) mudarCarregando(false)
       }
     }
 
