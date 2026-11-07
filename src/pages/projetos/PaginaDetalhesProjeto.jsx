@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
-import { obterProjetoPorId, listarDocumentosProjeto, obterUrlDownloadDocumento } from '@/api/projetos.js'
+import {
+  obterProjetoPorId,
+  listarDocumentosProjeto,
+  obterUrlDownloadDocumento,
+} from '@/api/projetos.js'
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
 import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'
@@ -87,7 +91,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
         listarDocumentosProjeto(identificador, null, controle.signal)
           .then((docs) => {
             if (ativo && Array.isArray(docs)) {
-              definirDocumentos(docs.length > 0 ? docs : (dadosProjeto.documentos || []))
+              definirDocumentos(docs.length > 0 ? docs : dadosProjeto.documentos || [])
             }
           })
           .catch(() => {
@@ -102,7 +106,10 @@ export default function PaginaDetalhesProjeto({ identificador }) {
           if (c) definirCursoInfo(c)
 
           // Carrega disciplinas associadas do projeto
-          if (Array.isArray(dadosProjeto.disciplinasIds) && dadosProjeto.disciplinasIds.length > 0) {
+          if (
+            Array.isArray(dadosProjeto.disciplinasIds) &&
+            dadosProjeto.disciplinasIds.length > 0
+          ) {
             listarDisciplinasPorCurso(dadosProjeto.cursoId, null, controle.signal)
               .then((todasDisc) => {
                 if (!ativo || !Array.isArray(todasDisc)) return
@@ -117,7 +124,10 @@ export default function PaginaDetalhesProjeto({ identificador }) {
 
         // Vincula orientador
         const orientadorVinculo = dadosProjeto.professores?.find((p) => p.papel === 'ORIENTADOR')
-        const profId = orientadorVinculo?.professorId || dadosProjeto.orientadorId || dadosProjeto.professores?.[0]?.professorId
+        const profId =
+          orientadorVinculo?.professorId ||
+          dadosProjeto.orientadorId ||
+          dadosProjeto.professores?.[0]?.professorId
         if (profId) {
           const prof = listaProfessores.find((item) => String(item.id) === String(profId))
           if (prof) definirOrientadorInfo(prof)
@@ -163,11 +173,16 @@ export default function PaginaDetalhesProjeto({ identificador }) {
     )
   }
 
-  const autores = Array.isArray(projeto.autores) && projeto.autores.length > 0
-    ? projeto.autores
-    : [{ id: 1, nome: projeto.autor || 'Discente do Curso' }]
+  const autores =
+    Array.isArray(projeto.autores) && projeto.autores.length > 0
+      ? projeto.autores
+      : [{ id: 1, nome: projeto.autor || 'Discente do Curso' }]
 
-  const nomeCurso = cursoInfo?.sigla || cursoInfo?.acronimo || cursoInfo?.nome || (projeto.cursoId ? `Curso ${projeto.cursoId}` : 'Curso Superior')
+  const nomeCurso =
+    cursoInfo?.sigla ||
+    cursoInfo?.acronimo ||
+    cursoInfo?.nome ||
+    (projeto.cursoId ? `Curso ${projeto.cursoId}` : 'Curso Superior')
   const nomeCursoCompleto = cursoInfo?.nome || nomeCurso
   const linkCurso = cursoInfo?.identificador ? `#curso/${cursoInfo.identificador}` : '#cursos'
 
@@ -175,14 +190,20 @@ export default function PaginaDetalhesProjeto({ identificador }) {
   const rotuloStatus = ROTULOS_STATUS[statusChave] || statusChave
   const classeStatus = MODIFICADOR_STATUS[statusChave] || 'publicado'
 
-  const tipoFormatado = ROTULOS_TIPO[projeto.tipoProjeto] || projeto.tipoProjeto || 'Trabalho Acadêmico'
+  const tipoFormatado =
+    ROTULOS_TIPO[projeto.tipoProjeto] || projeto.tipoProjeto || 'Trabalho Acadêmico'
   const classeTipo = MODIFICADOR_TIPO[projeto.tipoProjeto] || 'tcc'
 
   // Monta citação ABNT
-  const anoProjeto = projeto.dataInicio ? projeto.dataInicio.substring(0, 4) : new Date().getFullYear()
+  const anoProjeto = projeto.dataInicio
+    ? projeto.dataInicio.substring(0, 4)
+    : new Date().getFullYear()
   const primeiroAutor = autores[0]?.nome || 'AUTOR'
   const partesNome = primeiroAutor.trim().split(' ')
-  const ultimoSobrenome = partesNome.length > 1 ? partesNome[partesNome.length - 1].toUpperCase() : primeiroAutor.toUpperCase()
+  const ultimoSobrenome =
+    partesNome.length > 1
+      ? partesNome[partesNome.length - 1].toUpperCase()
+      : primeiroAutor.toUpperCase()
   const prenomes = partesNome.slice(0, -1).join(' ')
   const citacaoABNT = `${ultimoSobrenome}, ${prenomes}. ${projeto.nome}. ${anoProjeto}. Trabalho de Conclusão / Produção Acadêmica (${nomeCursoCompleto}) - Instituto Federal do Rio Grande do Norte (IFRN).`
 
@@ -208,7 +229,9 @@ export default function PaginaDetalhesProjeto({ identificador }) {
         <span aria-hidden="true">/</span>
         <a href="#projetos">Acervo de Projetos</a>
         <span aria-hidden="true">/</span>
-        <span aria-current="page" className="detalhe-projeto__trilha-atual">{projeto.nome}</span>
+        <span aria-current="page" className="detalhe-projeto__trilha-atual">
+          {projeto.nome}
+        </span>
       </nav>
 
       {/* Hero / Cabeçalho Editorial com Identidade Acadêmica */}
@@ -220,7 +243,11 @@ export default function PaginaDetalhesProjeto({ identificador }) {
           <span className={`detalhe-projeto__chip detalhe-projeto__chip--${classeStatus}`}>
             {rotuloStatus}
           </span>
-          <a className="detalhe-projeto__chip-curso" href={linkCurso} title={`Acessar página de ${nomeCursoCompleto}`}>
+          <a
+            className="detalhe-projeto__chip-curso"
+            href={linkCurso}
+            title={`Acessar página de ${nomeCursoCompleto}`}
+          >
             <Icone nome="catalogo-cursos" />
             <span>{nomeCurso}</span>
           </a>
@@ -253,7 +280,9 @@ export default function PaginaDetalhesProjeto({ identificador }) {
           </div>
           <div className="detalhe-projeto__meta-item">
             <span className="detalhe-projeto__meta-rotulo">Campus</span>
-            <span className="detalhe-projeto__meta-dado">{cursoInfo?.campus || 'IFRN Campus Nova Cruz'}</span>
+            <span className="detalhe-projeto__meta-dado">
+              {cursoInfo?.campus || 'IFRN Campus Nova Cruz'}
+            </span>
           </div>
         </div>
       </header>
@@ -266,7 +295,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
             <section className="detalhe-projeto__secao-bloco" aria-labelledby="rotulo-resumo">
               <div className="detalhe-projeto__bloco-header">
                 <Icone nome="grau-detalhe" />
-              <h2 id="rotulo-resumo">Resumo da produção</h2>
+                <h2 id="rotulo-resumo">Resumo da produção</h2>
               </div>
               <p className="detalhe-projeto__paragrafo">{resumo}</p>
             </section>
@@ -277,7 +306,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
             <section className="detalhe-projeto__secao-bloco" aria-labelledby="rotulo-detalhes">
               <div className="detalhe-projeto__bloco-header">
                 <Icone nome="laboratorio" />
-              <h2 id="rotulo-detalhes">Detalhamento e aplicação prática</h2>
+                <h2 id="rotulo-detalhes">Detalhamento e aplicação prática</h2>
               </div>
               <p className="detalhe-projeto__paragrafo">{descricao}</p>
             </section>
@@ -313,11 +342,18 @@ export default function PaginaDetalhesProjeto({ identificador }) {
             {documentos.length > 0 ? (
               <ul className="detalhe-projeto__documentos-lista">
                 {documentos.map((doc, idx) => {
-                  const nomeDoc = doc.nomeArquivo || doc.nomeOriginal || doc.nome || `Documento Técnico #${idx + 1}`
-                  const urlDownload = doc.localizacao && doc.localizacao.startsWith('http')
-                    ? doc.localizacao
-                    : obterUrlDownloadDocumento(projeto.id, doc.id)
-                  const ehLinkExterno = doc.tipoDocumento === 'LINK_MEMORIA' || (doc.localizacao && doc.localizacao.startsWith('http'))
+                  const nomeDoc =
+                    doc.nomeArquivo ||
+                    doc.nomeOriginal ||
+                    doc.nome ||
+                    `Documento Técnico #${idx + 1}`
+                  const urlDownload =
+                    doc.localizacao && doc.localizacao.startsWith('http')
+                      ? doc.localizacao
+                      : obterUrlDownloadDocumento(projeto.id, doc.id)
+                  const ehLinkExterno =
+                    doc.tipoDocumento === 'LINK_MEMORIA' ||
+                    (doc.localizacao && doc.localizacao.startsWith('http'))
 
                   return (
                     <li key={doc.id || idx} className="detalhe-projeto__documento-item">
@@ -327,7 +363,9 @@ export default function PaginaDetalhesProjeto({ identificador }) {
                       <div className="detalhe-projeto__doc-texto">
                         <strong title={nomeDoc}>{nomeDoc}</strong>
                         <small>
-                          {ehLinkExterno ? 'Repositório Institucional (Memória IFRN)' : 'Documento Técnico Original (PDF)'}
+                          {ehLinkExterno
+                            ? 'Repositório Institucional (Memória IFRN)'
+                            : 'Documento Técnico Original (PDF)'}
                         </small>
                       </div>
                       <a
@@ -370,7 +408,10 @@ export default function PaginaDetalhesProjeto({ identificador }) {
         </div>
 
         {/* Coluna Lateral: Orientador, Autores e Curso */}
-        <aside className="detalhe-projeto__coluna-lateral" aria-label="Equipe e Informações do Projeto">
+        <aside
+          className="detalhe-projeto__coluna-lateral"
+          aria-label="Equipe e Informações do Projeto"
+        >
           {/* Card: Orientação Docente */}
           <div className="detalhe-projeto__card-sidebar">
             <h3 className="detalhe-projeto__sidebar-titulo">Orientação docente</h3>
@@ -386,14 +427,18 @@ export default function PaginaDetalhesProjeto({ identificador }) {
                 <div className="detalhe-projeto__membro-dados">
                   <strong>{orientadorInfo.nome}</strong>
                   <span className="detalhe-projeto__membro-papel">
-                    {orientadorInfo.titulacao ? `Professor (${orientadorInfo.titulacao})` : 'Docente Orientador'}
+                    {orientadorInfo.titulacao
+                      ? `Professor (${orientadorInfo.titulacao})`
+                      : 'Docente Orientador'}
                   </span>
                   <span className="detalhe-projeto__membro-link-acao">Ver perfil docente →</span>
                 </div>
               </a>
             ) : (
               <div className="detalhe-projeto__membro-card">
-                <div className="detalhe-projeto__membro-avatar detalhe-projeto__membro-avatar--prof">P</div>
+                <div className="detalhe-projeto__membro-avatar detalhe-projeto__membro-avatar--prof">
+                  P
+                </div>
                 <div className="detalhe-projeto__membro-dados">
                   <strong>Prof. Dr. Marcelo Carvalho</strong>
                   <span className="detalhe-projeto__membro-papel">Docente Orientador</span>
@@ -404,14 +449,12 @@ export default function PaginaDetalhesProjeto({ identificador }) {
 
           {/* Card: Autores Discentes */}
           <div className="detalhe-projeto__card-sidebar">
-            <h3 className="detalhe-projeto__sidebar-titulo">
-              Equipe discente ({autores.length})
-            </h3>
+            <h3 className="detalhe-projeto__sidebar-titulo">Equipe discente ({autores.length})</h3>
             <div className="detalhe-projeto__autores-lista">
               {autores.map((autor, idx) => {
                 const nomeAutor = typeof autor === 'string' ? autor : autor.nome
                 const emailAutor = typeof autor === 'object' ? autor.email : ''
-                const idAutor = autor.id || autor.alunoId || (idx + 1)
+                const idAutor = autor.id || autor.alunoId || idx + 1
 
                 return (
                   <a
@@ -426,7 +469,9 @@ export default function PaginaDetalhesProjeto({ identificador }) {
                     <div className="detalhe-projeto__membro-dados">
                       <strong>{nomeAutor}</strong>
                       <span className="detalhe-projeto__membro-papel">Discente Autor</span>
-                      {emailAutor && <small className="detalhe-projeto__membro-email">{emailAutor}</small>}
+                      {emailAutor && (
+                        <small className="detalhe-projeto__membro-email">{emailAutor}</small>
+                      )}
                       <span className="detalhe-projeto__membro-link-acao">Ver produções →</span>
                     </div>
                   </a>

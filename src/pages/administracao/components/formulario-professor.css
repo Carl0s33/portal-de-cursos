@@ -61,7 +61,9 @@
   color: var(--titulo);
   font-size: 14px;
   padding: 10px 14px;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
 }
 .formulario-professor .campo:focus {
   border-color: var(--azul);

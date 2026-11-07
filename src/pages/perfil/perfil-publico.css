@@ -377,7 +377,9 @@
 
 :root[data-tema='escuro'] .perfil-publico__cabecalho--discente .perfil-publico__badge-discente,
 :root[data-tema='escuro'] .perfil-publico__cabecalho--docente .perfil-publico__badge-docente,
-:root[data-tema='escuro'] .perfil-publico__cabecalho--coordenador .perfil-publico__badge-coordenador {
+:root[data-tema='escuro']
+  .perfil-publico__cabecalho--coordenador
+  .perfil-publico__badge-coordenador {
   color: var(--preto);
 }
 

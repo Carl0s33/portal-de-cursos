@@ -273,10 +273,15 @@ export default function PaginaDetalhesSubmissao({
                 <label className="campo-rotulo">Documentos anexados (somente PDF)</label>
                 <ul className="documentos-submissao-professor">
                   {(edicao.documentos || []).map((doc, idx) => {
-                    const nome = typeof doc === 'string' ? doc : doc?.nomeArquivo || doc?.nome || `Documento ${idx + 1}`
+                    const nome =
+                      typeof doc === 'string'
+                        ? doc
+                        : doc?.nomeArquivo || doc?.nome || `Documento ${idx + 1}`
                     return (
                       <li key={idx} className="item-documento-estatico">
-                        <span className="documento-tipo" aria-hidden="true">PDF</span>
+                        <span className="documento-tipo" aria-hidden="true">
+                          PDF
+                        </span>
                         <span className="item-documento-nome">{nome}</span>
                       </li>
                     )
@@ -385,12 +390,13 @@ export default function PaginaDetalhesSubmissao({
               <h2>Equipe</h2>
               <p>{textoAutores(item.autores)}</p>
             </div>
-            {Array.isArray(item.professoresParticipantes) && item.professoresParticipantes.length > 0 && (
-              <div>
-                <h2>Docentes colaboradores</h2>
-                <p>{item.professoresParticipantes.join(', ')}</p>
-              </div>
-            )}
+            {Array.isArray(item.professoresParticipantes) &&
+              item.professoresParticipantes.length > 0 && (
+                <div>
+                  <h2>Docentes colaboradores</h2>
+                  <p>{item.professoresParticipantes.join(', ')}</p>
+                </div>
+              )}
             <div>
               <h2>Curso</h2>
               <p>{item.cursoCompleto}</p>

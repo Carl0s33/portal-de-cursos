@@ -190,7 +190,7 @@
   align-items: center;
   padding: 4px 10px;
   border-radius: var(--raio-pilula, 9999px);
-  color: var(--chip-tcc-texto, #FFFFFF);
+  color: var(--chip-tcc-texto, #ffffff);
   background: var(--chip-tcc-fundo, var(--chip-tcc, #003da8));
   font-size: var(--texto-xs, 12px);
   font-weight: 700;
@@ -198,17 +198,17 @@
 }
 
 .item-projeto__tipo-rotulo--extensao {
-  color: var(--chip-extensao-texto, #FFFFFF);
+  color: var(--chip-extensao-texto, #ffffff);
   background: var(--chip-extensao-fundo, var(--chip-extensao, #a8510b));
 }
 
 .item-projeto__tipo-rotulo--pesquisa {
-  color: var(--chip-pesquisa-texto, #FFFFFF);
+  color: var(--chip-pesquisa-texto, #ffffff);
   background: var(--chip-pesquisa-fundo, var(--chip-pesquisa, #067647));
 }
 
 .item-projeto__tipo-rotulo--integrador {
-  color: var(--chip-integrador-texto, #FFFFFF);
+  color: var(--chip-integrador-texto, #ffffff);
   background: var(--chip-integrador-fundo, var(--chip-integrador, #5b2db8));
 }
 

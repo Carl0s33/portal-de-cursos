@@ -99,7 +99,10 @@ export default function GestaoProfessores({ token, cursoId }) {
           ...new Map(
             consulta.dados
               .filter((item) => item.cursoId)
-              .map((item) => [String(item.cursoId), { id: item.cursoId, nome: `Curso ${item.cursoId}` }]),
+              .map((item) => [
+                String(item.cursoId),
+                { id: item.cursoId, nome: `Curso ${item.cursoId}` },
+              ]),
           ).values(),
         ]
   return (
@@ -209,7 +212,11 @@ export default function GestaoProfessores({ token, cursoId }) {
                       <td>
                         {(() => {
                           const c = mapaCursos.get(String(item.cursoId))
-                          return c ? (c.sigla || c.acronimo || c.nome) : (item.cursoId ? `Curso ${item.cursoId}` : '—')
+                          return c
+                            ? c.sigla || c.acronimo || c.nome
+                            : item.cursoId
+                              ? `Curso ${item.cursoId}`
+                              : '—'
                         })()}
                       </td>
                       <td>

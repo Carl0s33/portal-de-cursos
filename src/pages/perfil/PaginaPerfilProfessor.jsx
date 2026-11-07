@@ -31,7 +31,8 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
         if (!ativo) return
 
         const profEncontrado = professores.find(
-          (p) => String(p.id) === String(idProfessor) || String(p.usuario?.id) === String(idProfessor)
+          (p) =>
+            String(p.id) === String(idProfessor) || String(p.usuario?.id) === String(idProfessor),
         )
 
         definirProfessor(profEncontrado || null)
@@ -55,7 +56,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
 
           // Identifica cursos em que atua
           const cursosFiltrados = cursos.filter(
-            (c) => String(c.id) === String(profEncontrado.cursoId)
+            (c) => String(c.id) === String(profEncontrado.cursoId),
           )
           definirCursosAtuacao(cursosFiltrados.length ? cursosFiltrados : cursos.slice(0, 1))
 
@@ -113,18 +114,22 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
         <span aria-hidden="true">/</span>
         <a href="#cursos">Corpo Docente</a>
         <span aria-hidden="true">/</span>
-        <span aria-current="page" className="detalhe-projeto__trilha-atual">{professor.nome}</span>
+        <span aria-current="page" className="detalhe-projeto__trilha-atual">
+          {professor.nome}
+        </span>
       </nav>
 
       {/* Cartão de Identidade Docente */}
-      <header className={`perfil-publico__cabecalho ${ehCoordenador ? 'perfil-publico__cabecalho--coordenador' : 'perfil-publico__cabecalho--docente'}`}>
-        <div className="perfil-publico__avatar-docente">
-          {inicial}
-        </div>
+      <header
+        className={`perfil-publico__cabecalho ${ehCoordenador ? 'perfil-publico__cabecalho--coordenador' : 'perfil-publico__cabecalho--docente'}`}
+      >
+        <div className="perfil-publico__avatar-docente">{inicial}</div>
         <div className="perfil-publico__identidade">
           <div className="perfil-publico__tags">
             <span className="perfil-publico__badge-docente">Corpo docente IFRN</span>
-            {ehCoordenador && <span className="perfil-publico__badge-coordenador">Coordenação de curso</span>}
+            {ehCoordenador && (
+              <span className="perfil-publico__badge-coordenador">Coordenação de curso</span>
+            )}
             {professor.titulacao && (
               <span className="perfil-publico__badge-titulacao">{professor.titulacao}</span>
             )}
@@ -141,7 +146,8 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
           <div className="perfil-publico__bloco">
             <h2>Biografia e áreas de atuação</h2>
             <p className="perfil-publico__descricao-bio">
-              {professor.descricao || 'Docente atuante no ensino, pesquisa aplicada e orientação de trabalhos de conclusão de curso no IFRN.'}
+              {professor.descricao ||
+                'Docente atuante no ensino, pesquisa aplicada e orientação de trabalhos de conclusão de curso no IFRN.'}
             </p>
           </div>
 
@@ -168,7 +174,10 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
           <div className="perfil-publico__cabecalho-secao">
             <div>
               <h2>Produções orientadas ({projetosOrientados.length})</h2>
-              <p>Trabalhos de conclusão, pesquisas e projetos de extensão sob esta orientação docente.</p>
+              <p>
+                Trabalhos de conclusão, pesquisas e projetos de extensão sob esta orientação
+                docente.
+              </p>
             </div>
           </div>
 

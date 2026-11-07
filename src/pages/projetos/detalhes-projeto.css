@@ -210,7 +210,9 @@
   color: var(--azul);
   text-decoration: none;
   font-weight: 600;
-  transition: color 150ms ease, transform 150ms ease;
+  transition:
+    color 150ms ease,
+    transform 150ms ease;
 }
 
 .detalhe-projeto__meta-dado-link:hover {

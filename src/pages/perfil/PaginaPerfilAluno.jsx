@@ -29,7 +29,10 @@ export default function PaginaPerfilAluno({ idAluno }) {
         const projetosDoAluno = projetos.filter((proj) => {
           if (String(proj.autorId) === String(idAluno)) return true
           const autorStr = (proj.autores || '').toLowerCase()
-          return autorStr.includes(String(idAluno).toLowerCase()) || (proj.id && String(proj.id) === String(idAluno))
+          return (
+            autorStr.includes(String(idAluno).toLowerCase()) ||
+            (proj.id && String(proj.id) === String(idAluno))
+          )
         })
 
         const projReferencia = projetosDoAluno[0] || projetos[0]
@@ -37,12 +40,20 @@ export default function PaginaPerfilAluno({ idAluno }) {
         const primeiroAutor = Array.isArray(autoresReferencia)
           ? autoresReferencia[0]
           : autoresReferencia || projReferencia?.autor
-        const nomeDiscente = typeof primeiroAutor === 'string'
-          ? primeiroAutor
-          : primeiroAutor?.nome || (String(idAluno) === '1' ? 'Carlos Eduardo Santos Vitor' : 'Lucas Ribeiro Mendes')
-        const emailDiscente = typeof primeiroAutor === 'object' && primeiroAutor?.email
-          ? primeiroAutor.email
-          : `${nomeDiscente.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '.').replace(/^\.|\.$/g, '')}@escolar.ifrn.edu.br`
+        const nomeDiscente =
+          typeof primeiroAutor === 'string'
+            ? primeiroAutor
+            : primeiroAutor?.nome ||
+              (String(idAluno) === '1' ? 'Carlos Eduardo Santos Vitor' : 'Lucas Ribeiro Mendes')
+        const emailDiscente =
+          typeof primeiroAutor === 'object' && primeiroAutor?.email
+            ? primeiroAutor.email
+            : `${nomeDiscente
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '.')
+                .replace(/^\.|\.$/g, '')}@escolar.ifrn.edu.br`
 
         definirAluno({
           id: idAluno,
@@ -58,7 +69,9 @@ export default function PaginaPerfilAluno({ idAluno }) {
           definirCursoInfo(cursos[0])
         }
 
-        definirProjetosAutor(projetosDoAluno.length > 0 ? projetosDoAluno : (projReferencia ? [projReferencia] : []))
+        definirProjetosAutor(
+          projetosDoAluno.length > 0 ? projetosDoAluno : projReferencia ? [projReferencia] : [],
+        )
       } finally {
         if (ativo) definirCarregando(false)
       }
@@ -91,19 +104,21 @@ export default function PaginaPerfilAluno({ idAluno }) {
         <span aria-hidden="true">/</span>
         <a href="#projetos">Acervo de Projetos</a>
         <span aria-hidden="true">/</span>
-        <span aria-current="page" className="detalhe-projeto__trilha-atual">{aluno.nome}</span>
+        <span aria-current="page" className="detalhe-projeto__trilha-atual">
+          {aluno.nome}
+        </span>
       </nav>
 
       {/* Cartão de Identidade Discente */}
       <header className="perfil-publico__cabecalho perfil-publico__cabecalho--discente">
-        <div className="perfil-publico__avatar-discente">
-          {inicial}
-        </div>
+        <div className="perfil-publico__avatar-discente">{inicial}</div>
         <div className="perfil-publico__identidade">
           <div className="perfil-publico__tags">
             <span className="perfil-publico__badge-discente">Discente / autor</span>
             {cursoInfo && (
-              <span className="perfil-publico__badge-curso">{cursoInfo.sigla || cursoInfo.acronimo || 'TADS'}</span>
+              <span className="perfil-publico__badge-curso">
+                {cursoInfo.sigla || cursoInfo.acronimo || 'TADS'}
+              </span>
             )}
           </div>
           <h1 className="perfil-publico__nome">{aluno.nome}</h1>
@@ -120,14 +135,21 @@ export default function PaginaPerfilAluno({ idAluno }) {
             {cursoInfo ? (
               <div className="perfil-publico__curso-card">
                 <strong>{cursoInfo.nome}</strong>
-                <p>{cursoInfo.descricao || 'Formação acadêmica superior e tecnológica de excelência no IFRN.'}</p>
-                <a className="botao-secundario botao--pequeno" href={`#curso/${cursoInfo.identificador || cursoInfo.id}`}>
+                <p>
+                  {cursoInfo.descricao ||
+                    'Formação acadêmica superior e tecnológica de excelência no IFRN.'}
+                </p>
+                <a
+                  className="botao-secundario botao--pequeno"
+                  href={`#curso/${cursoInfo.identificador || cursoInfo.id}`}
+                >
                   Conhecer matriz curricular
                 </a>
               </div>
             ) : (
               <p className="perfil-publico__descricao-bio">
-                Discente matriculado em curso de graduação no Instituto Federal do Rio Grande do Norte.
+                Discente matriculado em curso de graduação no Instituto Federal do Rio Grande do
+                Norte.
               </p>
             )}
           </div>
@@ -138,7 +160,10 @@ export default function PaginaPerfilAluno({ idAluno }) {
           <div className="perfil-publico__cabecalho-secao">
             <div>
               <h2>Trabalhos e produções publicadas ({projetosAutor.length})</h2>
-              <p>Produções científicas, projetos integradores e pesquisas desenvolvidas pelo estudante.</p>
+              <p>
+                Produções científicas, projetos integradores e pesquisas desenvolvidas pelo
+                estudante.
+              </p>
             </div>
           </div>
 

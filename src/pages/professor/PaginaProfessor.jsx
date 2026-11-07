@@ -108,11 +108,21 @@ export default function PaginaProfessor({ submissoes, usuario }) {
 
   return (
     <main id="conteudo" className="limite pagina-professor">
-      <header className="pagina-professor__topo" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+      <header
+        className="pagina-professor__topo"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          gap: '16px',
+        }}
+      >
         <div>
           <h1>Submissões para acompanhar</h1>
           <p>
-            Veja as produções em que você consta como orientador ou colaborador e realize avaliações ou submeta novos projetos.
+            Veja as produções em que você consta como orientador ou colaborador e realize avaliações
+            ou submeta novos projetos.
           </p>
         </div>
         <div>

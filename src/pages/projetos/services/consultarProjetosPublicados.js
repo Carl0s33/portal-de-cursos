@@ -15,7 +15,8 @@ function ehProjetoValido(p) {
   const resumo = (p.resumo || p.descricao || '').trim()
 
   // Elimina rascunhos invalidos
-  if (['dgdg', 'teste', 'meu primeiro proeto', 'projeto teste', 'drgdrgdrg'].includes(nome)) return false
+  if (['dgdg', 'teste', 'meu primeiro proeto', 'projeto teste', 'drgdrgdrg'].includes(nome))
+    return false
   if (nome.length < 5) return false
   if (resumo.length < 10) return false
   return true
@@ -59,7 +60,9 @@ export async function consultarProjetosPublicados(sinal) {
       else if (infoCurso?.acronimo) nomeCurso = infoCurso.acronimo
       else if (infoCurso?.nome) nomeCurso = infoCurso.nome
       else if (p.curso && !/^#?\d+$/.test(String(p.curso).trim())) {
-        nomeCurso = String(p.curso).replace(/^Curso\s*#?/i, '').trim()
+        nomeCurso = String(p.curso)
+          .replace(/^Curso\s*#?/i, '')
+          .trim()
       } else if (idCurso) {
         nomeCurso = `Curso ${idCurso}`
       }

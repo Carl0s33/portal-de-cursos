@@ -132,8 +132,12 @@ export default function FormularioProfessor({
               <input
                 className="campo"
                 value={(() => {
-                  const encontrado = cursosVinculados.find((c) => String(c.id) === String(cursoIdInicial))
-                  return encontrado ? (encontrado.nome || encontrado.sigla) : `Curso ${cursoIdInicial}`
+                  const encontrado = cursosVinculados.find(
+                    (c) => String(c.id) === String(cursoIdInicial),
+                  )
+                  return encontrado
+                    ? encontrado.nome || encontrado.sigla
+                    : `Curso ${cursoIdInicial}`
                 })()}
                 readOnly
               />

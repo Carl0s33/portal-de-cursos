@@ -295,7 +295,10 @@ a:hover {
   border-radius: var(--raio-botao);
 }
 
-.pular-conteudo:focus {  top: 12px;  opacity: 1;  pointer-events: auto;
+.pular-conteudo:focus {
+  top: 12px;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 :root[data-tema='escuro'] .icone:not(.icone--usuario):not(.icone--adicionar) {

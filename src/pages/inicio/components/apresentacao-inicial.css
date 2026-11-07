@@ -12,7 +12,11 @@
   border: 1px solid color-mix(in srgb, var(--branco) 14%, transparent);
   border-radius: calc(var(--raio-cartao) + 8px);
   background:
-    radial-gradient(ellipse at 92% 4%, color-mix(in srgb, var(--azul-vivo) 62%, transparent), transparent 38%),
+    radial-gradient(
+      ellipse at 92% 4%,
+      color-mix(in srgb, var(--azul-vivo) 62%, transparent),
+      transparent 38%
+    ),
     linear-gradient(118deg, var(--marinho) 0%, var(--azul-escuro) 64%, var(--azul-vivo) 130%);
   color: var(--branco);
 }
@@ -32,7 +36,11 @@
 
 :root[data-tema='escuro'] .hero-inicial {
   background:
-    radial-gradient(ellipse at 92% 4%, color-mix(in srgb, var(--azul) 24%, transparent), transparent 38%),
+    radial-gradient(
+      ellipse at 92% 4%,
+      color-mix(in srgb, var(--azul) 24%, transparent),
+      transparent 38%
+    ),
     linear-gradient(
       118deg,
       var(--marinho) 0%,

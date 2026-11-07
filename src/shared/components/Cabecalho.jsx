@@ -179,7 +179,8 @@ export default function Cabecalho({
   const mostrarVoltarPortal =
     modoAcesso ||
     (autenticado &&
-      (areaProfessor || ['professor', 'coordenacao', 'administracao', 'aluno-painel'].includes(pagina)))
+      (areaProfessor ||
+        ['professor', 'coordenacao', 'administracao', 'aluno-painel'].includes(pagina)))
 
   const linkPerfil = (
     <a
@@ -271,7 +272,6 @@ export default function Cabecalho({
           Entrar
         </a>
       )}
-
     </>
   )
 

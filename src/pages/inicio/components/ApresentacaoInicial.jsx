@@ -3,14 +3,19 @@ import './apresentacao-inicial.css'
 
 export default function ApresentacaoInicial() {
   return (
-    <section id="inicio" className="hero-inicial hero-inicial--sem-imagem" aria-labelledby="titulo-inicial">
+    <section
+      id="inicio"
+      className="hero-inicial hero-inicial--sem-imagem"
+      aria-labelledby="titulo-inicial"
+    >
       <div className="hero-inicial__texto">
         <h1 id="titulo-inicial">
           Da formação
           <br />à criação.
         </h1>
         <p className="hero-inicial__descricao">
-          Da escolha do curso ao projeto publicado, conheça as formações e o que a comunidade acadêmica produz.
+          Da escolha do curso ao projeto publicado, conheça as formações e o que a comunidade
+          acadêmica produz.
         </p>
         <div className="hero-inicial__acoes">
           <a className="botao-primario" href="#cursos">

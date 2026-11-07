@@ -1,6 +1,11 @@
 import './skeleton.css'
 
-export default function Skeleton({ largura = '100%', altura = '20px', raio = '10px', estilo = {} }) {
+export default function Skeleton({
+  largura = '100%',
+  altura = '20px',
+  raio = '10px',
+  estilo = {},
+}) {
   return (
     <div
       className="skeleton"

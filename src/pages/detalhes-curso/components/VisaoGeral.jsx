@@ -16,50 +16,55 @@ export default function VisaoGeral({ curso }) {
       Promise.all([
         listarCoordenadores(null, { cursoId: curso.id }, controle.signal).catch(() => []),
         listarProfessores(null, {}, controle.signal).catch(() => []),
-      ])
-        .then(([dadosCoordenadores, professores]) => {
-          if (!ativo) return
-          const coordenadores = Array.isArray(dadosCoordenadores)
-            ? dadosCoordenadores
-            : Array.isArray(dadosCoordenadores?.coordenadores)
-              ? dadosCoordenadores.coordenadores
-              : dadosCoordenadores
-                ? [dadosCoordenadores]
-                : []
-          const registro = coordenadores[0]
-          if (!registro) return
+      ]).then(([dadosCoordenadores, professores]) => {
+        if (!ativo) return
+        const coordenadores = Array.isArray(dadosCoordenadores)
+          ? dadosCoordenadores
+          : Array.isArray(dadosCoordenadores?.coordenadores)
+            ? dadosCoordenadores.coordenadores
+            : dadosCoordenadores
+              ? [dadosCoordenadores]
+              : []
+        const registro = coordenadores[0]
+        if (!registro) return
 
-          const professorRef = registro.professor || registro.docente
-          const referenciasProfessor = [
-            registro.professorId,
-            professorRef?.id,
-            professorRef?.professorId,
-            professorRef?.usuario?.id,
-            registro.usuarioId,
-            registro.usuario?.id,
-            registro.id,
-          ].filter(Boolean)
-          const professor = professores.find((item) =>
-            [item.id, item.usuario?.id].some((id) =>
+        const professorRef = registro.professor || registro.docente
+        const referenciasProfessor = [
+          registro.professorId,
+          professorRef?.id,
+          professorRef?.professorId,
+          professorRef?.usuario?.id,
+          registro.usuarioId,
+          registro.usuario?.id,
+          registro.id,
+        ].filter(Boolean)
+        const professor = professores.find((item) =>
+          [item.id, item.usuario?.id].some(
+            (id) =>
               id && referenciasProfessor.some((referencia) => String(id) === String(referencia)),
-            ),
-          )
-          const professorId = registro.professorId || professorRef?.id || professor?.id || registro.usuarioId || registro.usuario?.id
-          const nome =
-            registro.nome ||
-            professorRef?.usuario?.nome ||
-            professorRef?.nome ||
-            registro.usuario?.nome ||
-            professor?.nome
+          ),
+        )
+        const professorId =
+          registro.professorId ||
+          professorRef?.id ||
+          professor?.id ||
+          registro.usuarioId ||
+          registro.usuario?.id
+        const nome =
+          registro.nome ||
+          professorRef?.usuario?.nome ||
+          professorRef?.nome ||
+          registro.usuario?.nome ||
+          professor?.nome
 
-          if (nome || String(professorId) === '2') {
-            definirCoordenador({
-              ...registro,
-              professorId: professorId || professor?.id,
-              nome: nome || 'Coordenador Inicial',
-            })
-          }
-        })
+        if (nome || String(professorId) === '2') {
+          definirCoordenador({
+            ...registro,
+            professorId: professorId || professor?.id,
+            nome: nome || 'Coordenador Inicial',
+          })
+        }
+      })
     }
 
     return () => {

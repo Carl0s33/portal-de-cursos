@@ -31,7 +31,10 @@ import { limparDadosLocais } from './limparDadosLocais.js'
 function identificarPagina(rota) {
   if (rota.startsWith('projeto/')) return 'detalhes-projeto'
   if (rota.startsWith('professor/perfil-publico/') || rota.startsWith('professor/')) {
-    if (!['professor', 'professor/painel', 'professor/perfil'].includes(rota) && !rota.startsWith('professor/submissao/')) {
+    if (
+      !['professor', 'professor/painel', 'professor/perfil'].includes(rota) &&
+      !rota.startsWith('professor/submissao/')
+    ) {
       return 'perfil-professor'
     }
   }
@@ -233,7 +236,8 @@ export default function Aplicacao() {
 
           const mapeadas = dados.map((p) => {
             const orientadorObj = p.professores?.find((prof) => prof.papel === 'ORIENTADOR')
-            const participantesObjs = p.professores?.filter((prof) => prof.papel !== 'ORIENTADOR') || []
+            const participantesObjs =
+              p.professores?.filter((prof) => prof.papel !== 'ORIENTADOR') || []
             const primeiroAutor =
               Array.isArray(p.autores) && p.autores.length > 0 ? p.autores[0] : null
             const nomeAutor =
@@ -249,11 +253,15 @@ export default function Aplicacao() {
                 orientadorObj?.nome ||
                 `Professor ${orientadorObj.professorId}`
               : ''
-            const nomesParticipantes = participantesObjs.map((part) =>
-              part.professorId
-                ? mapaProfessores.get(String(part.professorId)) || part?.nome || `Professor ${part.professorId}`
-                : part?.nome || ''
-            ).filter(Boolean)
+            const nomesParticipantes = participantesObjs
+              .map((part) =>
+                part.professorId
+                  ? mapaProfessores.get(String(part.professorId)) ||
+                    part?.nome ||
+                    `Professor ${part.professorId}`
+                  : part?.nome || '',
+              )
+              .filter(Boolean)
 
             return {
               identificador: String(p.id),
@@ -284,7 +292,9 @@ export default function Aplicacao() {
               dataInicio: p.dataInicio,
               dataFim: p.dataFim,
               documentos: Array.isArray(p.documentos) ? p.documentos : [],
-              disciplinas: Array.isArray(p.disciplinas) ? p.disciplinas.map((d) => d.nome || d) : [],
+              disciplinas: Array.isArray(p.disciplinas)
+                ? p.disciplinas.map((d) => d.nome || d)
+                : [],
               statusBackend: p.statusProjeto,
               status:
                 p.statusProjeto === 'EM_ANALISE'
@@ -589,7 +599,11 @@ export default function Aplicacao() {
                           // A próxima transição tenta avançar a submissão a partir do estado atual.
                         }
                         try {
-                          await atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                          await atualizarStatusProjeto(
+                            submissao.id,
+                            'ANALISE_PUBLICACAO',
+                            sessao.token,
+                          )
                         } catch {
                           // A publicação abaixo também tenta a transição direta.
                         }
@@ -598,7 +612,11 @@ export default function Aplicacao() {
                     } else if (status === 'Recusado') {
                       proximoStatusBackend = 'RECUSADO_PUBLICACAO'
                       try {
-                        await atualizarStatusProjeto(submissao.id, 'RECUSADO_PUBLICACAO', sessao.token)
+                        await atualizarStatusProjeto(
+                          submissao.id,
+                          'RECUSADO_PUBLICACAO',
+                          sessao.token,
+                        )
                       } catch {
                         await atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token)
                       }

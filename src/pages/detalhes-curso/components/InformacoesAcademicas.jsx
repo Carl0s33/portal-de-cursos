@@ -12,7 +12,10 @@ export default function InformacoesAcademicas({ curso }) {
   // Agrupamento por semestre para obrigatórias
   const semestres = [...new Set(obrigatorias.map((d) => d.semestre || 1))].sort((a, b) => a - b)
 
-  const cargaTotalObrigatoria = obrigatorias.reduce((acc, d) => acc + (Number(d.cargaHoraria) || 0), 0)
+  const cargaTotalObrigatoria = obrigatorias.reduce(
+    (acc, d) => acc + (Number(d.cargaHoraria) || 0),
+    0,
+  )
   const cargaTotalOptativa = optativas.reduce((acc, d) => acc + (Number(d.cargaHoraria) || 0), 0)
 
   return (
@@ -37,7 +40,10 @@ export default function InformacoesAcademicas({ curso }) {
 
       {itens.length > 0 ? (
         <>
-          <nav className="informacoes-academicas__filtro-abas" aria-label="Filtrar por natureza da disciplina">
+          <nav
+            className="informacoes-academicas__filtro-abas"
+            aria-label="Filtrar por natureza da disciplina"
+          >
             <button
               type="button"
               className={`informacoes-academicas__botao-filtro ${filtroTipo === 'todos' ? 'informacoes-academicas__botao-filtro--ativo' : ''}`}
@@ -78,11 +84,21 @@ export default function InformacoesAcademicas({ curso }) {
               </div>
 
               {semestres.map((semestre) => {
-                const disciplinasDoSemestre = obrigatorias.filter((d) => (d.semestre || 1) === semestre)
+                const disciplinasDoSemestre = obrigatorias.filter(
+                  (d) => (d.semestre || 1) === semestre,
+                )
                 if (disciplinasDoSemestre.length === 0) return null
                 return (
                   <div key={semestre} className="informacoes-academicas__semestre-bloco">
-                    <h4 style={{ margin: '8px 0 12px', fontSize: '14px', color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <h4
+                      style={{
+                        margin: '8px 0 12px',
+                        fontSize: '14px',
+                        color: 'var(--texto-suave)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.04em',
+                      }}
+                    >
                       {semestre}º Semestre
                     </h4>
                     <div className="informacoes-academicas__grade-grid">
@@ -95,7 +111,9 @@ export default function InformacoesAcademicas({ curso }) {
                             {item.codigo && (
                               <span className="cartao-disciplina__codigo">{item.codigo}</span>
                             )}
-                            <span className="cartao-disciplina__semestre">{semestre}º Semestre</span>
+                            <span className="cartao-disciplina__semestre">
+                              {semestre}º Semestre
+                            </span>
                           </div>
 
                           <h5 className="cartao-disciplina__nome">{item.nome}</h5>
@@ -106,7 +124,9 @@ export default function InformacoesAcademicas({ curso }) {
 
                           <div className="cartao-disciplina__rodape">
                             <span className="cartao-disciplina__carga">
-                              {item.cargaHoraria ? `${item.cargaHoraria} horas` : 'Carga a informar'}
+                              {item.cargaHoraria
+                                ? `${item.cargaHoraria} horas`
+                                : 'Carga a informar'}
                             </span>
                             <span className="cartao-disciplina__badge">Obrigatória</span>
                           </div>
@@ -121,7 +141,10 @@ export default function InformacoesAcademicas({ curso }) {
 
           {/* Seção Optativas */}
           {(filtroTipo === 'todos' || filtroTipo === 'optativas') && (
-            <div className="informacoes-academicas__secao-grupo" style={{ marginTop: filtroTipo === 'todos' ? '24px' : '0' }}>
+            <div
+              className="informacoes-academicas__secao-grupo"
+              style={{ marginTop: filtroTipo === 'todos' ? '24px' : '0' }}
+            >
               <div className="informacoes-academicas__secao-titulo">
                 <h3>
                   <Icone nome="laboratorio" />

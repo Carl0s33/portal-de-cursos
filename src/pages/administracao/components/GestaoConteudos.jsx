@@ -129,7 +129,11 @@ export default function GestaoConteudos({
             return {
               ...p,
               identificador: String(p.id),
-              curso: infoCurso?.sigla || infoCurso?.acronimo || infoCurso?.nome || (p.cursoId ? `Curso ${p.cursoId}` : ''),
+              curso:
+                infoCurso?.sigla ||
+                infoCurso?.acronimo ||
+                infoCurso?.nome ||
+                (p.cursoId ? `Curso ${p.cursoId}` : ''),
               tipo: ROTULOS_TIPO_GESTAO[tipoBruto] || tipoBruto,
               status: p.statusProjeto || p.status || '',
             }
@@ -474,15 +478,15 @@ export default function GestaoConteudos({
             return (
               <article className="cartao curso-gestao" key={curso.identificador || curso.id}>
                 <header className="curso-gestao__topo">
-                  <span className="curso-gestao__sigla">{curso.sigla || curso.acronimo || 'CURSO'}</span>
+                  <span className="curso-gestao__sigla">
+                    {curso.sigla || curso.acronimo || 'CURSO'}
+                  </span>
                   {curso.grau && <span className="curso-gestao__grau">{curso.grau}</span>}
                 </header>
                 <h3 className="curso-gestao__titulo">{curso.nome}</h3>
                 {(curso.grau || curso.turno || curso.modalidade || curso.campus) && (
                   <p className="curso-gestao__meta">
-                    {[curso.turno, curso.modalidade, curso.campus]
-                      .filter(Boolean)
-                      .join(' · ')}
+                    {[curso.turno, curso.modalidade, curso.campus].filter(Boolean).join(' · ')}
                   </p>
                 )}
                 <dl className="curso-gestao__metricas">
