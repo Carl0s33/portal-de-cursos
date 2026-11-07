@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
-import Ligacao from '@/shared/components/Ligacao.jsx'
+import Link from '@/shared/components/Link.jsx'
 import { buscarProjetosDestaque } from '../services/buscarProjetosDestaque.js'
 
-export default function ProjetosEmDestaque() {
+export default function ProjetosDestaque() {
   const [projetos, mudarProjetos] = useState([])
   const [estado, mudarEstado] = useState('carregando')
 
@@ -31,7 +31,7 @@ export default function ProjetosEmDestaque() {
           <h2 id="titulo-projetos">Projetos publicados</h2>
           <p>Conheça trabalhos aprovados e desenvolvidos ao longo da formação.</p>
         </div>
-        <Ligacao destino="#projetos">Explorar biblioteca de projetos</Ligacao>
+        <Link destino="#projetos">Explorar biblioteca de projetos</Link>
       </div>
       {estado === 'carregando' ? (
         <div className="painel-vazio painel-vazio--caixa">

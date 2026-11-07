@@ -1,7 +1,7 @@
 import Icone from './Icone.jsx'
 import './cartao-curso.css'
 
-export default function CartaoCurso({ curso }) {
+export default function CardCurso({ curso }) {
   const informacoes = [
     { rotulo: 'Duração', valor: curso.duracao, icone: 'duracao-cursos' },
     { rotulo: 'Modalidade', valor: curso.modalidade, icone: 'modalidade-cursos' },

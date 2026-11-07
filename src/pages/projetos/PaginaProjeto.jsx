@@ -51,7 +51,7 @@ function formatarData(isoStr) {
   return isoStr
 }
 
-export default function PaginaDetalhesProjeto({ identificador }) {
+export default function PaginaProjeto({ identificador }) {
   const [estado, mudarEstado] = useState('carregando')
   const [projeto, mudarProjeto] = useState(null)
   const [documentos, mudarDocumentos] = useState([])

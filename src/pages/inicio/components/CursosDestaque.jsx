@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
-import CartaoCurso from '@/shared/components/CartaoCurso.jsx'
-import Ligacao from '@/shared/components/Ligacao.jsx'
+import CardCurso from '@/shared/components/CardCurso.jsx'
+import Link from '@/shared/components/Link.jsx'
 
-export default function CursosEmDestaque() {
+export default function CursosDestaque() {
   const [cursos, mudarCursos] = useState([])
   const [estado, mudarEstado] = useState('carregando')
 
@@ -27,7 +27,7 @@ export default function CursosEmDestaque() {
           <h2 id="titulo-cursos">Cursos disponíveis</h2>
           <p>Conheça a estrutura e as possibilidades de cada formação.</p>
         </div>
-        <Ligacao destino="#cursos">Ver todos os cursos</Ligacao>
+        <Link destino="#cursos">Ver todos os cursos</Link>
       </div>
       {estado === 'carregando' && <p role="status">Carregando cursos…</p>}
       {estado === 'erro' && (
@@ -39,7 +39,7 @@ export default function CursosEmDestaque() {
         (cursos.length ? (
           <div className="grade-cursos">
             {cursos.map((curso) => (
-              <CartaoCurso key={curso.identificador} curso={curso} />
+              <CardCurso key={curso.identificador} curso={curso} />
             ))}
           </div>
         ) : (

@@ -3,7 +3,7 @@ import Icone from '@/shared/components/Icone.jsx'
 import BuscaCursos from './components/BuscaCursos.jsx'
 import FiltrosCursos from './components/FiltrosCursos.jsx'
 import FiltrosAtivos from './components/FiltrosAtivos.jsx'
-import CartaoCatalogo from './components/CartaoCatalogo.jsx'
+import CardCatalogo from './components/CardCatalogo.jsx'
 import CarregamentoCatalogo from './components/CarregamentoCatalogo.jsx'
 import CatalogoVazio from './components/CatalogoVazio.jsx'
 import ErroCatalogo from './components/ErroCatalogo.jsx'
@@ -225,7 +225,7 @@ export default function PaginaCursos() {
             (resultados.length ? (
               <div className="grade-catalogo">
                 {resultados.map((curso) => (
-                  <CartaoCatalogo curso={curso} key={curso.identificador} />
+                  <CardCatalogo curso={curso} key={curso.identificador} />
                 ))}
               </div>
             ) : (

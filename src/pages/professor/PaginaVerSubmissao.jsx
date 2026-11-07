@@ -61,7 +61,7 @@ function linhasParaAutores(texto) {
     .filter((autor) => autor.nome)
 }
 
-export default function PaginaDetalhesSubmissao({
+export default function PaginaVerSubmissao({
   item,
   tipoUsuario,
   usuario,

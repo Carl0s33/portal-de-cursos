@@ -10,7 +10,7 @@ import './detalhes-curso.css'
 
 const abasValidas = ['visao-geral', 'grade-curricular']
 
-export default function PaginaDetalhesCurso({ identificador, aba = 'visao-geral' }) {
+export default function PaginaCurso({ identificador, aba = 'visao-geral' }) {
   const [consulta, mudarConsulta] = useState({ estado: 'carregando', curso: null, erro: null })
   const [tentativa, mudarTentativa] = useState(0)
   const selecionada = abasValidas.includes(aba) ? aba : 'visao-geral'

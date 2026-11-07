@@ -1,5 +1,5 @@
 import EstadoVazio from '@/shared/components/EstadoVazio.jsx'
-import CartaoCatalogo from './CartaoCatalogo.jsx'
+import CardCatalogo from './CardCatalogo.jsx'
 import './estados-catalogo.css'
 
 export default function CatalogoVazio({ limpar, cursos }) {
@@ -17,7 +17,7 @@ export default function CatalogoVazio({ limpar, cursos }) {
           <p>Conheça outras possibilidades de formação.</p>
           <div className="grade-catalogo">
             {cursos.slice(0, 2).map((curso) => (
-              <CartaoCatalogo key={curso.identificador} curso={curso} />
+              <CardCatalogo key={curso.identificador} curso={curso} />
             ))}
           </div>
         </section>

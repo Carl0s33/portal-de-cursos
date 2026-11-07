@@ -1,7 +1,7 @@
 import Icone from '@/shared/components/Icone.jsx'
-import './apresentacao-inicial.css'
+import './capa.css'
 
-export default function ApresentacaoInicial() {
+export default function Capa() {
   return (
     <section
       id="inicio"

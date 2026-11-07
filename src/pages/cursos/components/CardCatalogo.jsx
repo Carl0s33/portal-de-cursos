@@ -1,7 +1,7 @@
 import Icone from '@/shared/components/Icone.jsx'
 import './cartao-catalogo.css'
 
-export default function CartaoCatalogo({ curso }) {
+export default function CardCatalogo({ curso }) {
   const informacoes = [
     ['Duração', curso.duracao, 'duracao-cursos'],
     ['Modalidade', curso.modalidade, 'modalidade-cursos'],

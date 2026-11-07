@@ -5,8 +5,8 @@ import Cabecalho from '@/shared/components/Cabecalho.jsx'
 import Rodape from '@/shared/components/Rodape.jsx'
 import PaginaInicial from '@/pages/inicio/PaginaInicial.jsx'
 import PaginaCursos from '@/pages/cursos/PaginaCursos.jsx'
-import PaginaDetalhesCurso from '@/pages/detalhes-curso/PaginaDetalhesCurso.jsx'
-import PaginaDetalhesProjeto from '@/pages/projetos/PaginaDetalhesProjeto.jsx'
+import PaginaCurso from '@/pages/curso/PaginaCurso.jsx'
+import PaginaProjeto from '@/pages/projetos/PaginaProjeto.jsx'
 import PaginaPerfilProfessor from '@/pages/perfil/PaginaPerfilProfessor.jsx'
 import PaginaPerfilAluno from '@/pages/perfil/PaginaPerfilAluno.jsx'
 import PaginaProjetos from '@/pages/projetos/PaginaProjetos.jsx'
@@ -21,7 +21,7 @@ import PaginaAdministracao from '../pages/administracao/PaginaAdministracao.jsx'
 import PaginaCoordenacao from '../pages/coordenacao/PaginaCoordenacao.jsx'
 import PaginaCadastroAluno from '@/pages/cadastro-aluno/PaginaCadastroAluno.jsx'
 import PaginaPainelAluno from '@/pages/painel-aluno/PaginaPainelAluno.jsx'
-import PaginaDetalhesSubmissao from '@/pages/professor/PaginaDetalhesSubmissao.jsx'
+import PaginaVerSubmissao from '@/pages/professor/PaginaVerSubmissao.jsx'
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
 import { atualizarStatusProjeto, excluirProjeto } from '@/api/projetos.js'
@@ -71,7 +71,7 @@ function lerTema() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro'
 }
 
-export default function Aplicacao() {
+export default function App() {
   const [sessao, mudarSessao] = useState(() => {
     try {
       const salva = JSON.parse(sessionStorage.getItem('portal-cursos-sessao') || 'null')
@@ -560,7 +560,7 @@ export default function Aplicacao() {
             }))}
           />
         ) : identificadorSubmissao ? (
-          <PaginaDetalhesSubmissao
+          <PaginaVerSubmissao
             key={identificadorSubmissao}
             item={listaSubmissoes.find((item) => item.identificador === identificadorSubmissao)}
             tipoUsuario={sessao.tipoUsuario}
@@ -720,7 +720,7 @@ export default function Aplicacao() {
       {pagina === 'cursos' && <PaginaCursos />}
       {pagina === 'projetos' && <PaginaProjetos />}
       {pagina === 'detalhes-projeto' && (
-        <PaginaDetalhesProjeto key={rota.split('/')[1]} identificador={rota.split('/')[1]} />
+        <PaginaProjeto key={rota.split('/')[1]} identificador={rota.split('/')[1]} />
       )}
       {pagina === 'perfil-professor' && (
         <PaginaPerfilProfessor key={rota.split('/')[1]} idProfessor={rota.split('/')[1]} />
@@ -729,7 +729,7 @@ export default function Aplicacao() {
         <PaginaPerfilAluno key={rota.split('/')[1]} idAluno={rota.split('/')[1]} />
       )}
       {pagina === 'detalhes-curso' && (
-        <PaginaDetalhesCurso key={identificador} identificador={identificador} aba={aba} />
+        <PaginaCurso key={identificador} identificador={identificador} aba={aba} />
       )}
       {pagina === 'submissao' && (
         <PaginaSubmissao

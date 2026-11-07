@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export default function CountUp({ to, duration = 900, suffix = '' }) {
+export default function Contador({ to, duration = 900, suffix = '' }) {
   const [n, setN] = useState(0)
 
   useEffect(() => {

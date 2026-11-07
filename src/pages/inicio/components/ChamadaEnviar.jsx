@@ -1,6 +1,6 @@
 import Icone from '@/shared/components/Icone.jsx'
 
-export default function ConviteSubmissao() {
+export default function ChamadaEnviar() {
   return (
     <section className="convite" aria-labelledby="titulo-convite">
       <div>

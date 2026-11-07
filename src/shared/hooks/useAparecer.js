@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-export function useReveal() {
+export function useAparecer() {
   const ref = useRef(null)
 
   useEffect(() => {

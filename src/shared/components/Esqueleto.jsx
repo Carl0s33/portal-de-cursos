@@ -1,6 +1,6 @@
-import './skeleton.css'
+import './esqueleto.css'
 
-export default function Skeleton({
+export default function Esqueleto({
   largura = '100%',
   altura = '20px',
   raio = '10px',
