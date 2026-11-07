@@ -7,7 +7,7 @@ import CartaoCatalogo from './components/CartaoCatalogo.jsx'
 import CarregamentoCatalogo from './components/CarregamentoCatalogo.jsx'
 import CatalogoVazio from './components/CatalogoVazio.jsx'
 import ErroCatalogo from './components/ErroCatalogo.jsx'
-import { consultarCursos } from './services/consultarCursos.js'
+import { buscarCursos } from './services/buscarCursos.js'
 import './cursos.css'
 
 const filtrosIniciais = {
@@ -72,7 +72,7 @@ export default function PaginaCursos() {
 
   useEffect(() => {
     const controle = new AbortController()
-    consultarCursos(controle.signal)
+    buscarCursos(controle.signal)
       .then((cursos) =>
         mudarConsulta({
           estado: 'pronto',

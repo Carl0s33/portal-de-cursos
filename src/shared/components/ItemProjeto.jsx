@@ -1,7 +1,7 @@
 import Icone from './Icone.jsx'
 import '@/shared/styles/projetos.css'
 
-function obterModificadorTipo(tipo) {
+function pegarModificadorTipo(tipo) {
   const normalizado = (tipo || '')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -14,7 +14,7 @@ function obterModificadorTipo(tipo) {
   return 'tcc'
 }
 
-function obterIconeTipo(modificador) {
+function pegarIconeTipo(modificador) {
   switch (modificador) {
     case 'integrador':
       return 'projetos-cursos'
@@ -29,11 +29,11 @@ function obterIconeTipo(modificador) {
 }
 
 export default function ItemProjeto({ projeto }) {
-  const modificador = obterModificadorTipo(projeto.tipo)
+  const modificador = pegarModificadorTipo(projeto.tipo)
   const orientador = projeto.orientador || 'Não informado'
   const cursoBruto = (projeto.curso || '').replace(/^Curso\s*#?/i, '').trim()
   const curso = /^#?\d+$/.test(cursoBruto) ? '' : cursoBruto
-  const iconeTipo = obterIconeTipo(modificador)
+  const iconeTipo = pegarIconeTipo(modificador)
 
   const informacoes = [
     ['Tipo', projeto.tipo || 'TCC', iconeTipo],

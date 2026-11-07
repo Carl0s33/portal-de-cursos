@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import FiltrosProjetos from './components/FiltrosProjetos.jsx'
-import { consultarProjetosPublicados } from './services/consultarProjetosPublicados.js'
+import { buscarProjetosPublicados } from './services/buscarProjetosPublicados.js'
 import './projetos.css'
 
 export default function PaginaProjetos() {
@@ -16,7 +16,7 @@ export default function PaginaProjetos() {
 
   useEffect(() => {
     const controle = new AbortController()
-    consultarProjetosPublicados(controle.signal)
+    buscarProjetosPublicados(controle.signal)
       .then((registros) => {
         if (!controle.signal.aborted) mudarPublicados(registros)
       })

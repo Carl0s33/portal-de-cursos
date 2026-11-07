@@ -3,7 +3,7 @@ import Indicadores from '@/shared/components/Indicadores.jsx'
 import { useCallback, useEffect, useState } from 'react'
 import { enderecoPrivado } from '@/app/rotas.js'
 import Icone from '@/shared/components/Icone.jsx'
-import { consultarResumoAdministracao } from '../services/consultarResumoAdministracao.js'
+import { buscarResumoAdmin } from '../services/buscarResumoAdmin.js'
 import '../estilos/indicadores.css'
 import '../estilos/registros.css'
 import '../estilos/painel.css'
@@ -18,7 +18,7 @@ export default function PainelAdministracao({ token }) {
       mudarCarregando(true)
       mudarErro('')
       try {
-        const dados = await consultarResumoAdministracao(token, sinal)
+        const dados = await buscarResumoAdmin(token, sinal)
         if (!sinal?.aborted) mudarResumo(dados)
       } catch (falha) {
         if (!sinal?.aborted)

@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
-import {
-  obterProjetoPorId,
-  listarDocumentosProjeto,
-  obterUrlDownloadDocumento,
-} from '@/api/projetos.js'
+import { buscarProjetoPorId, listarDocumentosProjeto, pegarUrlDownload } from '@/api/projetos.js'
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
 import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'
@@ -73,7 +69,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
       mudarEstado('carregando')
       try {
         const [dadosProjeto, listaCursos, listaProfessores] = await Promise.all([
-          obterProjetoPorId(identificador, null, controle.signal).catch(() => null),
+          buscarProjetoPorId(identificador, null, controle.signal).catch(() => null),
           listarCursos(controle.signal).catch(() => []),
           listarProfessores(null, {}, controle.signal).catch(() => []),
         ])
@@ -350,7 +346,7 @@ export default function PaginaDetalhesProjeto({ identificador }) {
                   const urlDownload =
                     doc.localizacao && doc.localizacao.startsWith('http')
                       ? doc.localizacao
-                      : obterUrlDownloadDocumento(projeto.id, doc.id)
+                      : pegarUrlDownload(projeto.id, doc.id)
                   const ehLinkExterno =
                     doc.tipoDocumento === 'LINK_MEMORIA' ||
                     (doc.localizacao && doc.localizacao.startsWith('http'))

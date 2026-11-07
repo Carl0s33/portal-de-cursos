@@ -4,7 +4,7 @@ import '@/shared/styles/painel-informativo.css'
 import './professor.css'
 import { enderecoPrivado, navegar } from '../../app/rotas.js'
 import ConfirmacaoGestao from '@/pages/administracao/components/ConfirmacaoGestao.jsx'
-import { baixarDocumentoBlob, obterUrlDownloadDocumento } from '@/api/projetos.js'
+import { baixarDocumentoBlob, pegarUrlDownload } from '@/api/projetos.js'
 
 const tiposDeProjeto = ['TCC', 'Projeto Integrador', 'Pesquisa', 'Extensão']
 
@@ -326,7 +326,7 @@ export default function PaginaDetalhesSubmissao({
                     const urlDestino = ehUrl
                       ? localizacao
                       : item?.id && documento?.id
-                        ? obterUrlDownloadDocumento(item.id, documento.id)
+                        ? pegarUrlDownload(item.id, documento.id)
                         : null
 
                     async function manipularCliqueDocumento(e) {

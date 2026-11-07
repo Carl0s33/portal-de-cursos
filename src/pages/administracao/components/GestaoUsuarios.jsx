@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { consultarUsuarios } from '@/api/usuarios.js'
+import { listarUsuarios } from '@/api/usuarios.js'
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '../services/gerenciarProfessores.js'
 import '../estilos/gestao.css'
@@ -25,7 +25,7 @@ export default function GestaoUsuarios({ token }) {
   useEffect(() => {
     const controle = new AbortController()
     Promise.all([
-      consultarUsuarios(token, controle.signal),
+      listarUsuarios(token, controle.signal),
       listarProfessores(token, controle.signal).catch(() => []),
     ])
       .then(([itens, professores]) => {

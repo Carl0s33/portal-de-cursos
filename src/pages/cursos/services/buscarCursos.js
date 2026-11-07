@@ -1,7 +1,7 @@
 import { listarCursos } from '@/api/cursos.js'
 
-export async function consultarCursos(sinal) {
+export async function buscarCursos(sinal) {
   return listarCursos(sinal)
 }
 
-export default consultarCursos
+export default buscarCursos

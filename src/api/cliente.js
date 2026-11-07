@@ -2,7 +2,7 @@ export const VERSAO_PADRAO_API = ''
 
 let versaoAtiva = import.meta.env.VITE_API_VERSAO || VERSAO_PADRAO_API
 
-export function obterVersaoApi() {
+export function pegarVersaoApi() {
   return versaoAtiva
 }
 
@@ -25,14 +25,14 @@ export class ErroApi extends Error {
   }
 }
 
-export function obterBaseApi(modulo = 'usuarios', versao = versaoAtiva) {
+export function pegarBaseApi(modulo = 'usuarios', versao = versaoAtiva) {
   const basePortal = import.meta.env.BASE_URL || '/'
   const baseLimpa = basePortal.endsWith('/') ? basePortal : `${basePortal}/`
   const segmentoVersao = versao ? `${versao}/` : ''
   return `${window.location.origin}${baseLimpa}api/${segmentoVersao}${modulo}`
 }
 
-export async function requisitarApi(caminhoCompletoOuRelativo, opcoes = {}) {
+export async function chamarApi(caminhoCompletoOuRelativo, opcoes = {}) {
   const {
     metodo = 'GET',
     corpo = null,

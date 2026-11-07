@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import Ligacao from '@/shared/components/Ligacao.jsx'
-import { consultarProjetosEmDestaque } from '../services/consultarProjetosEmDestaque.js'
+import { buscarProjetosDestaque } from '../services/buscarProjetosDestaque.js'
 
 export default function ProjetosEmDestaque() {
   const [projetos, mudarProjetos] = useState([])
@@ -9,7 +9,7 @@ export default function ProjetosEmDestaque() {
 
   useEffect(() => {
     const controle = new AbortController()
-    consultarProjetosEmDestaque(controle.signal)
+    buscarProjetosDestaque(controle.signal)
       .then((publicados) => {
         if (controle.signal.aborted) return
         mudarProjetos(publicados)

@@ -1,8 +1,8 @@
-import { autenticar } from '@/api/autenticacao.js'
+import { fazerLogin } from '@/api/autenticacao.js'
 import { identificarAluno, identificarConta } from '@/api/usuarios.js'
 
-export async function autenticarConta(identificacao, senha, sinal) {
-  const sessaoAutenticada = await autenticar(identificacao, senha, sinal)
+export async function entrarNaConta(identificacao, senha, sinal) {
+  const sessaoAutenticada = await fazerLogin(identificacao, senha, sinal)
   const conta =
     sessaoAutenticada.tipoUsuario === 'ALUNO'
       ? await identificarAluno(sessaoAutenticada.token, identificacao, sinal)
@@ -15,4 +15,4 @@ export async function autenticarConta(identificacao, senha, sinal) {
   }
 }
 
-export default autenticarConta
+export default entrarNaConta

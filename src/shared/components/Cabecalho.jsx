@@ -40,7 +40,7 @@ function ativoSe(condicao) {
   return condicao ? 'page' : undefined
 }
 
-function obterIniciais(nome = '') {
+function pegarIniciais(nome = '') {
   return nome
     .split(' ')
     .filter(Boolean)
@@ -86,7 +86,7 @@ function Avatar({ usuario }) {
   if (usuario?.nome) {
     return (
       <span className="cabecalho__iniciais" aria-hidden="true">
-        {obterIniciais(usuario.nome)}
+        {pegarIniciais(usuario.nome)}
       </span>
     )
   }

@@ -1,6 +1,6 @@
 const CHAVES_LOCAIS = ['portal-cursos-submissoes', 'portal-cursos-decisoes']
 
-export function limparDadosLocais() {
+export function limparLocal() {
   try {
     CHAVES_LOCAIS.forEach((chave) => localStorage.removeItem(chave))
     sessionStorage.removeItem('portal-cursos-sessao')

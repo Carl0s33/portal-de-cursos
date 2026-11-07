@@ -4,7 +4,7 @@ import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import { listarProfessores } from '@/api/professores.js'
 import { listarCursos } from '@/api/cursos.js'
 import { listarCoordenadores } from '@/api/coordenadores.js'
-import { consultarProjetosPublicados } from '@/pages/projetos/services/consultarProjetosPublicados.js'
+import { buscarProjetosPublicados } from '@/pages/projetos/services/buscarProjetosPublicados.js'
 import './perfil-publico.css'
 
 export default function PaginaPerfilProfessor({ idProfessor }) {
@@ -24,7 +24,7 @@ export default function PaginaPerfilProfessor({ idProfessor }) {
         const [professores, cursos, projetos, coordenadores] = await Promise.all([
           listarProfessores(null, {}, controle.signal).catch(() => []),
           listarCursos(controle.signal).catch(() => []),
-          consultarProjetosPublicados(controle.signal).catch(() => []),
+          buscarProjetosPublicados(controle.signal).catch(() => []),
           listarCoordenadores(null, {}, controle.signal).catch(() => []),
         ])
 

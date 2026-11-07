@@ -26,9 +26,9 @@ import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
 import { atualizarStatusProjeto, excluirProjeto } from '@/api/projetos.js'
 import { listarSubmissoes } from '@/api/submissoes.js'
-import { limparDadosLocais } from './limparDadosLocais.js'
+import { limparLocal } from './limparLocal.js'
 
-function identificarPagina(rota) {
+function descobrirPagina(rota) {
   if (rota.startsWith('projeto/')) return 'detalhes-projeto'
   if (rota.startsWith('professor/perfil-publico/') || rota.startsWith('professor/')) {
     if (
@@ -86,7 +86,7 @@ export default function Aplicacao() {
   const [sessaoExpirada, mudarSessaoExpirada] = useState(false)
   const [tema, mudarTema] = useState(lerTema)
   const [rota, mudarRota] = useState(lerRota)
-  const [pagina, mudarPagina] = useState(() => identificarPagina(lerRota()) || 'inicio')
+  const [pagina, mudarPagina] = useState(() => descobrirPagina(lerRota()) || 'inicio')
   const [rotaCurso, mudarRotaCurso] = useState(() =>
     window.location.hash.startsWith('#curso/') ? window.location.hash.slice(1) : '',
   )
@@ -107,10 +107,10 @@ export default function Aplicacao() {
     }
   }, [tema])
   useEffect(() => {
-    const acompanharRota = () => {
+    const aoMudarRota = () => {
       const destino = lerRota()
       mudarRota(destino)
-      const proximaPagina = identificarPagina(destino)
+      const proximaPagina = descobrirPagina(destino)
       if (proximaPagina) {
         mudarPagina(proximaPagina)
         if (destino.startsWith('curso/')) mudarRotaCurso(destino)
@@ -118,7 +118,7 @@ export default function Aplicacao() {
           window.scrollTo({ top: 0, behavior: 'instant' })
       }
     }
-    function acompanharLink(evento) {
+    function aoClicarLink(evento) {
       const link = evento.target.closest('a')
       if (
         !link ||
@@ -152,19 +152,19 @@ export default function Aplicacao() {
           'coordenacao',
           'aluno-cadastro',
           'aluno-painel',
-        ].includes(identificarPagina(lerRota())) && url.pathname === basePortal
+        ].includes(descobrirPagina(lerRota())) && url.pathname === basePortal
       if (privado || sairDoPainel) {
         evento.preventDefault()
         navegar(url.pathname + url.search + url.hash)
       }
     }
-    window.addEventListener('hashchange', acompanharRota)
-    window.addEventListener('popstate', acompanharRota)
-    document.addEventListener('click', acompanharLink)
+    window.addEventListener('hashchange', aoMudarRota)
+    window.addEventListener('popstate', aoMudarRota)
+    document.addEventListener('click', aoClicarLink)
     return () => {
-      window.removeEventListener('hashchange', acompanharRota)
-      window.removeEventListener('popstate', acompanharRota)
-      document.removeEventListener('click', acompanharLink)
+      window.removeEventListener('hashchange', aoMudarRota)
+      window.removeEventListener('popstate', aoMudarRota)
+      document.removeEventListener('click', aoClicarLink)
     }
   }, [])
   useEffect(() => {
@@ -192,7 +192,7 @@ export default function Aplicacao() {
       if (Date.now() >= sessao.expiraEm) {
         mudarSessao(null)
         mudarSessaoExpirada(true)
-        limparDadosLocais()
+        limparLocal()
       }
     }
     const temporizador = window.setTimeout(
@@ -343,7 +343,7 @@ export default function Aplicacao() {
         if (falha?.status === 401) {
           mudarSessao(null)
           mudarSessaoExpirada(true)
-          limparDadosLocais()
+          limparLocal()
         }
       }
     }
@@ -367,7 +367,7 @@ export default function Aplicacao() {
     mudarDecisoes({})
     mudarListaSubmissoes([])
     mudarRascunhos({ cursos: [], projetos: [], disciplinas: [] })
-    limparDadosLocais()
+    limparLocal()
     navegar(enderecoPrivado('login'), true)
   }
   useEffect(() => {

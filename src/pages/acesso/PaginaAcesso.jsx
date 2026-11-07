@@ -1,6 +1,6 @@
 import PainelInstitucional from '@/shared/components/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
-import { autenticarConta } from './services/autenticarConta.js'
+import { entrarNaConta } from './services/entrarNaConta.js'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
 import logoPortal from '@/assets/marca/logo-portal.png'
 import Icone from '@/shared/components/Icone.jsx'
@@ -101,7 +101,7 @@ export default function PaginaAcesso({
     let concluido = false
 
     try {
-      const sessao = await autenticarConta(identificacao.trim(), senha, controle.signal)
+      const sessao = await entrarNaConta(identificacao.trim(), senha, controle.signal)
       concluido = true
       mudarSenha('')
       aoEntrar(sessao)

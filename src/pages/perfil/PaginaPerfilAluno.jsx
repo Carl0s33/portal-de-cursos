@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
 import ItemProjeto from '@/shared/components/ItemProjeto.jsx'
 import { listarCursos } from '@/api/cursos.js'
-import { consultarProjetosPublicados } from '@/pages/projetos/services/consultarProjetosPublicados.js'
+import { buscarProjetosPublicados } from '@/pages/projetos/services/buscarProjetosPublicados.js'
 import './perfil-publico.css'
 
 export default function PaginaPerfilAluno({ idAluno }) {
@@ -20,7 +20,7 @@ export default function PaginaPerfilAluno({ idAluno }) {
       try {
         const [cursos, projetos] = await Promise.all([
           listarCursos(controle.signal).catch(() => []),
-          consultarProjetosPublicados(controle.signal).catch(() => []),
+          buscarProjetosPublicados(controle.signal).catch(() => []),
         ])
 
         if (!ativo) return

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Icone from '@/shared/components/Icone.jsx'
-import { consultarDetalhesCurso } from './services/consultarDetalhesCurso.js'
+import { buscarDetalhesCurso } from './services/buscarDetalhesCurso.js'
 import ResumoCurso from './components/ResumoCurso.jsx'
 import AbasCurso from './components/AbasCurso.jsx'
 import VisaoGeral from './components/VisaoGeral.jsx'
@@ -17,7 +17,7 @@ export default function PaginaDetalhesCurso({ identificador, aba = 'visao-geral'
 
   useEffect(() => {
     const controle = new AbortController()
-    consultarDetalhesCurso(identificador, controle.signal)
+    buscarDetalhesCurso(identificador, controle.signal)
       .then((curso) => mudarConsulta({ estado: 'pronto', curso, erro: null }))
       .catch((erro) => {
         if (erro.name !== 'AbortError') mudarConsulta({ estado: 'erro', curso: null, erro })

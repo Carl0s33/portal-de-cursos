@@ -22,7 +22,7 @@ function ehProjetoValido(p) {
   return true
 }
 
-export async function consultarProjetosPublicados(sinal) {
+export async function buscarProjetosPublicados(sinal) {
   try {
     localStorage.removeItem('portal-cursos-publicados-cache')
   } catch {

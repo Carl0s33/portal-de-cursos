@@ -1,13 +1,13 @@
-import { obterEnderecoRecurso } from './enderecos.js'
-import { ErroApi, requisitarApi } from './cliente.js'
+import { pegarEnderecoRecurso } from './enderecos.js'
+import { ErroApi, chamarApi } from './cliente.js'
 
 export const VERSAO = ''
 
-const obterUrlBaseProjetos = () => obterEnderecoRecurso('projetos')
+const pegarUrlBaseProjetos = () => pegarEnderecoRecurso('projetos')
 
 export async function listarSubmissoes(token = null, sinal = null) {
-  const endpoint = obterUrlBaseProjetos()
-  const dados = await requisitarApi(endpoint, {
+  const endpoint = pegarUrlBaseProjetos()
+  const dados = await chamarApi(endpoint, {
     metodo: 'GET',
     token,
     sinal,
@@ -22,9 +22,9 @@ export async function listarSubmissoes(token = null, sinal = null) {
   return dados
 }
 
-export async function obterSubmissaoPorId(id, token = null, sinal = null) {
-  const endpoint = obterUrlBaseProjetos()
-  return requisitarApi(`${endpoint}/${encodeURIComponent(id)}`, {
+export async function buscarSubmissaoPorId(id, token = null, sinal = null) {
+  const endpoint = pegarUrlBaseProjetos()
+  return chamarApi(`${endpoint}/${encodeURIComponent(id)}`, {
     metodo: 'GET',
     token,
     sinal,
@@ -34,7 +34,7 @@ export async function obterSubmissaoPorId(id, token = null, sinal = null) {
 export const moduloSubmissoes = {
   versao: VERSAO,
   listar: listarSubmissoes,
-  obterPorId: obterSubmissaoPorId,
+  obterPorId: buscarSubmissaoPorId,
 }
 
 export default moduloSubmissoes
