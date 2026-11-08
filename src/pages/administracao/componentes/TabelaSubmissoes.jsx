@@ -39,15 +39,29 @@ export default function TabelaSubmissoes({
         <tbody>
           {itens.map((item) => {
             const status = item.status || 'Aguardando Orientador'
-            const classeStatus = `status status--${status.toLowerCase().replace(/\s+/g, '-')}`
+            const chaveStatus =
+              {
+                'Aprovado pelo orientador': 'aprovado-pelo-orientador',
+                'Aguardando Coordenação': 'aguardando-coordenação',
+                'Recusado pelo orientador': 'recusado-pelo-orientador',
+                'Publicação recusada': 'publicação-recusada',
+                'Precisa de revisão': 'em-análise',
+              }[status] || status.toLowerCase().replace(/\s+/g, '-')
+            const classeStatus = `status status--${chaveStatus}`
             const rotuloStatus =
               status === 'Aguardando Orientador'
                 ? 'Aguardando orientador'
-                : status === 'Em análise'
-                  ? 'Em análise na coordenação'
-                  : status === 'Aprovado'
-                    ? 'Aprovado e publicado'
-                    : status
+                : status === 'Aprovado pelo orientador'
+                  ? 'Aprovado pelo orientador'
+                  : status === 'Aguardando Coordenação'
+                    ? 'Aguardando coordenação'
+                    : status === 'Aprovado'
+                      ? 'Aprovado e publicado'
+                      : status === 'Recusado pelo orientador'
+                        ? 'Recusado pelo orientador'
+                        : status === 'Publicação recusada'
+                          ? 'Publicação recusada'
+                          : status
             return (
               <tr key={item.identificador}>
                 <th scope="row">
@@ -75,10 +89,14 @@ export default function TabelaSubmissoes({
                 {baseDetalhes && (
                   <td data-label="Ação">
                     <a
-                      className="tabela-submissoes__abrir"
+                      className={
+                        status === 'Aguardando Coordenação'
+                          ? 'tabela-submissoes__abrir tabela-submissoes__avaliar'
+                          : 'tabela-submissoes__abrir'
+                      }
                       href={`${baseDetalhes}/${encodeURIComponent(item.identificador)}`}
                     >
-                      {status === 'Em análise' ? 'Avaliar' : 'Ver detalhes'}
+                      {status === 'Aguardando Coordenação' ? 'Avaliar' : 'Ver detalhes'}
                     </a>
                   </td>
                 )}

@@ -31,7 +31,7 @@ export default function PaginaAdministracao({
   if (secao === 'usuarios')
     return (
       <main id="conteudo" className="pagina-painel pagina-painel--administracao">
-        <GestaoUsuarios token={sessao.token} />
+        <GestaoUsuarios token={sessao.token} emailAtual={sessao.usuario?.email} />
       </main>
     )
   if (secao === 'professores')

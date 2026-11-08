@@ -1,13 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
-import { listarUsuarios } from '@/api/usuarios.js'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { excluirUsuario, listarUsuarios } from '@/api/usuarios.js'
 import { listarCursos } from '@/api/cursos.js'
-import { listarProfessores } from '../servicos/gerenciarProfessores.js'
+import { excluirAluno, listarAlunos } from '@/api/alunos.js'
+import { excluirCoordenador, listarCoordenadores } from '@/api/coordenadores.js'
+import { excluirProfessor, listarProfessores } from '../servicos/gerenciarProfessores.js'
 import '../estilos/gestao.css'
 import '../estilos/usuarios.css'
 import '../estilos/geral.css'
 
-export default function GestaoUsuarios({ token }) {
+export default function GestaoUsuarios({ token, emailAtual }) {
   const [consulta, mudarConsulta] = useState({ estado: 'carregando', itens: [], erro: '' })
+  const dialogoExclusao = useRef(null)
+  const [contaSelecionada, mudarContaSelecionada] = useState(null)
+  const [excluindo, mudarExcluindo] = useState(false)
+  const [erroExclusao, mudarErroExclusao] = useState('')
   const [busca, mudarBusca] = useState('')
   const [papel, mudarPapel] = useState('todos')
   const [curso, mudarCurso] = useState('todos')
@@ -80,6 +86,56 @@ export default function GestaoUsuarios({ token }) {
     tipo ||
     'Não informado'
 
+  useEffect(() => {
+    const dialogo = dialogoExclusao.current
+    if (contaSelecionada && !dialogo.open) dialogo.showModal()
+    if (!contaSelecionada && dialogo.open) dialogo.close()
+  }, [contaSelecionada])
+
+  async function aoExcluirConta(item) {
+    if (
+      excluindo ||
+      !item.id ||
+      !item.email ||
+      item.email?.toLowerCase() === emailAtual?.toLowerCase()
+    )
+      return
+
+    mudarExcluindo(true)
+    mudarErroExclusao('')
+    const mesmoEmail = (email) => email?.toLowerCase() === item.email.toLowerCase()
+    try {
+      if (item.tipoUsuario === 'ALUNO') {
+        const alunos = await listarAlunos(token)
+        const aluno = alunos.find((registro) => registro.usuario?.id === item.id)
+        if (!aluno?.id) throw new Error('Cadastro de aluno não encontrado.')
+        await excluirAluno(token, aluno.id)
+      } else if (['PROFESSOR', 'COORDENADOR'].includes(item.tipoUsuario)) {
+        const [professores, coordenadores] = await Promise.all([
+          listarProfessores(token),
+          listarCoordenadores(token),
+        ])
+        const professor = professores.find((registro) => mesmoEmail(registro.email))
+        if (!professor?.id) throw new Error('Cadastro de professor não encontrado.')
+        const vinculo = coordenadores.find((registro) => registro.professor?.id === professor.id)
+        if (vinculo?.id) await excluirCoordenador(token, vinculo.id)
+        await excluirProfessor(token, professor.id)
+      } else if (item.tipoUsuario === 'ADMIN') {
+        await excluirUsuario(token, item.id)
+      } else {
+        throw new Error('O tipo desta conta não foi reconhecido.')
+      }
+      mudarContaSelecionada(null)
+      mudarConsulta((atual) => ({
+        ...atual,
+        itens: atual.itens.filter((conta) => conta.id !== item.id),
+      }))
+    } catch (falha) {
+      mudarErroExclusao(falha.message || 'Não foi possível excluir a conta.')
+    } finally {
+      mudarExcluindo(false)
+    }
+  }
   return (
     <>
       <header className="painel-titulo">
@@ -165,6 +221,7 @@ export default function GestaoUsuarios({ token }) {
                   <th scope="col">Papel</th>
                   <th scope="col">Curso</th>
                   {acessoDisponivel && <th scope="col">Acesso</th>}
+                  <th scope="col">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -216,6 +273,38 @@ export default function GestaoUsuarios({ token }) {
                           </td>
                         )
                       })()}
+                    <td>
+                      <button
+                        className="gestao-excluir usuario-excluir"
+                        type="button"
+                        disabled={
+                          excluindo ||
+                          !item.id ||
+                          !item.email ||
+                          item.email?.toLowerCase() === emailAtual?.toLowerCase()
+                        }
+                        aria-label={`Excluir conta de ${item.nome || item.email}`}
+                        onClick={() => {
+                          mudarErroExclusao('')
+                          mudarContaSelecionada(item)
+                        }}
+                      >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5m4-5v5" />
+                        </svg>
+                        Excluir conta
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -224,6 +313,45 @@ export default function GestaoUsuarios({ token }) {
           {!filtrados.length && <p className="painel-vazio">Nenhuma conta encontrada.</p>}
         </section>
       )}
+      <dialog
+        ref={dialogoExclusao}
+        className="usuario-dialogo-exclusao"
+        aria-labelledby="usuario-exclusao-titulo"
+        aria-describedby="usuario-exclusao-descricao"
+        onCancel={(evento) => {
+          evento.preventDefault()
+          if (!excluindo) mudarContaSelecionada(null)
+        }}
+      >
+        <h2 id="usuario-exclusao-titulo">Excluir conta?</h2>
+        <p id="usuario-exclusao-descricao">
+          A pessoa perderá o acesso ao portal. Essa ação é permanente.
+        </p>
+        <div className="usuario-dialogo-exclusao__conta">
+          <strong>{contaSelecionada?.nome || 'Conta do portal'}</strong>
+          <span>{contaSelecionada?.email}</span>
+        </div>
+        {erroExclusao && <p role="alert">{erroExclusao}</p>}
+        <div className="usuario-dialogo-exclusao__acoes">
+          <button
+            className="botao-secundario"
+            type="button"
+            autoFocus
+            disabled={excluindo}
+            onClick={() => mudarContaSelecionada(null)}
+          >
+            Cancelar
+          </button>
+          <button
+            className="gestao-excluir"
+            type="button"
+            disabled={excluindo}
+            onClick={() => aoExcluirConta(contaSelecionada)}
+          >
+            {excluindo ? 'Excluindo…' : 'Excluir conta'}
+          </button>
+        </div>
+      </dialog>
       <p className="gestao-nota">
         A lista reúne as contas cadastradas e os vínculos docentes disponíveis no serviço.
       </p>

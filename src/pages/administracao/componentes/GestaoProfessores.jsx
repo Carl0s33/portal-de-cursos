@@ -5,6 +5,7 @@ import {
   excluirProfessor,
   listarProfessores,
 } from '../servicos/gerenciarProfessores.js'
+import { cadastrarCoordenador } from '@/api/coordenadores.js'
 import { listarCursos } from '@/api/cursos.js'
 import FormularioProfessor from './FormularioProfessor.jsx'
 import ConfirmacaoGestao from './ConfirmacaoGestao.jsx'
@@ -57,7 +58,17 @@ export default function GestaoProfessores({ token, cursoId }) {
       const professor = await cadastrarProfessor(token, dados)
       mudarConsulta((atual) => ({ ...atual, dados: [...atual.dados, professor] }))
       mudarCriando(false)
-      mudarMensagem('Professor cadastrado.')
+      if (dados.usuario.tipoUsuario === 'COORDENADOR') {
+        try {
+          await cadastrarCoordenador(token, { professorId: professor.id, cursoId: dados.cursoId })
+        } catch (falha) {
+          mudarErro(`Professor cadastrado, mas o vínculo de coordenação falhou. ${falha.message}`)
+          return
+        }
+        mudarMensagem('Professor cadastrado e vinculado à coordenação do curso.')
+      } else {
+        mudarMensagem('Professor cadastrado.')
+      }
     } catch (falha) {
       mudarErro(falha.message)
     } finally {

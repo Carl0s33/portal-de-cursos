@@ -234,3 +234,45 @@
   border-color: transparent;
   background: transparent;
 }
+
+.coordenacao-registros.coordenacao-fila {
+  padding: var(--espaco-5);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-superficie);
+  background: var(--superficie);
+}
+
+.painel-estrutura--coordenacao .tabela tbody tr:hover {
+  background: color-mix(in srgb, var(--azul) 5%, var(--superficie));
+}
+
+.painel-estrutura--coordenacao .tabela-submissoes__avaliar {
+  display: inline-block;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--raio-botao);
+  background: var(--azul-suave);
+  color: var(--azul);
+  font-weight: 700;
+}
+
+.coordenacao-registros.coordenacao-lista {
+  background: var(--superficie);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-superficie);
+  overflow: hidden;
+}
+
+.coordenacao-lista > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-2) var(--espaco-4);
+  padding: var(--espaco-5);
+}
+
+.coordenacao-lista__total {
+  color: var(--texto);
+  font-size: var(--texto-sm);
+  font-variant-numeric: tabular-nums;
+}
