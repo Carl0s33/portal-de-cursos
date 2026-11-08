@@ -1,4 +1,4 @@
-import { ErroApi, obterBaseApi, requisitarApi } from './cliente.js'
+import { ErroApi, pegarBaseApi, chamarApi } from './cliente.js'
 
 export const VERSAO = ''
 
@@ -18,12 +18,12 @@ export async function listarProfessores(token, filtros = {}, sinal) {
     sinal = filtros
     filtros = {}
   }
-  const base = obterBaseApi('usuarios', VERSAO)
+  const base = pegarBaseApi('usuarios', VERSAO)
   const parametros = new URLSearchParams()
   if (filtros.nome?.trim()) parametros.set('nome', filtros.nome.trim())
   if (filtros.titulacao) parametros.set('titulacao', filtros.titulacao)
   const query = parametros.size ? `?${parametros}` : ''
-  const dados = await requisitarApi(`${base}/professores/buscar${query}`, {
+  const dados = await chamarApi(`${base}/professores/buscar${query}`, {
     metodo: 'GET',
     token,
     sinal,
@@ -36,9 +36,9 @@ export async function listarProfessores(token, filtros = {}, sinal) {
   return dados.map(formatarPerfilProfessor)
 }
 
-export async function obterProfessorPorId(token, id, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  return requisitarApi(`${base}/professores/${encodeURIComponent(id)}`, {
+export async function buscarProfessorPorId(token, id, sinal) {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/professores/${encodeURIComponent(id)}`, {
     metodo: 'GET',
     token,
     sinal,
@@ -46,8 +46,8 @@ export async function obterProfessorPorId(token, id, sinal) {
 }
 
 export async function cadastrarProfessor(token, dados, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  const resposta = await requisitarApi(`${base}/professores`, {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  const resposta = await chamarApi(`${base}/professores`, {
     metodo: 'POST',
     corpo: dados,
     token,
@@ -58,8 +58,8 @@ export async function cadastrarProfessor(token, dados, sinal) {
 }
 
 export async function excluirProfessor(token, id, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  return requisitarApi(`${base}/professores/${encodeURIComponent(id)}`, {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/professores/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,
@@ -67,8 +67,19 @@ export async function excluirProfessor(token, id, sinal) {
 }
 
 export async function atualizarProfessor(token, id, dados, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  const resposta = await requisitarApi(`${base}/professores/${encodeURIComponent(id)}`, {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  const resposta = await chamarApi(`${base}/professores/${encodeURIComponent(id)}`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+  return formatarPerfilProfessor(resposta)
+}
+
+export async function atualizarMeuPerfilProfessor(token, dados, sinal) {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  const resposta = await chamarApi(`${base}/professores/me`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -80,9 +91,10 @@ export async function atualizarProfessor(token, id, dados, sinal) {
 export const moduloProfessores = {
   versao: VERSAO,
   listar: listarProfessores,
-  obterPorId: obterProfessorPorId,
+  obterPorId: buscarProfessorPorId,
   cadastrar: cadastrarProfessor,
   atualizar: atualizarProfessor,
+  atualizarMeuPerfil: atualizarMeuPerfilProfessor,
   excluir: excluirProfessor,
   formatarPerfil: formatarPerfilProfessor,
 }

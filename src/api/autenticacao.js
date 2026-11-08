@@ -1,8 +1,8 @@
-import { ErroApi, obterBaseApi, requisitarApi } from './cliente.js'
+import { ErroApi, pegarBaseApi, chamarApi } from './cliente.js'
 
 export const VERSAO = ''
 
-export function decodificarPayloadJwt(token) {
+export function lerTokenJwt(token) {
   try {
     const partes = token.split('.')
     if (partes.length !== 3) return null
@@ -19,17 +19,17 @@ export function decodificarPayloadJwt(token) {
   }
 }
 
-export async function autenticar(email, senha, sinal) {
+export async function fazerLogin(email, senha, sinal) {
   if (!email || !senha) {
     throw new ErroApi('E-mail e senha são obrigatórios para autenticação.', { status: 400 })
   }
 
-  const base = obterBaseApi('usuarios', VERSAO)
+  const base = pegarBaseApi('usuarios', VERSAO)
   const url = `${base}/auth/login`
 
   let resposta
   try {
-    resposta = await requisitarApi(url, {
+    resposta = await chamarApi(url, {
       metodo: 'POST',
       corpo: { email, senha },
       sinal,
@@ -62,7 +62,7 @@ export async function autenticar(email, senha, sinal) {
   }
 
   // Extrai a role primariamente do claim "role" do JWT; fallback para o corpo da resposta
-  const payloadJwt = decodificarPayloadJwt(resposta.token)
+  const payloadJwt = lerTokenJwt(resposta.token)
   const roleJwt = payloadJwt?.role?.replace(/^ROLE_/, '')
   const roleFinal = roleJwt || resposta.role || resposta.tipoUsuario || 'ALUNO'
 
@@ -78,8 +78,8 @@ export async function autenticar(email, senha, sinal) {
 
 export const moduloAutenticacao = {
   versao: VERSAO,
-  autenticar,
-  decodificarPayloadJwt,
+  fazerLogin,
+  lerTokenJwt,
 }
 
 export default moduloAutenticacao

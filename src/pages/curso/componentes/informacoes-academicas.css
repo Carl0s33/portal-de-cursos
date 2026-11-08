@@ -1,0 +1,262 @@
+.informacoes-academicas {
+  display: grid;
+  gap: var(--espaco-5);
+  min-width: 0;
+}
+
+.informacoes-academicas__cabecalho h2 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-titulo-secao);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.informacoes-academicas__cabecalho p {
+  margin: var(--espaco-2) 0 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.informacoes-academicas__proporcao {
+  display: flex;
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--raio-pilula);
+  background: var(--suave);
+}
+
+.informacoes-academicas__proporcao span:first-child {
+  background: var(--azul);
+}
+
+.informacoes-academicas__proporcao span:last-child {
+  background: var(--borda);
+}
+
+.informacoes-academicas__explicacao {
+  margin: calc(-1 * var(--espaco-4)) 0 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  line-height: 1.5;
+}
+
+.informacoes-academicas__legenda {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espaco-3) var(--espaco-5);
+  margin: calc(-1 * var(--espaco-3)) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+}
+
+.informacoes-academicas__legenda li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-2);
+  min-width: 0;
+}
+
+.informacoes-academicas__legenda li > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+
+.informacoes-academicas__legenda strong {
+  color: var(--titulo);
+  font-size: var(--texto-sm);
+}
+
+.informacoes-academicas__marcador {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  margin-top: 3px;
+  border-radius: 2px;
+}
+
+.informacoes-academicas__marcador--obrigatoria {
+  background: var(--azul);
+}
+
+.informacoes-academicas__marcador--optativa {
+  background: var(--borda);
+}
+
+@media (max-width: 520px) {
+  .informacoes-academicas__legenda {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.informacoes-academicas__indice {
+  position: sticky;
+  z-index: 2;
+  top: calc(var(--cabecalho-altura) + var(--espaco-2));
+  display: flex;
+  gap: var(--espaco-4);
+  overflow-x: auto;
+  padding: var(--espaco-2) 0;
+  border-bottom: 1px solid var(--borda-suave);
+  background: var(--fundo);
+}
+
+.informacoes-academicas__indice a {
+  flex: none;
+  min-height: 40px;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+  text-decoration: none;
+}
+
+.informacoes-academicas__indice a:hover,
+.informacoes-academicas__indice a[aria-current='location'] {
+  color: var(--azul);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.informacoes-academicas__filtro-abas {
+  display: flex;
+  gap: var(--espaco-5);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda-suave);
+}
+
+.informacoes-academicas__filtro-abas button {
+  min-height: 44px;
+  padding: var(--espaco-2) 0;
+  border: 0;
+  box-shadow: inset 0 -3px transparent;
+  background: transparent;
+  color: var(--texto-suave);
+  font: inherit;
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.informacoes-academicas__filtro-abas button:hover,
+.informacoes-academicas__filtro-abas button[aria-pressed='true'] {
+  color: var(--azul);
+}
+
+.informacoes-academicas__filtro-abas button[aria-pressed='true'] {
+  box-shadow: inset 0 -3px var(--azul);
+}
+
+.informacoes-academicas__filtro-abas button span {
+  margin-left: var(--espaco-1);
+  color: var(--texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.informacoes-academicas__semestre {
+  min-width: 0;
+  padding-top: var(--espaco-5);
+  scroll-margin-top: calc(var(--cabecalho-altura) + 80px);
+}
+
+.informacoes-academicas__semestre h3 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  margin: 0 0 var(--espaco-3);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-xl);
+  font-weight: 500;
+}
+
+.informacoes-academicas__semestre h3 small {
+  color: var(--texto-suave);
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+}
+
+.informacoes-academicas__semestre h4 {
+  margin: var(--espaco-4) 0 var(--espaco-2);
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+}
+
+.informacoes-academicas__tabela-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border-top: 1px solid var(--borda-suave);
+}
+
+.informacoes-academicas__tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+}
+
+.informacoes-academicas__tabela th,
+.informacoes-academicas__tabela td {
+  padding: var(--espaco-3) var(--espaco-2);
+  border-bottom: 1px solid var(--borda-suave);
+  text-align: left;
+}
+
+.informacoes-academicas__tabela thead th {
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 650;
+}
+
+.informacoes-academicas__tabela tbody th {
+  color: var(--titulo);
+  font-weight: 600;
+}
+
+.informacoes-academicas__tabela .informacoes-academicas__codigo {
+  width: 18%;
+  color: var(--texto-suave);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--texto-xs);
+}
+
+.informacoes-academicas__tabela .informacoes-academicas__numero {
+  width: 20%;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.informacoes-academicas__vazio {
+  padding-block: var(--espaco-7);
+  border-top: 1px solid var(--borda-suave);
+}
+
+.informacoes-academicas__vazio h3 {
+  margin: 0 0 var(--espaco-2);
+  font-size: var(--texto-lg);
+}
+
+.informacoes-academicas__vazio p {
+  max-width: var(--largura-texto);
+  margin: 0 0 var(--espaco-4);
+  color: var(--texto-suave);
+}
+
+@media (max-width: 680px) {
+  .informacoes-academicas__indice {
+    position: static;
+  }
+
+  .informacoes-academicas__semestre h3 {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--espaco-1);
+  }
+
+  .informacoes-academicas__tabela {
+    min-width: 500px;
+  }
+}

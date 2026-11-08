@@ -126,6 +126,29 @@
   overflow-wrap: anywhere;
 }
 
+.pagina-detalhes-submissao__texto-projeto > :first-child {
+  margin-top: 0;
+}
+
+.pagina-detalhes-submissao__texto-projeto > :last-child {
+  margin-bottom: 0;
+}
+
+.pagina-detalhes-submissao__texto-projeto ul,
+.pagina-detalhes-submissao__texto-projeto ol {
+  margin: 0 0 14px;
+  padding-left: 1.5em;
+  color: var(--texto);
+  font-size: var(--texto-md);
+  line-height: 1.72;
+}
+
+.pagina-detalhes-submissao__texto-projeto blockquote {
+  margin: 0 0 14px;
+  padding-left: 14px;
+  border-left: 3px solid var(--azul);
+}
+
 .pagina-detalhes-submissao__lateral {
   gap: 28px;
   padding: 24px;

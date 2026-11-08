@@ -2,6 +2,30 @@
   display: grid;
   gap: 24px;
 }
+.coordenacao-boas-vindas {
+  min-height: 0;
+  padding: 0 0 var(--espaco-5);
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+.coordenacao-registros {
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.coordenacao-registros > header {
+  padding: 0 0 var(--espaco-4);
+  border-color: var(--borda-suave);
+}
+.coordenacao-categoria {
+  border-radius: var(--raio-superficie);
+}
+.coordenacao-categoria a:hover .coordenacao-categoria__texto strong {
+  color: var(--titulo);
+}
 
 .coordenacao-boas-vindas {
   min-height: 102px;
@@ -92,10 +116,10 @@
 }
 
 .coordenacao-categoria {
-  padding: 20px 24px;
-  background: var(--superficie);
-  border: 1px solid var(--borda-suave);
-  border-radius: var(--raio-cartao);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 
 .coordenacao-categoria h3 {
@@ -175,4 +199,38 @@
     grid-template-columns: 1fr;
     gap: 18px;
   }
+}
+
+/* Cascata final para remover as caixas repetidas do painel. */
+.coordenacao-boas-vindas {
+  min-height: 0;
+  padding: 0 0 var(--espaco-5);
+  border: 0;
+  border-bottom: 1px solid var(--borda-suave);
+  border-radius: 0;
+  background: transparent;
+}
+.coordenacao-registros {
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.coordenacao-registros > header {
+  padding: 0 0 var(--espaco-4);
+  border-color: var(--borda-suave);
+}
+.coordenacao-categoria {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.coordenacao-categoria a:hover .coordenacao-categoria__texto strong {
+  color: var(--titulo);
+}
+:root[data-tema='escuro'] .coordenacao-boas-vindas,
+:root[data-tema='escuro'] .coordenacao-categoria {
+  border-color: transparent;
+  background: transparent;
 }
