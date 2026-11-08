@@ -140,10 +140,11 @@ export default function Cabecalho({
   const [rolado, mudarRolado] = useState(false)
   const botaoMenu = useRef(null)
 
-  /* Linha inferior aparece só quando a página é rolada */
+  /* Detecta se a página foi rolada (fixo sempre) */
   useEffect(() => {
     function aoRolar() {
-      mudarRolado(window.scrollY > 8)
+      // Quando rola mais de 50px, passa para o estilo sólido; antes disso, fica transparente
+      mudarRolado(window.scrollY > 50)
     }
 
     aoRolar()
@@ -166,9 +167,12 @@ export default function Cabecalho({
     return () => document.removeEventListener('keydown', aoPressionarEscape)
   }, [menuAberto])
 
+  const sobreHero = pagina === 'inicio' && !rolado
+
   const classes = [
     'cabecalho',
     rolado && 'cabecalho--rolado',
+    sobreHero && 'cabecalho--sobre-hero',
     areaProfessor && 'cabecalho--professor',
     modoAcesso && 'cabecalho--acesso',
   ]
