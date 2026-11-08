@@ -1,40 +1,15 @@
-import { obterEnderecoRecurso } from './enderecos.js'
-import { ErroApi, requisitarApi } from './cliente.js'
+import { listarProjetos, buscarProjetoPorId } from './projetos.js'
 
 export const VERSAO = ''
 
-const obterUrlBaseProjetos = () => obterEnderecoRecurso('projetos')
-
-export async function listarSubmissoes(token = null, sinal = null) {
-  const endpoint = obterUrlBaseProjetos()
-  const dados = await requisitarApi(endpoint, {
-    metodo: 'GET',
-    token,
-    sinal,
-  })
-
-  if (!Array.isArray(dados)) {
-    throw new ErroApi('A lista de submissões recebida está em um formato inválido.', {
-      status: 502,
-    })
-  }
-
-  return dados
-}
-
-export async function obterSubmissaoPorId(id, token = null, sinal = null) {
-  const endpoint = obterUrlBaseProjetos()
-  return requisitarApi(`${endpoint}/${encodeURIComponent(id)}`, {
-    metodo: 'GET',
-    token,
-    sinal,
-  })
-}
+// Aliases mantidos para compatibilidade; as chamadas ficam centralizadas em projetos.js.
+export const listarSubmissoes = listarProjetos
+export const buscarSubmissaoPorId = buscarProjetoPorId
 
 export const moduloSubmissoes = {
   versao: VERSAO,
   listar: listarSubmissoes,
-  obterPorId: obterSubmissaoPorId,
+  obterPorId: buscarSubmissaoPorId,
 }
 
 export default moduloSubmissoes

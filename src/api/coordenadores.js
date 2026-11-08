@@ -1,9 +1,9 @@
-import { obterBaseApi, requisitarApi } from './cliente.js'
+import { pegarBaseApi, chamarApi } from './cliente.js'
 
 export const VERSAO = ''
 
 function urlCoordenadores() {
-  return `${obterBaseApi('usuarios', VERSAO)}/coordenadores`
+  return `${pegarBaseApi('usuarios', VERSAO)}/coordenadores`
 }
 
 export async function listarCoordenadores(token, filtros = {}, sinal) {
@@ -13,11 +13,11 @@ export async function listarCoordenadores(token, filtros = {}, sinal) {
     parametros.set('cursoId', String(filtros.cursoId))
   }
   const query = parametros.size ? `?${parametros}` : ''
-  return requisitarApi(`${urlCoordenadores()}/buscar${query}`, { metodo: 'GET', token, sinal })
+  return chamarApi(`${urlCoordenadores()}/buscar${query}`, { metodo: 'GET', token, sinal })
 }
 
-export async function obterCoordenadorPorId(token, id, sinal) {
-  return requisitarApi(`${urlCoordenadores()}/${encodeURIComponent(id)}`, {
+export async function buscarCoordenadorPorId(token, id, sinal) {
+  return chamarApi(`${urlCoordenadores()}/${encodeURIComponent(id)}`, {
     metodo: 'GET',
     token,
     sinal,
@@ -25,11 +25,20 @@ export async function obterCoordenadorPorId(token, id, sinal) {
 }
 
 export async function cadastrarCoordenador(token, dados, sinal) {
-  return requisitarApi(urlCoordenadores(), { metodo: 'POST', corpo: dados, token, sinal })
+  return chamarApi(urlCoordenadores(), { metodo: 'POST', corpo: dados, token, sinal })
 }
 
 export async function atualizarCoordenador(token, id, dados, sinal) {
-  return requisitarApi(`${urlCoordenadores()}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${urlCoordenadores()}/${encodeURIComponent(id)}`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+}
+
+export async function atualizarMeuPerfilCoordenador(token, dados, sinal) {
+  return chamarApi(`${urlCoordenadores()}/me`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -38,7 +47,7 @@ export async function atualizarCoordenador(token, id, dados, sinal) {
 }
 
 export async function excluirCoordenador(token, id, sinal) {
-  return requisitarApi(`${urlCoordenadores()}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${urlCoordenadores()}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,
@@ -48,9 +57,10 @@ export async function excluirCoordenador(token, id, sinal) {
 export const moduloCoordenadores = {
   versao: VERSAO,
   listar: listarCoordenadores,
-  obterPorId: obterCoordenadorPorId,
+  obterPorId: buscarCoordenadorPorId,
   cadastrar: cadastrarCoordenador,
   atualizar: atualizarCoordenador,
+  atualizarMeuPerfil: atualizarMeuPerfilCoordenador,
   excluir: excluirCoordenador,
 }
 
