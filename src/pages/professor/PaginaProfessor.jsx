@@ -10,17 +10,21 @@ const filtros = [
   'Precisa da sua ação',
   'Todas',
   'Aguardando Orientador',
-  'Em análise',
+  'Aguardando Coordenação',
+  'Aprovado pelo orientador',
   'Aprovado',
-  'Recusado',
+  'Recusado pelo orientador',
+  'Publicação recusada',
 ]
 
 const tonsFiltro = {
   Todas: 'todas',
   'Aguardando Orientador': 'pendente',
-  'Em análise': 'analise',
+  'Aguardando Coordenação': 'analise',
+  'Aprovado pelo orientador': 'analise',
   Aprovado: 'aprovado',
-  Recusado: 'recusado',
+  'Recusado pelo orientador': 'recusado',
+  'Publicação recusada': 'recusado',
 }
 
 function normalizar(txt) {
@@ -86,7 +90,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
     () => ({
       total: orientacoes.length,
       pendentes: orientacoes.filter((item) => item.status === 'Aguardando Orientador').length,
-      analise: orientacoes.filter((item) => item.status === 'Em análise').length,
+      analise: orientacoes.filter((item) => item.status === 'Aguardando Coordenação').length,
       aprovados: orientacoes.filter((item) => item.status === 'Aprovado').length,
     }),
     [orientacoes],
@@ -148,7 +152,7 @@ export default function PaginaProfessor({ submissoes, usuario }) {
             tom: 'pendente',
           },
           {
-            titulo: 'Em análise na coordenação',
+            titulo: 'Aguardando coordenação',
             valor: totais.analise,
             icone: 'criterios-detalhe',
             tom: 'andamento',
@@ -198,8 +202,8 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                     ? 'Aguardando orientador'
                     : opcao === 'Aprovado'
                       ? 'Aprovado e publicado'
-                      : opcao === 'Em análise'
-                        ? 'Em análise na coordenação'
+                      : opcao === 'Aguardando Coordenação'
+                        ? 'Aguardando coordenação'
                         : opcao}
                 </span>
                 <small>
@@ -280,8 +284,10 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                           <span className="submissao-feed__status-ponto" aria-hidden="true" />
                           {status === 'Aguardando Orientador'
                             ? 'Aguardando orientador'
-                            : status === 'Em análise'
-                              ? 'Em análise na coordenação'
+                            : status === 'Aprovado pelo orientador'
+                              ? 'Aprovado pelo orientador'
+                              : status === 'Aguardando Coordenação'
+                                ? 'Aguardando coordenação'
                               : status === 'Aprovado'
                                 ? 'Aprovado e publicado'
                                 : status}

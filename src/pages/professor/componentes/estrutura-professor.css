@@ -326,3 +326,41 @@
     transition: none;
   }
 }
+
+.painel-estrutura--coordenacao .painel-navegacao nav a {
+  position: relative;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.painel-estrutura--coordenacao .painel-navegacao nav a[aria-current='page'] {
+  border-color: transparent;
+}
+
+.painel-estrutura--coordenacao .painel-navegacao nav a[aria-current='page']::before {
+  position: absolute;
+  inset: 8px auto 8px 0;
+  width: 5px;
+  background: var(--azul);
+  content: '';
+  pointer-events: none;
+}
+
+.painel-estrutura--coordenacao .painel-navegacao__icone {
+  transition: transform 220ms ease;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .painel-estrutura--coordenacao .painel-navegacao nav a:hover .painel-navegacao__icone {
+    transform: translateX(2px);
+  }
+}
+
+@media (min-width: 761px) {
+  .area-professor:has(> .painel-estrutura) .cabecalho__conteudo {
+    width: 100%;
+    max-width: none;
+    padding-inline: clamp(20px, 2vw, 32px);
+  }
+}

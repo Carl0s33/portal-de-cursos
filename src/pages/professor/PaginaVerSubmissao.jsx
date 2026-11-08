@@ -36,11 +36,17 @@ function rotuloDoTipo(tipoDocumento) {
 function rotuloDoStatus(status) {
   return status === 'Aguardando Orientador'
     ? 'Aguardando orientador'
-    : status === 'Em análise'
-      ? 'Em análise na coordenação'
-      : status === 'Aprovado'
-        ? 'Aprovado e publicado'
-        : status
+    : status === 'Aprovado pelo orientador'
+      ? 'Aprovado pelo orientador'
+      : status === 'Aguardando Coordenação'
+        ? 'Aguardando coordenação'
+        : status === 'Aprovado'
+          ? 'Aprovado e publicado'
+          : status === 'Recusado pelo orientador'
+            ? 'Recusado pelo orientador'
+            : status === 'Publicação recusada'
+              ? 'Publicação recusada'
+              : status
 }
 
 function textoAutores(autores) {
@@ -102,6 +108,14 @@ export default function PaginaVerSubmissao({
   }))
 
   const status = decisao?.status || decisao || item?.status || 'Aguardando Orientador'
+  const classeStatus =
+    {
+      'Aprovado pelo orientador': 'aprovado-pelo-orientador',
+      'Aguardando Coordenação': 'aguardando-coordenação',
+      'Recusado pelo orientador': 'recusado-pelo-orientador',
+      'Publicação recusada': 'publicação-recusada',
+      'Precisa de revisão': 'em-análise',
+    }[status] || status.toLowerCase().replaceAll(' ', '-')
   const volta = tipoUsuario === 'COORDENADOR' ? 'coordenacao/submissoes' : 'professor/feed'
   const visivel =
     item &&
@@ -122,18 +136,23 @@ export default function PaginaVerSubmissao({
   }
 
   const avaliacaoOrientador = tipoUsuario === 'PROFESSOR' && status === 'Aguardando Orientador'
-  const avaliacaoCoordenador = tipoUsuario === 'COORDENADOR' && status === 'Em análise'
+  const avaliacaoCoordenador = tipoUsuario === 'COORDENADOR' && status === 'Aguardando Coordenação'
 
   function atualizar(campo, valor) {
     mudarEdicao((atual) => ({ ...atual, [campo]: valor }))
   }
 
-  function registrarDecisao(proximoStatus) {
+  async function registrarDecisao(proximoStatus) {
     if (proximoStatus === 'Recusado' && !justificativa.trim()) {
       mudarErro('Explique o motivo antes de recusar o projeto.')
       return
     }
-    aoDecidir(proximoStatus, justificativa.trim())
+    try {
+      await aoDecidir(proximoStatus, justificativa.trim())
+    } catch {
+      mudarErro('Não foi possível salvar a decisão. Tente novamente.')
+      return
+    }
     mudarJustificativa('')
     mudarErro('')
   }
@@ -157,11 +176,11 @@ export default function PaginaVerSubmissao({
   const mensagemStatus =
     status === 'Aprovado'
       ? 'Esta submissão foi aprovada pelo coordenador e está publicada no portal.'
-      : status === 'Em análise'
+      : status === 'Aprovado pelo orientador' || status === 'Aguardando Coordenação'
         ? tipoUsuario === 'PROFESSOR'
           ? 'Você já aceitou orientar este projeto. Agora ele aguarda a avaliação da coordenação do curso.'
           : 'O orientador aceitou a submissão e ela aguarda a decisão da coordenação.'
-        : status === 'Recusado'
+        : status === 'Recusado pelo orientador' || status === 'Publicação recusada'
           ? `Esta submissão foi recusada.${decisao?.justificativa ? ` Motivo: ${decisao.justificativa}` : ''}`
           : 'A submissão aguarda aceite inicial do professor orientador.'
 
@@ -174,20 +193,22 @@ export default function PaginaVerSubmissao({
       <header className="pagina-detalhes-submissao__cabecalho">
         <div>
           <div className="pagina-detalhes-submissao__sinal">
-            <span className={`status status--${status.toLowerCase().replaceAll(' ', '-')}`}>
-              {rotuloDoStatus(status)}
+            <span
+              className={
+                status === 'Aprovado'
+                  ? 'pagina-detalhes-submissao__publicado'
+                  : `status status--${classeStatus}`
+              }
+            >
+              {status === 'Aprovado' ? 'Publicado no portal' : rotuloDoStatus(status)}
             </span>
             <span>{item.tipo}</span>
           </div>
           <h1>{item.titulo}</h1>
-          <EtapasSubmissao status={item.status} />
+          {status !== 'Aprovado' && <EtapasSubmissao status={status} />}
           <p>
-            {item.cursoCompleto} · enviado por {item.autor} em {item.enviadoEm}
+            Enviado por {item.autor} em {item.enviadoEm}
           </p>
-        </div>
-        <div className="pagina-detalhes-submissao__marco">
-          <span>Orientação</span>
-          <strong>{item.orientador}</strong>
         </div>
       </header>
 
@@ -373,7 +394,7 @@ export default function PaginaVerSubmissao({
                             </span>
                             <span className="item-documento-nome">{nome}</span>
                             <span className="item-documento-gatilho">
-                              {abrindoDocumento ? 'Abrindo…' : 'Abrir em nova aba'}{' '}
+                              {abrindoDocumento ? 'Abrindo…' : 'Abre em nova aba'}{' '}
                               <span className="item-documento-seta" aria-hidden="true">
                                 ↗
                               </span>
@@ -399,7 +420,7 @@ export default function PaginaVerSubmissao({
 
         <aside className="pagina-detalhes-submissao__lateral">
           <div className="pagina-detalhes-submissao__contexto">
-            <span className="pagina-detalhes-submissao__indice">Contexto</span>
+            <span className="pagina-detalhes-submissao__indice">Dados da submissão</span>
             <div>
               <h2>Equipe</h2>
               <p>{textoAutores(item.autores)}</p>
@@ -414,6 +435,10 @@ export default function PaginaVerSubmissao({
             <div>
               <h2>Curso</h2>
               <p>{item.cursoCompleto}</p>
+            </div>
+            <div>
+              <h2>Orientação</h2>
+              <p>{item.orientador}</p>
             </div>
             {Array.isArray(item.disciplinas) && item.disciplinas.length > 0 && (
               <div>
@@ -431,7 +456,7 @@ export default function PaginaVerSubmissao({
               </h2>
               <p className="pagina-detalhes-submissao__decisao-intro">
                 {avaliacaoCoordenador
-                  ? 'O orientador aceitou esta submissão. Decida se ela será publicada no portal.'
+                  ? 'O orientador aprovou esta submissão. Decida se ela será publicada no portal.'
                   : 'Leia o projeto e indique se poderá acompanhar esta produção. Após o aceite, ela seguirá ao coordenador do curso.'}
               </p>
               <label htmlFor={`justificativa-${item.identificador}`}>
@@ -495,7 +520,7 @@ export default function PaginaVerSubmissao({
                 </button>
               </div>
             </div>
-          ) : (
+          ) : status !== 'Aprovado' ? (
             <p
               className={`pagina-detalhes-submissao__aviso pagina-detalhes-submissao__aviso--${status
                 .toLowerCase()
@@ -504,7 +529,7 @@ export default function PaginaVerSubmissao({
             >
               {mensagemStatus}
             </p>
-          )}
+          ) : null}
         </aside>
       </div>
 

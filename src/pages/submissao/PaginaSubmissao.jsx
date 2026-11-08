@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import { listarDisciplinasPorCurso } from '@/api/disciplinas.js'
 import { listarProfessores } from '@/api/professores.js'
-import { atualizarStatusProjeto, cadastrarProjeto, enviarDocumentoProjeto } from '@/api/projetos.js'
+import { listarCoordenadores } from '@/api/coordenadores.js'
+import { enviarNotificacaoProjeto } from '@/api/notificacoes.js'
+import {
+  cadastrarProjeto,
+  encaminharProjetoParaCoordenacao,
+  enviarDocumentoProjeto,
+} from '@/api/projetos.js'
 import { enderecoPrivado } from '../../app/rotas.js'
 import {
   TAMANHO_MAXIMO_DOCUMENTO,
@@ -29,7 +35,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     nome: sessao?.usuario?.nome || '',
     email: sessao?.usuario?.email || '',
     curso:
-      sessao?.tipoUsuario === 'ALUNO' || sessao?.tipoUsuario === 'COORDENADOR'
+      ['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao?.tipoUsuario)
         ? sessao?.usuario?.cursoId || sessao?.usuario?.curso?.id || sessao?.usuario?.curso || ''
         : '',
     orientador:
@@ -43,6 +49,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
   const [enviado, mudarEnviado] = useState(false)
   const [enviando, mudarEnviando] = useState(false)
   const [falhaDocumentos, mudarFalhaDocumentos] = useState(false)
+  const [falhaEncaminhamento, mudarFalhaEncaminhamento] = useState(false)
   const resumoErros = useRef(null)
 
   useEffect(() => {
@@ -132,7 +139,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
 
   function validarEtapa() {
     const ehTCC = formulario.tipo === 'TCC'
-    const ehDocente = sessao?.tipoUsuario === 'PROFESSOR' || sessao?.tipoUsuario === 'COORDENADOR'
+    const ehDocente = ['PROFESSOR', 'COORDENADOR'].includes(sessao?.tipoUsuario)
     const camposEtapa1 = ehTCC
       ? ['tipo', 'titulo', 'resumo', 'objetivos']
       : ['tipo', 'titulo', 'resumo', 'objetivos', 'informacoesEspecificas']
@@ -299,7 +306,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         dateStyle: 'short',
         timeStyle: 'short',
       }).format(new Date()),
-      status: sessao?.tipoUsuario === 'ALUNO' ? 'Aguardando Orientador' : 'Em análise',
+      status: sessao?.tipoUsuario === 'ALUNO' ? 'Aguardando Orientador' : 'Aguardando Coordenação',
       email: formulario.email.trim(),
       disciplinas: [...formulario.disciplinas],
       resumo: formulario.resumo.trim(),
@@ -406,20 +413,44 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         mudarErro('O servidor não confirmou o registro do projeto. Tente novamente.')
         return
       }
-      if (sessao?.tipoUsuario === 'COORDENADOR') {
+
+      const destinatariosNotificacao = []
+      if (sessao.tipoUsuario === 'ALUNO') {
+        const emailOrientador = orientadorObj?.email || orientadorObj?.usuario?.email
+        if (emailOrientador) destinatariosNotificacao.push(emailOrientador)
+      } else if (sessao.tipoUsuario === 'COORDENADOR') {
+        if (sessao.usuario?.email) destinatariosNotificacao.push(sessao.usuario.email)
+      } else {
         try {
-          await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
+          const coordenadores = await listarCoordenadores(sessao.token, { cursoId: dto.cursoId })
+          destinatariosNotificacao.push(
+            ...(Array.isArray(coordenadores)
+              ? coordenadores.map((c) => c.professor?.usuario?.email || c.usuario?.email || c.email).filter(Boolean)
+              : []),
+          )
         } catch {
-          /* Continua envio de documentos */
+          // A falha de e-mail não desfaz uma submissão já salva.
         }
-      } else if (sessao?.tipoUsuario === 'PROFESSOR') {
+      }
+      let encaminhamentoFalhou = false
+      if (sessao.tipoUsuario !== 'ALUNO') {
         try {
-          // Se o próprio orientador submeteu, já avança para aprovação inicial
-          await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
-          await atualizarStatusProjeto(projetoCriado.id, 'ANALISE_PUBLICACAO', sessao.token)
+          await encaminharProjetoParaCoordenacao(projetoCriado.id, sessao.token)
         } catch {
-          /* Continua */
+          encaminhamentoFalhou = true
         }
+      }
+
+      if (!encaminhamentoFalhou) {
+        enviarNotificacaoProjeto(
+          {
+            statusProjeto: sessao.tipoUsuario === 'ALUNO' ? 'EM_ANALISE' : 'ANALISE_PUBLICACAO',
+            nomeProjeto: dto.nome,
+            tipoProjeto: dto.tipoProjeto,
+            destinatarios: destinatariosNotificacao,
+          },
+          sessao.token,
+        ).catch((falha) => console.warn('Falha ao enviar aviso da submissão:', falha.message))
       }
 
       const arquivosReais =
@@ -441,6 +472,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         id: projetoCriado.id,
         identificador: String(projetoCriado.id),
       })
+      mudarFalhaEncaminhamento(encaminhamentoFalhou)
       mudarEnviado(true)
     } catch (falha) {
       mudarErro(
@@ -522,15 +554,21 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           <h1 id="titulo-confirmacao">Projeto enviado.</h1>
           <p>
             {sessao?.tipoUsuario === 'COORDENADOR'
-              ? 'O projeto foi registrado e encaminhado diretamente para a coordenação do curso para publicação.'
+              ? 'O projeto foi registrado e encaminhado diretamente à coordenação do curso para avaliação e possível publicação.'
               : sessao?.tipoUsuario === 'PROFESSOR'
-                ? 'O projeto foi registrado com seu aceite docente e encaminhado para a homologação e publicação pela coordenação do curso.'
+                ? 'O projeto foi registrado e encaminhado diretamente à coordenação do curso para avaliação e possível publicação.'
                 : 'O orientador indicado vai analisar seu projeto primeiro. Se aceitar acompanhar o trabalho, a submissão seguirá para a coordenação do curso, que decidirá sobre a publicação no portal.'}
           </p>
           {falhaDocumentos && (
             <p role="alert">
               O projeto foi salvo, mas um ou mais documentos não foram enviados. Abra a submissão
               para anexá-los novamente.
+            </p>
+          )}
+          {falhaEncaminhamento && (
+            <p role="alert">
+              O projeto foi salvo, mas ainda não foi encaminhado à coordenação. Não envie outra
+              cópia; abra o painel para conferir o status ou tente novamente mais tarde.
             </p>
           )}
           <div className="submissao-confirmacao__resumo">
@@ -552,7 +590,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                   nome: sessao?.usuario?.nome || '',
                   email: sessao?.usuario?.email || '',
                   curso:
-                    sessao?.tipoUsuario === 'ALUNO'
+                    ['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao?.tipoUsuario)
                       ? sessao?.usuario?.cursoId ||
                         sessao?.usuario?.curso?.id ||
                         sessao?.usuario?.curso ||
@@ -562,6 +600,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                 mudarEtapa(0)
                 mudarEnviado(false)
                 mudarFalhaDocumentos(false)
+                mudarFalhaEncaminhamento(false)
               }}
             >
               Enviar outro projeto
@@ -665,11 +704,9 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         <div>
           <h1>Compartilhe seu projeto</h1>
           <p>
-            Preencha as quatro etapas e envie seu trabalho para avaliação do{' '}
-            {sessao?.tipoUsuario === 'PROFESSOR' || sessao?.tipoUsuario === 'COORDENADOR'
-              ? 'coordenador do curso'
-              : 'professor orientador'}
-            .
+            {sessao.tipoUsuario === 'ALUNO'
+              ? 'Preencha as quatro etapas e envie seu trabalho ao professor orientador. Se ele aprovar, a coordenação do curso decide sobre a publicação no portal.'
+              : 'Preencha as quatro etapas e envie seu projeto diretamente à coordenação do curso para avaliação e possível publicação.'}
           </p>
         </div>
       </div>

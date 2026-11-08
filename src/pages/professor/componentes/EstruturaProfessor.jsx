@@ -28,7 +28,7 @@ export default function EstruturaProfessor({
     : coordenador
       ? 'coordenacao/perfil'
       : aluno
-        ? `aluno/${usuario?.alunoId || usuario?.id || ''}`
+        ? 'aluno/perfil'
         : 'professor/perfil'
   return (
     <div
@@ -63,7 +63,11 @@ export default function EstruturaProfessor({
         <Cabecalho modoAcesso tema={tema} alternarTema={alternarTema} pagina="acesso" />
       )}
       {usuario && (administrador || coordenador) ? (
-        <div className="painel-estrutura">
+        <div
+          className={
+            coordenador ? 'painel-estrutura painel-estrutura--coordenacao' : 'painel-estrutura'
+          }
+        >
           {administrador ? (
             <NavegacaoAdministracao rota={rota} usuario={usuario} />
           ) : (
