@@ -1,0 +1,320 @@
+/* Componentes comuns. O cabeçalho mantém seus estilos próprios. */
+.cartao,
+.painel {
+  min-width: 0;
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-superficie);
+  background: var(--superficie);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+  color: var(--texto);
+}
+
+.cartao--clicavel {
+  --cor: var(--azul);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--transicao),
+    box-shadow var(--transicao),
+    border-color var(--transicao);
+}
+
+.cartao--clicavel::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--cor);
+  content: '';
+  transition: height var(--transicao);
+}
+
+.cartao--clicavel:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--cor) 55%, var(--borda-suave));
+  box-shadow: var(--sombra-elevada);
+}
+
+.cartao--clicavel:hover::before {
+  height: 6px;
+}
+
+.cartao--clicavel:hover :is(h2, h3) {
+  color: var(--cor);
+}
+
+.cartao--clicavel:focus-within {
+  outline: 2px solid var(--azul-vivo);
+  outline-offset: 3px;
+}
+
+[data-tipo='tcc'] {
+  --cor: var(--chip-tcc);
+}
+
+[data-tipo='extensao'] {
+  --cor: var(--chip-extensao);
+}
+
+[data-tipo='pesquisa'] {
+  --cor: var(--chip-pesquisa);
+}
+
+[data-tipo='integrador'] {
+  --cor: var(--chip-integrador);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartao--clicavel:hover {
+    transform: none;
+  }
+
+  .cartao--clicavel::before {
+    transition: none;
+  }
+}
+
+.painel__cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  padding: var(--espaco-4) var(--espaco-5);
+  border-bottom: 1px solid var(--borda);
+}
+
+.painel__cabecalho h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.painel__cabecalho p {
+  margin: 2px 0 0;
+  max-width: 68ch;
+  font-size: var(--texto-xs);
+  line-height: 1.5;
+  color: var(--texto-suave);
+}
+
+.painel-contagem {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: var(--raio-pilula);
+  background: var(--suave);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+
+.campo {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--espaco-2) var(--espaco-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-campo);
+  background: var(--superficie);
+  color: var(--texto);
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-md);
+  line-height: 1.6;
+}
+.campo:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+.campo[aria-invalid='true'] {
+  border-color: var(--erro);
+}
+
+/* ---------- Tabela de Submissões e Registros ---------- */
+.tabela-container {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.tabela-container:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: -2px;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+  line-height: 1.5;
+}
+
+.tabela thead th {
+  padding: 10px 20px;
+  background: var(--suave);
+  border-bottom: 1px solid var(--borda);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+
+.tabela tbody th,
+.tabela tbody td {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--borda);
+  vertical-align: middle;
+  text-align: left;
+  font-weight: 400;
+}
+
+.tabela tbody tr:last-child th,
+.tabela tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabela tbody tr {
+  transition: background-color var(--transicao);
+}
+
+.tabela tbody tr:hover {
+  background: color-mix(in srgb, var(--azul) 5%, var(--superficie));
+}
+
+/* Colunas padronizadas */
+.tabela thead th:nth-child(1) {
+  width: 46%;
+}
+.tabela td:nth-child(2) {
+  width: 22%;
+  color: var(--texto-suave);
+  line-height: 1.4;
+}
+.tabela td:nth-child(3) {
+  width: 12%;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-suave);
+}
+.tabela td:nth-child(4) {
+  width: 20%;
+  white-space: nowrap;
+}
+
+.tabela__titulo {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 600;
+  color: var(--titulo);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.tabela__descricao {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--texto-xs);
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+
+.estado-vazio {
+  padding: var(--espaco-6) var(--espaco-5);
+  text-align: center;
+}
+.estado-vazio h2 {
+  margin: 0;
+  font-size: var(--texto-xl);
+}
+.estado-vazio p {
+  margin-block: var(--espaco-3) var(--espaco-5);
+  max-width: 68ch;
+  margin-inline: auto;
+}
+
+/* Responsividade: linhas em cartões para telas estreitas */
+@media (max-width: 720px) {
+  .painel__cabecalho {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+  }
+
+  .tabela thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .tabela,
+  .tabela tbody,
+  .tabela tr,
+  .tabela th,
+  .tabela td {
+    display: block;
+    width: 100% !important;
+  }
+
+  .tabela tbody tr {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--borda);
+  }
+
+  .tabela tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .tabela tbody th,
+  .tabela tbody td {
+    padding: 0;
+    border: 0;
+  }
+
+  .tabela td {
+    margin-top: 8px;
+  }
+
+  .tabela td[data-label]::before {
+    content: attr(data-label) ': ';
+    font-weight: 600;
+    color: var(--titulo);
+  }
+}
+.tabela thead th:last-child {
+  text-align: start;
+}
+.tabela tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+.tabela-container:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+.painel__cabecalho h2 {
+  margin: 0;
+}
+.painel__cabecalho p {
+  margin: var(--espaco-2) 0 0;
+}
+.tabela {
+  min-width: 640px;
+}
+.tabela tbody th {
+  min-width: 240px;
+  max-width: 480px;
+}
+.tabela__descricao {
+  overflow-wrap: anywhere;
+}
+
+textarea.campo {
+  min-height: 112px;
+  resize: vertical;
+}
+.campo:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

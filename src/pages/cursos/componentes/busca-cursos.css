@@ -1,0 +1,37 @@
+.busca-cursos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--superficie);
+  border-radius: var(--raio-campo);
+}
+.busca-cursos input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-campo);
+  padding: 12px;
+  color: var(--titulo);
+  background: var(--superficie);
+  font-size: var(--texto-sm);
+}
+.busca-cursos input::placeholder {
+  color: var(--texto-suave);
+}
+.busca-cursos input::-webkit-search-cancel-button {
+  display: none;
+}
+.busca-cursos button {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.busca-cursos:has(input:disabled) {
+  opacity: 0.55;
+}

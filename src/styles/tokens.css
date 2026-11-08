@@ -1,86 +1,116 @@
 :root {
-  /* Cores básicas */
-  --fundo: #f7f8fc;
-  --superficie: #fff;
-  --suave: #e8edf8;
-  --etiqueta: #d8e2fb;
-  --titulo: #00050e;
-  --texto: #334155;
-  --texto-suave: #5f6b7d;
+  /* Escalas compartilhadas do design system */
+  --raio-controle: 10px;
+  --raio-superficie: 16px;
+  --raio-pilula: 9999px;
+  --raio-botao: var(--raio-controle);
+  --raio-campo: var(--raio-controle);
+  --raio-cartao: var(--raio-superficie);
+  --raio-destaque: var(--raio-superficie);
+  --limite-conteudo: 1184px;
+  --largura-conteudo: var(--limite-conteudo);
+  --largura-texto: 62ch;
+  --gutter: clamp(16px, 4vw, 32px);
+  --sidebar-largura: 248px;
+  --altura-botao-destaque: 52px;
+  --texto-numeral: 44px;
+  --espaco-1: 4px;
+  --espaco-2: 8px;
+  --espaco-3: 12px;
+  --espaco-4: 16px;
+  --espaco-5: 24px;
+  --espaco-6: 32px;
+  --espaco-7: 48px;
+  --espaco-8: 64px;
+
+  /* Aliases curtos de espaçamento */
+  --esp-1: var(--espaco-1);
+  --esp-2: var(--espaco-2);
+  --esp-3: var(--espaco-3);
+  --esp-4: var(--espaco-4);
+  --esp-5: var(--espaco-5);
+  --esp-6: var(--espaco-6);
+  --esp-7: var(--espaco-7);
+  --esp-8: var(--espaco-8);
+
+  /* Aliases de texto */
+  --texto-s: var(--texto-xs);
+  --texto-m: var(--texto-md);
+  --texto-l: var(--texto-lg);
+  --texto-xs: 12px;
+  --texto-sm: 14px;
+  --texto-md: 16px;
+  --texto-lg: 20px;
+  --texto-xl: 28px;
+  --texto-hero: clamp(38px, 5.2vw, 68px);
+  --texto-titulo-secao: clamp(30px, 4vw, 42px);
+  --fonte-titulo: 'Source Serif 4', Georgia, serif;
+  --fonte-corpo: Manrope, Arial, sans-serif;
+
+  /* PALETA ORIGINAL DO PORTAL */
   --azul: #003da8;
   --azul-vivo: #1559ff;
   --azul-escuro: #003b8f;
-  --azul-suave: #eaf0ff;
-  --verde: #18704a;
-  --borda: #c6cfdd;
-  --borda-suave: #dfe5ef;
-  --cabecalho: #fffffff2;
-  --cabecalho-altura: 64px;
-  --brilho: #c7d7ff;
-  --sombra: 0 1px 2px #0000000d;
+  --azul-suave: #dce7ff;
   --marinho: #0b1f36;
-  --superficie-escura: #141518;
-  --branco: #ffffff;
-  --preto: #000000;
+  --verde: #18704a;
+  --roxo: #5b2db8;
+  --roxo-suave: #e6ddff;
+
+  /* Chips de tipos de projetos */
+  --chip-tcc: #003da8;
+  --chip-extensao: #a8510b;
+  --chip-pesquisa: #067647;
+  --chip-integrador: #5b2db8;
+  --chip-tcc-texto: var(--branco);
+  --chip-extensao-texto: var(--branco);
+  --chip-pesquisa-texto: var(--branco);
+  --chip-integrador-texto: var(--branco);
+  --selo-coordenador-fundo: #ffc400;
+  --selo-coordenador-texto: #003da8;
+
+  /* Superfícies e neutros */
+  --fundo: #e9edf3;
+  --superficie: #ffffff;
+  --suave: #e4e8ee;
+  --etiqueta: #d8dee8;
+  --titulo: #101722;
+  --texto: #263241;
+  --texto-suave: #3f4b5b;
+  --borda: #aeb8c7;
+  --borda-suave: #d2d9e3;
+  --cabecalho: rgba(255, 255, 255, 0.95);
+  --cabecalho-altura: 64px;
+  --sombra: 0 1px 2px rgb(11 31 54 / 6%), 0 8px 24px -10px rgb(11 31 54 / 14%);
+  --sombra-elevada:
+    0 2px 4px rgb(11 31 54 / 6%), 0 22px 40px -14px color-mix(in srgb, var(--azul) 30%, transparent);
+  --fundo-alt: color-mix(in srgb, var(--azul-suave) 45%, var(--fundo));
+  --cor: var(--azul);
+  --texto-sobre-cor: var(--branco);
+  --transicao-lenta: 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
 
   /* Estados e feedback */
-  --erro: #dc2626;
-  --erro-suave: #fef2f2;
-  --erro-escuro: #b91c1c;
+  --erro: #b42318;
+  --erro-suave: #fef3f2;
+  --erro-escuro: #9f1d27;
   --sucesso: #067647;
   --sucesso-suave: #dff3e7;
   --aviso: #a8510b;
   --aviso-suave: #fff3c4;
-  --roxo: #5b2db8;
-  --roxo-suave: #efe7ff;
-  --foco: var(--azul);
+  --branco: #ffffff;
+  --preto: #000000;
 
-  /* Escala de espaçamento (base 4px) */
-  --esp-1: 4px;
-  --esp-2: 8px;
-  --esp-3: 12px;
-  --esp-4: 16px;
-  --esp-5: 24px;
-  --esp-6: 32px;
-  --esp-7: 48px;
-
-  /* Escala de raios de borda */
-  --raio-p: 6px;
-  --raio-m: 8px;
-  --raio-g: 14px;
-  --raio-pilula: 999px;
-
-  /* Escala tipográfica */
-  --texto-xs: 12px;
-  --texto-s: 14px;
-  --texto-m: 16px;
-  --texto-g: 18px;
-  --titulo-3: 22px;
-  --titulo-2: 28px;
-  --titulo-1: clamp(40px, 5vw, 64px);
-
-  /* Interação e elevação */
   --texto-sobre-azul: var(--branco);
   --azul-hover: color-mix(in srgb, var(--azul) 82%, var(--preto));
-  --anel-foco: 0 0 0 3px color-mix(in srgb, var(--azul) 35%, transparent);
-  --sombra-elevada: 0 8px 24px color-mix(in srgb, var(--azul) 12%, transparent);
   --transicao: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Aliases para compatibilidade */
-  --azul-marca: var(--azul);
-  --borda-campo: var(--borda);
-  --texto-secundario: var(--texto-suave);
-  --texto-mutado: var(--texto-suave);
-  --acesso-fundo-aluno: var(--fundo);
-
   color-scheme: light;
 }
 
 :root[data-tema='escuro'] {
   --fundo: #000000;
-  --superficie: #0c0c0c;
-  --suave: #141414;
-  --etiqueta: #182238;
+  --superficie: #050505;
+  --suave: #101010;
+  --etiqueta: #171717;
   --titulo: #f5f5f5;
   --texto: #bfbfbf;
   --texto-suave: #9aa3b0;
@@ -88,14 +118,25 @@
   --azul-vivo: #6c93ff;
   --azul-escuro: #b5ccff;
   --azul-suave: #182238;
+  --marinho: #0b1f36;
   --verde: #7ed9aa;
-  --borda: #292929;
-  --borda-suave: #26282d;
-  --cabecalho: #000000;
-  --brilho: transparent;
-  --sombra: 0 0 0 1px var(--borda);
+  --borda: #343434;
+  --borda-suave: #242424;
+  --cabecalho: rgba(0, 0, 0, 0.95);
+  --sombra: none;
+  --sombra-elevada:
+    0 0 0 1px color-mix(in srgb, var(--cor) 45%, transparent),
+    0 18px 40px -18px color-mix(in srgb, var(--cor) 45%, transparent);
+  --fundo-alt: #0a0e16;
 
-  --erro: #f87171;
+  --chip-tcc: #8fb1ff;
+  --chip-extensao: #ffc14d;
+  --chip-pesquisa: #7ed9aa;
+  --chip-integrador: #bb9aff;
+  --selo-coordenador-fundo: #ffc14d;
+  --selo-coordenador-texto: #000000;
+
+  --erro: #f97066;
   --erro-suave: #2a1210;
   --erro-escuro: #ff8a80;
   --sucesso: #7ed9aa;
@@ -105,9 +146,17 @@
   --roxo: #bb9aff;
   --roxo-suave: #2a1d4a;
 
-  --azul-hover: color-mix(in srgb, var(--azul) 82%, var(--branco));
   --texto-sobre-azul: var(--preto);
-  --sombra-elevada: 0 0 0 1px var(--azul);
+  --texto-sobre-cor: var(--preto);
+  --chip-tcc-texto: #d6e2ff;
+  --chip-extensao-texto: #ffd49a;
+  --chip-pesquisa-texto: #a7f0c9;
+  --chip-integrador-texto: #d8c2ff;
+  --chip-tcc-fundo: #10264d;
+  --chip-extensao-fundo: #3a2410;
+  --chip-pesquisa-fundo: #0d2d20;
+  --chip-integrador-fundo: #281847;
+  --azul-hover: color-mix(in srgb, var(--azul) 82%, var(--branco));
 
   color-scheme: dark;
 }

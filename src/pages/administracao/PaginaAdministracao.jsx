@@ -1,10 +1,10 @@
-import GestaoAreas from './components/GestaoAreas.jsx'
-import GestaoConteudos from './components/GestaoConteudos.jsx'
-import GestaoCampus from './components/GestaoCampus.jsx'
-import GestaoProfessores from './components/GestaoProfessores.jsx'
-import GestaoUsuarios from './components/GestaoUsuarios.jsx'
-import PainelAdministracao from './components/PainelAdministracao.jsx'
-import TabelaSubmissoes from './components/TabelaSubmissoes.jsx'
+import GestaoAreas from './componentes/GestaoAreas.jsx'
+import GestaoConteudos from './componentes/GestaoConteudos.jsx'
+import GestaoCampus from './componentes/GestaoCampus.jsx'
+import GestaoProfessores from './componentes/GestaoProfessores.jsx'
+import GestaoUsuarios from './componentes/GestaoUsuarios.jsx'
+import PainelAdministracao from './componentes/PainelAdministracao.jsx'
+import TabelaSubmissoes from './componentes/TabelaSubmissoes.jsx'
 import '@/shared/styles/painel.css'
 import './administracao.css'
 
@@ -31,7 +31,7 @@ export default function PaginaAdministracao({
   if (secao === 'usuarios')
     return (
       <main id="conteudo" className="pagina-painel pagina-painel--administracao">
-        <GestaoUsuarios token={sessao.token} />
+        <GestaoUsuarios token={sessao.token} emailAtual={sessao.usuario?.email} />
       </main>
     )
   if (secao === 'professores')

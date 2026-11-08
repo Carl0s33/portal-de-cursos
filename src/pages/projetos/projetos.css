@@ -6,7 +6,7 @@
   min-height: 70dvh;
 }
 .pagina-projetos > nav {
-  font-size: 13px;
+  font-size: var(--texto-xs);
 }
 .pagina-projetos__titulo {
   display: flex;
@@ -15,13 +15,13 @@
   gap: 32px;
 }
 .pagina-projetos__titulo h1 {
-  font-size: 36px;
+  font-size: var(--texto-xl);
   line-height: 44px;
   letter-spacing: -0.9px;
   max-width: 800px;
 }
 .pagina-projetos__titulo p {
-  font-size: 16px;
+  font-size: var(--texto-md);
   line-height: 26px;
 }
 .pagina-projetos__titulo .pagina-projetos__rotulo {
@@ -29,10 +29,10 @@
   align-items: center;
   gap: 8px;
   color: var(--azul);
-  font-size: 12px;
+  font-size: var(--texto-xs);
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+
+  letter-spacing: normal;
   margin: 0 0 8px;
 }
 .pagina-projetos__titulo .pagina-projetos__rotulo::before {
@@ -52,7 +52,7 @@
 }
 .pagina-projetos__contagem {
   margin: 0 0 16px;
-  font-size: 14px;
+  font-size: var(--texto-sm);
   font-weight: 700;
   color: var(--titulo);
 }
@@ -80,7 +80,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   font-weight: 600;
   color: var(--texto);
 }
@@ -88,10 +88,10 @@
   background: var(--superficie);
   color: var(--titulo);
   border: 1px solid var(--borda);
-  border-radius: 10px;
+  border-radius: var(--raio-botao);
   min-height: 40px;
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   font-weight: 600;
 }
 @media (max-width: 760px) {
@@ -104,7 +104,7 @@
     text-align: left;
     padding: 14px 16px;
     border: 1px solid var(--borda);
-    border-radius: 8px;
+    border-radius: var(--raio-botao);
     background: var(--superficie);
     color: var(--titulo);
     cursor: pointer;
@@ -127,14 +127,14 @@
   text-align: center;
   background: var(--superficie);
   border: 1px solid var(--borda);
-  border-radius: 16px;
+  border-radius: var(--raio-cartao);
 }
 .pagina-projetos__vazio-icone {
   display: inline-grid;
   place-items: center;
   width: 56px;
   height: 56px;
-  border-radius: 14px;
+  border-radius: var(--raio-cartao);
   background: var(--azul);
   color: var(--branco);
   margin-bottom: 4px;
@@ -144,12 +144,12 @@
 }
 .pagina-projetos__vazio h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: var(--texto-lg);
 }
 .pagina-projetos__vazio p {
   margin: 0 0 8px;
   max-width: 52ch;
-  font-size: 14px;
+  font-size: var(--texto-sm);
   line-height: 1.6;
 }
 @media (max-width: 760px) {
@@ -159,7 +159,7 @@
     gap: 12px;
   }
   .pagina-projetos__titulo h1 {
-    font-size: 28px;
+    font-size: var(--texto-xl);
     line-height: 36px;
   }
   .pagina-projetos__grade {

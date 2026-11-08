@@ -1,0 +1,62 @@
+.etiqueta,
+.status {
+  --cor-status: var(--branco);
+  --fundo-status: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  gap: var(--espaco-2);
+  width: fit-content;
+  padding: var(--espaco-1) var(--espaco-3);
+  border: 1px solid var(--fundo-status);
+  border-radius: var(--raio-pilula);
+  background: var(--fundo-status);
+  color: var(--cor-status);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.etiqueta::before,
+.status::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--raio-pilula);
+  background: currentColor;
+}
+
+.status--aguardando-orientador,
+.status--aguardando-coordenador,
+.status--aguardando-coordenação {
+  --fundo-status: #854400;
+}
+
+.status--em-análise,
+.status--em-analise {
+  --fundo-status: #003da8;
+}
+
+.status--aceito,
+.status--aprovado,
+.status--aprovado-pelo-orientador,
+.status--aprovado-orientador,
+.status--publicado {
+  --fundo-status: #08623e;
+}
+
+.status--recusado,
+.status--recusado-pelo-orientador,
+.status--publicação-recusada {
+  --fundo-status: #a61b1b;
+}
+
+.etiqueta--neutra {
+  --cor-status: var(--branco);
+  --fundo-status: #475569;
+}

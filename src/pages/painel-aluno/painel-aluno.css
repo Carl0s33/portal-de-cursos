@@ -2,10 +2,12 @@
 
 .pagina-painel-aluno {
   max-width: 1200px;
-  padding: 40px clamp(20px, 3vw, 44px) 72px;
+  padding-top: calc(var(--cabecalho-altura, 64px) + 24px);
+  padding-bottom: 72px;
+  padding-inline: clamp(20px, 3vw, 44px);
   margin: 0 auto;
   display: grid;
-  gap: 28px;
+  gap: 24px;
   color: var(--texto);
 }
 
@@ -14,25 +16,6 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-}
-
-.painel-aluno-rotulo {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 12px;
-  color: var(--azul);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.painel-aluno-rotulo::before {
-  width: 24px;
-  height: 2px;
-  background: currentColor;
-  content: '';
 }
 
 .pagina-painel-aluno h1 {
@@ -45,68 +28,36 @@
 
 .pagina-painel-aluno h1 + p {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--texto-sm);
   line-height: 1.6;
   max-width: 64ch;
 }
 
-.painel-aluno-indicadores {
-  margin: 0;
+.painel-aluno__rodape-aviso {
+  padding: 12px 20px;
+  border-top: 1px solid var(--borda);
+  background: var(--suave);
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  line-height: 1.5;
 }
 
-.painel-aluno-vazio-icone {
-  display: inline-grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 12px;
-  border-radius: 16px;
-  background: var(--azul);
-  color: var(--branco);
-}
-
-:root[data-tema='escuro'] .painel-aluno-vazio-icone {
-  color: var(--preto);
-}
-
-/* Aviso de somente-leitura */
-.painel-aluno-aviso {
-  margin-top: 4px;
-}
-
-@media (max-width: 1000px) {
-  .painel-aluno-indicadores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
+.painel-aluno__rodape-aviso strong {
+  color: var(--titulo);
 }
 
 @media (max-width: 760px) {
   .pagina-painel-aluno {
-    padding-top: 28px;
-    gap: 24px;
+    padding-top: calc(var(--cabecalho-altura, 64px) + 16px);
+    gap: var(--espaco-4);
   }
-
   .painel-aluno-cabecalho {
     align-items: flex-start;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--espaco-4);
   }
+}
 
-  .painel-aluno-indicadores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .painel-aluno-indicadores > div {
-    padding: 18px;
-  }
-
-  .painel-aluno-indicadores__destaque {
-    padding-top: 16px !important;
-  }
-
-  .painel-aluno-indicadores dd {
-    font-size: 30px;
-  }
+.tabela.tabela-projetos-aluno tbody tr:hover {
+  background: color-mix(in srgb, var(--azul) 5%, var(--superficie));
 }

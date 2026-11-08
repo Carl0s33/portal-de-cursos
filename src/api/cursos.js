@@ -1,17 +1,12 @@
-import { ErroApi, requisitarApi } from './cliente.js'
+import { pegarEnderecoRecurso } from './enderecos.js'
+import { ErroApi, chamarApi } from './cliente.js'
 
 export const VERSAO = ''
 
-const enderecoCursos =
-  import.meta.env.VITE_API_CURSOS_URL ||
-  import.meta.env.VITE_API_CURSOS ||
-  `${import.meta.env.BASE_URL}api/cursos`
-const enderecoDisciplinas =
-  import.meta.env.VITE_API_DISCIPLINAS_URL ||
-  import.meta.env.VITE_API_DISCIPLINAS ||
-  `${import.meta.env.BASE_URL}api/disciplinas`
-const enderecoCampus = `${import.meta.env.BASE_URL}api/campus`
-const enderecoAreas = `${import.meta.env.BASE_URL}api/areas-conhecimento`
+const enderecoCursos = pegarEnderecoRecurso('cursos')
+const enderecoDisciplinas = pegarEnderecoRecurso('disciplinas')
+const enderecoCampus = pegarEnderecoRecurso('campus')
+const enderecoAreas = pegarEnderecoRecurso('areas-conhecimento')
 
 const rotulos = {
   grau: {
@@ -34,7 +29,7 @@ function rotuloDoEnum(valor, tipo) {
   return rotulos[tipo][valor] || valor
 }
 
-function criarIdentificador(acronimo = '') {
+function gerarSlug(acronimo = '') {
   return acronimo
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -43,12 +38,12 @@ function criarIdentificador(acronimo = '') {
     .replace(/^-|-$/g, '')
 }
 
-function mapearCurso(curso) {
+function prepararCurso(curso) {
   const semestres = Number(curso.duracao?.match(/\d+/)?.[0]) || 0
   const componentes = (curso.qtdDisciplinasObrigatorias || 0) + (curso.qtdDisciplinasOptativas || 0)
   return {
     ...curso,
-    identificador: criarIdentificador(curso.acronimo),
+    identificador: gerarSlug(curso.acronimo),
     sigla: curso.acronimo,
     grau: rotuloDoEnum(curso.grau, 'grau'),
     modalidade: rotuloDoEnum(curso.modalidade, 'modalidade'),
@@ -66,7 +61,7 @@ function mapearCurso(curso) {
   }
 }
 
-function mapearDisciplina(disciplina) {
+function prepararDisciplina(disciplina) {
   const ordemSemestres = [
     'PRIMEIRO',
     'SEGUNDO',
@@ -88,17 +83,18 @@ function mapearDisciplina(disciplina) {
   }
 }
 
-async function requisitarCursos(sinal) {
+async function buscarTodosCursos(sinal, token = null) {
   const cursos = []
   let pagina = 0
   let totalPaginas = 1
 
   while (pagina < totalPaginas) {
     const separador = enderecoCursos.includes('?') ? '&' : '?'
-    const dados = await requisitarApi(
+    const dados = await chamarApi(
       `${enderecoCursos}${separador}page=${pagina}&size=100&sort=nome,asc`,
       {
         metodo: 'GET',
+        token,
         sinal,
       },
     )
@@ -115,24 +111,24 @@ async function requisitarCursos(sinal) {
     pagina += 1
   }
 
-  return cursos.map(mapearCurso)
+  return cursos.map(prepararCurso)
 }
 
-export async function listarCursos(sinal) {
-  return requisitarCursos(sinal)
+export async function listarCursos(sinal, token = null) {
+  return buscarTodosCursos(sinal, token)
 }
 
-export async function obterCursoPorId(identificador, sinal) {
-  const cursos = await requisitarCursos(sinal)
+export async function buscarCursoPorId(identificador, sinal) {
+  const cursos = await buscarTodosCursos(sinal)
   const resumo = cursos.find((curso) => curso.identificador === identificador)
   if (!resumo) throw new ErroApi('Curso não encontrado.', { status: 404 })
 
   const [dadosCurso, disciplinas] = await Promise.all([
-    requisitarApi(`${enderecoCursos.replace(/\/$/, '')}/${encodeURIComponent(resumo.id)}`, {
+    chamarApi(`${enderecoCursos.replace(/\/$/, '')}/${encodeURIComponent(resumo.id)}`, {
       metodo: 'GET',
       sinal,
     }),
-    requisitarApi(
+    chamarApi(
       `${enderecoDisciplinas}${enderecoDisciplinas.includes('?') ? '&' : '?'}cursoId=${encodeURIComponent(resumo.id)}`,
       { metodo: 'GET', sinal },
     ),
@@ -142,15 +138,15 @@ export async function obterCursoPorId(identificador, sinal) {
     throw new ErroApi('Os dados do curso estão em um formato inválido.', { status: 502 })
   }
 
-  return { ...mapearCurso(dadosCurso), grade: disciplinas.map(mapearDisciplina) }
+  return { ...prepararCurso(dadosCurso), grade: disciplinas.map(prepararDisciplina) }
 }
 
 export async function cadastrarCurso(token, dados, sinal) {
-  return requisitarApi(enderecoCursos, { metodo: 'POST', corpo: dados, token, sinal })
+  return chamarApi(enderecoCursos, { metodo: 'POST', corpo: dados, token, sinal })
 }
 
 export async function atualizarCurso(token, id, dados, sinal) {
-  return requisitarApi(`${enderecoCursos.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoCursos.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -159,7 +155,7 @@ export async function atualizarCurso(token, id, dados, sinal) {
 }
 
 export async function excluirCurso(token, id, sinal) {
-  return requisitarApi(`${enderecoCursos.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoCursos.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,
@@ -167,15 +163,15 @@ export async function excluirCurso(token, id, sinal) {
 }
 
 export async function listarCampus(sinal) {
-  return requisitarApi(enderecoCampus, { metodo: 'GET', sinal })
+  return chamarApi(enderecoCampus, { metodo: 'GET', sinal })
 }
 
 export async function cadastrarCampus(token, dados, sinal) {
-  return requisitarApi(enderecoCampus, { metodo: 'POST', corpo: dados, token, sinal })
+  return chamarApi(enderecoCampus, { metodo: 'POST', corpo: dados, token, sinal })
 }
 
 export async function atualizarCampus(token, id, dados, sinal) {
-  return requisitarApi(`${enderecoCampus.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoCampus.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -184,7 +180,7 @@ export async function atualizarCampus(token, id, dados, sinal) {
 }
 
 export async function excluirCampus(token, id, sinal) {
-  return requisitarApi(`${enderecoCampus.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoCampus.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,
@@ -192,15 +188,15 @@ export async function excluirCampus(token, id, sinal) {
 }
 
 export async function listarAreasConhecimento(sinal) {
-  return requisitarApi(enderecoAreas, { metodo: 'GET', sinal })
+  return chamarApi(enderecoAreas, { metodo: 'GET', sinal })
 }
 
 export async function cadastrarAreaConhecimento(token, dados, sinal) {
-  return requisitarApi(enderecoAreas, { metodo: 'POST', corpo: dados, token, sinal })
+  return chamarApi(enderecoAreas, { metodo: 'POST', corpo: dados, token, sinal })
 }
 
 export async function atualizarAreaConhecimento(token, id, dados, sinal) {
-  return requisitarApi(`${enderecoAreas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoAreas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -209,7 +205,7 @@ export async function atualizarAreaConhecimento(token, id, dados, sinal) {
 }
 
 export async function excluirAreaConhecimento(token, id, sinal) {
-  return requisitarApi(`${enderecoAreas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoAreas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,
@@ -219,7 +215,7 @@ export async function excluirAreaConhecimento(token, id, sinal) {
 export const moduloCursos = {
   versao: VERSAO,
   listar: listarCursos,
-  obterPorId: obterCursoPorId,
+  obterPorId: buscarCursoPorId,
   cadastrar: cadastrarCurso,
   atualizar: atualizarCurso,
   excluir: excluirCurso,

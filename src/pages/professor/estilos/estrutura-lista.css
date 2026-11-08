@@ -1,0 +1,341 @@
+/* ==========================================================================
+   Feed do professor
+   ========================================================================== */
+
+.pagina-professor {
+  display: grid;
+  gap: 32px;
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+
+.pagina-professor__topo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.pagina-professor h1 {
+  max-width: 720px;
+  margin: 0 0 8px;
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.pagina-professor__topo p:not(.pagina-professor__rotulo) {
+  margin: 0;
+  font-size: var(--texto-sm);
+  line-height: 1.6;
+  max-width: 64ch;
+}
+
+.pagina-professor__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+.pagina-professor__filtro-painel {
+  position: static;
+  gap: var(--espaco-4);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.pagina-professor__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+.pagina-professor__filtros button {
+  width: auto;
+  min-height: 40px;
+  padding-inline: var(--espaco-3);
+  border-color: var(--borda-suave);
+  border-radius: var(--raio-pilula);
+}
+.pagina-professor__filtro-rotulo {
+  gap: 0;
+}
+.pagina-professor__filtros button[aria-pressed='true'] {
+  border-color: var(--azul);
+  color: var(--azul);
+  background: var(--azul-suave);
+}
+.pagina-professor__filtros button[aria-pressed='true'] small {
+  color: var(--titulo);
+  background: var(--superficie);
+}
+.pagina-professor__filtros button small {
+  min-width: auto;
+  padding: 0;
+  background: transparent;
+}
+.pagina-professor__tipo {
+  max-width: 280px;
+  padding-top: var(--espaco-3);
+}
+.pagina-professor__tipo select {
+  border-radius: var(--raio-controle);
+}
+
+/* Cascata final do feed: filtros e busca ocupam a faixa inteira acima dos cards. */
+.pagina-professor__layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+.pagina-professor__filtro-painel {
+  position: static;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  align-items: end;
+  gap: var(--espaco-4);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.pagina-professor__filtros {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--espaco-5);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda-suave);
+}
+.pagina-professor__filtros button {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 44px;
+  padding: var(--espaco-2) 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  white-space: nowrap;
+}
+.pagina-professor__filtros button:hover {
+  border-color: var(--borda);
+  background: transparent;
+  color: var(--titulo);
+}
+.pagina-professor__filtros button[aria-pressed='true'] {
+  border-color: transparent;
+  border-bottom-color: var(--azul);
+  background: transparent;
+  color: var(--azul);
+}
+.pagina-professor__filtros button small,
+.pagina-professor__filtros button[aria-pressed='true'] small {
+  min-width: auto;
+  padding: 0;
+  background: transparent;
+  color: var(--texto-suave);
+}
+.pagina-professor__tipo {
+  max-width: none;
+  padding: 0;
+  border: 0;
+}
+.pagina-professor__tipo select {
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .pagina-professor__filtro-painel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pagina-professor__filtro-painel {
+  grid-template-columns: minmax(0, 1fr) 200px;
+  align-items: end;
+}
+.pagina-professor__filtros {
+  gap: var(--espaco-5);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--borda-suave);
+}
+.pagina-professor__filtros button {
+  min-height: 44px;
+  padding: var(--espaco-2) 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  white-space: nowrap;
+}
+.pagina-professor__filtros button:hover {
+  border-color: var(--borda);
+  background: transparent;
+  color: var(--titulo);
+}
+.pagina-professor__filtros button[aria-pressed='true'] {
+  border-color: transparent;
+  border-bottom-color: var(--azul);
+  background: transparent;
+  color: var(--azul);
+}
+.pagina-professor__filtros button[aria-pressed='true'] small {
+  color: var(--azul);
+  background: transparent;
+}
+
+@media (max-width: 700px) {
+  .pagina-professor__filtro-painel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Painel de filtros ---------- */
+
+.pagina-professor__filtro-painel {
+  position: sticky;
+  top: 88px;
+  display: grid;
+  gap: 24px;
+  padding: 24px 20px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+}
+
+.pagina-professor__filtro-painel > div {
+  display: grid;
+  gap: 8px;
+}
+
+.pagina-professor__filtro-painel strong {
+  color: var(--titulo);
+  font-size: var(--texto-md);
+}
+
+.pagina-professor__filtro-painel p {
+  margin: 0;
+  color: var(--texto);
+  font-size: var(--texto-xs);
+  line-height: 1.55;
+}
+
+.pagina-professor__filtros {
+  display: grid;
+  gap: 6px;
+}
+
+.pagina-professor__filtros button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--raio-cartao);
+  color: var(--texto);
+  background: transparent;
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease-out,
+    border-color 150ms ease-out,
+    color 150ms ease-out;
+}
+
+.pagina-professor__filtro-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.pagina-professor__filtro-rotulo .icone {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.pagina-professor__filtros button[data-tom='todas'] .icone {
+  color: var(--roxo);
+}
+
+.pagina-professor__filtros button[data-tom='pendente'] .icone {
+  color: var(--aviso);
+}
+
+.pagina-professor__filtros button[data-tom='analise'] .icone {
+  color: var(--azul);
+}
+
+.pagina-professor__filtros button[data-tom='aprovado'] .icone {
+  color: var(--sucesso);
+}
+
+.pagina-professor__filtros button[data-tom='recusado'] .icone {
+  color: var(--erro);
+}
+
+.pagina-professor__filtros button > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pagina-professor__filtros button small {
+  flex-shrink: 0;
+  min-width: 24px;
+  padding: 2px 8px;
+  border-radius: var(--raio-cartao);
+  background: var(--fundo);
+  color: var(--titulo);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  text-align: center;
+}
+
+.pagina-professor__filtros button:hover {
+  border-color: var(--azul);
+  color: var(--azul);
+  background: var(--superficie);
+}
+.pagina-professor__filtros button[aria-pressed='true'] {
+  border-color: var(--azul);
+  background: var(--azul);
+  color: var(--texto-sobre-azul);
+}
+.pagina-professor__filtros button[aria-pressed='true'] .icone {
+  color: inherit;
+}
+.pagina-professor__filtros button[aria-pressed='true'] small {
+  background: var(--superficie);
+  color: var(--titulo);
+}
+
+.pagina-professor__filtros button:focus-visible,
+.pagina-professor__tipo select:focus-visible,
+.submissao-feed__gatilho:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+.pagina-professor__tipo {
+  display: grid;
+  gap: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--borda);
+  color: var(--titulo);
+  font-size: var(--texto-xs);
+  font-weight: 800;
+}
+
+.pagina-professor__tipo select {
+  width: 100%;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+  padding: 10px;
+  color: var(--titulo);
+  background: var(--fundo);
+  font: inherit;
+  font-size: var(--texto-xs);
+}

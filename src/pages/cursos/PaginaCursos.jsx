@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import Icone from '@/shared/components/Icone.jsx'
-import BuscaCursos from './components/BuscaCursos.jsx'
-import FiltrosCursos from './components/FiltrosCursos.jsx'
-import FiltrosAtivos from './components/FiltrosAtivos.jsx'
-import CartaoCatalogo from './components/CartaoCatalogo.jsx'
-import CarregamentoCatalogo from './components/CarregamentoCatalogo.jsx'
-import CatalogoVazio from './components/CatalogoVazio.jsx'
-import ErroCatalogo from './components/ErroCatalogo.jsx'
-import { consultarCursos } from './services/consultarCursos.js'
+import Icone from '@/shared/componentes/Icone.jsx'
+import BuscaCursos from './componentes/BuscaCursos.jsx'
+import FiltrosCursos from './componentes/FiltrosCursos.jsx'
+import FiltrosAtivos from './componentes/FiltrosAtivos.jsx'
+import CardCatalogo from './componentes/CardCatalogo.jsx'
+import CarregamentoCatalogo from './componentes/CarregamentoCatalogo.jsx'
+import CatalogoVazio from './componentes/CatalogoVazio.jsx'
+import ErroCatalogo from './componentes/ErroCatalogo.jsx'
+import { buscarCursos } from './servicos/buscarCursos.js'
 import './cursos.css'
 
 const filtrosIniciais = {
@@ -59,22 +59,21 @@ function correspondeDuracao(curso, opcoes) {
 }
 
 export default function PaginaCursos() {
-  const [consulta, definirConsulta] = useState({
+  const [consulta, mudarConsulta] = useState({
     estado: 'carregando',
     cursos: [],
     erro: null,
     ultimaTentativa: new Date(),
   })
-  const [tentativa, definirTentativa] = useState(0)
-  const [filtros, definirFiltros] = useState(lerFiltros)
-  const [ordem, definirOrdem] = useState('relevancia')
-  const [filtrosAbertos, definirFiltrosAbertos] = useState(false)
+  const [tentativa, mudarTentativa] = useState(0)
+  const [filtros, mudarFiltros] = useState(lerFiltros)
+  const [ordem, mudarOrdem] = useState('relevancia')
 
   useEffect(() => {
     const controle = new AbortController()
-    consultarCursos(controle.signal)
+    buscarCursos(controle.signal)
       .then((cursos) =>
-        definirConsulta({
+        mudarConsulta({
           estado: 'pronto',
           cursos,
           erro: null,
@@ -83,7 +82,7 @@ export default function PaginaCursos() {
       )
       .catch((erro) => {
         if (erro.name !== 'AbortError')
-          definirConsulta({
+          mudarConsulta({
             estado: 'erro',
             cursos: [],
             erro,
@@ -102,18 +101,18 @@ export default function PaginaCursos() {
   }, [filtros])
 
   function alterar(campo, valor) {
-    definirFiltros((anteriores) => ({ ...anteriores, [campo]: valor }))
+    mudarFiltros((anteriores) => ({ ...anteriores, [campo]: valor }))
   }
   function limpar() {
-    definirFiltros({ ...filtrosIniciais })
+    mudarFiltros({ ...filtrosIniciais })
   }
   function tentarNovamente() {
-    definirConsulta((anterior) => ({
+    mudarConsulta((anterior) => ({
       ...anterior,
       estado: 'carregando',
       erro: null,
     }))
-    definirTentativa((anterior) => anterior + 1)
+    mudarTentativa((anterior) => anterior + 1)
   }
 
   const resultados = consulta.cursos
@@ -147,10 +146,6 @@ export default function PaginaCursos() {
       </nav>
       <div className="pagina-cursos__introducao">
         <div>
-          <p className="pagina-cursos__rotulo">
-            <span />
-            Catálogo acadêmico
-          </p>
           <h1>Conheça nossos cursos</h1>
           <p>Explore a formação, as disciplinas, os professores e as produções de cada curso.</p>
         </div>
@@ -168,29 +163,14 @@ export default function PaginaCursos() {
       />
       <FiltrosAtivos filtros={filtros} alterar={alterar} limpar={limpar} />
       <div className="pagina-cursos__grade">
-        <div
-          className={`pagina-cursos__lateral ${filtrosAbertos ? 'pagina-cursos__lateral--aberta' : ''}`}
-        >
-          <button
-            className="pagina-cursos__abrir-filtros"
-            aria-expanded={filtrosAbertos}
-            aria-controls="painel-filtros"
-            onClick={() => definirFiltrosAbertos(!filtrosAbertos)}
-          >
-            <Icone nome="filtrar-cursos" />
-            {filtrosAbertos ? 'Recolher filtros' : 'Filtrar cursos'}
-          </button>
-          <div id="painel-filtros">
-            <FiltrosCursos
-              filtros={filtros}
-              alterar={alterar}
-              limpar={limpar}
-              bloqueado={bloqueado}
-              cursos={consulta.cursos}
-            />
-          </div>
-        </div>
         <div className="pagina-cursos__resultados" aria-busy={consulta.estado === 'carregando'}>
+          <FiltrosCursos
+            filtros={filtros}
+            alterar={alterar}
+            limpar={limpar}
+            bloqueado={bloqueado}
+            cursos={consulta.cursos}
+          />
           <div className="pagina-cursos__resumo">
             <p role="status" aria-live="polite">
               {consulta.estado === 'pronto' ? (
@@ -209,7 +189,7 @@ export default function PaginaCursos() {
               <select
                 value={ordem}
                 disabled={bloqueado}
-                onChange={(evento) => definirOrdem(evento.target.value)}
+                onChange={(evento) => mudarOrdem(evento.target.value)}
               >
                 <option value="relevancia">Mais relevantes</option>
                 <option value="nome">Nome de A a Z</option>
@@ -229,7 +209,7 @@ export default function PaginaCursos() {
             (resultados.length ? (
               <div className="grade-catalogo">
                 {resultados.map((curso) => (
-                  <CartaoCatalogo curso={curso} key={curso.identificador} />
+                  <CardCatalogo curso={curso} key={curso.identificador} />
                 ))}
               </div>
             ) : (

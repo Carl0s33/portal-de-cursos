@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Documentos (compartilhado entre feed e detalhes)
+   ========================================================================== */
+
+.documentos-submissao-professor {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.documentos-submissao-professor li {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--borda);
+  border-radius: 0;
+  transition:
+    border-color var(--transicao),
+    color var(--transicao);
+}
+
+.documentos-submissao-professor li:first-child {
+  border-top: 1px solid var(--borda);
+}
+
+.documentos-submissao-professor li:hover {
+  border-color: var(--borda);
+}
+
+.item-documento-interativo,
+.item-documento-estatico {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4) 0;
+  width: 100%;
+  color: var(--texto);
+  background: transparent;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: color var(--transicao);
+}
+
+.item-documento-interativo:hover {
+  background-color: color-mix(in srgb, var(--azul) 5%, var(--superficie));
+  color: var(--azul);
+}
+
+.documento-tipo {
+  flex-shrink: 0;
+  min-width: 44px;
+  padding: 3px 8px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-p);
+  color: var(--azul);
+  background: transparent;
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: normal;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.item-documento-nome {
+  flex: 1;
+  font-size: var(--texto-s);
+  font-weight: 600;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--titulo);
+  transition: color var(--transicao);
+}
+
+.item-documento-interativo:hover .item-documento-nome {
+  color: var(--azul);
+}
+
+.item-documento-gatilho {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--azul);
+  white-space: nowrap;
+}
+
+.item-documento-seta {
+  display: inline-block;
+  font-size: var(--texto-sm);
+  font-weight: 800;
+  transition: transform var(--transicao);
+}
+
+.item-documento-interativo:hover .item-documento-seta {
+}
+
+.documento-indisponivel {
+  color: var(--texto);
+  font-size: var(--texto-xs);
+  white-space: nowrap;
+}
+
+.botao-texto {
+  border: 0;
+  padding: 0;
+  color: var(--azul);
+  background: transparent;
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  cursor: pointer;
+}

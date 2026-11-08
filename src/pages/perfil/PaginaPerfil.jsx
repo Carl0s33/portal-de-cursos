@@ -1,175 +1,183 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { listarCursos } from '@/api/cursos.js'
+import { atualizarMeuPerfilAluno } from '@/api/alunos.js'
+import { atualizarMeuPerfilProfessor } from '@/api/professores.js'
+import { atualizarMeuPerfilCoordenador } from '@/api/coordenadores.js'
+import { atualizarMeuUsuario } from '@/api/usuarios.js'
 import { enderecoPrivado } from '../../app/rotas.js'
-import Icone from '@/shared/components/Icone.jsx'
 import './perfil.css'
 
-export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'professor/feed' }) {
-  const [nome, definirNome] = useState(usuario.nome || '')
-  const [titulacao, definirTitulacao] = useState(usuario.titulacao || '')
-  const [descricao, definirDescricao] = useState(usuario.descricao || '')
-  const [foto, definirFoto] = useState(usuario.foto || '')
-  const [erro, definirErro] = useState('')
-  const [mensagem, definirMensagem] = useState('')
-  const [carregandoFoto, definirCarregandoFoto] = useState(false)
-  const leitor = useRef(null)
-  const entradaFoto = useRef(null)
-  useEffect(() => () => leitor.current?.abort(), [])
+const titulacoes = {
+  GRADUACAO: 'Graduação',
+  ESPECIALIZACAO: 'Especialização',
+  MESTRADO: 'Mestrado',
+  DOUTORADO: 'Doutorado',
+  POS_DOUTORADO: 'Pós-doutorado',
+}
 
-  function selecionarFoto(evento) {
-    const arquivo = evento.target.files?.[0]
-    if (!arquivo) return
-    definirErro('')
-    definirMensagem('')
-    if (
-      !['image/jpeg', 'image/png', 'image/webp'].includes(arquivo.type) ||
-      arquivo.size > 2 * 1024 * 1024
-    ) {
-      definirErro('Escolha uma foto JPG, PNG ou WebP de até 2 MB.')
-      evento.target.value = ''
-      return
-    }
-    leitor.current?.abort()
-    const leitura = new FileReader()
-    leitor.current = leitura
-    definirCarregandoFoto(true)
-    leitura.onload = () => {
-      definirFoto(leitura.result)
-      definirCarregandoFoto(false)
-    }
-    leitura.onerror = () => {
-      definirErro('Não foi possível abrir esta foto. Escolha outro arquivo.')
-      definirCarregandoFoto(false)
-    }
-    leitura.readAsDataURL(arquivo)
-    evento.target.value = ''
-  }
-  function salvar(evento) {
+export default function PaginaPerfil({ usuario, tipoUsuario, token, aoSalvar, destinoVoltar }) {
+  const professor = tipoUsuario === 'PROFESSOR'
+  const coordenador = tipoUsuario === 'COORDENADOR'
+  const [nome, mudarNome] = useState(usuario.nome || '')
+  const [senha, mudarSenha] = useState('')
+  const [titulacao, mudarTitulacao] = useState(usuario.titulacao || '')
+  const [descricao, mudarDescricao] = useState(usuario.descricao || '')
+  const [cursoId, mudarCursoId] = useState('')
+  const [cursos, mudarCursos] = useState([])
+  const [erro, mudarErro] = useState('')
+  const [mensagem, mudarMensagem] = useState('')
+  const [salvando, mudarSalvando] = useState(false)
+
+  useEffect(() => {
+    if (!coordenador) return
+    const controle = new AbortController()
+    listarCursos(controle.signal)
+      .then(mudarCursos)
+      .catch(() => {
+        if (!controle.signal.aborted) mudarErro('Não foi possível carregar os cursos.')
+      })
+    return () => controle.abort()
+  }, [coordenador])
+
+  async function salvar(evento) {
     evento.preventDefault()
-    if (!nome.trim()) {
-      definirErro('Informe seu nome.')
-      return
+    if (salvando) return
+    mudarErro('')
+    mudarMensagem('')
+    mudarSalvando(true)
+    try {
+      const dadosUsuario = { nome: nome.trim(), email: usuario.email, senha }
+      if (coordenador) {
+        const salvo = await atualizarMeuPerfilCoordenador(token, {
+          professorId: usuario.professorId,
+          cursoId: Number(cursoId),
+        })
+        aoSalvar({ cursoId: salvo.cursoId })
+      } else if (professor) {
+        const salvo = await atualizarMeuPerfilProfessor(token, {
+          usuario: dadosUsuario,
+          cursoId: usuario.cursoId,
+          titulacao,
+          descricao: descricao.trim(),
+        })
+        aoSalvar({ nome: salvo.nome, titulacao: salvo.titulacao, descricao: salvo.descricao })
+      } else if (tipoUsuario === 'ALUNO') {
+        const salvo = await atualizarMeuPerfilAluno(token, {
+          usuario: dadosUsuario,
+          cursoId: usuario.cursoId,
+        })
+        aoSalvar({ nome: salvo.usuario.nome })
+      } else if (tipoUsuario === 'ADMIN') {
+        const salvo = await atualizarMeuUsuario(token, dadosUsuario)
+        aoSalvar({ nome: salvo.nome })
+      }
+      mudarSenha('')
+      mudarMensagem('Perfil atualizado com sucesso.')
+    } catch (falha) {
+      mudarErro(falha.message || 'Não foi possível salvar o perfil.')
+    } finally {
+      mudarSalvando(false)
     }
-    aoSalvar({ nome: nome.trim(), titulacao: titulacao.trim(), descricao: descricao.trim(), foto })
-    definirErro('')
-    definirMensagem(
-      'Perfil atualizado nesta sessão. As alterações ainda não são enviadas ao servidor.',
-    )
   }
+
   function cancelar() {
-    leitor.current?.abort()
-    definirCarregandoFoto(false)
-    definirNome(usuario.nome || '')
-    definirTitulacao(usuario.titulacao || '')
-    definirDescricao(usuario.descricao || '')
-    definirFoto(usuario.foto || '')
-    definirErro('')
-    definirMensagem('Alterações descartadas.')
+    mudarNome(usuario.nome || '')
+    mudarSenha('')
+    mudarTitulacao(usuario.titulacao || '')
+    mudarDescricao(usuario.descricao || '')
+    mudarCursoId('')
+    mudarErro('')
+    mudarMensagem('Alterações descartadas.')
   }
+
   return (
     <main id="conteudo" className="limite pagina-perfil">
       <a className="perfil-voltar" href={enderecoPrivado(destinoVoltar)}>
-        ←{' '}
-        {destinoVoltar.startsWith('administracao/')
-          ? 'Voltar para a administração'
-          : 'Voltar para o feed'}
+        ← Voltar para minha área
       </a>
       <header className="perfil-titulo">
         <h1>Meu perfil</h1>
-        <p>Suas informações e foto de apresentação.</p>
       </header>
       <form className="perfil-formulario" onSubmit={salvar}>
-        <section className="perfil-foto" aria-labelledby="titulo-foto">
-          <div className="perfil-foto__imagem">
-            {foto ? (
-              <img
-                src={foto}
-                alt="Prévia da foto de perfil"
-                onError={() => {
-                  definirFoto('')
-                  definirErro('A imagem não pôde ser exibida. Escolha outra foto.')
-                }}
-              />
-            ) : (
-              <Icone nome="usuario" />
-            )}
-          </div>
-          <div>
-            <h2 id="titulo-foto">Foto de perfil</h2>
-            <p>JPG, PNG ou WebP. Até 2 MB.</p>
-            <div className="perfil-foto__acoes">
-              <button
-                type="button"
-                onClick={() => entradaFoto.current.click()}
-                disabled={carregandoFoto}
-              >
-                {carregandoFoto ? 'Preparando foto…' : 'Escolher foto'}
-              </button>
-              {foto && (
-                <button type="button" onClick={() => definirFoto('')}>
-                  Remover foto
-                </button>
-              )}
-            </div>
-            <input
-              ref={entradaFoto}
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={selecionarFoto}
-              aria-label="Escolher arquivo de foto"
-              hidden
-            />
-          </div>
-        </section>
-        <div className="perfil-campos">
-          <label htmlFor="perfil-nome">
+        <fieldset className="perfil-campos" disabled={salvando}>
+          <label>
             Nome
             <input
-              id="perfil-nome"
               autoComplete="name"
-              maxLength={120}
+              maxLength={100}
               value={nome}
-              onChange={(e) => definirNome(e.target.value)}
+              readOnly={coordenador}
+              onChange={(evento) => mudarNome(evento.target.value)}
               required
             />
           </label>
-          <label htmlFor="perfil-email">
-            <span id="rotulo-email-perfil">E-mail</span>
-            <input
-              aria-labelledby="rotulo-email-perfil"
-              id="perfil-email"
-              type="email"
-              value={usuario.email || ''}
-              readOnly
-              aria-describedby="perfil-email-ajuda"
-            />
-            <small id="perfil-email-ajuda">E-mail utilizado para entrar no portal.</small>
+          <label>
+            E-mail
+            <input type="email" value={usuario.email || ''} readOnly />
           </label>
-          <label htmlFor="perfil-titulacao">
-            Titulação
-            <input
-              id="perfil-titulacao"
-              maxLength={100}
-              value={titulacao}
-              onChange={(e) => definirTitulacao(e.target.value)}
-            />
-          </label>
-          <label htmlFor="perfil-descricao">
-            <span id="rotulo-apresentacao">Apresentação</span>
-            <textarea
-              aria-labelledby="rotulo-apresentacao"
-              id="perfil-descricao"
-              maxLength={600}
-              rows={4}
-              value={descricao}
-              onChange={(e) => definirDescricao(e.target.value)}
-            />
-            <small>{descricao.length}/600 caracteres</small>
-          </label>
-        </div>
-        <p className="perfil-nota">
-          As edições e a foto ficam apenas nesta sessão. Ao sair ou recarregar a página, elas serão
-          descartadas.
-        </p>
+          {coordenador ? (
+            <label>
+              Curso da coordenação
+              <select
+                value={cursoId}
+                onChange={(evento) => mudarCursoId(evento.target.value)}
+                required
+              >
+                <option value="">Selecione o curso</option>
+                {cursos.map((curso) => (
+                  <option key={curso.id} value={curso.id}>
+                    {curso.nome}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <label>
+              Senha para salvar
+              <input
+                type="password"
+                autoComplete="new-password"
+                minLength={8}
+                maxLength={100}
+                value={senha}
+                onChange={(evento) => mudarSenha(evento.target.value)}
+                required
+              />
+              <small>
+                Digite a senha atual para mantê-la ou digite a nova senha que deseja usar.
+              </small>
+            </label>
+          )}
+          {professor && (
+            <>
+              <label>
+                Titulação
+                <select
+                  value={titulacao}
+                  onChange={(evento) => mudarTitulacao(evento.target.value)}
+                  required
+                >
+                  <option value="">Selecione a titulação</option>
+                  {Object.entries(titulacoes).map(([valor, rotulo]) => (
+                    <option key={valor} value={valor}>
+                      {rotulo}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Apresentação
+                <textarea
+                  maxLength={500}
+                  rows={4}
+                  value={descricao}
+                  onChange={(evento) => mudarDescricao(evento.target.value)}
+                  required
+                />
+              </label>
+            </>
+          )}
+        </fieldset>
         {erro && (
           <p className="perfil-aviso" role="alert">
             {erro}
@@ -181,10 +189,10 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
           </p>
         )}
         <div className="perfil-acoes">
-          <button className="botao-primario" type="submit" disabled={carregandoFoto}>
-            Salvar nesta sessão
+          <button className="botao-primario" type="submit" disabled={salvando}>
+            {salvando ? 'Salvando…' : 'Salvar alterações'}
           </button>
-          <button type="button" onClick={cancelar}>
+          <button type="button" onClick={cancelar} disabled={salvando}>
             Descartar alterações
           </button>
         </div>

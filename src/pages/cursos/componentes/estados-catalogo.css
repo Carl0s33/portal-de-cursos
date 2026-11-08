@@ -1,0 +1,72 @@
+.carregamento-catalogo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espaco-5);
+}
+.esqueleto-catalogo {
+  min-width: 0;
+  border-radius: var(--raio-cartao);
+  padding: var(--espaco-5);
+  border: 1px solid var(--borda);
+  background: var(--superficie);
+}
+.esqueleto-catalogo > div,
+.esqueleto-catalogo__metadados span {
+  background: var(--borda);
+  border-radius: var(--raio-botao);
+}
+.esqueleto-catalogo__etiqueta {
+  width: 32%;
+  height: 24px;
+  margin-bottom: 24px;
+  border-radius: var(--raio-pilula);
+}
+.esqueleto-catalogo__titulo {
+  width: 90%;
+  height: 28px;
+  margin-bottom: 6px;
+}
+.esqueleto-catalogo__subtitulo {
+  width: 55%;
+  height: 28px;
+  margin-bottom: 24px;
+}
+.esqueleto-catalogo__linha {
+  height: 16px;
+  width: 100%;
+  margin-bottom: 6px;
+}
+.esqueleto-catalogo__linha--curta {
+  width: 75%;
+}
+.esqueleto-catalogo .esqueleto-catalogo__metadados {
+  background: none;
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+.esqueleto-catalogo__metadados span {
+  flex: 1;
+  height: 48px;
+}
+.esqueleto-catalogo__acao {
+  margin: 24px 0 0 auto;
+  width: 40%;
+  height: 40px;
+}
+.sugestoes-catalogo {
+  margin-top: 40px;
+}
+.sugestoes-catalogo > h2 {
+  font-size: var(--texto-md);
+  margin: 0 0 4px;
+}
+.sugestoes-catalogo > p {
+  font-size: var(--texto-sm);
+  margin: 0 0 20px;
+}
+@media (max-width: 1000px) {
+  .carregamento-catalogo {
+    grid-template-columns: 1fr;
+  }
+}

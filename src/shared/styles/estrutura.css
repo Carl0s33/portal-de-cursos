@@ -1,9 +1,18 @@
 .rodape {
+  position: relative;
   margin-top: 48px;
   padding: 48px 0 32px;
   background: var(--superficie);
-  border-top: 1px solid var(--borda);
+  border-top: 0;
   color: var(--texto);
+}
+
+.rodape::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--azul);
+  content: '';
 }
 
 .rodape__colunas {
@@ -14,18 +23,18 @@
 
 .rodape__marca-bloco p {
   max-width: 38ch;
-  font-size: 14px;
+  font-size: var(--texto-sm);
   line-height: 1.6;
   margin: 12px 0 0;
   color: var(--texto);
 }
 
 .rodape h2 {
-  font-size: 12px;
+  font-size: var(--texto-xs);
   font-weight: 700;
   line-height: 1.4;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+
+  letter-spacing: normal;
   color: var(--titulo);
   margin: 0 0 14px;
 }
@@ -38,7 +47,7 @@
 }
 
 .rodape a {
-  font-size: 14px;
+  font-size: var(--texto-sm);
   font-weight: 500;
   color: var(--texto);
   transition: color 160ms ease;
@@ -54,7 +63,7 @@
 }
 
 .rodape__acesso p {
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 1.55;
   margin: 10px 0 0;
   color: var(--texto-suave);
@@ -73,19 +82,15 @@
 
 .rodape__base p {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--texto-xs);
   color: var(--texto-suave);
 }
 
 .rodape__base small {
   align-self: center;
-  background: var(--suave);
-  border: 1px solid var(--borda-suave);
-  border-radius: 6px;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--texto);
+  font-size: var(--texto-xs);
+  color: var(--texto-suave);
+  text-align: right;
 }
 
 @media (max-width: 1000px) {
@@ -114,5 +119,6 @@
 
   .rodape__base small {
     align-self: flex-start;
+    text-align: left;
   }
 }

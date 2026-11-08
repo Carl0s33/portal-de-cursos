@@ -1,0 +1,41 @@
+.pagina-projetos__filtros {
+  display: grid;
+  gap: 18px;
+  padding: 22px 20px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-cartao);
+}
+.pagina-projetos__filtros h2 {
+  font-size: var(--texto-md);
+  font-weight: 800;
+  margin: 0;
+}
+.pagina-projetos__filtros label {
+  display: grid;
+  gap: 8px;
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  color: var(--titulo);
+}
+.pagina-projetos__filtros input,
+.pagina-projetos__filtros select {
+  min-height: 44px;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-botao);
+  background: var(--fundo);
+  color: var(--titulo);
+  font-size: var(--texto-sm);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+.pagina-projetos__filtros input:focus-visible,
+.pagina-projetos__filtros select:focus-visible {
+  border-color: var(--azul);
+  outline: 3px solid color-mix(in srgb, var(--azul) 22%, transparent);
+  outline-offset: 1px;
+}

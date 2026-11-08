@@ -1,40 +1,14 @@
+import PainelInstitucional from '@/shared/componentes/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
-import { autenticarConta } from './services/autenticarConta.js'
+import { entrarNaConta } from './servicos/entrarNaConta.js'
 import { basePortal, enderecoPrivado } from '@/app/rotas.js'
+import Icone from '@/shared/componentes/Icone.jsx'
 import logoPortal from '@/assets/marca/logo-portal.png'
-import Icone from '@/shared/components/Icone.jsx'
 import './acesso.css'
 
 const TEMPO_LIMITE_MS = 15000
 const MOTIVO_TEMPO_ESGOTADO = 'tempo-esgotado'
 const MOTIVO_DESMONTADO = 'desmontado'
-
-const TIPOS_PROJETO = [
-  {
-    id: 'tcc',
-    icone: 'formacao-cursos',
-    titulo: 'TCC',
-    descricao: 'Trabalho de conclusão de curso',
-  },
-  {
-    id: 'integrador',
-    icone: 'projetos-cursos',
-    titulo: 'Projeto Integrador',
-    descricao: 'Soluções aplicadas ao curso',
-  },
-  {
-    id: 'pesquisa',
-    icone: 'laboratorio',
-    titulo: 'Pesquisa',
-    descricao: 'Conhecimento em construção',
-  },
-  {
-    id: 'extensao',
-    icone: 'docentes-detalhe',
-    titulo: 'Extensão',
-    descricao: 'Projetos conectados à comunidade',
-  },
-]
 
 function validarFormulario(identificacao, senha) {
   const erros = {}
@@ -67,12 +41,12 @@ export default function PaginaAcesso({
   sessaoExpirada = false,
   perfil = 'institucional',
 }) {
-  const [identificacao, definirIdentificacao] = useState('')
-  const [senha, definirSenha] = useState('')
-  const [mostrarSenha, definirMostrarSenha] = useState(false)
-  const [enviando, definirEnviando] = useState(false)
-  const [erroGeral, definirErroGeral] = useState('')
-  const [erros, definirErros] = useState({})
+  const [identificacao, mudarIdentificacao] = useState('')
+  const [senha, mudarSenha] = useState('')
+  const [mostrarSenha, mudarMostrarSenha] = useState(false)
+  const [enviando, mudarEnviando] = useState(false)
+  const [erroGeral, mudarErroGeral] = useState('')
+  const [erros, mudarErros] = useState({})
   const [cadastroConcluido] = useState(
     () => new URLSearchParams(window.location.search).get('cadastro') === 'sucesso',
   )
@@ -96,12 +70,12 @@ export default function PaginaAcesso({
 
   function alterarCampo(campo, valor) {
     if (campo === 'identificacao') {
-      definirIdentificacao(valor)
+      mudarIdentificacao(valor)
     } else {
-      definirSenha(valor)
+      mudarSenha(valor)
     }
-    definirErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
-    definirErroGeral('')
+    mudarErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
+    mudarErroGeral('')
   }
 
   async function entrar(evento) {
@@ -109,8 +83,8 @@ export default function PaginaAcesso({
     if (enviandoRef.current) return
 
     const novosErros = validarFormulario(identificacao, senha)
-    definirErros(novosErros)
-    definirErroGeral('')
+    mudarErros(novosErros)
+    mudarErroGeral('')
 
     if (Object.keys(novosErros).length) {
       const campo = novosErros.identificacao ? campoIdentificacao.current : campoSenha.current
@@ -119,7 +93,7 @@ export default function PaginaAcesso({
     }
 
     enviandoRef.current = true
-    definirEnviando(true)
+    mudarEnviando(true)
 
     const controle = new AbortController()
     requisicao.current = controle
@@ -127,19 +101,19 @@ export default function PaginaAcesso({
     let concluido = false
 
     try {
-      const sessao = await autenticarConta(identificacao.trim(), senha, controle.signal)
+      const sessao = await entrarNaConta(identificacao.trim(), senha, controle.signal)
       concluido = true
-      definirSenha('')
+      mudarSenha('')
       aoEntrar(sessao)
     } catch (falha) {
       if (controle.signal.reason === MOTIVO_DESMONTADO) return
 
-      definirErroGeral(
+      mudarErroGeral(
         controle.signal.reason === MOTIVO_TEMPO_ESGOTADO
           ? 'O serviço demorou para responder. Tente novamente.'
           : falha.message,
       )
-      definirSenha('')
+      mudarSenha('')
       window.requestAnimationFrame(() => avisoGeral.current?.focus())
     } finally {
       window.clearTimeout(limite)
@@ -147,42 +121,28 @@ export default function PaginaAcesso({
       /* Após sucesso, o botão continua bloqueado até a navegação acontecer */
       if (!concluido) {
         enviandoRef.current = false
-        if (controle.signal.reason !== MOTIVO_DESMONTADO) definirEnviando(false)
+        if (controle.signal.reason !== MOTIVO_DESMONTADO) mudarEnviando(false)
       }
     }
   }
 
-  const rotuloPerfil =
-    perfil === 'aluno'
-      ? 'Portal do Aluno'
-      : perfil === 'professor'
-        ? 'Portal Docente'
-        : perfil === 'administracao'
-          ? 'Gestão Institucional'
-          : 'Acesso Institucional'
-
   return (
     <main id="conteudo" className={`limite pagina-acesso acesso-login acesso-login--${perfil}`}>
       <div className="acesso-login__coluna">
-        <section className="acesso-login__cartao" aria-labelledby="titulo-entrar">
+        <section
+          className="acesso-login__cartao layout-autenticacao"
+          aria-labelledby="titulo-entrar"
+        >
           <div className="acesso-login__conteudo">
-            <div className="acesso-login__topo">
-              <div className="acesso-login__marca">
-                <span className="acesso-login__logo">
-                  <img src={logoPortal} alt="" width="28" height="28" />
-                </span>
-                <div className="acesso-login__marca-textos">
-                  <strong>Portal de Cursos</strong>
-                  <span>{rotuloPerfil}</span>
-                </div>
-              </div>
-              <span className="acesso-login__etiqueta">
-                <Icone nome="seguranca-detalhe" />
-                <span>Ambiente seguro</span>
-              </span>
-            </div>
-
             <div className="acesso-login__cabecalho">
+              <div className="acesso-login__marca" aria-label="Portal de Cursos">
+                <span className="acesso-login__logo">
+                  <img src={logoPortal} alt="" width="30" height="30" />
+                </span>
+                <span className="acesso-login__marca-textos">
+                  <strong>Portal de Cursos</strong>
+                </span>
+              </div>
               <h1 id="titulo-entrar">
                 {perfil === 'aluno'
                   ? 'Acesse sua conta de aluno'
@@ -221,9 +181,6 @@ export default function PaginaAcesso({
               <div className="acesso-campo">
                 <label htmlFor="identificacao">E-mail institucional</label>
                 <div className="acesso-entrada">
-                  <span className="acesso-entrada__icone" aria-hidden="true">
-                    <Icone nome="email" />
-                  </span>
                   <input
                     ref={campoIdentificacao}
                     id="identificacao"
@@ -248,9 +205,6 @@ export default function PaginaAcesso({
               <div className="acesso-campo">
                 <label htmlFor="senha">Senha</label>
                 <div className="acesso-senha">
-                  <span className="acesso-entrada__icone" aria-hidden="true">
-                    <Icone nome="senha" />
-                  </span>
                   <input
                     ref={campoSenha}
                     id="senha"
@@ -266,7 +220,7 @@ export default function PaginaAcesso({
                   />
                   <button
                     type="button"
-                    onClick={() => definirMostrarSenha((mostrando) => !mostrando)}
+                    onClick={() => mudarMostrarSenha((mostrando) => !mostrando)}
                     aria-controls="senha"
                     aria-pressed={mostrarSenha}
                     aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
@@ -291,8 +245,7 @@ export default function PaginaAcesso({
               )}
 
               <button className="botao-primario acesso-entrar" type="submit" disabled={enviando}>
-                <span>{enviando ? 'Entrando…' : 'Entrar na plataforma'}</span>
-                <Icone nome="seta" classe="acesso-entrar__icone" />
+                <span>{enviando ? 'Entrando…' : 'Acessar conta'}</span>
               </button>
 
               <span className="somente-leitores" role="status">
@@ -306,69 +259,18 @@ export default function PaginaAcesso({
                 <span>Exclusivo para estudantes matriculados</span>
               </div>
               <a href={enderecoPrivado('aluno/cadastro')}>
-                <Icone nome="cadastro-aluno" />
                 <span>Crie sua conta de aluno</span>
               </a>
             </div>
+
+            <p className="acesso-login__ajuda">
+              Professores, coordenadores e administradores acessam com as credenciais fornecidas
+              pela coordenação. <a href={basePortal}>Voltar ao portal</a>
+            </p>
           </div>
 
-          <aside className="acesso-login__vitrine" aria-label="Conheça os projetos do portal">
-            <div className="acesso-login__vitrine-cabecalho">
-              <span className="acesso-login__vitrine-selo-topo">
-                <Icone nome="destaque" />
-                <span>Repositório Institucional</span>
-              </span>
-              <h2>Onde a produção acadêmica ganha visibilidade</h2>
-              <p>
-                Submeta trabalhos, receba orientação docente e publique no acervo oficial do curso.
-              </p>
-            </div>
-
-            <article className="acesso-login__projetos">
-              <header>
-                <div>
-                  <strong>Tipos de projeto</strong>
-                  <span>Publicados após aprovação do orientador e coordenação</span>
-                </div>
-                <b>
-                  <Icone nome="confirmacao-cursos" />4 modalidades
-                </b>
-              </header>
-
-              <div className="acesso-login__lista-projetos">
-                {TIPOS_PROJETO.map((tipo) => (
-                  <div
-                    key={tipo.id}
-                    className={`acesso-login__projeto acesso-login__projeto--${tipo.id}`}
-                  >
-                    <span className="acesso-login__projeto-icone" aria-hidden="true">
-                      <Icone nome={tipo.icone} />
-                    </span>
-                    <div>
-                      <strong>{tipo.titulo}</strong>
-                      <small>{tipo.descricao}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <footer>
-                <div className="acesso-login__projetos-rodape">
-                  <span>PRODUÇÃO ACADÊMICA</span>
-                  <b>Seu próximo projeto começa aqui.</b>
-                </div>
-                <span className="acesso-login__projetos-indicador" aria-hidden="true">
-                  <Icone nome="reconhecimento-detalhe" />
-                </span>
-              </footer>
-            </article>
-          </aside>
+          <PainelInstitucional />
         </section>
-
-        <p className="acesso-login__ajuda">
-          Professores, coordenadores e administradores acessam com as credenciais fornecidas pela
-          coordenação. <a href={basePortal}>Voltar ao portal</a>
-        </p>
       </div>
     </main>
   )

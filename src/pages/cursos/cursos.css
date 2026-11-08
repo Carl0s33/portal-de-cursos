@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
+  font-size: var(--texto-sm);
 }
 .caminho-cursos [aria-current] {
   font-weight: 600;
@@ -23,14 +23,14 @@
   gap: 24px;
 }
 .pagina-cursos__introducao h1 {
-  font-size: 36px;
+  font-size: var(--texto-xl);
   line-height: 44px;
   font-weight: 700;
   letter-spacing: -0.9px;
   margin-bottom: 4px;
 }
 .pagina-cursos__introducao p:not(.pagina-cursos__rotulo) {
-  font-size: 18px;
+  font-size: var(--texto-md);
   line-height: 28px;
   margin: 0;
 }
@@ -39,16 +39,16 @@
   align-items: center;
   gap: 4px;
   margin: 0 0 8px;
-  font-size: 11px;
-  text-transform: uppercase;
+  font-size: var(--texto-xs);
+
   color: var(--azul);
-  letter-spacing: 0.5px;
+  letter-spacing: normal;
 }
 .pagina-cursos__rotulo span {
   width: 6px;
   height: 6px;
   background: var(--azul);
-  border-radius: 50%;
+  border-radius: var(--raio-pilula);
 }
 .pagina-cursos__offline {
   display: flex;
@@ -56,22 +56,20 @@
   align-items: center;
   flex-shrink: 0;
   padding: 6px 12px;
-  border-radius: 20px;
+  border-radius: var(--raio-cartao);
   background: var(--superficie);
-  font-size: 12px;
+  font-size: var(--texto-xs);
 }
 .pagina-cursos__grade {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
 }
 .pagina-cursos__lateral {
   min-width: 0;
   position: static;
   max-height: none;
   overflow: visible;
-  border-radius: 12px;
+  border-radius: var(--raio-campo);
 }
 .pagina-cursos__lateral .filtros-cursos {
   position: static;
@@ -88,30 +86,27 @@
   margin-bottom: 16px;
 }
 .pagina-cursos__resumo p {
-  font-size: 14px;
+  font-size: var(--texto-sm);
   margin: 0;
 }
 .pagina-cursos__resumo label {
   display: flex;
   gap: 8px;
   align-items: center;
-  font-size: 12px;
+  font-size: var(--texto-xs);
 }
 .pagina-cursos__resumo select {
   background: var(--superficie);
   color: var(--texto);
   padding: 8px;
   border: 1px solid var(--borda);
-  border-radius: 6px;
+  border-radius: var(--raio-botao);
   min-height: 40px;
 }
 .grade-catalogo {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
-.pagina-cursos__abrir-filtros {
-  display: none;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: var(--espaco-5);
 }
 .pagina-cursos .icone {
   width: auto;
@@ -138,11 +133,8 @@
   outline-offset: 3px;
 }
 @media (max-width: 1100px) {
-  .pagina-cursos__grade {
-    grid-template-columns: 260px minmax(0, 1fr);
-  }
   .grade-catalogo {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   }
 }
 @media (max-width: 760px) {
@@ -152,16 +144,12 @@
     gap: 12px;
   }
   .pagina-cursos__introducao h1 {
-    font-size: 28px;
+    font-size: var(--texto-xl);
     line-height: 36px;
   }
   .pagina-cursos__introducao p:not(.pagina-cursos__rotulo) {
-    font-size: 16px;
+    font-size: var(--texto-md);
     line-height: 24px;
-  }
-  .pagina-cursos__grade {
-    grid-template-columns: 1fr;
-    gap: 20px;
   }
   .pagina-cursos__lateral {
     position: static;
@@ -175,10 +163,10 @@
     width: 100%;
     padding: 14px 16px;
     border: 1px solid var(--borda);
-    border-radius: 8px;
+    border-radius: var(--raio-botao);
     color: var(--titulo);
     background: var(--superficie);
-    font-size: 14px;
+    font-size: var(--texto-sm);
     cursor: pointer;
   }
   .pagina-cursos__lateral:not(.pagina-cursos__lateral--aberta) #painel-filtros {

@@ -2,11 +2,11 @@ export const VERSAO_PADRAO_API = ''
 
 let versaoAtiva = import.meta.env.VITE_API_VERSAO || VERSAO_PADRAO_API
 
-export function obterVersaoApi() {
+export function pegarVersaoApi() {
   return versaoAtiva
 }
 
-export function definirVersaoApi(novaVersao) {
+export function mudarVersaoApi(novaVersao) {
   if (typeof novaVersao === 'string') {
     versaoAtiva = novaVersao.trim()
   }
@@ -25,14 +25,14 @@ export class ErroApi extends Error {
   }
 }
 
-export function obterBaseApi(modulo = 'usuarios', versao = versaoAtiva) {
+export function pegarBaseApi(modulo = 'usuarios', versao = versaoAtiva) {
   const basePortal = import.meta.env.BASE_URL || '/'
   const baseLimpa = basePortal.endsWith('/') ? basePortal : `${basePortal}/`
   const segmentoVersao = versao ? `${versao}/` : ''
   return `${window.location.origin}${baseLimpa}api/${segmentoVersao}${modulo}`
 }
 
-export async function requisitarApi(caminhoCompletoOuRelativo, opcoes = {}) {
+export async function chamarApi(caminhoCompletoOuRelativo, opcoes = {}) {
   const {
     metodo = 'GET',
     corpo = null,
@@ -40,11 +40,14 @@ export async function requisitarApi(caminhoCompletoOuRelativo, opcoes = {}) {
     headers = {},
     sinal = null,
     tempoLimiteMs = 15000,
+    formatoResposta = 'json',
   } = opcoes
 
+  const multipart = corpo instanceof FormData
+  const possuiCorpo = corpo !== null && corpo !== undefined
   const cabecalhos = {
     Accept: 'application/json',
-    ...(corpo ? { 'Content-Type': 'application/json' } : {}),
+    ...(possuiCorpo && !multipart ? { 'Content-Type': 'application/json' } : {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...headers,
   }
@@ -58,7 +61,7 @@ export async function requisitarApi(caminhoCompletoOuRelativo, opcoes = {}) {
     resposta = await fetch(caminhoCompletoOuRelativo, {
       method: metodo,
       headers: cabecalhos,
-      body: corpo ? JSON.stringify(corpo) : undefined,
+      body: possuiCorpo ? (multipart ? corpo : JSON.stringify(corpo)) : undefined,
       signal: sinalCombinado,
       credentials: 'omit',
       cache: 'no-store',
@@ -83,6 +86,8 @@ export async function requisitarApi(caminhoCompletoOuRelativo, opcoes = {}) {
     return null
   }
 
+  if (resposta.ok && formatoResposta === 'blob') return resposta.blob()
+
   let dados = null
   const tipoConteudo = resposta.headers.get('content-type') || ''
   if (tipoConteudo.includes('json')) {
@@ -98,7 +103,7 @@ export async function requisitarApi(caminhoCompletoOuRelativo, opcoes = {}) {
 
   if (!resposta.ok) {
     // Tratamento global para 401: notifica aplicação para limpar sessão e redirecionar ao login
-    if (resposta.status === 401) {
+    if (resposta.status === 401 && token) {
       try {
         sessionStorage.removeItem('portal-cursos-sessao')
         window.dispatchEvent(new CustomEvent('portal-sessao-expirada'))
@@ -121,7 +126,9 @@ export async function requisitarApi(caminhoCompletoOuRelativo, opcoes = {}) {
     }
 
     if (resposta.status === 401) {
-      mensagem = 'Sua autenticação não foi aceita. Faça login novamente.'
+      mensagem = token
+        ? 'Sua autenticação não foi aceita. Faça login novamente.'
+        : 'O serviço recusou o acesso. Confira os dados de entrada ou a configuração de acesso da API.'
     } else if (resposta.status === 403) {
       mensagem = 'Sua conta não tem permissão para realizar esta operação.'
     } else if (resposta.status === 404 && !dados?.detail) {

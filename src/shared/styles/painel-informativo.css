@@ -3,12 +3,13 @@
   align-items: flex-start;
   gap: 12px;
   margin: 0;
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: color-mix(in srgb, var(--suave) 78%, var(--superficie));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--borda) 68%, transparent);
+  padding: var(--espaco-4);
+  border-radius: var(--raio-cartao);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+
   color: var(--texto);
-  font-size: 13px;
+  font-size: var(--texto-xs);
   line-height: 1.55;
 }
 
@@ -17,24 +18,23 @@
   width: 8px;
   height: 8px;
   margin-top: 6px;
-  border-radius: 50%;
+  border-radius: var(--raio-pilula);
   background: var(--azul);
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--azul) 12%, transparent);
+
   content: '';
 }
 
 .painel-informativo strong {
   color: var(--titulo);
-  font-size: 13px;
+  font-size: var(--texto-xs);
 }
 
 .painel-informativo--observacao::before {
   background: var(--verde);
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--verde) 12%, transparent);
 }
 
 @media (max-width: 600px) {
   .painel-informativo {
-    padding: 15px 16px;
+    padding: var(--espaco-4);
   }
 }

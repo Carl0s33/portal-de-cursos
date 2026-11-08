@@ -1,0 +1,172 @@
+.hero-inicial {
+  --fundo-capa: #0a1d33;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: clamp(480px, 70vh, 640px);
+  padding-top: calc(var(--cabecalho-altura) + 40px);
+  padding-bottom: clamp(40px, 6vw, 72px);
+  color: var(--branco);
+  scroll-margin-top: 0;
+  background: var(--fundo-capa);
+  /* Quebra o container .limite para esticar 100% de ponta a ponta na viewport */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-inline: max(var(--gutter), calc((100vw - var(--largura-conteudo)) / 2 + var(--gutter)));
+  overflow: hidden;
+}
+
+:root[data-tema='escuro'] .hero-inicial {
+  --fundo-capa: #081524;
+}
+
+/* Camada 1: foto aérea da praça / campus */
+.hero-inicial::before {
+  position: absolute;
+  z-index: -2;
+  inset: -6px;
+  background-image: url('/img/hero-praca.jpg');
+  background-position: right 10% center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(1.5px) brightness(0.9) contrast(1.08);
+  content: '';
+}
+
+/* Camada 2: sombreamento direcional para leitura cristalina do texto */
+.hero-inicial__sombra {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    /* Sombra no topo para dar legibilidade nítida ao cabeçalho transparente */
+    linear-gradient(180deg, rgba(8, 21, 36, 0.85) 0%, rgba(8, 21, 36, 0.3) 75px, transparent 150px),
+    /* Sombra horizontal focada no lado esquerdo onde fica o texto */
+    linear-gradient(
+      90deg,
+      rgba(8, 21, 36, 0.94) 0%,
+      rgba(8, 21, 36, 0.8) 38%,
+      rgba(8, 21, 36, 0.35) 68%,
+      rgba(8, 21, 36, 0.1) 100%
+    );
+}
+
+.hero-inicial__conteudo {
+  position: relative;
+  z-index: 1;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.hero-inicial__tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #70aaff;
+  background: rgba(10, 45, 90, 0.65);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(112, 170, 255, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.hero-inicial__titulo-principal {
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(2.4rem, 4.8vw, 4.2rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+}
+
+.hero-inicial__descricao {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  line-height: 1.6;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero-inicial__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.hero-inicial .botao-primario {
+  background: #ffffff;
+  color: #0a1d33;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 28px;
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-inicial .botao-primario:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.hero-inicial__cta-secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.hero-inicial__cta-secundario:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+  .hero-inicial {
+    min-height: auto;
+    padding-top: calc(var(--cabecalho-altura) + 32px);
+  }
+
+  .hero-inicial::before {
+    background-position: center;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-inicial__slide {
+    animation: hero-entrada 420ms ease-out;
+  }
+}
+
+@keyframes hero-entrada {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
