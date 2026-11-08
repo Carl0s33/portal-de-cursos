@@ -51,11 +51,9 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
     () => ({
       total: minhasSubmissoes.length,
       analise: minhasSubmissoes.filter((s) =>
-        [
-          'Aguardando Orientador',
-          'Aprovado pelo orientador',
-          'Aguardando Coordenação',
-        ].includes(s.status),
+        ['Aguardando Orientador', 'Aprovado pelo orientador', 'Aguardando Coordenação'].includes(
+          s.status,
+        ),
       ).length,
       aprovados: minhasSubmissoes.filter((s) => s.status === 'Aprovado').length,
       recusados: minhasSubmissoes.filter((s) =>

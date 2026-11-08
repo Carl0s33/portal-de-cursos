@@ -77,12 +77,13 @@ function EditorTexto({
       inserido = '\n\n'
       inicioCursor = antes.length + inserido.length
     } else {
-      const marcador =
-        tipo === 'numeracao' ? '1. ' : tipo === 'citacao' ? '> ' : '- '
+      const marcador = tipo === 'numeracao' ? '1. ' : tipo === 'citacao' ? '> ' : '- '
       const linhas = selecao ? selecao.split('\n') : ['']
-      inserido = linhas.map((linha, indice) =>
-        tipo === 'numeracao' ? `${indice + 1}. ${linha}` : `${marcador}${linha}`,
-      ).join('\n')
+      inserido = linhas
+        .map((linha, indice) =>
+          tipo === 'numeracao' ? `${indice + 1}. ${linha}` : `${marcador}${linha}`,
+        )
+        .join('\n')
       antes = texto.slice(0, inicio)
       depois = texto.slice(fim)
       if (antes && !antes.endsWith('\n')) {
@@ -156,11 +157,9 @@ function EditorTexto({
           required
           maxLength={limite}
           aria-invalid={Boolean(erro)}
-          aria-describedby={
-            [idAjuda, limite ? `${id}-contador` : null, erro ? idErro : null]
-              .filter(Boolean)
-              .join(' ')
-          }
+          aria-describedby={[idAjuda, limite ? `${id}-contador` : null, erro ? idErro : null]
+            .filter(Boolean)
+            .join(' ')}
           placeholder={placeholder}
           rows={linhas}
           value={valor}
