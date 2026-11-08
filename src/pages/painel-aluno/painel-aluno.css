@@ -57,3 +57,7 @@
     gap: var(--espaco-4);
   }
 }
+
+.tabela.tabela-projetos-aluno tbody tr:hover {
+  background: color-mix(in srgb, var(--azul) 5%, var(--superficie));
+}

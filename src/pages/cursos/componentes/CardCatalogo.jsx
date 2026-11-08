@@ -8,7 +8,7 @@ export default function CardCatalogo({ curso }) {
   ].filter(([, valor]) => valor)
 
   return (
-    <article className="cartao cartao--clicavel curso-catalogo">
+    <article className="curso-catalogo">
       <div className="curso-catalogo__topo">
         <span className="curso-catalogo__grau">
           {curso.grau === 'Tecnologia' ? 'Graduação tecnológica' : curso.grau}

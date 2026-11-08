@@ -8,7 +8,7 @@ const destaques = [
   {
     id: 'projetos',
     filtro: (projeto) => !ehTcc(projeto),
-    titulo: 'Projetos que transformam boas ideias em ação.',
+    titulo: 'Projetos acadêmicos',
     descricao:
       'Conheça iniciativas de pesquisa, extensão e projetos integradores da comunidade acadêmica.',
     conviteRotulo: 'Seu projeto pode ser o próximo',
@@ -17,7 +17,7 @@ const destaques = [
   {
     id: 'tccs',
     filtro: ehTcc,
-    titulo: 'TCCs que mostram até onde o conhecimento pode chegar.',
+    titulo: 'Trabalhos de conclusão de curso',
     descricao:
       'Explore trabalhos de conclusão desenvolvidos pelos estudantes e aprovados para publicação.',
     conviteRotulo: 'Seu TCC pode ser o próximo',

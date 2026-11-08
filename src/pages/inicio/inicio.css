@@ -145,14 +145,6 @@
   -webkit-line-clamp: 4;
 }
 
-.secao-producoes .lista-projetos[data-quantidade='1'] > li:first-child .item-projeto::before {
-  height: 5px;
-}
-
-.secao-producoes .lista-projetos[data-quantidade='1'] > li:first-child .item-projeto:hover::before {
-  height: 7px;
-}
-
 .secao-producoes .lista-projetos[data-quantidade='1'] .convite-envio {
   display: flex;
   flex-direction: column;
@@ -417,5 +409,41 @@
 @media (max-width: 640px) {
   .secao-producoes .lista-projetos[data-quantidade='3'] {
     grid-template-columns: 1fr;
+  }
+}
+
+.pagina-inicial :is(.item-projeto, .curso-resumo),
+.pagina-inicial :is(.item-projeto, .curso-resumo):hover {
+  background: var(--superficie);
+  border-color: var(--borda-suave);
+  box-shadow: none;
+  transform: none;
+  transition: scale 500ms ease-in-out;
+}
+
+.pagina-inicial :is(.item-projeto, .curso-resumo)::before {
+  display: none;
+}
+
+.pagina-inicial .item-projeto:hover .item-projeto__titulo {
+  color: var(--titulo);
+}
+
+.pagina-inicial :is(.item-projeto, .curso-resumo):hover {
+  position: relative;
+  z-index: 1;
+  scale: 1.05;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pagina-inicial .inicio-revelado > * {
+    animation: entrada-secao-inicial 360ms ease-out both;
+  }
+}
+
+@keyframes entrada-secao-inicial {
+  from {
+    opacity: 0.6;
+    transform: translateY(10px);
   }
 }

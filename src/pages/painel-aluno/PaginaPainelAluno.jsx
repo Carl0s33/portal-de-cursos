@@ -8,10 +8,12 @@ import { basePortal } from '../../app/rotas.js'
 import './painel-aluno.css'
 
 const classeStatus = {
-  'Em análise': 'status--em-análise',
   'Aguardando Orientador': 'status--aguardando-orientador',
+  'Aprovado pelo orientador': 'status--aprovado-orientador',
+  'Aguardando Coordenação': 'status--aguardando-coordenação',
   Aprovado: 'status--aprovado',
-  Recusado: 'status--recusado',
+  'Recusado pelo orientador': 'status--recusado',
+  'Publicação recusada': 'status--recusado',
 }
 
 export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
@@ -49,10 +51,16 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
     () => ({
       total: minhasSubmissoes.length,
       analise: minhasSubmissoes.filter((s) =>
-        ['Aguardando Orientador', 'Em análise'].includes(s.status),
+        [
+          'Aguardando Orientador',
+          'Aprovado pelo orientador',
+          'Aguardando Coordenação',
+        ].includes(s.status),
       ).length,
       aprovados: minhasSubmissoes.filter((s) => s.status === 'Aprovado').length,
-      recusados: minhasSubmissoes.filter((s) => s.status === 'Recusado').length,
+      recusados: minhasSubmissoes.filter((s) =>
+        ['Recusado pelo orientador', 'Publicação recusada'].includes(s.status),
+      ).length,
     }),
     [minhasSubmissoes],
   )
@@ -127,7 +135,7 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
             aria-label="Lista de submissões"
             tabIndex={0}
           >
-            <table className="tabela">
+            <table className="tabela tabela-projetos-aluno">
               <caption className="somente-leitores">
                 Acompanhamento das suas submissões acadêmicas
               </caption>

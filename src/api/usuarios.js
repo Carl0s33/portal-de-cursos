@@ -43,6 +43,16 @@ export async function atualizarUsuario(token, id, dados, sinal) {
   })
 }
 
+export async function atualizarMeuUsuario(token, dados, sinal) {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/admin/me`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+}
+
 export async function excluirUsuario(token, id, sinal) {
   const base = pegarBaseApi('usuarios', VERSAO)
   return chamarApi(`${base}/admin/${encodeURIComponent(id)}`, {
@@ -171,6 +181,7 @@ export const moduloUsuarios = {
   obterPorId: buscarUsuarioPorId,
   cadastrar: cadastrarUsuario,
   atualizar: atualizarUsuario,
+  atualizarMeuUsuario,
   excluir: excluirUsuario,
   identificarConta,
   identificarAluno,

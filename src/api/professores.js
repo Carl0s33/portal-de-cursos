@@ -77,12 +77,24 @@ export async function atualizarProfessor(token, id, dados, sinal) {
   return formatarPerfilProfessor(resposta)
 }
 
+export async function atualizarMeuPerfilProfessor(token, dados, sinal) {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  const resposta = await chamarApi(`${base}/professores/me`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+  return formatarPerfilProfessor(resposta)
+}
+
 export const moduloProfessores = {
   versao: VERSAO,
   listar: listarProfessores,
   obterPorId: buscarProfessorPorId,
   cadastrar: cadastrarProfessor,
   atualizar: atualizarProfessor,
+  atualizarMeuPerfil: atualizarMeuPerfilProfessor,
   excluir: excluirProfessor,
   formatarPerfil: formatarPerfilProfessor,
 }

@@ -74,10 +74,10 @@ export default function PaginaProjetos() {
       <div className="pagina-projetos__titulo">
         <div>
           <h1>Produções acadêmicas</h1>
-          <p>Explore os trabalhos avaliados e aprovados pelos orientadores e coordenadores.</p>
+          <p>Consulte projetos e TCCs publicados no portal.</p>
         </div>
         <a className="botao-primario" href="#submeter">
-          Submeter projeto
+          Enviar projeto
         </a>
       </div>
       <div className="pagina-projetos__grade">

@@ -37,6 +37,15 @@ export async function atualizarCoordenador(token, id, dados, sinal) {
   })
 }
 
+export async function atualizarMeuPerfilCoordenador(token, dados, sinal) {
+  return chamarApi(`${urlCoordenadores()}/me`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+}
+
 export async function excluirCoordenador(token, id, sinal) {
   return chamarApi(`${urlCoordenadores()}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
@@ -51,6 +60,7 @@ export const moduloCoordenadores = {
   obterPorId: buscarCoordenadorPorId,
   cadastrar: cadastrarCoordenador,
   atualizar: atualizarCoordenador,
+  atualizarMeuPerfil: atualizarMeuPerfilCoordenador,
   excluir: excluirCoordenador,
 }
 

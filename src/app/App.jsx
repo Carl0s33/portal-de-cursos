@@ -15,7 +15,7 @@ const PaginaAcesso = lazy(() => import('../pages/acesso/PaginaAcesso.jsx'))
 const PaginaLoginAluno = lazy(() => import('@/pages/acesso/PaginaLoginAluno.jsx'))
 const PaginaLoginProfessor = lazy(() => import('@/pages/acesso/PaginaLoginProfessor.jsx'))
 const PaginaLoginAdministracao = lazy(() => import('@/pages/acesso/PaginaLoginAdministracao.jsx'))
-const PaginaPerfil = lazy(() => import('../pages/perfil/PaginaPerfil.jsx'))
+import PaginaPerfil from '@/pages/perfil/PaginaPerfil.jsx'
 const PaginaProfessor = lazy(() => import('@/pages/professor/PaginaProfessor.jsx'))
 const PaginaAdministracao = lazy(() => import('../pages/administracao/PaginaAdministracao.jsx'))
 const PaginaCoordenacao = lazy(() => import('../pages/coordenacao/PaginaCoordenacao.jsx'))
@@ -33,8 +33,9 @@ function CarregamentoPagina() {
 }
 import { listarCursos } from '@/api/cursos.js'
 import { listarProfessores } from '@/api/professores.js'
-import { atualizarStatusProjeto, excluirProjeto } from '@/api/projetos.js'
-import { listarSubmissoes } from '@/api/submissoes.js'
+import { atualizarStatusProjeto, excluirProjeto, listarProjetos } from '@/api/projetos.js'
+import { listarCoordenadores } from '@/api/coordenadores.js'
+import { enviarNotificacaoProjeto } from '@/api/notificacoes.js'
 import { limparLocal } from './limparLocal.js'
 
 function descobrirPagina(rota) {
@@ -48,12 +49,12 @@ function descobrirPagina(rota) {
     }
   }
   if (rota.startsWith('aluno/')) {
-    if (rota !== 'aluno/cadastro' && rota !== 'aluno/painel') return 'perfil-aluno'
+    if (!['aluno/cadastro', 'aluno/painel', 'aluno/perfil'].includes(rota)) return 'perfil-aluno'
   }
   if (['projetos', 'biblioteca'].includes(rota)) return 'projetos'
   if (['acesso', 'acesso-professor', 'acesso-administracao'].includes(rota)) return 'acesso'
   if (rota === 'aluno/cadastro') return 'aluno-cadastro'
-  if (rota === 'aluno/painel') return 'aluno-painel'
+  if (['aluno/painel', 'aluno/perfil'].includes(rota)) return 'aluno-painel'
   if (rota === 'administracao' || rota.startsWith('administracao/')) return 'administracao'
   if (rota === 'coordenacao' || rota.startsWith('coordenacao/')) return 'coordenacao'
   if (rota === 'submeter') return 'submissao'
@@ -268,7 +269,7 @@ export default function App() {
     async function sincronizarSubmissoes() {
       try {
         const [dados, cursosCadastrados, professoresCadastrados] = await Promise.all([
-          listarSubmissoes(sessao.token, controller.signal),
+          listarProjetos(sessao.token, controller.signal),
           listarCursos(controller.signal).catch(() => []),
           listarProfessores(sessao.token, {}, controller.signal).catch(() => []),
         ])
@@ -352,13 +353,19 @@ export default function App() {
               status:
                 p.statusProjeto === 'EM_ANALISE'
                   ? 'Aguardando Orientador'
-                  : p.statusProjeto === 'APROVADO' || p.statusProjeto === 'ANALISE_PUBLICACAO'
-                    ? 'Em análise'
-                    : p.statusProjeto === 'PUBLICADO'
-                      ? 'Aprovado'
-                      : p.statusProjeto === 'RECUSADO' || p.statusProjeto === 'RECUSADO_PUBLICACAO'
-                        ? 'Recusado'
-                        : p.statusProjeto,
+                  : p.statusProjeto === 'APROVADO'
+                    ? 'Aprovado pelo orientador'
+                    : p.statusProjeto === 'ANALISE_PUBLICACAO'
+                      ? 'Aguardando Coordenação'
+                      : p.statusProjeto === 'PUBLICADO'
+                        ? 'Aprovado'
+                        : p.statusProjeto === 'RECUSADO'
+                          ? 'Recusado pelo orientador'
+                          : p.statusProjeto === 'RECUSADO_PUBLICACAO'
+                            ? 'Publicação recusada'
+                            : p.statusProjeto === 'REVISAO'
+                              ? 'Precisa de revisão'
+                            : p.statusProjeto,
               resumo: p.resumo,
               objetivo: p.descricao,
               tipoAutor: 'ALUNO',
@@ -545,7 +552,7 @@ export default function App() {
         coordenador={coordenador}
         aluno={aluno}
         rota={rota}
-        perfilAtivo={['professor/perfil', 'administracao/perfil', 'coordenacao/perfil'].includes(
+        perfilAtivo={['professor/perfil', 'administracao/perfil', 'coordenacao/perfil', 'aluno/perfil'].includes(
           rota,
         )}
         usuario={sessao?.usuario}
@@ -559,8 +566,10 @@ export default function App() {
         <Suspense fallback={<CarregamentoPagina />}>
           {!sessao ? (
           <PaginaDeLogin aoEntrar={entrar} sessaoExpirada={sessaoExpirada} />
-        ) : ['professor/perfil', 'administracao/perfil', 'coordenacao/perfil'].includes(rota) ? (
+        ) : ['professor/perfil', 'administracao/perfil', 'coordenacao/perfil', 'aluno/perfil'].includes(rota) ? (
           <PaginaPerfil
+            tipoUsuario={sessao.tipoUsuario}
+            token={sessao.token}
             destinoVoltar={
               areaDaSessao === 'professor'
                 ? 'professor/feed'
@@ -629,62 +638,82 @@ export default function App() {
 
               // Sincroniza com o backend via PATCH /api/projetos/{id}/status
               let proximoStatusBackend = submissao?.statusBackend
+              let statusAtualizado = status
+              const enviarAviso = (statusProjeto, destinatarios) =>
+                enviarNotificacaoProjeto(
+                  {
+                    statusProjeto,
+                    nomeProjeto: submissao?.titulo || submissao?.nome || 'Projeto',
+                    tipoProjeto:
+                      ({
+                        TCC: 'TCC',
+                        'Projeto Integrador': 'PROJETO_INTEGRADOR',
+                        Pesquisa: 'PROJETO_PESQUISA',
+                        Extensão: 'PROJETO_EXTENSAO',
+                      }[submissao?.tipo] || submissao?.tipo || 'TCC'),
+                    destinatarios,
+                    justificativa,
+                  },
+                  sessao.token,
+                ).catch((falha) => console.warn('Falha ao enviar aviso do projeto:', falha.message))
+              const emailsAutores = (submissao?.autores || [])
+                .map((autor) => (typeof autor === 'string' ? '' : autor?.email))
+                .filter(Boolean)
+              if (submissao?.email) emailsAutores.push(submissao.email)
               if (submissao?.id && sessao?.token) {
                 try {
                   if (sessao.tipoUsuario === 'PROFESSOR') {
                     if (status === 'Em análise' || status === 'Aceito') {
-                      proximoStatusBackend = 'ANALISE_PUBLICACAO'
                       await atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
                       await atualizarStatusProjeto(submissao.id, 'ANALISE_PUBLICACAO', sessao.token)
+                      proximoStatusBackend = 'ANALISE_PUBLICACAO'
+                      statusAtualizado = 'Aguardando Coordenação'
+                      enviarAviso('APROVADO', emailsAutores)
+                      const coordenadores = await listarCoordenadores(sessao.token, {
+                        cursoId: submissao?.cursoId,
+                      }).catch((falha) => {
+                        console.warn('Não foi possível localizar a coordenação:', falha.message)
+                        return []
+                      })
+                      enviarAviso(
+                        'ANALISE_PUBLICACAO',
+                        (Array.isArray(coordenadores) ? coordenadores : [])
+                          .map((c) => c.professor?.usuario?.email || c.usuario?.email || c.email)
+                          .filter(Boolean),
+                      )
                     } else if (status === 'Recusado') {
-                      proximoStatusBackend = 'RECUSADO'
                       await atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token)
+                      proximoStatusBackend = 'RECUSADO'
+                      statusAtualizado = 'Recusado pelo orientador'
+                      enviarAviso('RECUSADO', emailsAutores)
                     }
                   } else if (sessao.tipoUsuario === 'COORDENADOR') {
                     if (status === 'Aprovado') {
+                      await atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token)
                       proximoStatusBackend = 'PUBLICADO'
-                      try {
-                        await atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token)
-                      } catch {
-                        // Se estiver em EM_ANALISE ou APROVADO, avanca a esteira
-                        try {
-                          await atualizarStatusProjeto(submissao.id, 'APROVADO', sessao.token)
-                        } catch {
-                          // A próxima transição tenta avançar a submissão a partir do estado atual.
-                        }
-                        try {
-                          await atualizarStatusProjeto(
-                            submissao.id,
-                            'ANALISE_PUBLICACAO',
-                            sessao.token,
-                          )
-                        } catch {
-                          // A publicação abaixo também tenta a transição direta.
-                        }
-                        await atualizarStatusProjeto(submissao.id, 'PUBLICADO', sessao.token)
-                      }
+                      statusAtualizado = 'Aprovado'
+                      enviarAviso('PUBLICADO', emailsAutores)
                     } else if (status === 'Recusado') {
+                      await atualizarStatusProjeto(
+                        submissao.id,
+                        'RECUSADO_PUBLICACAO',
+                        sessao.token,
+                      )
                       proximoStatusBackend = 'RECUSADO_PUBLICACAO'
-                      try {
-                        await atualizarStatusProjeto(
-                          submissao.id,
-                          'RECUSADO_PUBLICACAO',
-                          sessao.token,
-                        )
-                      } catch {
-                        await atualizarStatusProjeto(submissao.id, 'RECUSADO', sessao.token)
-                      }
+                      statusAtualizado = 'Publicação recusada'
+                      enviarAviso('RECUSADO_PUBLICACAO', emailsAutores)
                     }
                   }
                 } catch (err) {
                   console.error('Erro ao atualizar status do projeto no backend:', err)
+                  throw err
                 }
               }
 
               mudarDecisoes((atuais) => ({
                 ...atuais,
                 [identificadorSubmissao]: {
-                  status,
+                  status: statusAtualizado,
                   justificativa,
                   papel: sessao.tipoUsuario,
                   usuarioId: sessao.usuario.id,
@@ -696,7 +725,7 @@ export default function App() {
               mudarListaSubmissoes((atuais) => {
                 const atualizadas = atuais.map((item) =>
                   item.identificador === identificadorSubmissao
-                    ? { ...item, status, statusBackend: proximoStatusBackend }
+                    ? { ...item, status: statusAtualizado, statusBackend: proximoStatusBackend }
                     : item,
                 )
                 return atualizadas
@@ -761,7 +790,7 @@ export default function App() {
             : sessao?.tipoUsuario === 'COORDENADOR'
               ? 'coordenacao/perfil'
               : sessao?.tipoUsuario === 'ALUNO'
-                ? `aluno/${sessao.usuario.alunoId || sessao.usuario.id}`
+                ? 'aluno/perfil'
                 : 'professor/perfil'
         }
         tipoUsuario={sessao?.tipoUsuario}

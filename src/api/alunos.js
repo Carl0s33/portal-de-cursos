@@ -33,6 +33,15 @@ export async function atualizarAluno(token, id, dados, sinal) {
   })
 }
 
+export async function atualizarMeuPerfilAluno(token, dados, sinal) {
+  return chamarApi(`${urlAlunos()}/me`, {
+    metodo: 'PUT',
+    corpo: dados,
+    token,
+    sinal,
+  })
+}
+
 export async function excluirAluno(token, id, sinal) {
   return chamarApi(`${urlAlunos()}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
@@ -47,6 +56,7 @@ export const moduloAlunos = {
   obterPorId: buscarAlunoPorId,
   cadastrar: cadastrarAluno,
   atualizar: atualizarAluno,
+  atualizarMeuPerfil: atualizarMeuPerfilAluno,
   excluir: excluirAluno,
 }
 

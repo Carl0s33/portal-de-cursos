@@ -393,3 +393,24 @@
     transform: none;
   }
 }
+
+.pagina-projetos .item-projeto,
+.pagina-projetos .item-projeto:hover {
+  border-color: var(--borda-suave);
+  box-shadow: none;
+  transform: none;
+  transition: scale 500ms ease-in-out;
+}
+
+.pagina-projetos .item-projeto::before {
+  display: none;
+}
+
+.pagina-projetos .item-projeto:hover .item-projeto__titulo {
+  color: var(--titulo);
+}
+
+.pagina-projetos .item-projeto:hover {
+  z-index: 1;
+  scale: 1.05;
+}

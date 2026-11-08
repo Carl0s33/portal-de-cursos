@@ -32,7 +32,8 @@
 }
 
 .status--aguardando-orientador,
-.status--aguardando-coordenador {
+.status--aguardando-coordenador,
+.status--aguardando-coordenação {
   --fundo-status: #854400;
 }
 
@@ -43,11 +44,15 @@
 
 .status--aceito,
 .status--aprovado,
+.status--aprovado-pelo-orientador,
+.status--aprovado-orientador,
 .status--publicado {
   --fundo-status: #08623e;
 }
 
-.status--recusado {
+.status--recusado,
+.status--recusado-pelo-orientador,
+.status--publicação-recusada {
   --fundo-status: #a61b1b;
 }
 

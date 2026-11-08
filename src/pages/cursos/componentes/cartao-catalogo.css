@@ -11,33 +11,16 @@
   background: var(--superficie);
   border: 1px solid var(--borda);
   border-radius: var(--raio-superficie);
-  box-shadow: var(--sombra);
-
-  transition:
-    border-color var(--transicao, 150ms ease),
-    outline var(--transicao, 150ms ease),
-    box-shadow var(--transicao, 150ms ease),
-    transform var(--transicao, 150ms ease);
+  box-shadow: none;
 }
 
-.curso-catalogo:hover {
-  border-color: color-mix(in srgb, var(--cor) 55%, var(--borda-suave));
-  box-shadow: var(--sombra-elevada);
-  transform: translateY(-4px);
+.pagina-cursos .curso-catalogo {
+  transition: scale 500ms ease-in-out;
 }
-.curso-catalogo::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  height: 4px;
-  background: var(--cor);
-  transition: height var(--transicao);
-}
-.curso-catalogo:hover::before {
-  height: 6px;
-}
-.curso-catalogo:hover .curso-catalogo__titulo {
-  color: var(--cor);
+
+.pagina-cursos .curso-catalogo:hover {
+  z-index: 1;
+  scale: 1.05;
 }
 
 .curso-catalogo:focus-within {

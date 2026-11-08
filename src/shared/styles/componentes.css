@@ -178,7 +178,7 @@
 }
 
 .tabela tbody tr:hover {
-  background: var(--suave);
+  background: color-mix(in srgb, var(--azul) 5%, var(--superficie));
 }
 
 /* Colunas padronizadas */
