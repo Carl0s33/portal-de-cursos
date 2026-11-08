@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { enderecoPrivado } from '../../app/rotas.js'
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import './perfil.css'
 
 export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'professor/feed' }) {
-  const [nome, definirNome] = useState(usuario.nome || '')
-  const [titulacao, definirTitulacao] = useState(usuario.titulacao || '')
-  const [descricao, definirDescricao] = useState(usuario.descricao || '')
-  const [foto, definirFoto] = useState(usuario.foto || '')
-  const [erro, definirErro] = useState('')
-  const [mensagem, definirMensagem] = useState('')
-  const [carregandoFoto, definirCarregandoFoto] = useState(false)
+  const [nome, mudarNome] = useState(usuario.nome || '')
+  const [titulacao, mudarTitulacao] = useState(usuario.titulacao || '')
+  const [descricao, mudarDescricao] = useState(usuario.descricao || '')
+  const [foto, mudarFoto] = useState(usuario.foto || '')
+  const [erro, mudarErro] = useState('')
+  const [mensagem, mudarMensagem] = useState('')
+  const [carregandoFoto, mudarCarregandoFoto] = useState(false)
   const leitor = useRef(null)
   const entradaFoto = useRef(null)
   useEffect(() => () => leitor.current?.abort(), [])
@@ -18,27 +18,27 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
   function selecionarFoto(evento) {
     const arquivo = evento.target.files?.[0]
     if (!arquivo) return
-    definirErro('')
-    definirMensagem('')
+    mudarErro('')
+    mudarMensagem('')
     if (
       !['image/jpeg', 'image/png', 'image/webp'].includes(arquivo.type) ||
       arquivo.size > 2 * 1024 * 1024
     ) {
-      definirErro('Escolha uma foto JPG, PNG ou WebP de até 2 MB.')
+      mudarErro('Escolha uma foto JPG, PNG ou WebP de até 2 MB.')
       evento.target.value = ''
       return
     }
     leitor.current?.abort()
     const leitura = new FileReader()
     leitor.current = leitura
-    definirCarregandoFoto(true)
+    mudarCarregandoFoto(true)
     leitura.onload = () => {
-      definirFoto(leitura.result)
-      definirCarregandoFoto(false)
+      mudarFoto(leitura.result)
+      mudarCarregandoFoto(false)
     }
     leitura.onerror = () => {
-      definirErro('Não foi possível abrir esta foto. Escolha outro arquivo.')
-      definirCarregandoFoto(false)
+      mudarErro('Não foi possível abrir esta foto. Escolha outro arquivo.')
+      mudarCarregandoFoto(false)
     }
     leitura.readAsDataURL(arquivo)
     evento.target.value = ''
@@ -46,24 +46,24 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
   function salvar(evento) {
     evento.preventDefault()
     if (!nome.trim()) {
-      definirErro('Informe seu nome.')
+      mudarErro('Informe seu nome.')
       return
     }
     aoSalvar({ nome: nome.trim(), titulacao: titulacao.trim(), descricao: descricao.trim(), foto })
-    definirErro('')
-    definirMensagem(
+    mudarErro('')
+    mudarMensagem(
       'Perfil atualizado nesta sessão. As alterações ainda não são enviadas ao servidor.',
     )
   }
   function cancelar() {
     leitor.current?.abort()
-    definirCarregandoFoto(false)
-    definirNome(usuario.nome || '')
-    definirTitulacao(usuario.titulacao || '')
-    definirDescricao(usuario.descricao || '')
-    definirFoto(usuario.foto || '')
-    definirErro('')
-    definirMensagem('Alterações descartadas.')
+    mudarCarregandoFoto(false)
+    mudarNome(usuario.nome || '')
+    mudarTitulacao(usuario.titulacao || '')
+    mudarDescricao(usuario.descricao || '')
+    mudarFoto(usuario.foto || '')
+    mudarErro('')
+    mudarMensagem('Alterações descartadas.')
   }
   return (
     <main id="conteudo" className="limite pagina-perfil">
@@ -84,9 +84,11 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
               <img
                 src={foto}
                 alt="Prévia da foto de perfil"
+                loading="lazy"
+                decoding="async"
                 onError={() => {
-                  definirFoto('')
-                  definirErro('A imagem não pôde ser exibida. Escolha outra foto.')
+                  mudarFoto('')
+                  mudarErro('A imagem não pôde ser exibida. Escolha outra foto.')
                 }}
               />
             ) : (
@@ -105,7 +107,7 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
                 {carregandoFoto ? 'Preparando foto…' : 'Escolher foto'}
               </button>
               {foto && (
-                <button type="button" onClick={() => definirFoto('')}>
+                <button type="button" onClick={() => mudarFoto('')}>
                   Remover foto
                 </button>
               )}
@@ -128,7 +130,7 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
               autoComplete="name"
               maxLength={120}
               value={nome}
-              onChange={(e) => definirNome(e.target.value)}
+              onChange={(e) => mudarNome(e.target.value)}
               required
             />
           </label>
@@ -150,7 +152,7 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
               id="perfil-titulacao"
               maxLength={100}
               value={titulacao}
-              onChange={(e) => definirTitulacao(e.target.value)}
+              onChange={(e) => mudarTitulacao(e.target.value)}
             />
           </label>
           <label htmlFor="perfil-descricao">
@@ -161,7 +163,7 @@ export default function PaginaPerfil({ usuario, aoSalvar, destinoVoltar = 'profe
               maxLength={600}
               rows={4}
               value={descricao}
-              onChange={(e) => definirDescricao(e.target.value)}
+              onChange={(e) => mudarDescricao(e.target.value)}
             />
             <small>{descricao.length}/600 caracteres</small>
           </label>

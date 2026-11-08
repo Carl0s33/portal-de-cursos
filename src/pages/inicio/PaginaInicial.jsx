@@ -1,16 +1,22 @@
-import ApresentacaoInicial from './components/ApresentacaoInicial.jsx'
-import CursosEmDestaque from './components/CursosEmDestaque.jsx'
-import ProjetosEmDestaque from './components/ProjetosEmDestaque.jsx'
-import ConviteSubmissao from './components/ConviteSubmissao.jsx'
+import Capa from './componentes/Capa.jsx'
+import SobrePortal from './componentes/SobrePortal.jsx'
+import CursosDestaque from './componentes/CursosDestaque.jsx'
+import ProjetosDestaque from './componentes/ProjetosDestaque.jsx'
+import ChamadaEnviar from './componentes/ChamadaEnviar.jsx'
+import NavegacaoSecoes from './componentes/NavegacaoSecoes.jsx'
 import './inicio.css'
 
 export default function PaginaInicial() {
   return (
     <main id="conteudo" className="limite pagina-inicial">
-      <ApresentacaoInicial />
-      <CursosEmDestaque />
-      <ProjetosEmDestaque />
-      <ConviteSubmissao />
+      <Capa />
+      <SobrePortal />
+      <ProjetosDestaque />
+      <CursosDestaque />
+      <div id="chamada-projeto">
+        <ChamadaEnviar />
+      </div>
+      <NavegacaoSecoes />
     </main>
   )
 }

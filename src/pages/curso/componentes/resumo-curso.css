@@ -1,0 +1,111 @@
+.resumo-curso {
+  display: grid;
+  gap: var(--espaco-5);
+  padding-block: var(--espaco-6) var(--espaco-5);
+}
+
+.resumo-curso__identidade {
+  min-width: 0;
+}
+
+.resumo-curso__grau {
+  margin: 0 0 var(--espaco-2);
+  color: var(--azul);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+}
+
+.resumo-curso__identidade h1 {
+  max-width: 26ch;
+  margin: 0;
+  color: var(--titulo);
+  font-family: var(--fonte-titulo);
+  font-size: clamp(34px, 4.4vw, 52px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.resumo-curso__identidade > div > p:last-child {
+  max-width: var(--largura-texto);
+  margin: var(--espaco-3) 0 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-md);
+  line-height: 1.7;
+}
+
+/* Os indicadores do curso têm cinco valores editoriais, não números de painel. */
+.pagina-detalhe-curso .indicadores {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.pagina-detalhe-curso .indicadores > div {
+  padding: var(--espaco-4) clamp(12px, 1.25vw, 20px);
+}
+
+.pagina-detalhe-curso .indicadores__valor {
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.pagina-detalhe-curso .indicadores > div:last-child .indicadores__valor {
+  font-size: clamp(18px, 1.8vw, 25px);
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+.pagina-detalhe-curso .indicadores dt {
+  font-size: var(--texto-xs);
+}
+
+.pagina-detalhe-curso .indicadores__detalhe {
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .pagina-detalhe-curso .indicadores {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pagina-detalhe-curso .indicadores > div:nth-child(4) {
+    border-left: 0;
+  }
+
+  .pagina-detalhe-curso .indicadores > div:nth-child(n + 4) {
+    border-top: 1px solid var(--borda-suave);
+  }
+}
+
+@media (max-width: 560px) {
+  .pagina-detalhe-curso .indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pagina-detalhe-curso .indicadores > div:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .pagina-detalhe-curso .indicadores > div:nth-child(even) {
+    border-left: 1px solid var(--borda-suave);
+  }
+
+  .pagina-detalhe-curso .indicadores > div:nth-child(n + 3) {
+    border-top: 1px solid var(--borda-suave);
+  }
+}
+
+@media (max-width: 380px) {
+  .pagina-detalhe-curso .indicadores > div:last-child .indicadores__valor {
+    font-size: 18px;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 640px) {
+  .resumo-curso {
+    padding-block: var(--espaco-5);
+  }
+}

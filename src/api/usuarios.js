@@ -1,10 +1,10 @@
-import { ErroApi, obterBaseApi, requisitarApi } from './cliente.js'
+import { ErroApi, pegarBaseApi, chamarApi } from './cliente.js'
 
 export const VERSAO = ''
 
-export async function consultarUsuarios(token, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  return requisitarApi(`${base}/admin`, {
+export async function listarUsuarios(token, sinal) {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/admin`, {
     metodo: 'GET',
     token,
     sinal,
@@ -12,16 +12,16 @@ export async function consultarUsuarios(token, sinal) {
 }
 
 export async function buscarUsuarios(token, filtros = {}, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
+  const base = pegarBaseApi('usuarios', VERSAO)
   const parametros = new URLSearchParams()
   if (filtros.nome?.trim()) parametros.set('nome', filtros.nome.trim())
   const query = parametros.size ? `?${parametros}` : ''
-  return requisitarApi(`${base}/admin/buscar${query}`, { metodo: 'GET', token, sinal })
+  return chamarApi(`${base}/admin/buscar${query}`, { metodo: 'GET', token, sinal })
 }
 
-export async function obterUsuarioPorId(token, id, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  return requisitarApi(`${base}/admin/${encodeURIComponent(id)}`, {
+export async function buscarUsuarioPorId(token, id, sinal) {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/admin/${encodeURIComponent(id)}`, {
     metodo: 'GET',
     token,
     sinal,
@@ -29,13 +29,13 @@ export async function obterUsuarioPorId(token, id, sinal) {
 }
 
 export async function cadastrarUsuario(dados, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  return requisitarApi(`${base}/admin`, { metodo: 'POST', corpo: dados, sinal })
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/admin`, { metodo: 'POST', corpo: dados, sinal })
 }
 
 export async function atualizarUsuario(token, id, dados, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  return requisitarApi(`${base}/admin/${encodeURIComponent(id)}`, {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/admin/${encodeURIComponent(id)}`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -44,8 +44,8 @@ export async function atualizarUsuario(token, id, dados, sinal) {
 }
 
 export async function excluirUsuario(token, id, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  return requisitarApi(`${base}/admin/${encodeURIComponent(id)}`, {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  return chamarApi(`${base}/admin/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,
@@ -53,14 +53,14 @@ export async function excluirUsuario(token, id, sinal) {
 }
 
 export async function identificarConta(token, email, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
+  const base = pegarBaseApi('usuarios', VERSAO)
   const corresponde = (conta) =>
     typeof conta?.email === 'string' && conta.email.toLowerCase() === email.toLowerCase()
 
   // Consulta lista de professores para saber se a conta é de professor ou coordenador
   let listaProfessores
   try {
-    listaProfessores = await requisitarApi(`${base}/professores/buscar`, {
+    listaProfessores = await chamarApi(`${base}/professores/buscar`, {
       metodo: 'GET',
       token,
       sinal,
@@ -97,7 +97,7 @@ export async function identificarConta(token, email, sinal) {
   // Tenta consultar admin
   let listaUsuarios
   try {
-    listaUsuarios = await requisitarApi(`${base}/admin`, {
+    listaUsuarios = await chamarApi(`${base}/admin`, {
       metodo: 'GET',
       token,
       sinal,
@@ -136,8 +136,8 @@ export async function identificarConta(token, email, sinal) {
 }
 
 export async function identificarAluno(token, email, sinal) {
-  const base = obterBaseApi('usuarios', VERSAO)
-  const alunos = await requisitarApi(`${base}/alunos/buscar`, {
+  const base = pegarBaseApi('usuarios', VERSAO)
+  const alunos = await chamarApi(`${base}/alunos/buscar`, {
     metodo: 'GET',
     token,
     sinal,
@@ -166,9 +166,9 @@ export async function identificarAluno(token, email, sinal) {
 
 export const moduloUsuarios = {
   versao: VERSAO,
-  consultarUsuarios,
+  listarUsuarios,
   buscar: buscarUsuarios,
-  obterPorId: obterUsuarioPorId,
+  obterPorId: buscarUsuarioPorId,
   cadastrar: cadastrarUsuario,
   atualizar: atualizarUsuario,
   excluir: excluirUsuario,

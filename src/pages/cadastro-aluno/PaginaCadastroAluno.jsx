@@ -1,11 +1,11 @@
-import PainelInstitucional from '@/shared/components/PainelInstitucional.jsx'
+import PainelInstitucional from '@/shared/componentes/PainelInstitucional.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { basePortal } from '@/app/rotas.js'
 import logoPortal from '@/assets/marca/logo-portal.png'
 import { listarCursos } from '@/api/cursos.js'
 import { cadastrarAluno } from '@/api/alunos.js'
 import { ErroApi } from '@/api/cliente.js'
-import Icone from '@/shared/components/Icone.jsx'
+import Icone from '@/shared/componentes/Icone.jsx'
 import '@/pages/acesso/acesso.css'
 import './cadastro-aluno.css'
 
@@ -91,16 +91,16 @@ function IconeCampo({ tipo }) {
 }
 
 export default function PaginaCadastroAluno() {
-  const [cursos, definirCursos] = useState([])
-  const [carregandoCursos, definirCarregandoCursos] = useState(true)
-  const [erroCursos, definirErroCursos] = useState('')
-  const [tentativaCursos, definirTentativaCursos] = useState(0)
-  const [valores, definirValores] = useState(VALORES_INICIAIS)
-  const [tocados, definirTocados] = useState({})
-  const [erros, definirErros] = useState({})
-  const [mostrarSenha, definirMostrarSenha] = useState(false)
-  const [enviando, definirEnviando] = useState(false)
-  const [erroGeral, definirErroGeral] = useState('')
+  const [cursos, mudarCursos] = useState([])
+  const [carregandoCursos, mudarCarregandoCursos] = useState(true)
+  const [erroCursos, mudarErroCursos] = useState('')
+  const [tentativaCursos, mudarTentativaCursos] = useState(0)
+  const [valores, mudarValores] = useState(VALORES_INICIAIS)
+  const [tocados, mudarTocados] = useState({})
+  const [erros, mudarErros] = useState({})
+  const [mostrarSenha, mudarMostrarSenha] = useState(false)
+  const [enviando, mudarEnviando] = useState(false)
+  const [erroGeral, mudarErroGeral] = useState('')
   const resumoErro = useRef(null)
 
   useEffect(() => {
@@ -108,57 +108,57 @@ export default function PaginaCadastroAluno() {
 
     listarCursos(controle.signal)
       .then((lista) => {
-        if (!controle.signal.aborted) definirCursos(lista)
+        if (!controle.signal.aborted) mudarCursos(lista)
       })
       .catch(() => {
         if (!controle.signal.aborted) {
-          definirErroCursos('Não foi possível carregar os cursos agora.')
+          mudarErroCursos('Não foi possível carregar os cursos agora.')
         }
       })
       .finally(() => {
-        if (!controle.signal.aborted) definirCarregandoCursos(false)
+        if (!controle.signal.aborted) mudarCarregandoCursos(false)
       })
 
     return () => controle.abort()
   }, [tentativaCursos])
 
   function tentarNovamenteCursos() {
-    definirErroCursos('')
-    definirCarregandoCursos(true)
-    definirTentativaCursos((numero) => numero + 1)
+    mudarErroCursos('')
+    mudarCarregandoCursos(true)
+    mudarTentativaCursos((numero) => numero + 1)
   }
 
   function alterar(campo, valor) {
     const proximos = { ...valores, [campo]: valor }
-    definirValores(proximos)
-    definirErroGeral('')
-    definirErros(calcularErros(proximos, tocados))
+    mudarValores(proximos)
+    mudarErroGeral('')
+    mudarErros(calcularErros(proximos, tocados))
   }
 
   function sairDoCampo(campo) {
     const marcados = { ...tocados, [campo]: true }
-    definirTocados(marcados)
-    definirErros(calcularErros(valores, marcados))
+    mudarTocados(marcados)
+    mudarErros(calcularErros(valores, marcados))
   }
 
   async function cadastrar(evento) {
     evento.preventDefault()
 
     const novosErros = calcularTodosErros(valores)
-    definirTocados(Object.fromEntries(CAMPOS.map((campo) => [campo, true])))
-    definirErros(novosErros)
+    mudarTocados(Object.fromEntries(CAMPOS.map((campo) => [campo, true])))
+    mudarErros(novosErros)
 
     const primeiroInvalido = CAMPOS.find((campo) => novosErros[campo])
     if (primeiroInvalido) {
-      definirErroGeral('Revise os campos destacados para continuar.')
+      mudarErroGeral('Revise os campos destacados para continuar.')
       window.requestAnimationFrame(() =>
         document.getElementById(IDS_CAMPOS[primeiroInvalido])?.focus(),
       )
       return
     }
 
-    definirErroGeral('')
-    definirEnviando(true)
+    mudarErroGeral('')
+    mudarEnviando(true)
 
     try {
       await cadastrarAluno({
@@ -171,12 +171,12 @@ export default function PaginaCadastroAluno() {
       })
       window.location.assign(`${basePortal}login?cadastro=sucesso`)
     } catch (falha) {
-      definirErroGeral(
+      mudarErroGeral(
         falha instanceof ErroApi
           ? falha.message
           : 'Não foi possível criar sua conta agora. Tente novamente.',
       )
-      definirEnviando(false)
+      mudarEnviando(false)
       window.requestAnimationFrame(() => resumoErro.current?.focus())
     }
   }
@@ -329,7 +329,7 @@ export default function PaginaCadastroAluno() {
                 />
                 <button
                   type="button"
-                  onClick={() => definirMostrarSenha(!mostrarSenha)}
+                  onClick={() => mudarMostrarSenha(!mostrarSenha)}
                   aria-controls="aluno-senha aluno-confirmar-senha"
                   aria-pressed={mostrarSenha}
                   aria-label={mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'}
