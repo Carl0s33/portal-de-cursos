@@ -41,7 +41,7 @@ export function retornoAutenticado(tipoUsuario) {
       : tipoUsuario === 'COORDENADOR'
         ? /^coordenacao\/(painel|curso|disciplinas|professores|projetos|submissoes|perfil|submissao\/[a-zA-Z0-9_-]+)$/
         : tipoUsuario === 'ALUNO'
-          ? /^(aluno\/painel|submeter)$/
+          ? /^(aluno\/(painel|perfil)|submeter)$/
           : /^professor\/(feed|perfil|submissao\/[a-zA-Z0-9_-]+)$|^submeter$/
   return retorno && permitido.test(retorno)
     ? retorno

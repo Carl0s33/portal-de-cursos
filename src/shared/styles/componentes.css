@@ -2,15 +2,76 @@
 .cartao,
 .painel {
   min-width: 0;
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-cartao);
+  border: 1px solid var(--borda-suave);
+  border-radius: var(--raio-superficie);
   background: var(--superficie);
+  box-shadow: var(--sombra);
   overflow: hidden;
   color: var(--texto);
 }
 
-.cartao[href]:hover {
-  border-color: var(--azul);
+.cartao--clicavel {
+  --cor: var(--azul);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--transicao),
+    box-shadow var(--transicao),
+    border-color var(--transicao);
+}
+
+.cartao--clicavel::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--cor);
+  content: '';
+  transition: height var(--transicao);
+}
+
+.cartao--clicavel:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--cor) 55%, var(--borda-suave));
+  box-shadow: var(--sombra-elevada);
+}
+
+.cartao--clicavel:hover::before {
+  height: 6px;
+}
+
+.cartao--clicavel:hover :is(h2, h3) {
+  color: var(--cor);
+}
+
+.cartao--clicavel:focus-within {
+  outline: 2px solid var(--azul-vivo);
+  outline-offset: 3px;
+}
+
+[data-tipo='tcc'] {
+  --cor: var(--chip-tcc);
+}
+
+[data-tipo='extensao'] {
+  --cor: var(--chip-extensao);
+}
+
+[data-tipo='pesquisa'] {
+  --cor: var(--chip-pesquisa);
+}
+
+[data-tipo='integrador'] {
+  --cor: var(--chip-integrador);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartao--clicavel:hover {
+    transform: none;
+  }
+
+  .cartao--clicavel::before {
+    transition: none;
+  }
 }
 
 .painel__cabecalho {
@@ -117,7 +178,7 @@
 }
 
 .tabela tbody tr:hover {
-  background: var(--suave);
+  background: color-mix(in srgb, var(--azul) 5%, var(--superficie));
 }
 
 /* Colunas padronizadas */

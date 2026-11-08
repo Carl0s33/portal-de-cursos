@@ -97,6 +97,9 @@
   cursor: wait;
 }
 .perfil-campos {
+  min-width: 0;
+  border: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
@@ -113,6 +116,7 @@
 .perfil-campos label:last-child {
   grid-column: 1/-1;
 }
+.perfil-campos select,
 .perfil-campos input,
 .perfil-campos textarea {
   min-width: 0;
@@ -129,6 +133,7 @@
 .perfil-campos textarea {
   resize: vertical;
 }
+.perfil-campos select:focus-visible,
 .perfil-campos input:focus-visible,
 .perfil-campos textarea:focus-visible {
   outline: 2px solid var(--azul);
