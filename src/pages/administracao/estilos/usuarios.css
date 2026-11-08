@@ -16,23 +16,23 @@
 }
 
 .status.usuario-papel--admin {
-  --cor-status: var(--marinho);
+  --cor-status: var(--branco);
+  --fundo-status: #0b1f36;
 }
 
 .status.usuario-papel--coordenador {
-  --cor-status: var(--aviso);
+  --cor-status: var(--branco);
+  --fundo-status: #854400;
 }
 
 .status.usuario-papel--professor {
-  --cor-status: var(--roxo);
+  --cor-status: var(--branco);
+  --fundo-status: #4b248f;
 }
 
 .status.usuario-papel--aluno {
-  --cor-status: var(--sucesso);
-}
-
-:root[data-tema='escuro'] .status.usuario-papel--admin {
-  --cor-status: var(--papel-inativo);
+  --cor-status: var(--branco);
+  --fundo-status: #08623e;
 }
 
 .usuario-acesso {
@@ -90,4 +90,71 @@
   border-color: var(--borda-suave);
   background: var(--superficie-escura);
   color: var(--texto);
+}
+
+.pagina-painel .usuario-excluir {
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 6px 10px;
+  border-radius: var(--raio, 8px);
+  border-color: transparent;
+  background: transparent;
+  white-space: nowrap;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.pagina-painel .usuario-excluir:hover:not(:disabled) {
+  box-shadow: none;
+  transform: none;
+}
+
+.pagina-painel .usuario-excluir:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pagina-painel .usuario-excluir {
+    transition: none;
+  }
+}
+
+.usuario-dialogo-exclusao {
+  width: min(28rem, calc(100% - 2rem));
+  padding: clamp(1rem, 5vw, 1.75rem);
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+  background: var(--superficie);
+  color: var(--titulo);
+  box-shadow: 0 16px 48px rgb(0 0 0 / 30%);
+}
+
+.usuario-dialogo-exclusao::backdrop {
+  background: rgb(0 0 0 / 64%);
+}
+
+.usuario-dialogo-exclusao h2 {
+  margin: 0;
+}
+
+.usuario-dialogo-exclusao p {
+  margin: 0.75rem 0;
+}
+
+.usuario-dialogo-exclusao__conta {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-inline-start: 3px solid var(--erro);
+  background: var(--suave);
+  overflow-wrap: anywhere;
+}
+
+.usuario-dialogo-exclusao__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
 }

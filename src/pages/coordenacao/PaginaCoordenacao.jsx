@@ -1,26 +1,26 @@
 import { ordenarSubmissoes } from '@/shared/utils/ordenarSubmissoes.js'
-import Indicadores from '@/shared/components/Indicadores.jsx'
+import Indicadores from '@/shared/componentes/Indicadores.jsx'
 import { useEffect, useState } from 'react'
 import { listarCursos } from '@/api/cursos.js'
 import { basePortal, enderecoPrivado } from '../../app/rotas.js'
-import Icone from '@/shared/components/Icone.jsx'
-import TabelaSubmissoes from '@/pages/administracao/components/TabelaSubmissoes.jsx'
-import GestaoConteudos from '@/pages/administracao/components/GestaoConteudos.jsx'
-import GestaoProfessores from '@/pages/administracao/components/GestaoProfessores.jsx'
-import { filtrarContextoCoordenacao } from './services/filtrarContextoCoordenacao.js'
+import Icone from '@/shared/componentes/Icone.jsx'
+import TabelaSubmissoes from '@/pages/administracao/componentes/TabelaSubmissoes.jsx'
+import GestaoConteudos from '@/pages/administracao/componentes/GestaoConteudos.jsx'
+import GestaoProfessores from '@/pages/administracao/componentes/GestaoProfessores.jsx'
+import { filtrarContextoCoordenacao } from './servicos/filtrarContextoCoordenacao.js'
 import '@/shared/styles/painel.css'
 import './coordenacao.css'
 
 export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar, submissoes }) {
-  const [cursos, definirCursos] = useState([])
+  const [cursos, mudarCursos] = useState([])
   useEffect(() => {
     const controller = new AbortController()
     listarCursos(controller.signal)
       .then((registros) => {
-        if (!controller.signal.aborted) definirCursos(registros)
+        if (!controller.signal.aborted) mudarCursos(registros)
       })
       .catch(() => {
-        if (!controller.signal.aborted) definirCursos([])
+        if (!controller.signal.aborted) mudarCursos([])
       })
     return () => controller.abort()
   }, [])
@@ -111,16 +111,21 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             </a>
           </div>
         </header>
-        <section className="painel-secao coordenacao-registros">
+        <section
+          className="painel-secao coordenacao-registros coordenacao-lista"
+          aria-labelledby="coordenacao-lista-titulo"
+        >
           <header>
-            <div>
-              <h2>Todas as submissões</h2>
-              <p>{submissoesDoCurso.length} produções registradas neste curso.</p>
-            </div>
+            <h2 id="coordenacao-lista-titulo">Todas as submissões</h2>
+            <span className="coordenacao-lista__total">
+              {submissoesDoCurso.length}{' '}
+              {submissoesDoCurso.length === 1 ? 'submissão' : 'submissões'}
+            </span>
           </header>
           <TabelaSubmissoes
             itens={ordenarSubmissoes(submissoesDoCurso)}
             baseDetalhes={enderecoPrivado('coordenacao/submissao')}
+            ocultarCurso
           />
         </section>
       </main>
@@ -153,41 +158,47 @@ export default function PaginaCoordenacao({ secao, sessao, rascunhos, aoAlterar,
             titulo: 'Total de submissões',
             valor: indicadores.total,
             icone: 'projetos-detalhe',
+            tom: 'primario',
           },
           {
-            titulo: 'Aguardando coordenação',
+            titulo: 'Em análise na coordenação',
             valor: indicadores.emAnaliseCoord,
             icone: 'relogio-cursos',
+            tom: 'pendente',
           },
           {
-            titulo: 'Com o orientador',
+            titulo: 'Aguardando orientador',
             valor: indicadores.aguardandoOrientador,
             icone: 'docentes-detalhe',
+            tom: 'andamento',
           },
           {
             titulo: 'Publicados no portal',
             valor: indicadores.publicados,
             icone: 'confirmacao-cursos',
+            tom: 'sucesso',
           },
         ]}
       />
 
-      <section className="painel-secao coordenacao-registros">
+      <section className="painel-secao coordenacao-registros coordenacao-fila">
         <header>
           <div>
-            <h2>Submissões por prioridade</h2>
-            <p>
-              Trabalhos submetidos pelos estudantes que aguardam aceite do orientador ou aprovação
-              final da coordenação.
-            </p>
+            <h2>Aguardando minha avaliação</h2>
+            <p>Decida sobre a publicação dos trabalhos encaminhados à coordenação.</p>
           </div>
-          <a href={enderecoPrivado('coordenacao/submissoes')}>
-            Ver todas <span aria-hidden="true">→</span>
-          </a>
+          {indicadores.emAnaliseCoord > 0 && (
+            <a href={enderecoPrivado('coordenacao/submissoes')}>Ver todas as submissões</a>
+          )}
         </header>
         <TabelaSubmissoes
-          itens={ordenarSubmissoes(submissoesDoCurso).slice(0, 8)}
+          itens={ordenarSubmissoes(submissoesDoCurso)
+            .filter((item) => item.status === 'Aguardando Coordenação')
+            .slice(0, 8)}
           baseDetalhes={enderecoPrivado('coordenacao/submissao')}
+          ocultarCurso
+          textoVazio="Nenhuma submissão para avaliar."
+          acaoVaziaHref={enderecoPrivado('coordenacao/submissoes')}
         />
       </section>
 
