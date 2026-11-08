@@ -106,6 +106,29 @@ export async function atualizarStatusProjeto(id, status, token = null, sinal = n
   })
 }
 
+export async function encaminharProjetoParaCoordenacao(id, token = null, sinal = null) {
+  let projeto = await buscarProjetoPorId(id, token, sinal)
+  let status = projeto.statusProjeto
+
+  if (status === 'EM_ANALISE') {
+    projeto = await atualizarStatusProjeto(id, 'APROVADO', token, sinal)
+    status = projeto.statusProjeto
+  }
+
+  if (status === 'APROVADO') {
+    projeto = await atualizarStatusProjeto(id, 'ANALISE_PUBLICACAO', token, sinal)
+    status = projeto.statusProjeto
+  }
+
+  if (status !== 'ANALISE_PUBLICACAO') {
+    throw new ErroApi('O projeto não pôde ser encaminhado para avaliação da coordenação.', {
+      status: 409,
+    })
+  }
+
+  return projeto
+}
+
 export async function excluirProjeto(id, token = null, sinal = null) {
   const url = `${pegarUrlBaseProjetos()}/${encodeURIComponent(id)}`
   return chamarApi(url, {
@@ -165,6 +188,7 @@ export const moduloProjetos = {
   cadastrar: cadastrarProjeto,
   atualizar: atualizarProjeto,
   atualizarStatus: atualizarStatusProjeto,
+  encaminharParaCoordenacao: encaminharProjetoParaCoordenacao,
   excluir: excluirProjeto,
   enviarDocumento: enviarDocumentoProjeto,
   listarDocumentos: listarDocumentosProjeto,
