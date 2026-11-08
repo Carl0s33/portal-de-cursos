@@ -1,0 +1,201 @@
+.sobre-portal {
+  --faixa-cor: var(--fundo-alt);
+  position: relative;
+  isolation: isolate;
+  scroll-margin-top: calc(var(--cabecalho-altura) + var(--espaco-5));
+  padding-block: var(--espaco-8);
+}
+
+.sobre-portal::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--faixa-cor);
+  box-shadow: 0 0 0 100vmax var(--faixa-cor);
+  clip-path: inset(0 -100vmax);
+  content: '';
+  pointer-events: none;
+}
+
+.sobre-portal__abertura {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: end;
+  gap: var(--espaco-6);
+  margin: 0 0 var(--espaco-7);
+}
+
+.sobre-portal__chamada h2 {
+  max-width: 15ch;
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-titulo-secao);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+.sobre-portal__contexto p {
+  max-width: 58ch;
+  margin: 0 0 var(--espaco-3);
+  color: var(--texto-suave);
+  font-size: var(--texto-md);
+  line-height: 1.7;
+}
+
+.sobre-portal__contexto > span {
+  color: var(--azul);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+}
+
+.sobre-portal__fluxo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espaco-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sobre-portal__passo {
+  position: relative;
+  min-width: 0;
+  padding-top: var(--espaco-5);
+  transition:
+    opacity var(--transicao-lenta),
+    transform var(--transicao-lenta);
+}
+
+.sobre-portal__passo::before {
+  position: absolute;
+  top: 5px;
+  right: calc(var(--espaco-6) * -1);
+  left: 0;
+  border-top: 1px solid var(--borda);
+  content: '';
+}
+
+.sobre-portal__passo:last-child::before {
+  right: 0;
+  border-image: linear-gradient(90deg, var(--borda), transparent) 1;
+}
+
+.sobre-portal__passo::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--espaco-3);
+  height: var(--espaco-3);
+  border-radius: var(--raio-pilula);
+  background: var(--azul);
+  box-shadow: 0 0 0 var(--espaco-1) var(--faixa-cor);
+  content: '';
+}
+
+.sobre-portal__passo:last-child::after {
+  background: var(--verde);
+}
+
+.sobre-portal__numero {
+  display: block;
+  margin: 0 0 var(--espaco-3);
+  color: var(--titulo);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-numeral);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.sobre-portal__passo h3 {
+  margin: 0 0 var(--espaco-2);
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.sobre-portal__passo p {
+  max-width: 36ch;
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+  line-height: 1.6;
+}
+
+.sobre-portal__publicacao {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-3);
+  max-width: none;
+  margin: var(--espaco-6) 0 0;
+  padding-top: var(--espaco-5);
+  border-top: 1px solid var(--borda-suave);
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+  line-height: 1.6;
+}
+
+.sobre-portal__publicacao strong {
+  margin-right: var(--espaco-1);
+  color: var(--titulo);
+}
+
+@media (max-width: 900px) {
+  .sobre-portal__abertura {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: var(--espaco-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .sobre-portal {
+    padding-block: var(--espaco-6);
+  }
+
+  .sobre-portal__abertura {
+    margin-bottom: var(--espaco-6);
+  }
+
+  .sobre-portal__fluxo {
+    grid-template-columns: 1fr;
+    gap: var(--espaco-5);
+    padding-left: var(--espaco-4);
+  }
+
+  .sobre-portal__passo {
+    padding: 0 0 0 var(--espaco-5);
+  }
+
+  .sobre-portal__passo::before {
+    top: 0;
+    right: auto;
+    bottom: calc(var(--espaco-5) * -1);
+    left: var(--espaco-1);
+    border-top: 0;
+    border-left: 1px solid var(--borda);
+  }
+
+  .sobre-portal__passo:last-child::before {
+    bottom: 0;
+    border-image: linear-gradient(var(--borda), transparent) 1;
+  }
+
+  .sobre-portal__passo::after {
+    top: 4px;
+    left: 0;
+  }
+
+  .sobre-portal__numero {
+    margin-bottom: var(--espaco-2);
+    font-size: clamp(40px, 12vw, var(--texto-numeral));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sobre-portal__passo {
+    transition: none;
+  }
+}

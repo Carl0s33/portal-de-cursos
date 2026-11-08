@@ -1,9 +1,18 @@
 .rodape {
+  position: relative;
   margin-top: 48px;
   padding: 48px 0 32px;
   background: var(--superficie);
-  border-top: 1px solid var(--borda);
+  border-top: 0;
   color: var(--texto);
+}
+
+.rodape::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--azul);
+  content: '';
 }
 
 .rodape__colunas {
@@ -79,13 +88,9 @@
 
 .rodape__base small {
   align-self: center;
-  background: var(--suave);
-  border: 1px solid var(--borda-suave);
-  border-radius: var(--raio-botao);
-  padding: 5px 10px;
   font-size: var(--texto-xs);
-  font-weight: 600;
-  color: var(--texto);
+  color: var(--texto-suave);
+  text-align: right;
 }
 
 @media (max-width: 1000px) {
@@ -114,5 +119,6 @@
 
   .rodape__base small {
     align-self: flex-start;
+    text-align: left;
   }
 }

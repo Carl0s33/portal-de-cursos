@@ -1,0 +1,478 @@
+/* ==========================================================================
+   Cabeçalho global — versão 2
+   Compatível com Cabecalho.jsx (nova versão). Substitui cabecalho.css.
+   Cores vêm de styles/tokens.css e mudam com o tema. Nenhum valor fixo aqui.
+   Tokens usados: --fundo, --superficie, --suave, --borda, --borda-campo,
+   --titulo, --texto, --texto-secundario, --etiqueta, --foco, --azul-marca.
+   ========================================================================== */
+
+:root {
+  --cabecalho-altura: 64px;
+  --cabecalho-item: 36px;
+  --cabecalho-transicao: var(--transicao);
+}
+
+/* ---------- Barra ---------- */
+
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--fundo) 88%, transparent);
+  border-bottom: 1px solid var(--borda-suave);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  backdrop-filter: saturate(140%) blur(14px);
+  transition:
+    border-color var(--cabecalho-transicao),
+    background-color var(--cabecalho-transicao),
+    box-shadow var(--cabecalho-transicao);
+}
+
+.cabecalho--rolado {
+  border-bottom-color: var(--borda);
+  box-shadow: var(--sombra);
+}
+
+.cabecalho__conteudo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  height: var(--cabecalho-altura);
+}
+
+.cabecalho--professor .cabecalho__conteudo {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.cabecalho--acesso .cabecalho__conteudo {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+/* ---------- Marca ---------- */
+
+.marca--cabecalho {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 10px;
+  color: var(--titulo);
+  text-decoration: none;
+}
+
+.marca__simbolo {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.marca__texto {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.marca__cursos {
+  color: var(--azul-marca);
+}
+
+/* ---------- Navegação ---------- */
+
+.cabecalho .navegacao {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  gap: 4px;
+}
+
+.cabecalho .navegacao a,
+.cabecalho .navegacao button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: var(--cabecalho-item);
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-secundario);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--cabecalho-transicao),
+    background-color var(--cabecalho-transicao);
+}
+
+.cabecalho .navegacao a:hover,
+.cabecalho .navegacao button:hover {
+  background: var(--suave);
+  color: var(--titulo);
+}
+
+/* Página atual: texto mais forte e um ponto discreto abaixo do link */
+.cabecalho .navegacao a[aria-current='page'] {
+  color: var(--titulo);
+  font-weight: 600;
+}
+
+.cabecalho .navegacao a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--azul-marca);
+  transform: translateX(-50%);
+}
+
+/* Desktop: Sair, Entrar e menu aparecem só onde fazem sentido */
+.cabecalho .navegacao .navegacao__sair,
+.cabecalho .navegacao .navegacao__entrar-mobile,
+.cabecalho .botao-menu {
+  display: none;
+}
+
+/* ---------- Ações da direita ---------- */
+
+.cabecalho__acoes {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.cabecalho__portal,
+.cabecalho__sair,
+.cabecalho__entrar {
+  display: inline-flex;
+  align-items: center;
+  height: var(--cabecalho-item);
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-secundario);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color var(--cabecalho-transicao),
+    background-color var(--cabecalho-transicao);
+}
+
+.cabecalho__portal:hover,
+.cabecalho__sair:hover {
+  background: var(--suave);
+  color: var(--titulo);
+}
+
+/* Entrar é a única ação com borda: é o convite principal para visitantes */
+.cabecalho__entrar {
+  padding: 0 14px;
+  border: 1px solid var(--borda-campo);
+  color: var(--titulo);
+}
+
+.cabecalho__entrar:hover {
+  background: var(--suave);
+}
+
+/* Avatar do usuário: mesma altura dos demais itens */
+.cabecalho__perfil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cabecalho-item);
+  height: var(--cabecalho-item);
+  border-radius: 50%;
+  background: var(--suave);
+  color: var(--texto-secundario);
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: box-shadow var(--cabecalho-transicao);
+}
+
+.cabecalho__perfil > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cabecalho__perfil .icone,
+.cabecalho__perfil svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cabecalho__iniciais {
+  color: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cabecalho__perfil--admin {
+  background: var(--marinho);
+  color: var(--branco);
+}
+
+.cabecalho__perfil--coordenador {
+  background: var(--aviso);
+  color: var(--branco);
+}
+
+.cabecalho__perfil--professor {
+  background: var(--roxo);
+  color: var(--branco);
+}
+
+.cabecalho__perfil--aluno {
+  background: var(--sucesso);
+  color: var(--branco);
+}
+
+:root[data-tema='escuro'] .cabecalho__perfil--coordenador,
+:root[data-tema='escuro'] .cabecalho__perfil--professor,
+:root[data-tema='escuro'] .cabecalho__perfil--aluno {
+  color: var(--preto);
+}
+
+.cabecalho__perfil:hover {
+  box-shadow: inset 0 0 0 1px var(--borda-campo);
+}
+
+.cabecalho__perfil[aria-current='page'] {
+  box-shadow: 0 0 0 2px var(--azul-marca);
+}
+
+/* Seletor de tema: trilho com duas opções, a escolhida fica elevada */
+.cabecalho__tema {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--cabecalho-item);
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--suave);
+}
+
+.cabecalho__opcao-tema {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto-secundario);
+  cursor: pointer;
+  transition:
+    color var(--cabecalho-transicao),
+    background-color var(--cabecalho-transicao);
+}
+
+.cabecalho__opcao-tema > svg,
+.cabecalho__opcao-tema > img,
+.cabecalho__opcao-tema > .icone {
+  width: 14px;
+  height: 14px;
+}
+
+.cabecalho__opcao-tema:hover {
+  color: var(--titulo);
+}
+
+.cabecalho__opcao-tema[aria-pressed='true'] {
+  background: var(--superficie);
+  color: var(--titulo);
+  box-shadow: inset 0 0 0 1px var(--borda);
+}
+
+/* ---------- Botão do menu (celular) ---------- */
+
+.botao-menu {
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--titulo);
+  cursor: pointer;
+  transition: background-color var(--cabecalho-transicao);
+}
+
+.botao-menu:hover {
+  background: var(--suave);
+}
+
+.cabecalho__icone-menu {
+  display: block;
+}
+
+/* ---------- Foco visível ---------- */
+
+.cabecalho a:focus-visible,
+.cabecalho button:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .cabecalho__conteudo {
+    gap: 12px;
+  }
+
+  .cabecalho .navegacao a,
+  .cabecalho .navegacao button {
+    padding: 0 8px;
+    font-size: 13px;
+  }
+}
+
+/* ---------- Celular ---------- */
+
+@media (max-width: 760px) {
+  .cabecalho__conteudo {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 8px;
+  }
+
+  /* Ordem visual: marca | ações | menu */
+  .cabecalho__acoes {
+    order: 2;
+    gap: 6px;
+  }
+
+  .botao-menu {
+    display: inline-flex;
+    order: 3;
+  }
+
+  .cabecalho__sair,
+  .cabecalho__portal,
+  .cabecalho__entrar {
+    display: none;
+  }
+
+  .cabecalho--acesso .cabecalho__portal {
+    display: inline-flex;
+  }
+
+  /* Menu aberto: painel abaixo da barra */
+  .cabecalho .navegacao {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 8px 16px 16px;
+    background: var(--fundo);
+    border-bottom: 1px solid var(--borda);
+  }
+
+  .cabecalho .navegacao--aberta {
+    display: flex;
+    animation: cabecalho-menu 160ms ease;
+  }
+
+  .cabecalho .navegacao a,
+  .cabecalho .navegacao button {
+    height: 44px;
+    padding: 0 12px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+
+  .cabecalho .navegacao .navegacao__sair,
+  .cabecalho .navegacao .navegacao__entrar-mobile {
+    display: inline-flex;
+  }
+
+  .cabecalho .navegacao a[aria-current='page']::after {
+    display: none;
+  }
+
+  /* Área do professor: navegação só no menu */
+  .cabecalho--professor .navegacao--aberta {
+    display: flex;
+  }
+
+  .cabecalho--professor .cabecalho__portal {
+    display: none;
+  }
+
+  .cabecalho--professor .cabecalho__sair {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .marca__texto {
+    font-size: 14px;
+  }
+
+  .marca__simbolo {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Área do professor no desktop não mostra navegação */
+.cabecalho--professor .navegacao {
+  display: none;
+}
+
+@keyframes cabecalho-menu {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Movimento reduzido ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cabecalho,
+  .cabecalho .navegacao a,
+  .cabecalho .navegacao button,
+  .cabecalho__portal,
+  .cabecalho__sair,
+  .cabecalho__entrar,
+  .cabecalho__perfil,
+  .cabecalho__opcao-tema,
+  .botao-menu {
+    transition: none;
+  }
+
+  .cabecalho .navegacao--aberta {
+    animation: none;
+  }
+}
