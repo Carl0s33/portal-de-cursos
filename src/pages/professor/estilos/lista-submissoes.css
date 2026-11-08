@@ -124,11 +124,12 @@
 }
 
 .submissao-feed__coautores-badge {
+  --badge-fundo: #475569;
   padding: 2px 8px;
-  border: 1px solid var(--borda);
+  border: 1px solid var(--badge-fundo);
   border-radius: var(--raio-cartao);
-  color: var(--azul);
-  background: var(--suave);
+  color: var(--branco);
+  background: var(--badge-fundo);
   font-size: var(--texto-xs);
   font-weight: 700;
 }
@@ -195,6 +196,12 @@
   color: var(--branco);
   background: var(--cor-status-card);
 }
+.submissao-feed:hover {
+  border-color: color-mix(in srgb, var(--cor) 55%, var(--borda-suave));
+  outline: 0;
+  box-shadow: var(--sombra-elevada);
+  transform: translateY(-4px);
+}
 
 .pagina-professor__vazio {
   padding: 48px 32px;
@@ -205,4 +212,130 @@
 
 .pagina-professor__vazio h2 {
   margin-top: 0;
+}
+
+/* Feed em cards horizontais: capa informativa + título e contexto, no ritmo do YouTube. */
+.lista-submissoes {
+  gap: var(--espaco-4);
+  padding-top: var(--espaco-4);
+}
+.submissao-feed {
+  min-width: 0;
+  padding: 0;
+  border-radius: var(--raio-superficie);
+  box-shadow: var(--sombra);
+}
+.submissao-feed__gatilho {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.28fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--espaco-5);
+  min-height: 156px;
+  padding: var(--espaco-4);
+  border-radius: inherit;
+}
+.submissao-feed__gatilho:hover {
+  background: transparent;
+}
+.submissao-feed__capa {
+  display: flex;
+  min-height: 120px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  overflow: hidden;
+  padding: var(--espaco-4);
+  border-radius: var(--raio-controle);
+  background: color-mix(in srgb, var(--cor) 10%, var(--superficie));
+  color: var(--cor);
+}
+.submissao-feed__capa-marca {
+  color: var(--texto-suave);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.submissao-feed__capa strong {
+  max-width: 18ch;
+  color: var(--titulo);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 600;
+  line-height: 1.2;
+}
+.submissao-feed__capa-linha {
+  width: 32px;
+  height: 3px;
+  background: var(--cor);
+}
+.submissao-feed__conteudo {
+  gap: var(--espaco-2);
+}
+.submissao-feed__meta {
+  color: var(--texto-suave);
+}
+.submissao-feed__titulo {
+  display: -webkit-box;
+  max-width: 58ch;
+  overflow: hidden;
+  color: var(--titulo);
+  font-family: var(--fonte-titulo);
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.submissao-feed__rodape {
+  gap: var(--espaco-3);
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+}
+.submissao-feed__metadados {
+  color: var(--texto-suave);
+}
+.submissao-feed__expandir {
+  min-height: 44px;
+  padding-inline: var(--espaco-3);
+  border-color: transparent;
+  border-radius: var(--raio-controle);
+  color: var(--azul);
+  background: transparent;
+}
+.submissao-feed:hover .submissao-feed__expandir {
+  border-color: var(--borda);
+  color: var(--azul);
+  background: var(--superficie);
+}
+.submissao-feed__gatilho:focus-visible .submissao-feed__expandir {
+  color: var(--azul);
+  background: var(--azul-suave);
+}
+
+@media (max-width: 760px) {
+  .submissao-feed__gatilho {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: var(--espaco-3);
+    padding: var(--espaco-3);
+  }
+  .submissao-feed__capa {
+    min-height: 104px;
+    padding: var(--espaco-2);
+  }
+  .submissao-feed__capa strong {
+    font-size: var(--texto-sm);
+  }
+  .submissao-feed__expandir {
+    grid-column: 2;
+    justify-self: start;
+    min-height: 36px;
+    padding: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .submissao-feed,
+  .submissao-feed__gatilho {
+    transition: none;
+  }
 }

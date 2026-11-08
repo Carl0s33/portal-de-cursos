@@ -1,9 +1,9 @@
-import { obterBaseApi, requisitarApi } from './cliente.js'
+import { pegarBaseApi, chamarApi } from './cliente.js'
 
 export const VERSAO = ''
 
 function urlAlunos() {
-  return `${obterBaseApi('usuarios', VERSAO)}/alunos`
+  return `${pegarBaseApi('usuarios', VERSAO)}/alunos`
 }
 
 export async function listarAlunos(token, filtros = {}, sinal) {
@@ -13,19 +13,19 @@ export async function listarAlunos(token, filtros = {}, sinal) {
     parametros.set('cursoId', String(filtros.cursoId))
   }
   const query = parametros.size ? `?${parametros}` : ''
-  return requisitarApi(`${urlAlunos()}/buscar${query}`, { metodo: 'GET', token, sinal })
+  return chamarApi(`${urlAlunos()}/buscar${query}`, { metodo: 'GET', token, sinal })
 }
 
-export async function obterAlunoPorId(token, id, sinal) {
-  return requisitarApi(`${urlAlunos()}/${encodeURIComponent(id)}`, { metodo: 'GET', token, sinal })
+export async function buscarAlunoPorId(token, id, sinal) {
+  return chamarApi(`${urlAlunos()}/${encodeURIComponent(id)}`, { metodo: 'GET', token, sinal })
 }
 
 export async function cadastrarAluno(dados, sinal) {
-  return requisitarApi(urlAlunos(), { metodo: 'POST', corpo: dados, sinal })
+  return chamarApi(urlAlunos(), { metodo: 'POST', corpo: dados, sinal })
 }
 
 export async function atualizarAluno(token, id, dados, sinal) {
-  return requisitarApi(`${urlAlunos()}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${urlAlunos()}/${encodeURIComponent(id)}`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -34,7 +34,7 @@ export async function atualizarAluno(token, id, dados, sinal) {
 }
 
 export async function excluirAluno(token, id, sinal) {
-  return requisitarApi(`${urlAlunos()}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${urlAlunos()}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,
@@ -44,7 +44,7 @@ export async function excluirAluno(token, id, sinal) {
 export const moduloAlunos = {
   versao: VERSAO,
   listar: listarAlunos,
-  obterPorId: obterAlunoPorId,
+  obterPorId: buscarAlunoPorId,
   cadastrar: cadastrarAluno,
   atualizar: atualizarAluno,
   excluir: excluirAluno,

@@ -19,12 +19,12 @@ import '@/shared/styles/painel-informativo.css'
 import './submissao.css'
 
 export default function PaginaSubmissao({ sessao, aoSubmeter }) {
-  const [cursos, definirCursos] = useState([])
-  const [orientadores, definirOrientadores] = useState([])
-  const [disciplinasCurso, definirDisciplinasCurso] = useState([])
-  const [carregandoCadastros, definirCarregandoCadastros] = useState(true)
-  const [carregandoDisciplinas, definirCarregandoDisciplinas] = useState(false)
-  const [formulario, definirFormulario] = useState(() => ({
+  const [cursos, mudarCursos] = useState([])
+  const [orientadores, mudarOrientadores] = useState([])
+  const [disciplinasCurso, mudarDisciplinasCurso] = useState([])
+  const [carregandoCadastros, mudarCarregandoCadastros] = useState(true)
+  const [carregandoDisciplinas, mudarCarregandoDisciplinas] = useState(false)
+  const [formulario, mudarFormulario] = useState(() => ({
     ...formularioInicial,
     nome: sessao?.usuario?.nome || '',
     email: sessao?.usuario?.email || '',
@@ -37,10 +37,12 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
         ? sessao?.usuario?.nome || ''
         : '',
   }))
-  const [etapa, definirEtapa] = useState(0)
-  const [erro, definirErro] = useState('')
-  const [erros, definirErros] = useState({})
-  const [enviado, definirEnviado] = useState(false)
+  const [etapa, mudarEtapa] = useState(0)
+  const [erro, mudarErro] = useState('')
+  const [erros, mudarErros] = useState({})
+  const [enviado, mudarEnviado] = useState(false)
+  const [enviando, mudarEnviando] = useState(false)
+  const [falhaDocumentos, mudarFalhaDocumentos] = useState(false)
   const resumoErros = useRef(null)
 
   useEffect(() => {
@@ -51,13 +53,13 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     ])
       .then(([resultadoCursos, resultadoOrientadores]) => {
         if (controller.signal.aborted) return
-        definirCursos(resultadoCursos.status === 'fulfilled' ? resultadoCursos.value : [])
-        definirOrientadores(
+        mudarCursos(resultadoCursos.status === 'fulfilled' ? resultadoCursos.value : [])
+        mudarOrientadores(
           resultadoOrientadores.status === 'fulfilled' ? resultadoOrientadores.value : [],
         )
       })
       .finally(() => {
-        if (!controller.signal.aborted) definirCarregandoCadastros(false)
+        if (!controller.signal.aborted) mudarCarregandoCadastros(false)
       })
     return () => controller.abort()
   }, [sessao?.token])
@@ -68,7 +70,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     const controller = new AbortController()
 
     async function carregarDisciplinas() {
-      definirCarregandoDisciplinas(true)
+      mudarCarregandoDisciplinas(true)
       try {
         const dados = await listarDisciplinasPorCurso(
           formulario.curso,
@@ -76,15 +78,15 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           controller.signal,
         )
         if (ativo) {
-          definirDisciplinasCurso(Array.isArray(dados) ? dados : [])
+          mudarDisciplinasCurso(Array.isArray(dados) ? dados : [])
         }
       } catch {
         if (ativo) {
-          definirDisciplinasCurso([])
+          mudarDisciplinasCurso([])
         }
       } finally {
         if (ativo) {
-          definirCarregandoDisciplinas(false)
+          mudarCarregandoDisciplinas(false)
         }
       }
     }
@@ -98,14 +100,14 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
   }, [formulario.curso, sessao?.token])
 
   function alterar(campo, valor) {
-    definirFormulario((anterior) => ({ ...anterior, [campo]: valor }))
-    definirErro('')
-    definirErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
+    mudarFormulario((anterior) => ({ ...anterior, [campo]: valor }))
+    mudarErro('')
+    mudarErros((anteriores) => ({ ...anteriores, [campo]: undefined }))
   }
 
   function registrarErros(proximosErros, mensagem = 'Revise os campos destacados para continuar.') {
-    definirErros(proximosErros)
-    definirErro(mensagem)
+    mudarErros(proximosErros)
+    mudarErro(mensagem)
     window.requestAnimationFrame(() => resumoErros.current?.focus())
   }
 
@@ -240,20 +242,21 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
 
   function avancar() {
     if (validarEtapa()) {
-      definirErro('')
-      definirErros({})
-      definirEtapa((anterior) => Math.min(anterior + 1, etapas.length - 1))
+      mudarErro('')
+      mudarErros({})
+      mudarEtapa((anterior) => Math.min(anterior + 1, etapas.length - 1))
     }
   }
 
   function voltar() {
-    definirErro('')
-    definirErros({})
-    definirEtapa((anterior) => Math.max(anterior - 1, 0))
+    mudarErro('')
+    mudarErros({})
+    mudarEtapa((anterior) => Math.max(anterior - 1, 0))
   }
 
-  function submeter(evento) {
+  async function submeter(evento) {
     evento.preventDefault()
+    if (enviando) return
     if (!validarEtapa()) return
     const cursoProjeto = cursos.find(
       (item) =>
@@ -369,7 +372,17 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       autores: autoresParaDto,
       disciplinaIds: disciplinaIds.length > 0 ? disciplinaIds : null,
       nome: formulario.titulo.trim(),
-      descricao: formulario.objetivos.trim(),
+      descricao: [
+        `Objetivos e resultados:\n${formulario.objetivos.trim()}`,
+        formulario.informacoesEspecificas.trim()
+          ? [
+              `${tiposProjeto[formulario.tipo]?.campoEspecifico || 'Escopo e informações específicas'}:`,
+              formulario.informacoesEspecificas.trim(),
+            ].join('\n')
+          : '',
+      ]
+        .filter(Boolean)
+        .join('\n\n'),
       resumo: formulario.resumo.trim(),
       tipoProjeto: mapasTipoProjeto[formulario.tipo] || formulario.tipo,
       dataInicio,
@@ -378,57 +391,71 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       documentos: documentosDto.length > 0 ? documentosDto : null,
     }
 
-    aoSubmeter?.(submissaoLocal)
-    definirEnviado(true)
+    if (!sessao?.token || !dto.cursoId || !dto.campusId || dto.professores.length === 0) {
+      mudarErro(
+        'Não foi possível identificar sua sessão, curso, campus ou professor orientador. Confira os dados e tente novamente.',
+      )
+      return
+    }
 
-    if (
-      sessao?.token &&
-      dto.cursoId &&
-      dto.campusId &&
-      dto.disciplinaIds &&
-      dto.professores.length > 0
-    ) {
-      cadastrarProjeto(dto, sessao.token)
-        .then(async (projetoCriado) => {
-          if (!projetoCriado?.id) return
-          if (sessao?.tipoUsuario === 'COORDENADOR') {
-            try {
-              await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
-            } catch {
-              /* Continua envio de documentos */
-            }
-          } else if (sessao?.tipoUsuario === 'PROFESSOR') {
-            try {
-              // Se o próprio orientador submeteu, já avança para aprovação inicial
-              await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
-              await atualizarStatusProjeto(projetoCriado.id, 'ANALISE_PUBLICACAO', sessao.token)
-            } catch {
-              /* Continua */
-            }
-          }
-          const arquivosReais =
-            formulario.tipo === 'TCC'
-              ? []
-              : Object.values(formulario.documentos).flat().filter(Boolean)
+    mudarEnviando(true)
+    mudarFalhaDocumentos(false)
+    try {
+      const projetoCriado = await cadastrarProjeto(dto, sessao.token)
+      if (!projetoCriado?.id) {
+        mudarErro('O servidor não confirmou o registro do projeto. Tente novamente.')
+        return
+      }
+      if (sessao?.tipoUsuario === 'COORDENADOR') {
+        try {
+          await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
+        } catch {
+          /* Continua envio de documentos */
+        }
+      } else if (sessao?.tipoUsuario === 'PROFESSOR') {
+        try {
+          // Se o próprio orientador submeteu, já avança para aprovação inicial
+          await atualizarStatusProjeto(projetoCriado.id, 'APROVADO', sessao.token)
+          await atualizarStatusProjeto(projetoCriado.id, 'ANALISE_PUBLICACAO', sessao.token)
+        } catch {
+          /* Continua */
+        }
+      }
 
-          for (const arq of arquivosReais) {
-            if (arq instanceof File) {
-              try {
-                await enviarDocumentoProjeto(projetoCriado.id, arq, sessao.token)
-              } catch {
-                continue
-              }
-            }
+      const arquivosReais =
+        formulario.tipo === 'TCC'
+          ? []
+          : Object.values(formulario.documentos).flat().filter(Boolean)
+
+      for (const arq of arquivosReais) {
+        if (arq instanceof File) {
+          try {
+            await enviarDocumentoProjeto(projetoCriado.id, arq, sessao.token)
+          } catch {
+            mudarFalhaDocumentos(true)
           }
-        })
-        .catch(() => {})
+        }
+      }
+      aoSubmeter?.({
+        ...submissaoLocal,
+        id: projetoCriado.id,
+        identificador: String(projetoCriado.id),
+      })
+      mudarEnviado(true)
+    } catch (falha) {
+      mudarErro(
+        falha?.message ||
+          'Não foi possível salvar o projeto. Seus dados continuam nesta tela; tente novamente.',
+      )
+    } finally {
+      mudarEnviando(false)
     }
   }
 
   function alterarDocumentos(documento, arquivos) {
     const listaArquivos = documento.multiplo ? [...arquivos] : [arquivos?.[0]].filter(Boolean)
     if (listaArquivos.length === 0) {
-      definirFormulario((anterior) => {
+      mudarFormulario((anterior) => {
         const novosDocumentos = { ...anterior.documentos }
         delete novosDocumentos[documento.id]
         return { ...anterior, documentos: novosDocumentos }
@@ -440,7 +467,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       registrarErros({ [documento.id]: erroEncontrado })
       return
     }
-    definirErros((anteriores) => {
+    mudarErros((anteriores) => {
       const novos = { ...anteriores }
       delete novos[documento.id]
       return novos
@@ -492,14 +519,20 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           <span className="submissao-confirmacao__selo" aria-hidden="true">
             ✓
           </span>
-          <h1 id="titulo-confirmacao">Seu projeto foi enviado com sucesso.</h1>
+          <h1 id="titulo-confirmacao">Projeto enviado.</h1>
           <p>
             {sessao?.tipoUsuario === 'COORDENADOR'
               ? 'O projeto foi registrado e encaminhado diretamente para a coordenação do curso para publicação.'
               : sessao?.tipoUsuario === 'PROFESSOR'
                 ? 'O projeto foi registrado com seu aceite docente e encaminhado para a homologação e publicação pela coordenação do curso.'
-                : 'O professor orientador indicado receberá a solicitação para aceite inicial antes da avaliação final da coordenação (RN19).'}
+                : 'O orientador indicado vai analisar seu projeto primeiro. Se aceitar acompanhar o trabalho, a submissão seguirá para a coordenação do curso, que decidirá sobre a publicação no portal.'}
           </p>
+          {falhaDocumentos && (
+            <p role="alert">
+              O projeto foi salvo, mas um ou mais documentos não foram enviados. Abra a submissão
+              para anexá-los novamente.
+            </p>
+          )}
           <div className="submissao-confirmacao__resumo">
             <strong>{formulario.titulo}</strong>
             <span>
@@ -514,7 +547,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
               className="botao-secundario"
               type="button"
               onClick={() => {
-                definirFormulario({
+                mudarFormulario({
                   ...formularioInicial,
                   nome: sessao?.usuario?.nome || '',
                   email: sessao?.usuario?.email || '',
@@ -526,8 +559,9 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                         ''
                       : '',
                 })
-                definirEtapa(0)
-                definirEnviado(false)
+                mudarEtapa(0)
+                mudarEnviado(false)
+                mudarFalhaDocumentos(false)
               }}
             >
               Enviar outro projeto
@@ -652,7 +686,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                   ? 'etapa etapa--feita'
                   : 'etapa'
             }
-            onClick={() => indice < etapa && definirEtapa(indice)}
+            onClick={() => indice < etapa && mudarEtapa(indice)}
             disabled={indice > etapa}
             aria-current={indice === etapa ? 'step' : undefined}
           >
@@ -729,8 +763,8 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                 {etapa === 0 ? 'o projeto' : etapa === 1 ? 'a equipe' : 'os documentos'}
               </button>
             ) : (
-              <button className="botao-primario" type="submit">
-                Enviar projeto
+              <button className="botao-primario" type="submit" disabled={enviando}>
+                {enviando ? 'Salvando projeto…' : 'Enviar projeto'}
               </button>
             )}
           </div>

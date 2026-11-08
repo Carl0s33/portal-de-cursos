@@ -1,9 +1,9 @@
 import { ordenarSubmissoes } from '@/shared/utils/ordenarSubmissoes.js'
-import Indicadores from '@/shared/components/Indicadores.jsx'
-import EtapasSubmissao from '@/shared/components/EtapasSubmissao.jsx'
+import Indicadores from '@/shared/componentes/Indicadores.jsx'
+import EtapasSubmissao from '@/shared/componentes/EtapasSubmissao.jsx'
 import { useMemo } from 'react'
 import '@/shared/styles/painel-informativo.css'
-import EstadoVazio from '@/shared/components/EstadoVazio.jsx'
+import EstadoVazio from '@/shared/componentes/EstadoVazio.jsx'
 import { basePortal } from '../../app/rotas.js'
 import './painel-aluno.css'
 
@@ -78,21 +78,25 @@ export default function PaginaPainelAluno({ sessao, submissoes = [] }) {
             titulo: 'Total de submissões',
             valor: totais.total,
             icone: 'projetos-detalhe',
+            tom: 'primario',
           },
           {
             titulo: 'Em análise',
             valor: totais.analise,
             icone: 'relogio-cursos',
+            tom: 'andamento',
           },
           {
             titulo: 'Aprovados',
             valor: totais.aprovados,
             icone: 'confirmacao-cursos',
+            tom: 'sucesso',
           },
           {
             titulo: 'Recusados',
             valor: totais.recusados,
             icone: 'erro',
+            tom: 'erro',
           },
         ]}
       />

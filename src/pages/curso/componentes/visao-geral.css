@@ -1,0 +1,79 @@
+.visao-curso {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+  gap: var(--espaco-7);
+  align-items: start;
+  padding-block: var(--espaco-6);
+  border-top: 1px solid var(--borda-suave);
+}
+
+.visao-curso > div {
+  max-width: var(--largura-texto);
+}
+
+.visao-curso h2 {
+  margin: 0 0 var(--espaco-3);
+  color: var(--titulo);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-titulo-secao);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.visao-curso > div > p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-md);
+  line-height: 1.7;
+}
+
+.visao-curso__coordenador-bloco {
+  display: grid;
+  gap: var(--espaco-3);
+  padding-left: var(--espaco-5);
+  border-left: 1px solid var(--borda-suave);
+}
+
+.visao-curso__coordenador-bloco h3 {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.visao-curso__coordenador-bloco a {
+  display: grid;
+  gap: var(--espaco-2);
+  color: var(--titulo);
+  text-decoration: none;
+}
+
+.visao-curso__coordenador-bloco a strong {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 600;
+}
+
+.visao-curso__coordenador-bloco a span {
+  color: var(--azul);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.visao-curso__coordenador-bloco a:hover span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 800px) {
+  .visao-curso {
+    grid-template-columns: 1fr;
+    gap: var(--espaco-5);
+  }
+
+  .visao-curso__coordenador-bloco {
+    padding: var(--espaco-5) 0 0;
+    border-top: 1px solid var(--borda-suave);
+    border-left: 0;
+  }
+}

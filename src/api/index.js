@@ -1,10 +1,10 @@
 export {
   VERSAO_PADRAO_API,
   ErroApi,
-  obterBaseApi,
-  obterVersaoApi,
-  definirVersaoApi,
-  requisitarApi,
+  pegarBaseApi,
+  pegarVersaoApi,
+  mudarVersaoApi,
+  chamarApi,
 } from './cliente.js'
 
 export * as alunosApi from './alunos.js'

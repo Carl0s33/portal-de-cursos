@@ -16,23 +16,23 @@
 }
 
 .status.usuario-papel--admin {
-  --cor-status: var(--marinho);
+  --cor-status: var(--branco);
+  --fundo-status: #0b1f36;
 }
 
 .status.usuario-papel--coordenador {
-  --cor-status: var(--aviso);
+  --cor-status: var(--branco);
+  --fundo-status: #854400;
 }
 
 .status.usuario-papel--professor {
-  --cor-status: var(--roxo);
+  --cor-status: var(--branco);
+  --fundo-status: #4b248f;
 }
 
 .status.usuario-papel--aluno {
-  --cor-status: var(--sucesso);
-}
-
-:root[data-tema='escuro'] .status.usuario-papel--admin {
-  --cor-status: var(--papel-inativo);
+  --cor-status: var(--branco);
+  --fundo-status: #08623e;
 }
 
 .usuario-acesso {
