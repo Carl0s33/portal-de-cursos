@@ -1,25 +1,26 @@
 .etiqueta,
 .status {
-  --cor-status: var(--texto-sobre-azul);
+  --cor-status: var(--branco);
   --fundo-status: var(--azul);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  vertical-align: middle;
   min-height: 28px;
   gap: var(--espaco-2);
   width: fit-content;
   padding: var(--espaco-1) var(--espaco-3);
-  border: 0;
+  border: 1px solid var(--fundo-status);
   border-radius: var(--raio-pilula);
   background: var(--fundo-status);
   color: var(--cor-status);
   font-size: var(--texto-xs);
   font-weight: 600;
   line-height: 1.6;
+  text-align: center;
+  vertical-align: middle;
   white-space: nowrap;
 }
+
 .etiqueta::before,
 .status::before {
   content: '';
@@ -29,52 +30,28 @@
   border-radius: var(--raio-pilula);
   background: currentColor;
 }
+
 .status--aguardando-orientador,
 .status--aguardando-coordenador {
-  --cor-status: var(--branco);
-  --fundo-status: var(--aviso);
+  --fundo-status: #854400;
 }
+
 .status--em-análise,
 .status--em-analise {
-  --cor-status: var(--branco);
-  --fundo-status: var(--aviso);
+  --fundo-status: #003da8;
 }
+
 .status--aceito,
 .status--aprovado,
 .status--publicado {
-  --cor-status: var(--branco);
-  --fundo-status: var(--sucesso);
+  --fundo-status: #08623e;
 }
+
 .status--recusado {
+  --fundo-status: #a61b1b;
+}
+
+.etiqueta--neutra {
   --cor-status: var(--branco);
-  --fundo-status: var(--erro);
-}
-
-:root[data-tema='escuro'] .status {
-  --cor-status: var(--texto);
-  --fundo-status: var(--suave);
-  border: 1px solid var(--borda);
-}
-
-:root[data-tema='escuro'] .status--aprovado,
-:root[data-tema='escuro'] .status--aceito,
-:root[data-tema='escuro'] .status--publicado {
-  --cor-status: var(--sucesso);
-  --fundo-status: color-mix(in srgb, var(--sucesso) 16%, var(--fundo));
-  border-color: color-mix(in srgb, var(--sucesso) 42%, var(--borda));
-}
-
-:root[data-tema='escuro'] .status--aguardando-orientador,
-:root[data-tema='escuro'] .status--aguardando-coordenador,
-:root[data-tema='escuro'] .status--em-análise,
-:root[data-tema='escuro'] .status--em-analise {
-  --cor-status: var(--aviso);
-  --fundo-status: color-mix(in srgb, var(--aviso) 14%, var(--fundo));
-  border-color: color-mix(in srgb, var(--aviso) 40%, var(--borda));
-}
-
-:root[data-tema='escuro'] .status--recusado {
-  --cor-status: var(--erro);
-  --fundo-status: color-mix(in srgb, var(--erro) 14%, var(--fundo));
-  border-color: color-mix(in srgb, var(--erro) 40%, var(--borda));
+  --fundo-status: #475569;
 }

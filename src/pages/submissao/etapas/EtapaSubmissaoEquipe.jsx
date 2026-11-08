@@ -1,4 +1,3 @@
-
 export default function EtapaSubmissaoEquipe({
   formulario,
   erros,

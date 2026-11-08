@@ -1,0 +1,122 @@
+.navegacao-secoes {
+  position: fixed;
+  z-index: 30;
+  top: 50%;
+  left: 20px;
+  width: 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  transform: translateY(-50%);
+}
+
+.navegacao-secoes button {
+  color: var(--texto-suave);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.navegacao-secoes__seta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  flex: 0 0 88px;
+  width: 88px;
+  height: 26px;
+  padding: 0;
+  margin: 0;
+  border-radius: 4px;
+}
+
+.navegacao-secoes__seta svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.navegacao-secoes__seta:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.navegacao-secoes__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 88px;
+  min-height: 31px;
+  padding: 5px 4px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  text-align: left;
+  transition: color var(--transicao);
+}
+
+.navegacao-secoes__item:hover,
+.navegacao-secoes__item:focus-visible {
+  color: var(--titulo);
+}
+
+.navegacao-secoes__ponto {
+  display: none;
+}
+
+.navegacao-secoes__rotulo {
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  opacity: 1;
+  transform: none;
+  transition:
+    color var(--transicao),
+    font-weight var(--transicao);
+}
+
+.navegacao-secoes__item--ativa {
+  color: var(--titulo) !important;
+}
+
+.navegacao-secoes__item--ativa .navegacao-secoes__rotulo {
+  color: var(--titulo);
+  font-weight: 800;
+}
+
+.navegacao-secoes__item--ativa::after {
+  position: absolute;
+  right: 4px;
+  bottom: 1px;
+  left: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--azul);
+  content: '';
+}
+
+.navegacao-secoes__seta:focus-visible,
+.navegacao-secoes__item:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1100px) {
+  .navegacao-secoes {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navegacao-secoes__item {
+    transition: none;
+  }
+}

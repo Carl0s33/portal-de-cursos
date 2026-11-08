@@ -1,6 +1,6 @@
-import { obterBaseApi } from './cliente.js'
+import { pegarBaseApi } from './cliente.js'
 
-export function obterEnderecoRecurso(recurso) {
+export function pegarEnderecoRecurso(recurso) {
   const chave = recurso.toUpperCase().replaceAll('-', '_')
   const personalizado =
     import.meta.env[`VITE_API_${chave}_URL`] || import.meta.env[`VITE_API_${chave}`]
@@ -9,5 +9,5 @@ export function obterEnderecoRecurso(recurso) {
     const baseAcademica = import.meta.env.VITE_API_ACADEMICO_URL
     if (baseAcademica) return `${baseAcademica.replace(/\/+$/, '')}/${recurso}`
   }
-  return obterBaseApi(recurso)
+  return pegarBaseApi(recurso)
 }

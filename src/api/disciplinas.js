@@ -1,12 +1,12 @@
-import { obterEnderecoRecurso } from './enderecos.js'
-import { requisitarApi } from './cliente.js'
+import { pegarEnderecoRecurso } from './enderecos.js'
+import { chamarApi } from './cliente.js'
 
 export const VERSAO = ''
-const enderecoDisciplinas = obterEnderecoRecurso('disciplinas')
+const enderecoDisciplinas = pegarEnderecoRecurso('disciplinas')
 
 export async function listarDisciplinasPorCurso(cursoId, token, sinal) {
   const query = new URLSearchParams({ cursoId: String(cursoId) })
-  const dados = await requisitarApi(`${enderecoDisciplinas}?${query}`, {
+  const dados = await chamarApi(`${enderecoDisciplinas}?${query}`, {
     metodo: 'GET',
     token,
     sinal,
@@ -40,7 +40,7 @@ export async function filtrarDisciplinas(filtros = {}, token, sinal) {
   if (filtros.obrigatoria !== undefined && filtros.obrigatoria !== null) {
     query.set('obrigatoria', String(filtros.obrigatoria))
   }
-  const dados = await requisitarApi(`${enderecoDisciplinas}/filtros?${query}`, {
+  const dados = await chamarApi(`${enderecoDisciplinas}/filtros?${query}`, {
     metodo: 'GET',
     token,
     sinal,
@@ -50,11 +50,11 @@ export async function filtrarDisciplinas(filtros = {}, token, sinal) {
 }
 
 export async function cadastrarDisciplina(token, dados, sinal) {
-  return requisitarApi(enderecoDisciplinas, { metodo: 'POST', corpo: dados, token, sinal })
+  return chamarApi(enderecoDisciplinas, { metodo: 'POST', corpo: dados, token, sinal })
 }
 
 export async function atualizarDisciplina(token, id, dados, sinal) {
-  return requisitarApi(`${enderecoDisciplinas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoDisciplinas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'PUT',
     corpo: dados,
     token,
@@ -63,7 +63,7 @@ export async function atualizarDisciplina(token, id, dados, sinal) {
 }
 
 export async function excluirDisciplina(token, id, sinal) {
-  return requisitarApi(`${enderecoDisciplinas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
+  return chamarApi(`${enderecoDisciplinas.replace(/\/$/, '')}/${encodeURIComponent(id)}`, {
     metodo: 'DELETE',
     token,
     sinal,

@@ -120,21 +120,22 @@
 }
 .tabela-submissoes .status,
 .status {
-  --cor-status: var(--azul);
+  --cor-status: var(--branco);
+  --fundo-status: #003da8;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   width: fit-content;
   padding: 5px 12px;
   border-radius: 999px;
-  border: 1px solid var(--cor-status);
-  background: var(--cor-status);
-  color: var(--branco);
+  border: 1px solid var(--fundo-status);
+  background: var(--fundo-status);
+  color: var(--cor-status);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  box-shadow: 0 2px 6px color-mix(in srgb, var(--cor-status) 24%, transparent);
+  box-shadow: none;
 }
 .tabela-submissoes .status::before,
 .status::before {
@@ -149,11 +150,13 @@
 .tabela-submissoes .status--em-analise,
 .status--em-análise,
 .status--em-analise {
-  --cor-status: var(--azul);
+  --fundo-status: #003da8;
 }
 .tabela-submissoes .status--aguardando-orientador,
-.status--aguardando-orientador {
-  --cor-status: var(--aviso);
+.tabela-submissoes .status--aguardando-coordenador,
+.status--aguardando-orientador,
+.status--aguardando-coordenador {
+  --fundo-status: #854400;
 }
 .tabela-submissoes .status--aceito,
 .tabela-submissoes .status--aprovado,
@@ -161,18 +164,18 @@
 .status--aceito,
 .status--aprovado,
 .status--publicado {
-  --cor-status: var(--sucesso);
+  --fundo-status: #08623e;
 }
 .tabela-submissoes .status--recusado,
 .status--recusado {
-  --cor-status: var(--erro);
+  --fundo-status: #a61b1b;
 }
 :root[data-tema='escuro'] .tabela-submissoes .status,
 :root[data-tema='escuro'] .status {
   color: var(--branco);
-  background: var(--cor-status);
-  border-color: var(--cor-status);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  background: var(--fundo-status);
+  border-color: var(--fundo-status);
+  box-shadow: none;
 }
 .tabela-submissoes a:hover {
   color: var(--azul);
@@ -281,6 +284,10 @@
 }
 .painel-vazio p {
   margin: 12px 0 24px;
+}
+.tabela td:has(> .status) {
+  text-align: center;
+  vertical-align: middle;
 }
 .painel-integracao {
   margin: 0;

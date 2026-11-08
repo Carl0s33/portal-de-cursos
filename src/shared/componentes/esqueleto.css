@@ -1,0 +1,31 @@
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--borda-suave, #e2e8f0) 25%,
+    var(--suave, #f1f5f9) 50%,
+    var(--borda-suave, #e2e8f0) 75%
+  );
+  background-size: 200% 100%;
+  animation: esqueleto-brilho 1.4s infinite;
+  display: block;
+}
+
+@keyframes esqueleto-brilho {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+:root[data-tema='escuro'] .skeleton {
+  background: linear-gradient(90deg, #131a30 25%, #1c2545 50%, #131a30 75%);
+  background-size: 200% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
