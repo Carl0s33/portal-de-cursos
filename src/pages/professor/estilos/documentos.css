@@ -45,7 +45,7 @@
 }
 
 .item-documento-interativo:hover {
-  background-color: transparent;
+  background-color: color-mix(in srgb, var(--azul) 5%, var(--superficie));
   color: var(--azul);
 }
 
