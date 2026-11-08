@@ -39,3 +39,5 @@ desktop.ini
 *.md
 commitlint.config.*
 /verificacoes/
+AGENTS.md
+docs/imagens/
