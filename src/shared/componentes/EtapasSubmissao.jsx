@@ -14,13 +14,14 @@ const passos = [
 
 export default function EtapasSubmissao({ status, compact = false }) {
   const concluido = ['Aprovado', 'Publicado'].includes(status)
-  const atual =
-    ['Aprovado pelo orientador', 'Aguardando Coordenação', 'Em análise'].includes(status)
-      ? 2
-      : ['Aguardando Orientador', 'Recusado pelo orientador'].includes(status)
-        ? 1
-        : status === 'Publicação recusada'
-          ? 2
+  const atual = ['Aprovado pelo orientador', 'Aguardando Coordenação', 'Em análise'].includes(
+    status,
+  )
+    ? 2
+    : ['Aguardando Orientador', 'Recusado pelo orientador'].includes(status)
+      ? 1
+      : status === 'Publicação recusada'
+        ? 2
         : status === 'Precisa de revisão'
           ? 0
           : 0

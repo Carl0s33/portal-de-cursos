@@ -46,8 +46,7 @@ export function filtrarContextoCoordenacao({ cursos = [], sessao, submissoes = [
     submissoesDoCurso,
     indicadores: {
       total: submissoesDoCurso.length,
-      emAnaliseCoord: submissoesDoCurso.filter((s) => s.status === 'Aguardando Coordenação')
-        .length,
+      emAnaliseCoord: submissoesDoCurso.filter((s) => s.status === 'Aguardando Coordenação').length,
       aguardandoOrientador: submissoesDoCurso.filter((s) => s.status === 'Aguardando Orientador')
         .length,
       publicados: submissoesDoCurso.filter((s) => s.status === 'Aprovado').length,

@@ -8,13 +8,13 @@ export default function Capa() {
 
       <div className="hero-inicial__conteudo">
         <span className="hero-inicial__tag">Rede Integrada de Ensino e Pesquisa</span>
-        
+
         <h1 className="hero-inicial__titulo-principal">
           Formação acadêmica e produção científica em todos os campi.
         </h1>
 
         <p className="hero-inicial__descricao">
-          Conecte-se aos cursos, matrizes curriculares e projetos de pesquisa, extensão e TCCs 
+          Conecte-se aos cursos, matrizes curriculares e projetos de pesquisa, extensão e TCCs
           desenvolvidos por estudantes e docentes em toda a nossa instituição.
         </p>
 

@@ -288,9 +288,9 @@ export default function PaginaProfessor({ submissoes, usuario }) {
                               ? 'Aprovado pelo orientador'
                               : status === 'Aguardando Coordenação'
                                 ? 'Aguardando coordenação'
-                              : status === 'Aprovado'
-                                ? 'Aprovado e publicado'
-                                : status}
+                                : status === 'Aprovado'
+                                  ? 'Aprovado e publicado'
+                                  : status}
                         </span>
                         {[
                           item.curso,

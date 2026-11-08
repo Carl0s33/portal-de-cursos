@@ -34,10 +34,9 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
     ...formularioInicial,
     nome: sessao?.usuario?.nome || '',
     email: sessao?.usuario?.email || '',
-    curso:
-      ['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao?.tipoUsuario)
-        ? sessao?.usuario?.cursoId || sessao?.usuario?.curso?.id || sessao?.usuario?.curso || ''
-        : '',
+    curso: ['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao?.tipoUsuario)
+      ? sessao?.usuario?.cursoId || sessao?.usuario?.curso?.id || sessao?.usuario?.curso || ''
+      : '',
     orientador:
       sessao?.tipoUsuario === 'PROFESSOR' || sessao?.tipoUsuario === 'COORDENADOR'
         ? sessao?.usuario?.nome || ''
@@ -425,7 +424,9 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
           const coordenadores = await listarCoordenadores(sessao.token, { cursoId: dto.cursoId })
           destinatariosNotificacao.push(
             ...(Array.isArray(coordenadores)
-              ? coordenadores.map((c) => c.professor?.usuario?.email || c.usuario?.email || c.email).filter(Boolean)
+              ? coordenadores
+                  .map((c) => c.professor?.usuario?.email || c.usuario?.email || c.email)
+                  .filter(Boolean)
               : []),
           )
         } catch {
@@ -454,9 +455,7 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
       }
 
       const arquivosReais =
-        formulario.tipo === 'TCC'
-          ? []
-          : Object.values(formulario.documentos).flat().filter(Boolean)
+        formulario.tipo === 'TCC' ? [] : Object.values(formulario.documentos).flat().filter(Boolean)
 
       for (const arq of arquivosReais) {
         if (arq instanceof File) {
@@ -589,13 +588,12 @@ export default function PaginaSubmissao({ sessao, aoSubmeter }) {
                   ...formularioInicial,
                   nome: sessao?.usuario?.nome || '',
                   email: sessao?.usuario?.email || '',
-                  curso:
-                    ['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao?.tipoUsuario)
-                      ? sessao?.usuario?.cursoId ||
-                        sessao?.usuario?.curso?.id ||
-                        sessao?.usuario?.curso ||
-                        ''
-                      : '',
+                  curso: ['ALUNO', 'PROFESSOR', 'COORDENADOR'].includes(sessao?.tipoUsuario)
+                    ? sessao?.usuario?.cursoId ||
+                      sessao?.usuario?.curso?.id ||
+                      sessao?.usuario?.curso ||
+                      ''
+                    : '',
                 })
                 mudarEtapa(0)
                 mudarEnviado(false)

@@ -66,12 +66,8 @@ export default function EtapaSubmissaoDocumentos({
             const idDaZona = `arquivo-${documento.id}`
             return (
               <div
-                className={`campo-arquivo-wrapper ${
-                  temErro ? 'campo-arquivo-wrapper--erro' : ''
-                } ${
-                  documentoArrastado === documento.id
-                    ? 'campo-arquivo-wrapper--arrastando'
-                    : ''
+                className={`campo-arquivo-wrapper ${temErro ? 'campo-arquivo-wrapper--erro' : ''} ${
+                  documentoArrastado === documento.id ? 'campo-arquivo-wrapper--arrastando' : ''
                 }`}
                 key={documento.id}
                 onDragOver={(evento) => {
@@ -124,10 +120,7 @@ export default function EtapaSubmissaoDocumentos({
                   />
                 </label>
                 {arquivos.length > 0 && (
-                  <ul
-                    className="campo-arquivo__lista"
-                    aria-label={`Arquivos de ${documento.nome}`}
-                  >
+                  <ul className="campo-arquivo__lista" aria-label={`Arquivos de ${documento.nome}`}>
                     {arquivos.map((arquivoSelecionado, indice) => (
                       <li
                         className="campo-arquivo__arquivo"

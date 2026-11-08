@@ -120,14 +120,20 @@ export default function InformacoesAcademicas({ curso }) {
           </p>
           <ul className="informacoes-academicas__legenda">
             <li>
-              <span className="informacoes-academicas__marcador informacoes-academicas__marcador--obrigatoria" aria-hidden="true" />
+              <span
+                className="informacoes-academicas__marcador informacoes-academicas__marcador--obrigatoria"
+                aria-hidden="true"
+              />
               <span>
                 <strong>Obrigatórias</strong>
                 {obrigatorias.length} disciplinas · {cargaObrigatoria.toLocaleString('pt-BR')} h
               </span>
             </li>
             <li>
-              <span className="informacoes-academicas__marcador informacoes-academicas__marcador--optativa" aria-hidden="true" />
+              <span
+                className="informacoes-academicas__marcador informacoes-academicas__marcador--optativa"
+                aria-hidden="true"
+              />
               <span>
                 <strong>Optativas</strong>
                 {optativas.length} disciplinas · {cargaOptativa.toLocaleString('pt-BR')} h
