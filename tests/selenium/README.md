@@ -1,17 +1,23 @@
 # Teste Selenium da submissão de projeto
 
-O teste percorre a submissão como aluno no navegador: identifica o erro de e-mail obrigatório,
+O teste percorre a submissão como aluno no navegador: verifica a validação do título obrigatório,
 preenche um Projeto Integrador, escolhe orientador, anexa dois PDFs fictícios, autoriza publicação,
 verifica a confirmação e confere os dados enviados no cadastro. Em falha, salva um screenshot em
 `target/screenshots`. As chamadas HTTP de cursos, professores, disciplinas, cadastro de projeto,
 upload e notificações recebem respostas simuladas no navegador; nenhum dado é gravado em serviços.
 
+O código está separado por responsabilidade: `SubmissaoProjetoSeleniumTest` organiza os cenários,
+`SubmissaoPage` concentra as ações e consultas da tela, e `ApiSubmissaoFalsa` prepara a sessão e as
+respostas simuladas antes de carregar o portal usando WebDriver BiDi.
+
 ## Pré-requisitos
 
 - Java 21 ou superior
-- Maven 3.9 ou superior
 - Node.js compatível com o projeto
 - Google Chrome instalado
+
+O Maven Wrapper incluído baixa e usa o Maven necessário automaticamente; não é preciso instalar
+o comando global `mvn`.
 
 ## Executar
 
@@ -21,15 +27,23 @@ No terminal, na raiz do frontend:
 npm run dev -- --host 0.0.0.0
 ```
 
-Em outro terminal, execute:
+Abra outro PowerShell na raiz do frontend e execute:
 
 ```powershell
 cd tests/selenium
 $env:PORTAL_URL = 'http://localhost:5173'
-mvn test
+.\mvnw.cmd test
 ```
 
-O Selenium Manager baixa/resolve o ChromeDriver local quando necessário.
+Se o prompt já estiver em `tests/selenium`, pule o comando `cd tests/selenium` e execute apenas:
+
+```powershell
+$env:PORTAL_URL = 'http://localhost:5173'
+.\mvnw.cmd test
+```
+
+No macOS ou Linux, use `./mvnw test`. O Selenium Manager baixa/resolve o ChromeDriver local
+quando necessário.
 
 O usuário, curso, orientador, projeto e conteúdo dos PDFs do teste são fictícios. A sessão é
 injetada apenas no `sessionStorage` do navegador de teste. O teste não depende de senha real nem
