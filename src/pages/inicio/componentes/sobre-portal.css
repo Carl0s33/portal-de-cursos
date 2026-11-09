@@ -3,7 +3,7 @@
   position: relative;
   isolation: isolate;
   scroll-margin-top: calc(var(--cabecalho-altura) + var(--espaco-5));
-  padding-block: var(--espaco-8);
+  padding-block: var(--espaco-7) var(--espaco-6);
 }
 
 .sobre-portal::before {
