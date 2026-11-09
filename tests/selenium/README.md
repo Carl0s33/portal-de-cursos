@@ -1,10 +1,14 @@
 # Teste Selenium da submissão de projeto
 
-O teste percorre a submissão como aluno no navegador: identifica o erro de e-mail obrigatório,
+O teste percorre a submissão como aluno no navegador: verifica a validação do título obrigatório,
 preenche um Projeto Integrador, escolhe orientador, anexa dois PDFs fictícios, autoriza publicação,
 verifica a confirmação e confere os dados enviados no cadastro. Em falha, salva um screenshot em
 `target/screenshots`. As chamadas HTTP de cursos, professores, disciplinas, cadastro de projeto,
 upload e notificações recebem respostas simuladas no navegador; nenhum dado é gravado em serviços.
+
+O código está separado por responsabilidade: `SubmissaoProjetoSeleniumTest` organiza os cenários,
+`SubmissaoPage` concentra as ações e consultas da tela, e `ApiSubmissaoFalsa` prepara a sessão e as
+respostas simuladas antes de carregar o portal usando WebDriver BiDi.
 
 ## Pré-requisitos
 
