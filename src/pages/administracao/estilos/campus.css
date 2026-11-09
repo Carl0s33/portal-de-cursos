@@ -212,10 +212,13 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 9px;
   max-width: none;
-  padding: 20px 22px;
+  padding: 0;
   color: var(--titulo);
   font-size: var(--texto-sm);
   font-weight: 650;
+}
+.campus-lista .gestao-lista-filtros {
+  align-items: center;
 }
 .campus-lista .gestao-busca input {
   max-width: 480px;
