@@ -37,7 +37,9 @@ desktop.ini
 .agents/
 .gemini/
 *.md
+!tests/selenium/README.md
 commitlint.config.*
 /verificacoes/
+/tests/selenium/target/
 AGENTS.md
 docs/imagens/
