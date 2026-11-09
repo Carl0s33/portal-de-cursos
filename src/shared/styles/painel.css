@@ -294,7 +294,6 @@
   margin: 12px 0 24px;
 }
 .tabela td:has(> .status) {
-  text-align: center;
   vertical-align: middle;
 }
 .painel-integracao {
