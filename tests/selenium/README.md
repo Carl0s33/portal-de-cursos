@@ -9,9 +9,11 @@ upload e notificações recebem respostas simuladas no navegador; nenhum dado é
 ## Pré-requisitos
 
 - Java 21 ou superior
-- Maven 3.9 ou superior
 - Node.js compatível com o projeto
 - Google Chrome instalado
+
+O Maven Wrapper incluído baixa e usa o Maven necessário automaticamente; não é preciso instalar
+o comando global `mvn`.
 
 ## Executar
 
@@ -21,15 +23,23 @@ No terminal, na raiz do frontend:
 npm run dev -- --host 0.0.0.0
 ```
 
-Em outro terminal, execute:
+Abra outro PowerShell na raiz do frontend e execute:
 
 ```powershell
 cd tests/selenium
 $env:PORTAL_URL = 'http://localhost:5173'
-mvn test
+.\mvnw.cmd test
 ```
 
-O Selenium Manager baixa/resolve o ChromeDriver local quando necessário.
+Se o prompt já estiver em `tests/selenium`, pule o comando `cd tests/selenium` e execute apenas:
+
+```powershell
+$env:PORTAL_URL = 'http://localhost:5173'
+.\mvnw.cmd test
+```
+
+No macOS ou Linux, use `./mvnw test`. O Selenium Manager baixa/resolve o ChromeDriver local
+quando necessário.
 
 O usuário, curso, orientador, projeto e conteúdo dos PDFs do teste são fictícios. A sessão é
 injetada apenas no `sessionStorage` do navegador de teste. O teste não depende de senha real nem
