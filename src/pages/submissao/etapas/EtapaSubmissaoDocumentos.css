@@ -1,0 +1,51 @@
+.documentos-submissao .campo-arquivo {
+  display: grid !important;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-areas:
+    'icone conteudo'
+    '. botao';
+  align-items: start;
+  gap: 8px 16px !important;
+  min-height: 0;
+  padding: 20px;
+}
+
+.documentos-submissao .campo-arquivo__icone {
+  grid-area: icone;
+  margin-top: 2px;
+}
+
+.documentos-submissao .campo-arquivo__conteudo {
+  grid-area: conteudo;
+  min-width: 0;
+}
+
+.documentos-submissao .campo-arquivo__conteudo strong {
+  overflow-wrap: anywhere;
+}
+
+.documentos-submissao .campo-arquivo__acao {
+  display: block;
+  margin-top: 7px;
+  line-height: 1.45;
+}
+
+.documentos-submissao .campo-arquivo__selecionar {
+  grid-area: botao;
+  justify-self: start;
+  min-height: 36px;
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .documentos-submissao .campo-arquivo {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 8px 12px !important;
+    padding: 16px;
+  }
+
+  .documentos-submissao .campo-arquivo__icone {
+    width: 36px;
+    height: 36px;
+  }
+}

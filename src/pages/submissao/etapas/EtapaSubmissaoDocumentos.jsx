@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Eye, FileText, Trash2, Upload } from 'lucide-react'
 import { tiposProjeto } from '../constantes.js'
+import './EtapaSubmissaoDocumentos.css'
 
 function formatarTamanho(tamanho) {
   if (tamanho < 1024 * 1024) return `${Math.max(1, Math.round(tamanho / 1024))} KB`
