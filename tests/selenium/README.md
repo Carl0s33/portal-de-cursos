@@ -26,27 +26,34 @@ Na raiz do frontend, inicie o portal:
 npm run dev -- --host 0.0.0.0
 ```
 
-Em outro PowerShell, configure as credenciais do aluno criado pelo seeder sem salvá-las no
-repositório e execute:
+Em outro PowerShell, informe os dados de uma conta de aluno criada pelo seeder. A senha é lida sem
+ser exibida e não deve ser gravada no repositório. Depois execute:
 
 ```powershell
-$env:SELENIUM_EMAIL = 'e-mail do aluno de teste'
-$env:SELENIUM_PASSWORD = 'senha definida no seeder'
+$env:SELENIUM_EMAIL = Read-Host 'E-mail do aluno do seeder'
+$senhaSelenium = Read-Host 'Senha do aluno do seeder' -AsSecureString
+$env:SELENIUM_PASSWORD = [System.Net.NetworkCredential]::new('', $senhaSelenium).Password
 $env:PORTAL_URL = 'http://localhost:5173'
 cd tests/selenium
 .\mvnw.cmd test
 ```
 
-O teste falha com uma mensagem clara se as variáveis `SELENIUM_EMAIL` ou `SELENIUM_PASSWORD` não
-estiverem definidas. O Maven Wrapper resolve o Maven e o Selenium Manager resolve o ChromeDriver.
-Se o Selenium Manager não puder baixar o driver, defina `CHROMEDRIVER_PATH` com o caminho de um
-ChromeDriver compatível já instalado.
+Antes de iniciar o navegador, o teste verifica se a página de login do Vite e a rota de cursos do
+gateway respondem. Se algum serviço estiver parado, ele encerra com o endereço que precisa ser
+verificado, sem aguardar vários minutos pelo carregamento do navegador.
+
+O Maven Wrapper resolve o Maven. O Selenium Manager tenta resolver o navegador e o ChromeDriver.
+Para evitar downloads e usar a instalação local do Brave com um driver já existente no cache, defina
+os caminhos antes de rodar o Maven:
 
 Para executar com Brave, configure também o caminho local do executável antes do Maven:
 
 ```powershell
 $env:BROWSER_BINARY = "$env:ProgramFiles\BraveSoftware\Brave-Browser\Application\brave.exe"
-$env:CHROMEDRIVER_PATH = 'C:\caminho\para\chromedriver.exe'
+$driver = Get-ChildItem "$env:USERPROFILE\.cache\selenium\chromedriver\win64\*\chromedriver.exe" |
+  Sort-Object { [version]$_.Directory.Name } -Descending |
+  Select-Object -First 1
+$env:CHROMEDRIVER_PATH = $driver.FullName
 ```
 
 Em caso de falha, o navegador salva uma captura em `target/screenshots`.
