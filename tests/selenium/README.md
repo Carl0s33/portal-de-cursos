@@ -26,15 +26,19 @@ Na raiz do frontend, inicie o portal:
 npm run dev -- --host 0.0.0.0
 ```
 
-Em outro PowerShell, informe os dados de uma conta de aluno criada pelo seeder. A senha é lida sem
-ser exibida e não deve ser gravada no repositório. Depois execute:
+Abra outro PowerShell e entre na pasta `tests/selenium` (se ainda estiver na raiz do frontend).
+Informe o e-mail real e a senha de uma conta de aluno criada pelo seeder. A senha é lida sem ser
+exibida e não deve ser gravada no repositório. Não pressione Enter deixando os campos vazios.
 
 ```powershell
-$env:SELENIUM_EMAIL = Read-Host 'E-mail do aluno do seeder'
-$senhaSelenium = Read-Host 'Senha do aluno do seeder' -AsSecureString
+if (-not (Test-Path .\mvnw.cmd)) { Set-Location .\tests\selenium }
+$env:SELENIUM_EMAIL = Read-Host 'E-mail real do aluno do seeder'
+$senhaSelenium = Read-Host 'Senha real do aluno do seeder' -AsSecureString
 $env:SELENIUM_PASSWORD = [System.Net.NetworkCredential]::new('', $senhaSelenium).Password
+if ([string]::IsNullOrWhiteSpace($env:SELENIUM_EMAIL) -or [string]::IsNullOrWhiteSpace($env:SELENIUM_PASSWORD)) {
+  throw 'Informe o e-mail e a senha reais da conta do seeder antes de executar o teste.'
+}
 $env:PORTAL_URL = 'http://localhost:5173'
-cd tests/selenium
 .\mvnw.cmd test
 ```
 
