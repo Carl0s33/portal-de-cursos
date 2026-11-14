@@ -6,6 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -36,15 +40,20 @@ class SubmissaoProjetoSeleniumTest {
   final AfterTestExecutionCallback screenshotOnFailure = context -> {
     if (driver == null || context.getExecutionException().isEmpty()) return;
 
-    Path screenshots = Path.of("target", "screenshots");
-    Files.createDirectories(screenshots);
-    String filename = context.getDisplayName().replaceAll("[^a-zA-Z0-9.-]", "_") + ".png";
-    Files.copy(((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE).toPath(),
-        screenshots.resolve(filename), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+    try {
+      Path screenshots = Path.of("target", "screenshots");
+      Files.createDirectories(screenshots);
+      String filename = context.getDisplayName().replaceAll("[^a-zA-Z0-9.-]", "_") + ".png";
+      Files.copy(((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE).toPath(),
+          screenshots.resolve(filename), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+    } catch (Exception falhaScreenshot) {
+      context.publishReportEntry("Screenshot não capturada: " + falhaScreenshot.getClass().getSimpleName());
+    }
   };
 
   @BeforeEach
-  void iniciarNavegador() {
+  void iniciarNavegador() throws Exception {
+    verificarPortalEGateway();
     ChromeOptions options = new ChromeOptions();
     options.enableBiDi();
     String executavelNavegador = System.getenv("BROWSER_BINARY");
@@ -72,9 +81,11 @@ class SubmissaoProjetoSeleniumTest {
         driver = new org.openqa.selenium.chrome.ChromeDriver(service, options);
       }
       driver.manage().window().setSize(new Dimension(1440, 1100));
+      driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+      driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
     } catch (Exception falha) {
       throw new IllegalStateException(
-          "Não foi possível iniciar o Chrome. Confira a instalação do navegador e do ChromeDriver.",
+          "Não foi possível iniciar o navegador Selenium. Confira o navegador e, se necessário, configure BROWSER_BINARY e CHROMEDRIVER_PATH.",
           falha);
     }
 
@@ -136,7 +147,41 @@ class SubmissaoProjetoSeleniumTest {
       throw new IllegalStateException(
           "Configure " + key + " no ambiente para executar o teste integrado com os serviços reais.");
     }
+    String valorNormalizado = value.toLowerCase(java.util.Locale.ROOT);
+    if (value.startsWith("<") || valorNormalizado.contains("aluno de teste")
+        || valorNormalizado.contains("senha definida no seeder")) {
+      throw new IllegalStateException(
+          key + " ainda contém um texto de exemplo. Use os dados reais da conta criada pelo seeder.");
+    }
     return value;
+  }
+
+  private static void verificarPortalEGateway() throws Exception {
+    HttpClient cliente = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofSeconds(4))
+        .build();
+    verificarResposta(cliente, "/aluno/login", "Portal Vite");
+    verificarResposta(cliente, "/api/academico/cursos", "Gateway e microsserviço acadêmico");
+  }
+
+  private static void verificarResposta(HttpClient cliente, String caminho, String servico)
+      throws Exception {
+    URI uri = URI.create(PORTAL_URL.replaceAll("/+$", "") + caminho);
+    HttpRequest requisicao = HttpRequest.newBuilder(uri)
+        .timeout(Duration.ofSeconds(6))
+        .GET()
+        .build();
+    try {
+      int status = cliente.send(requisicao, HttpResponse.BodyHandlers.discarding()).statusCode();
+      if (status < 200 || status >= 400) {
+        throw new IllegalStateException(
+            servico + " respondeu HTTP " + status + " em " + uri + ". Confira se está ativo.");
+      }
+    } catch (java.io.IOException falha) {
+      throw new IllegalStateException(
+          servico + " não respondeu em " + uri + ". Inicie o portal e os serviços locais antes do teste.",
+          falha);
+    }
   }
 }
 
