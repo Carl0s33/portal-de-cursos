@@ -1,50 +1,53 @@
-# Teste Selenium da submissão de projeto
+# Testes Selenium integrados
 
-O teste percorre a submissão como aluno no navegador: verifica a validação do título obrigatório,
-preenche um Projeto Integrador, escolhe orientador, anexa dois PDFs fictícios, autoriza publicação,
-verifica a confirmação e confere os dados enviados no cadastro. Em falha, salva um screenshot em
-`target/screenshots`. As chamadas HTTP de cursos, professores, disciplinas, cadastro de projeto,
-upload e notificações recebem respostas simuladas no navegador; nenhum dado é gravado em serviços.
+Os cenários usam o navegador para autenticar um aluno e submeter um Projeto Integrador pelos
+serviços reais do Portal de Cursos. O teste não substitui `fetch`, não injeta sessão e não cria
+respostas ou dados de API simulados.
 
-O código está separado por responsabilidade: `SubmissaoProjetoSeleniumTest` organiza os cenários,
-`SubmissaoPage` concentra as ações e consultas da tela, e `ApiSubmissaoFalsa` prepara a sessão e as
-respostas simuladas antes de carregar o portal usando WebDriver BiDi.
+O fluxo validado cobre login do aluno, consulta real de curso, professor e disciplina, validação do
+título, cadastro da submissão e envio dos dois PDFs obrigatórios. O Selenium gera arquivos PDF
+mínimos e fictícios em diretório temporário. A submissão é gravada no ambiente local e pode acionar
+as notificações configuradas nos serviços; não execute estes testes contra produção.
 
 ## Pré-requisitos
 
 - Java 21 ou superior
 - Node.js compatível com o projeto
-- Google Chrome instalado
-
-O Maven Wrapper incluído baixa e usa o Maven necessário automaticamente; não é preciso instalar
-o comando global `mvn`.
+- Gateway e microsserviços locais ativos, incluindo os serviços de usuários e projetos
+- Portal Vite iniciado em `http://localhost:5173`
+- Chrome ou Brave instalado
+- Conta de aluno criada pelo seeder do serviço de usuários
 
 ## Executar
 
-No terminal, na raiz do frontend:
+Na raiz do frontend, inicie o portal:
 
 ```powershell
 npm run dev -- --host 0.0.0.0
 ```
 
-Abra outro PowerShell na raiz do frontend e execute:
+Em outro PowerShell, configure as credenciais do aluno criado pelo seeder sem salvá-las no
+repositório e execute:
 
 ```powershell
+$env:SELENIUM_EMAIL = 'e-mail do aluno de teste'
+$env:SELENIUM_PASSWORD = 'senha definida no seeder'
+$env:PORTAL_URL = 'http://localhost:5173'
 cd tests/selenium
-$env:PORTAL_URL = 'http://localhost:5173'
 .\mvnw.cmd test
 ```
 
-Se o prompt já estiver em `tests/selenium`, pule o comando `cd tests/selenium` e execute apenas:
+O teste falha com uma mensagem clara se as variáveis `SELENIUM_EMAIL` ou `SELENIUM_PASSWORD` não
+estiverem definidas. O Maven Wrapper resolve o Maven e o Selenium Manager resolve o ChromeDriver.
+Se o Selenium Manager não puder baixar o driver, defina `CHROMEDRIVER_PATH` com o caminho de um
+ChromeDriver compatível já instalado.
+
+Para executar com Brave, configure também o caminho local do executável antes do Maven:
 
 ```powershell
-$env:PORTAL_URL = 'http://localhost:5173'
-.\mvnw.cmd test
+$env:BROWSER_BINARY = "$env:ProgramFiles\BraveSoftware\Brave-Browser\Application\brave.exe"
+$env:CHROMEDRIVER_PATH = 'C:\caminho\para\chromedriver.exe'
 ```
 
-No macOS ou Linux, use `./mvnw test`. O Selenium Manager baixa/resolve o ChromeDriver local
-quando necessário.
+Em caso de falha, o navegador salva uma captura em `target/screenshots`.
 
-O usuário, curso, orientador, projeto e conteúdo dos PDFs do teste são fictícios. A sessão é
-injetada apenas no `sessionStorage` do navegador de teste. O teste não depende de senha real nem
-de backend ativo.
